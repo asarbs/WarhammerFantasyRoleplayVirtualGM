@@ -1,0 +1,340 @@
+* {
+    margin : 0;
+    padding : 0;
+}
+
+.clear {
+    clear: both;
+}
+
+.error {
+    color: #FF0000;
+}
+
+.help-text {
+    color: #ffa500;
+}
+
+.info {
+    background-color : #993333;
+    border : #660000 solid 1px;
+    color : #FFFFFF;
+    padding : 15px;
+    margin : 10px 30px 30px 30px;
+    text-align : center;
+}
+
+.vertical-divider {
+    background-color: lightgray;
+    border-left: 1px solid gray;
+    display: inline;
+    margin: 0px 5px;
+}
+
+.view-title {
+    margin-bottom: 10px;
+}
+
+body {
+    background-color : #FFFFFF;
+    font-family : 'Droid Sans', sans-serif;
+    font-size : 12px;
+    color : #666666;
+    text-align : left;
+    height : 100%;
+}
+
+a {
+    color : #004363;
+    text-decoration : none;
+}
+
+a:hover {
+    color : #004363;
+    text-decoration : underline;
+}
+
+a.button,
+input[type="submit"] {
+    background-color : #E6EEF4;
+    padding : 0 0 0 0;
+    margin : 5px 10px 5px 10px;
+    padding : 2px 6px 2px 6px;
+    border-top : 1px solid #C2C2C2;
+    border-right : 1px solid #333333;
+    border-bottom : 1px solid #333333;
+    border-left : 1px solid #C2C2C2;
+    text-decoration : none;
+    white-space : nowrap;
+    cursor : pointer;
+}
+
+a.button:hover {
+    background-color : #E6EEF4;
+    padding : 0 0 0 0;
+    margin : 5px 10px 5px 10px;
+    padding : 2px 6px 2px 6px;
+    border-top : 1px solid #333333;
+    border-right : 1px solid #C2C2C2;
+    border-bottom : 1px solid #C2C2C2;
+    border-left : 1px solid #333333;
+    text-decoration : none;
+    white-space : nowrap;
+}
+
+select,
+input {
+    border : #AAA solid 1px;
+    background : #E6EEF4;
+    font-size : 11px;
+    color : #004363;
+    width : 200px;
+}
+
+input[type="text"]#tournament_p,
+input[type="text"]#big_p,
+input[type="text"]#small_p {
+    width : 50px;
+    text-align : center;
+}
+
+select.small,
+input.small {
+    width : 40px;
+}
+
+textarea {
+    border : #AAA solid 1px;
+    background : #CCC;
+    font-size : 11px;
+    color : #004363;
+    width : 700px;
+}
+
+ul.errorlist {
+    padding : 0 0 0 15px;
+    color : #FF0000;
+}
+
+div#cookieack div.wrap {
+    width : 74.77778%;
+    margin-left : 1.5%;
+    margin-right : 1.5%;
+    margin-left : 12.61111%;
+    margin-right : 12.61111%;
+}
+
+div#cookieack div.wrap p {
+    font-size : 1em;
+    line-height : 3em;
+}
+
+div#cookieack div.accept {
+    margin : 0 1ex;
+    padding : 1ex;
+    background : rgba(255, 255, 255, 0.1);
+}
+
+div#main_top_bar {
+    background-image : url("img/top_bg.png");
+    height: 35px;
+    margin-bottom: 15px;
+    padding-left: 15px;
+    background-color: #2980b9;
+    border-top: 2px solid #35fbd6;
+}
+
+div#main_top_bar img {
+    width: 35px;
+    height: 35px;
+    /* margin-top: 2px; */
+    /* line-height: 40px; */
+}
+
+div#main_top_bar div.user {
+    float : right;
+    margin-right: 15px;
+    color: white;
+    line-height: 35px;
+}
+
+div#main h3.main {
+    font-size : 20px;
+    border-bottom : 1px solid #666666;
+    margin-bottom : 10px;
+}
+
+div#main div#tournamentDetail ol.players_classification li.round {
+    margin : 15px 0 15px 0;
+}
+
+div#main div#tournamentDetail h3 {
+    font-size : 16px;
+    margin : 3px 0 3px 0;
+}
+
+div#main div#tournamentDetail h4 {
+    font-size : 16px;
+    margin : 3px 0 3px 0;
+}
+
+div#main div#tournamentDetail li.roundHead {
+    margin : 0 0 0 15px;
+}
+
+div#main div#tournamentDetail li.roundHead h5 {
+    font-size : 12px;
+    color : #000000;
+}
+
+div#main div#tournamentDetail li.roundHead li.roundDetail {
+    margin : 0 0 0 15px;
+}
+
+div#main div#tournamentDetail ol.players_classification {
+    margin : 0 0 0 25px;
+}
+
+div#main div#tournamentDetail ul.players_classification {
+    margin : 0 0 0 25px;
+}
+
+div#main div#tournamentDetail ul.players_classification li.small {
+    font-size : 9px;
+}
+
+div#main div#blog {
+    width : 80%;
+}
+
+div#main div#blog div.blog_content {
+    margin-bottom: 25px;
+}
+
+div#main div#blog div.blog_content .news-link {
+    color : #97D7F4;
+}
+
+div#main div#blog div.blog_content_info {
+    margin-bottom: 5px;
+}
+
+div#main div#blog div.blog_content_info p {
+    display: inline;
+}
+
+div#main div#blog div.blog_content .news-text {
+    font-size: 13px;
+}
+
+@media only screen and (min-width:601px) {
+    div#menu_button {
+        display : none;
+    }
+
+    div#menu {
+        background-color : #E6EEF4;
+        padding : 0;
+        margin : 0 15px 0 15px;
+        width : 200px;
+        float : left;
+    }
+
+    div#menu ol {
+        margin : 0 0 0 0;
+        padding : 0;
+        list-style-type : none;
+    }
+
+    div#menu ol li {
+        margin : 0 0 0 0;
+    }
+
+    div#menu ol li.menuChild {
+        background-color : #E1EDF7;
+    }
+
+    div#menu ol li.menuChild a {
+        padding: 10px 0 10px 20px;
+    }
+
+    div#menu ol li.menuChild a:hover {
+        padding : 10px 0 10px 15px;
+    }
+
+    div#menu ol li a {
+        display : block;
+        margin : 0 0 0 0;
+        padding : 10px 0 10px 10px;
+        text-decoration : none;
+        white-space : nowrap;
+    }
+
+    div#menu ol li a:hover {
+        background-image : url("img/link_hover.png");
+        background-repeat : no-repeat;
+        margin : 0 0 0 0;
+        padding : 10px 0 10px 10px;
+        text-decoration : none;
+        white-space : nowrap;
+    }
+
+    div#main {
+        padding : 0 0 0 0;
+        width: auto;
+        overflow : hidden;
+    }
+}
+
+@media only screen and (max-width:480px) {
+    div#menu_button {
+        position : fixed;
+        top : 5px;
+        left : 5px;
+        width : 24px;
+        height : 24px;
+        background-image : url("img/menu-icon2.png");
+        background-size : 24px 24px;
+    }
+
+    div#menu {
+        background-color : #E6EEF4;
+        color : #FFFFFF;
+        padding : 0;
+        margin : 0 0 10px 0;
+        width : 100%;
+        float : left;
+        display : none;
+    }
+
+    div#menu ol {
+        margin : 0;
+        padding : 0;
+        list-style-type : none;
+    }
+
+    div#menu ol li {
+        margin : 0 0 0 0;
+    }
+
+    div#menu ol li a {
+        display : block;
+        margin : 0 0 0 0;
+        padding : 10px 0 10px 10px;
+        text-decoration : none;
+        white-space : nowrap;
+    }
+
+    div#menu ol li a:hover {
+        background-image : url("img/link_hover.png");
+        background-repeat : no-repeat;
+        margin : 0 0 0 0;
+        padding : 10px 0 10px 10px;
+        text-decoration : none;
+        white-space : nowrap;
+    }
+
+    div#main {
+        padding : 10px 0 0 0;
+    }
+}

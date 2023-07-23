@@ -1,0 +1,63 @@
+{% load static %}
+<head>
+<title>Warhammer Fantasy Roleplay - Virtual GM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="{% static "main.css" %}" />
+<link rel="stylesheet" href="{% static "table.css" %}" />
+
+<script type="text/javascript">
+    function showMenu() {
+        var element = document.getElementById("menu");
+        if(element.style.display == "" || element.style.display == "none")
+        {
+            element.style.display = "inline"
+        }
+        else if( element.style.display == "inline")
+        {
+            element.style.display = "none"
+        }
+    }
+    function hideShowMenu(){
+        var width = window.innerWidth;
+        if(width <= 480)
+        {
+            document.getElementById("menu").style.display = "none"
+        }
+        else if (width > 480)
+        {
+            document.getElementById("menu").style.display = "inline"
+        }
+    }
+    
+    function getCookie(cname)
+    {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+    
+    function hideCookie()
+        {
+            document.cookie="cookie_allow=true; expires=365; path=/";
+            document.getElementById("cookieack").style.display = "none";
+        };
+    $(document).ready(
+    function()
+        {
+            var cookie_allow = getCookie("cookie_allow");
+            if (cookie_allow=="true")
+            {
+                document.getElementById("cookieack").style.display = "none";
+            }
+        }
+    );
+    
+    </script>
+
+</head>
