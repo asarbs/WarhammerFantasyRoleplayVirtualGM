@@ -1,0 +1,15 @@
+{% csrf_token %}
+<table class="paleblue">
+{% for field in form %}
+    <tr>
+        <td class="left">{{ field.label }}</td>
+        <td class="right">{{ field }}<span class="help-text">{{ field.help_text }}</span></td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td>
+            <input type="submit" class="button" value="{% if submit_value %}{{ submit_value }}{% else %}Save{% endif %}">
+        </td>
+    </tr>
+</table>

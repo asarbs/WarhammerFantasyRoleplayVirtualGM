@@ -66,7 +66,7 @@ class RegisterMenuElement(MenuElement):
     def __init__(self, request, visible=None):
         MenuElement.__init__(self, request, request, visible)
         self.name = "Register"
-        self.url = "/tc_player/addUser"
+        self.url = "wfrpg_gm/addUser"
         self.visible = False
         if not request.user.is_authenticated:
             self.visible = True
@@ -100,9 +100,9 @@ class MenuManager(object):
         #                                   ["Owners"]))
 
         # self.l.append(MenuElement("FAQ", "/news/1/"))
-        # self.l.append(RegisterMenuElement(self.request) )
-        # self.l.append(AuthenticationStateMenuElement(self.request))
-        # self.l.append(NotLogedInMenuElement(request= self.request, name="Remind Password", url=reverse("RemindPassword")))
+        self.l.append(RegisterMenuElement(self.request) )
+        self.l.append(AuthenticationStateMenuElement(self.request))
+        #self.l.append(NotLogedInMenuElement(request= self.request, name="Remind Password", url=reverse("RemindPassword")))
         # self.l.append(LogedInMenuElement(request=self.request, name="Edit account", url="/tc_player/editPlayer/"+str(self.request.user.id)+"/"))
         # self.l[-1].addChildraen(LogedInMenuElement(request= self.request, name="Change Password", url="/tc_player/changePassword/"))
 
