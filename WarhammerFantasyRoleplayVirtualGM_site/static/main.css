@@ -136,17 +136,16 @@ div#cookieack div.accept {
 }
 
 div#main_top_bar {
-    background-image : url("img/top_bg.png");
-    height: 35px;
+    height: 158px;
     margin-bottom: 15px;
     padding-left: 15px;
-    background-color: #2980b9;
+    background-color: #452304;
     border-top: 2px solid #35fbd6;
 }
 
 div#main_top_bar img {
-    width: 35px;
-    height: 35px;
+    width: 342px;
+    height: 158px;
     /* margin-top: 2px; */
     /* line-height: 40px; */
 }

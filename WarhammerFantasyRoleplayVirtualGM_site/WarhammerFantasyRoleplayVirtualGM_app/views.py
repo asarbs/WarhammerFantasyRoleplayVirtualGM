@@ -53,7 +53,7 @@ def addUser(request):
             user = uf.save()
             pf = Player(user=user)
             pf.save()
-            return HttpResponseRedirect("/tc_player/addUserConfirm/")
+            return HttpResponseRedirect("/wfrpg_gm/addUserConfirm/")
     else:
         uf = UserForm(prefix='user')
     return render(request, 'addUser.html', dict(form=uf))
