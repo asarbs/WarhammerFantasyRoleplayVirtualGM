@@ -10,6 +10,9 @@ class PlayerAdmin(admin.ModelAdmin):
     getLastLogin.short_description = 'Last Login'
     getLastLogin.admin_order_field = 'user__last_login'
 
+class CampaignAdmin(admin.ModelAdmin):
+    pass
+
 class CharacterAdmin(admin.ModelAdmin):
     pass
 
@@ -34,10 +37,21 @@ class HairAdmin(admin.ModelAdmin):
 class EyesAdmin(admin.ModelAdmin):
     pass
 
+class SkillsAdmin(admin.ModelAdmin):
+    list_display = ("name", "characteristics", "description")
+    ordering = ("name",)
+
+class TalenAdmin(admin.ModelAdmin):
+    list_display = ("name", "description")
+    ordering = ("name",)
+
+class Campaign2PlayerAdmin(admin.ModelAdmin):
+    pass
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
+admin.site.register(models.Campaign, CampaignAdmin)
 admin.site.register(models.Species ,SpeciesAdmin)
 admin.site.register(models.CharacterClass ,CharacterClassAdmin)
 admin.site.register(models.CareerPath ,CareerPathAdmin)
@@ -45,3 +59,6 @@ admin.site.register(models.Career ,CareerAdmin)
 admin.site.register(models.Status ,StatusAdmin)
 admin.site.register(models.Hair ,HairAdmin)
 admin.site.register(models.Eyes ,EyesAdmin)
+admin.site.register(models.Skils ,SkillsAdmin)
+admin.site.register(models.Talent ,TalenAdmin)
+admin.site.register(models.Campaign2Player, Campaign2PlayerAdmin)

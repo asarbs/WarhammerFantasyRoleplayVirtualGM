@@ -5,6 +5,7 @@ from django.forms import PasswordInput
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 
+from . import models
 
 class UserForm(ModelForm):
     password = CharField(widget=PasswordInput())
@@ -24,3 +25,7 @@ class UserForm(ModelForm):
 class RemindPasswordForm(Form):
     username_mail = CharField(label="User Name / E-mail")
 
+class CreateCampaignForm(ModelForm):
+    class Meta:
+        model = models.Campaign
+        fields = ['name', 'party_name', 'ambitions_shortterm', 'ambitions_longterm']

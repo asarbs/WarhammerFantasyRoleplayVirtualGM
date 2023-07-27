@@ -8,5 +8,7 @@ urlpatterns = [
     path('changePassword', views.changePassword, name="changePassword"),
     path('addUserConfirm', views.addUserConfirm, name="addUserConfirm"),
     path('editPlayer/(?P<pk>\d+)/',  views.UpdatePlayer.as_view(success_url="/"), name='updatePlayer'),
-    path('remindPassword', views.RemindPassword, name="RemindPassword")
+    path('remindPassword', views.RemindPassword, name="remindPassword"),
+    path("createCampaign", views.createCampaign, name="createCampaign"),
+    path("detailsCampaign/<int:CampaignId>", views.detailsCampaign, name="detailsCampaign")
 ]

@@ -3,6 +3,8 @@ from django.urls import reverse
 from django import template
 from django.utils.safestring import mark_safe
 
+from WarhammerFantasyRoleplayVirtualGM_app.models import Player, Campaign2Player
+
 class MenuElement(object):
     def __init__(self, name, url="", visible=True):
         self.name = name
@@ -26,6 +28,16 @@ class MenuElement(object):
 
     def __unicode__(self):
         return u"{} {} {} {}".format(self.name, self.url, self.visible, self.children)
+
+    def getLinkTag(self):
+        return '<a href="{}">{}</a>'.format(self.url, self.name)
+
+class MenuHeader(MenuElement):
+    def __init__(self, name, visible=True):
+        MenuElement.__init__(self, name , "", visible)
+
+    def getLinkTag(self):
+        return '<a>{}</a>'.format(self.url)
 
 class AuthenticationStateMenuElement(MenuElement):
     def __init__(self, request, visible=None):
@@ -86,13 +98,20 @@ class MenuManager(object):
         module = self.request.get_full_path().split("/")[1]
         self.l = [
             MenuElement("Main", "/"),
+            MenuElement("Create Campaign",  reverse("createCampaign")),
         ]
+
+        if not request.user.is_anonymous:
+            logger_player = Player.objects.get(user=request.user)
+            player_campaign = Campaign2Player.objects.filter(player=logger_player)
+            for campaign in player_campaign:
+                self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
 
         # self.l.append( MenuElement("League", "/tc_league/leagueList") )
         # if module == "tc_league":
         #     self.l[-1].addChildraen(MenuElementWithPrivileges("Add a League", "/tc_league/addLeague", self.request,  ["Owners"]) )
 
-        
+
         # if module == "tc2":
         #     self.l[-1].addChildraen(MenuElementWithPrivileges("Add a tournament", reverse("tc2_addNewTournament"), self.request, ["Owners"]) )
         #     self.l[-1].addChildraen(
@@ -121,9 +140,10 @@ def makeMenu(context):
 
     out = "<ol>"
     for menuElem in menu:
-        out += "<li><a href=\"" + str(menuElem.url) + "\">" + str(menuElem.name) + "</a></li>"
-        if menuElem.hasChildren:
-            for child in menuElem.getChildren():
-                out += "<li class=\"menuChild\"><a href=\"" + str(child.url) + "\">" + str(child.name) + "</a></li>"
+        if menuElem.visible:
+            out += "<li>{}</li>".format(menuElem.getLinkTag())
+            if menuElem.hasChildren:
+                for child in menuElem.getChildren():
+                    out += '<li class="menuChild">{}</li>'.format(child.getLinkTag())
     out += "<ol>"
     return mark_safe(out)

@@ -5,9 +5,16 @@ from django.forms import CharField
 from django.forms import PasswordInput
 from django.views.generic.edit import UpdateView
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
 from WarhammerFantasyRoleplayVirtualGM_app.models import Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
+from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
 
 # Create your views here.
 from django.http import HttpResponse
@@ -16,6 +23,25 @@ from django.http import HttpResponse
 def index(request):
     data = {}
     return render(request, 'main/main.html', data)
+
+def createCampaign(request):
+    if request.method == 'POST':
+        campaign_form = CreateCampaignForm(request.POST, prefix='user')
+        if campaign_form.is_valid():
+            campaign = campaign_form.save()
+            player = Player.objects.get(user=request.user)
+            c2p = Campaign2Player(player=player, campaign=campaign)
+            c2p.save()
+            return HttpResponseRedirect("/wfrpg_gm/")
+    else:
+        campaign_form = CreateCampaignForm(prefix='user')
+    return render(request, 'addCampaign.html', dict(form=campaign_form))
+
+
+def detailsCampaign(request, CampaignId):
+    c = Campaign.objects.get(id=CampaignId)
+    dic ={'camaing': c}
+    return render(request, 'detailsCampaign.html', dic)
 
 class ChangePasswordForm(Form):
     new_password = CharField(widget=PasswordInput(), label="New Password")
@@ -74,10 +100,10 @@ def RemindPassword(request):
                 for p in user:
                     password = random_password()
                     email_text = """Hi,
-                     
-New password for {0} "{1}" {2} is {3} 
-                                    
-Tournament Calculator admin (Bartosz Skorupa)         
+
+New password for {0} "{1}" {2} is {3}
+
+Tournament Calculator admin (Bartosz Skorupa)
                                  """.format(p.first_name, p.username, p.last_name, password)
                     email = EmailMessage('Tournament Calculator New password', email_text, to=[p.email],
                                          from_email="turniej@infinity.wroclaw.pl",
