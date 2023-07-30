@@ -10,21 +10,23 @@
 </form> {% endcomment %}
 
 <div class="character_sheet">
+    <div class="top"> </div>
+    <div class="head">
+        <input type="text" id="character_sheet_name" name="fname">
+        <input type="text" id="species" name="fname">
+        <input type="text" id="class" name="fname">
 
-    <input type="text" id="character_sheet_name" name="fname">
-    <input type="text" id="species" name="fname">
-    <input type="text" id="class" name="fname">
+        <input type="text" id="carrer" name="fname">
+        <input type="text" id="carrer_level" name="fname">
 
-    <input type="text" id="carrer" name="fname">
-    <input type="text" id="carrer_level" name="fname">
+        <input type="text" id="carrer_path" name="fname">
+        <input type="text" id="status" name="fname">
 
-    <input type="text" id="carrer_path" name="fname">
-    <input type="text" id="status" name="fname">
-
-    <input type="text" id="age" name="fname">
-    <input type="text" id="height" name="fname">
-    <input type="text" id="hair" name="fname">
-    <input type="text" id="eyes" name="fname">
+        <input type="text" id="age" name="fname">
+        <input type="text" id="height" name="fname">
+        <input type="text" id="hair" name="fname">
+        <input type="text" id="eyes" name="fname">
+    </div>
 
     <div class="characteristics">
 
@@ -38,6 +40,7 @@
        <input type="text" id="characteristics_int_initial" name="fname">
        <input type="text" id="characteristics_wp_initial" name="fname">
        <input type="text" id="characteristics_fel_initial" name="fname">
+
        <input type="text" id="characteristics_ws_advances" name="fname">
        <input type="text" id="characteristics_bs_advances" name="fname">
        <input type="text" id="characteristics_s_advances" name="fname">
@@ -47,9 +50,52 @@
        <input type="text" id="characteristics_dex_advances" name="fname">
        <input type="text" id="characteristics_int_advances" name="fname">
        <input type="text" id="characteristics_wp_advances" name="fname">
-       <input type="text" id="characteristics_fel_advances" name="fname"> 
+       <input type="text" id="characteristics_fel_advances" name="fname">
 
+       <input type="text" id="characteristics_ws_current" name="fname">
+       <input type="text" id="characteristics_bs_current" name="fname">
+       <input type="text" id="characteristics_s_current" name="fname">
+       <input type="text" id="characteristics_t_current" name="fname">
+       <input type="text" id="characteristics_i_current" name="fname">
+       <input type="text" id="characteristics_ag_current" name="fname">
+       <input type="text" id="characteristics_dex_current" name="fname">
+       <input type="text" id="characteristics_int_current" name="fname">
+       <input type="text" id="characteristics_wp_current" name="fname">
+       <input type="text" id="characteristics_fel_current" name="fname">
     </div>
+
+    <div class="fate">
+        <input type="text" id="fate_fate" name="fname">
+        <input type="text" id="fate_fortune" name="fname">
+    </div>
+
+    <div class="resilience">
+        <input type="text" id="resilience_resilience" name="fname">
+        <input type="text" id="resilience_resolve" name="fname">
+        <input type="text" id="resilience_motivation" name="fname">
+    </div>
+
+    <div class="experience">
+        <input type="text" id="experience_current" name="fname">
+        <input type="text" id="experience_spent" name="fname">
+        <input type="text" id="experience_total" name="fname">
+    </div>
+
+    <div class="movement">
+        <input type="text" id="movement_movement" name="fname">
+        <input type="text" id="movement_walk" name="fname">
+        <input type="text" id="movement_run" name="fname">
+    </div>
+
+    <div class="basic_skills">
+        <div class="basic_skills_top"></div>
+        {% for basic_skill in basic_skills %}
+        <div class="basic_skill">
+        {{ basic_skill.name }}
+        </div>
+        {% endfor %}
+    </div>
+
 
 </div>
 

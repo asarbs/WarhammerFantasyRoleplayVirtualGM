@@ -4,6 +4,8 @@ from django.forms import Form
 from django.forms import CharField
 from django.forms import PasswordInput
 from django.views.generic.edit import UpdateView
+from django.db.models import Q
+
 from django.urls import reverse
 
 
@@ -17,6 +19,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
 from WarhammerFantasyRoleplayVirtualGM_app.models import Player
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
 
 # Create your views here.
 from django.http import HttpResponse
@@ -41,8 +44,14 @@ def createCampaign(request):
 
 
 def addCharacter(request):
+    basic_skills_criterion1 = Q(id__gte = 1)
+    basic_skills_criterion2 = Q(id__lte = 26)
+    basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").order_by('name').values()
 
-    return render(request, 'addCharacter.html',{})
+    context = {
+        'basic_skills': basic_skills
+        }
+    return render(request, 'addCharacter.html',context)
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)

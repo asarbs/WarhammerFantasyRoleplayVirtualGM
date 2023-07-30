@@ -19,7 +19,8 @@
 				"qwtel.sqlite-viewer",
 				"yy0931.vscode-sqlite3-editor",
 				"chop-dbhi.multiline-string-editor",
-				"mhutchie.git-graph"
+				"mhutchie.git-graph",
+				"aeschli.vscode-css-formatter"
 			]		
 		}
 	}
