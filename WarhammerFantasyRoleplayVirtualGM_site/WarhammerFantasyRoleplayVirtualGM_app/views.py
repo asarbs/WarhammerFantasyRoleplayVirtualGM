@@ -4,6 +4,8 @@ from django.forms import Form
 from django.forms import CharField
 from django.forms import PasswordInput
 from django.views.generic.edit import UpdateView
+from django.urls import reverse
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -37,6 +39,10 @@ def createCampaign(request):
         campaign_form = CreateCampaignForm(prefix='user')
     return render(request, 'addCampaign.html', dict(form=campaign_form))
 
+
+def addCharacter(request):
+
+    return render(request, 'addCharacter.html',{})
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
@@ -79,7 +85,7 @@ def addUser(request):
             user = uf.save()
             pf = Player(user=user)
             pf.save()
-            return HttpResponseRedirect("/wfrpg_gm/addUserConfirm/")
+            return HttpResponseRedirect(reverse("addUserConfirm"))
     else:
         uf = UserForm(prefix='user')
     return render(request, 'addUser.html', dict(form=uf))

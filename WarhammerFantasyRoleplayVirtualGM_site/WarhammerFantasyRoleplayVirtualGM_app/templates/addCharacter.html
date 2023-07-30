@@ -1,0 +1,56 @@
+{% extends "index.html" %}
+{% load static %}
+{% block main %}
+
+
+{% comment %} <form action="/wfrpg_gm/createCampaign" method="POST">
+    {% with submit_value="Register" %}
+    {% include "form.html" %}
+    {% endwith %}
+</form> {% endcomment %}
+
+<div class="character_sheet">
+
+    <input type="text" id="character_sheet_name" name="fname">
+    <input type="text" id="species" name="fname">
+    <input type="text" id="class" name="fname">
+
+    <input type="text" id="carrer" name="fname">
+    <input type="text" id="carrer_level" name="fname">
+
+    <input type="text" id="carrer_path" name="fname">
+    <input type="text" id="status" name="fname">
+
+    <input type="text" id="age" name="fname">
+    <input type="text" id="height" name="fname">
+    <input type="text" id="hair" name="fname">
+    <input type="text" id="eyes" name="fname">
+
+    <div class="characteristics">
+
+       <input type="text" id="characteristics_ws_initial" name="fname">
+       <input type="text" id="characteristics_bs_initial" name="fname">
+       <input type="text" id="characteristics_s_initial" name="fname">
+       <input type="text" id="characteristics_t_initial" name="fname">
+       <input type="text" id="characteristics_i_initial" name="fname">
+       <input type="text" id="characteristics_ag_initial" name="fname">
+       <input type="text" id="characteristics_dex_initial" name="fname">
+       <input type="text" id="characteristics_int_initial" name="fname">
+       <input type="text" id="characteristics_wp_initial" name="fname">
+       <input type="text" id="characteristics_fel_initial" name="fname">
+       <input type="text" id="characteristics_ws_advances" name="fname">
+       <input type="text" id="characteristics_bs_advances" name="fname">
+       <input type="text" id="characteristics_s_advances" name="fname">
+       <input type="text" id="characteristics_t_advances" name="fname">
+       <input type="text" id="characteristics_i_advances" name="fname">
+       <input type="text" id="characteristics_ag_advances" name="fname">
+       <input type="text" id="characteristics_dex_advances" name="fname">
+       <input type="text" id="characteristics_int_advances" name="fname">
+       <input type="text" id="characteristics_wp_advances" name="fname">
+       <input type="text" id="characteristics_fel_advances" name="fname"> 
+
+    </div>
+
+</div>
+
+{% endblock %}

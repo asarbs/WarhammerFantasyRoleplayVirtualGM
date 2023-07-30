@@ -78,7 +78,7 @@ class RegisterMenuElement(MenuElement):
     def __init__(self, request, visible=None):
         MenuElement.__init__(self, request, request, visible)
         self.name = "Register"
-        self.url = "wfrpg_gm/addUser"
+        self.url = "/wfrpg_gm/addUser"
         self.visible = False
         if not request.user.is_authenticated:
             self.visible = True
@@ -103,9 +103,11 @@ class MenuManager(object):
 
         if not request.user.is_anonymous:
             logger_player = Player.objects.get(user=request.user)
-            player_campaign = Campaign2Player.objects.filter(player=logger_player)
-            for campaign in player_campaign:
-                self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
+            if logger_player:
+                player_campaign = Campaign2Player.objects.filter(player=logger_player)
+                if player_campaign:
+                    for campaign in player_campaign:
+                        self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
 
         # self.l.append( MenuElement("League", "/tc_league/leagueList") )
         # if module == "tc_league":

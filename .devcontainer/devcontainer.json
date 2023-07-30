@@ -16,7 +16,10 @@
 				"ms-python.python",
 				"batisteo.vscode-django",
 				"bibhasdn.django-html",
-				"qwtel.sqlite-viewer"
+				"qwtel.sqlite-viewer",
+				"yy0931.vscode-sqlite3-editor",
+				"chop-dbhi.multiline-string-editor",
+				"mhutchie.git-graph"
 			]		
 		}
 	}
