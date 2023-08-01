@@ -20,7 +20,8 @@
 				"yy0931.vscode-sqlite3-editor",
 				"chop-dbhi.multiline-string-editor",
 				"mhutchie.git-graph",
-				"aeschli.vscode-css-formatter"
+				"aeschli.vscode-css-formatter",
+				"mohd-akram.vscode-html-format"
 			]		
 		}
 	}

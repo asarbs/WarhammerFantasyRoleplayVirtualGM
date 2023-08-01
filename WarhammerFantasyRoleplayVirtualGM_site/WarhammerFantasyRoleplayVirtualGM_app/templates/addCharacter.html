@@ -29,44 +29,83 @@
     </div>
 
     <div class="characteristics">
-
-       <input type="text" id="characteristics_ws_initial" name="fname">
-       <input type="text" id="characteristics_bs_initial" name="fname">
-       <input type="text" id="characteristics_s_initial" name="fname">
-       <input type="text" id="characteristics_t_initial" name="fname">
-       <input type="text" id="characteristics_i_initial" name="fname">
-       <input type="text" id="characteristics_ag_initial" name="fname">
-       <input type="text" id="characteristics_dex_initial" name="fname">
-       <input type="text" id="characteristics_int_initial" name="fname">
-       <input type="text" id="characteristics_wp_initial" name="fname">
-       <input type="text" id="characteristics_fel_initial" name="fname">
-
-       <input type="text" id="characteristics_ws_advances" name="fname">
-       <input type="text" id="characteristics_bs_advances" name="fname">
-       <input type="text" id="characteristics_s_advances" name="fname">
-       <input type="text" id="characteristics_t_advances" name="fname">
-       <input type="text" id="characteristics_i_advances" name="fname">
-       <input type="text" id="characteristics_ag_advances" name="fname">
-       <input type="text" id="characteristics_dex_advances" name="fname">
-       <input type="text" id="characteristics_int_advances" name="fname">
-       <input type="text" id="characteristics_wp_advances" name="fname">
-       <input type="text" id="characteristics_fel_advances" name="fname">
-
-       <input type="text" id="characteristics_ws_current" name="fname">
-       <input type="text" id="characteristics_bs_current" name="fname">
-       <input type="text" id="characteristics_s_current" name="fname">
-       <input type="text" id="characteristics_t_current" name="fname">
-       <input type="text" id="characteristics_i_current" name="fname">
-       <input type="text" id="characteristics_ag_current" name="fname">
-       <input type="text" id="characteristics_dex_current" name="fname">
-       <input type="text" id="characteristics_int_current" name="fname">
-       <input type="text" id="characteristics_wp_current" name="fname">
-       <input type="text" id="characteristics_fel_current" name="fname">
+        <table border="1">
+            <tr>
+                <td colspan="11" class="title">
+                    CHARACTERISTICS
+                </td>
+            </tr>
+            <tr>
+                <td class="head">&nbsp;</td>
+                <td class="head">WS</td>
+                <td class="head">BA</td>
+                <td class="head">S</td>
+                <td class="head">T</td>
+                <td class="head">I</td>
+                <td class="head">Ag</td>
+                <td class="head">Dex</td>
+                <td class="head">Int</td>
+                <td class="head">WP</td>
+                <td class="head">Fel</td>
+            </tr>
+            <tr>
+                <td class="head">Inital</td>
+                <td><input type="text" id="characteristics_ws_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_bs_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_s_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_t_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_i_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_ag_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_dex_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_int_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_wp_initial" name="fname"></td>
+                <td><input type="text" id="characteristics_fel_initial" name="fname"></td>
+            </tr>
+            <tr>
+                <td class="head">Advaces</td>
+                <td><input type="text" id="characteristics_ws_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_bs_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_s_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_t_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_i_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_ag_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_dex_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_int_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_wp_advances" name="fname"></td>
+                <td><input type="text" id="characteristics_fel_advances" name="fname"></td>
+            </tr>
+            <tr>
+                <td class="head">Current</td>
+                <td><input type="text" id="characteristics_ws_current" name="fname"></td>
+                <td><input type="text" id="characteristics_bs_current" name="fname"></td>
+                <td><input type="text" id="characteristics_s_current" name="fname"></td>
+                <td><input type="text" id="characteristics_t_current" name="fname"></td>
+                <td><input type="text" id="characteristics_i_current" name="fname"></td>
+                <td><input type="text" id="characteristics_ag_current" name="fname"></td>
+                <td><input type="text" id="characteristics_dex_current" name="fname"></td>
+                <td><input type="text" id="characteristics_int_current" name="fname"></td>
+                <td><input type="text" id="characteristics_wp_current" name="fname"></td>
+                <td><input type="text" id="characteristics_fel_current" name="fname"></td>
+            </tr>
+        </table>
     </div>
 
     <div class="fate">
-        <input type="text" id="fate_fate" name="fname">
-        <input type="text" id="fate_fortune" name="fname">
+        <table border="0">
+            <tr>
+                <td colspan="2" class="title">
+                    FATE
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Fate</td>
+                <td><input type="text" id="fate_fate" name="fname"></td>
+            </tr>
+            <tr>
+                <td class="head">Fortune</td>
+                <td><input type="text" id="fate_fortune" name="fname"></td>
+            </tr>
+        </table>
     </div>
 
     <div class="resilience">
@@ -82,20 +121,75 @@
     </div>
 
     <div class="movement">
+        <h2>MOVEMENT</h2>
         <input type="text" id="movement_movement" name="fname">
         <input type="text" id="movement_walk" name="fname">
         <input type="text" id="movement_run" name="fname">
     </div>
 
     <div class="basic_skills">
-        <div class="basic_skills_top"></div>
+        <table>
+            <tr>
+                <th colspan="5" class="block_name">
+                    BASIC SKILL
+                </th>
+            </tr>
+            <tr class="block_header">
+                <th>
+                    Name
+                </th>
+                <th colspan=2>
+                    Characteristic
+                </th>
+                <th>
+                    Adv
+                </th>
+                <th>
+                    Skill
+                </th>
+            </tr>
         {% for basic_skill in basic_skills %}
-        <div class="basic_skill">
-        {{ basic_skill.name }}
-        </div>
+            <tr>
+                <td class="left">
+                {{ basic_skill.name }}
+                </td>
+                <td class="characteristics">
+                {{ basic_skill.characteristics }}
+                </td>
+                <td class="edit">
+                    <input type="text" id="basic_skills_characteristics_{{ basic_skill.id }}" name="fname">
+                </td>
+                <td class="edit">
+                    <input type="text" id="basic_skills_adv__{{ basic_skill.id }}" name="fname">
+                </td>
+                <td>
+                    C
+                </td>
+            </tr>
         {% endfor %}
+        </table>
     </div>
 
+    <div class="talents">
+        <table>
+            <tr>
+                <th colspan="3" class="block_name">
+                    TALENTS
+                </th>
+            </tr>
+            <tr class="block_header">
+                <th>
+                    Talent Name
+                </th>
+                <th>
+                    Times Taken
+                </th>
+                <th>
+                    Description
+                </th>
+            </tr>
+        </table>
+    </div>
 
 </div>
 

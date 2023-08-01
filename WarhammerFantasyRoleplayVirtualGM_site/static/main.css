@@ -3,6 +3,11 @@
     padding : 0;
 }
 
+@font-face {
+    font-family: AntykwaTorunska-Regular;
+    src: url(/static/font/AntykwaTorunska-Regular.ttf);
+}
+
 .clear {
     clear: both;
 }
@@ -37,9 +42,9 @@
 
 body {
     background-color : #FFFFFF;
-    font-family : 'Droid Sans', sans-serif;
+    font-family: AntykwaTorunska-Regular;
     font-size : 12px;
-    color : #666666;
+    color : #000000;
     text-align : left;
     height : 100%;
 }
@@ -333,162 +338,76 @@ div#main div.character_sheet div.head input#eyes {
 }
 
 div#main div.character_sheet div.characteristics {
-    width: 515px;
-    height: 162px;
-    margin-top: 546px;
-    margin-left: 260px;
+    border: 0px solid #35fbd6;
+    background-color: #993333;
+    width: 675px;
+    height: 280px;
+    margin-top: 440px;
+    margin-left: 117px;
     position: absolute;
 }
+div#main div.character_sheet div.characteristics table {
+    width: 635px;
+    margin-top: 13px;
+    margin-left: 10px;
+}
+div#main div.character_sheet div.characteristics table tr {
+    min-height: 52px;
+}
+div#main div.character_sheet div.characteristics table tr td {
+    min-height: 52px;
+    min-width: 53px;
+    text-align: center;
+}
+div#main div.character_sheet div.characteristics table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.characteristics table tr td.head {
+    font-size: 150%;
+    text-align: left;
+}
+
 div#main div.character_sheet div.characteristics input {
     height: 52px;
     width: 53px;
-    position: absolute;
+    position: relative;
 }
 
-div#main div.character_sheet div.characteristics input#characteristics_ws_initial {
-    margin-top: 0px;
-    margin-left: calc(0 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_bs_initial {
-    margin-top: 0px;
-    margin-left: calc(1 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_s_initial {
-    margin-top: 0px;
-    margin-left: calc(2 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_t_initial {
-    margin-top: 0px;
-    margin-left: calc(3 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_i_initial {
-    margin-top: 0px;
-    margin-left: calc(4 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_ag_initial {
-    margin-top: 0px;
-    margin-left: calc(5 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_dex_initial {
-    margin-top: 0px;
-    margin-left: calc(6 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_int_initial {
-    margin-top: 0px;
-    margin-left: calc(7 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_wp_initial {
-    margin-top: 0px;
-    margin-left: calc(8 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_fel_initial {
-    margin-top: 0px;
-    margin-left: calc(9 * 51px);
-}
-
-div#main div.character_sheet div.characteristics input#characteristics_ws_advances {
-    margin-top: 54px;
-    margin-left: calc(0 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_bs_advances {
-    margin-top: 54px;
-    margin-left: calc(1 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_s_advances {
-    margin-top: 54px;
-    margin-left: calc(2 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_t_advances {
-    margin-top: 54px;
-    margin-left: calc(3 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_i_advances {
-    margin-top: 54px;
-    margin-left: calc(4 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_ag_advances {
-    margin-top: 54px;
-    margin-left: calc(5 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_dex_advances {
-    margin-top: 54px;
-    margin-left: calc(6 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_int_advances {
-    margin-top: 54px;
-    margin-left: calc(7 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_wp_advances {
-    margin-top: 54px;
-    margin-left: calc(8 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_fel_advances {
-    margin-top: 54px;
-    margin-left: calc(9 * 51px);
-}
-
-div#main div.character_sheet div.characteristics input#characteristics_ws_current {
-    margin-top: 108px;
-    margin-left: calc(0 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_bs_current {
-    margin-top: 108px;
-    margin-left: calc(1 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_s_current {
-    margin-top: 108px;
-    margin-left: calc(2 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_t_current {
-    margin-top: 108px;
-    margin-left: calc(3 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_i_current {
-    margin-top: 108px;
-    margin-left: calc(4 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_ag_current {
-    margin-top: 108px;
-    margin-left: calc(5 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_dex_current {
-    margin-top: 108px;
-    margin-left: calc(6 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_int_current {
-    margin-top: 108px;
-    margin-left: calc(7 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_wp_current {
-    margin-top: 108px;
-    margin-left: calc(8 * 51px);
-}
-div#main div.character_sheet div.characteristics input#characteristics_fel_current {
-    margin-top: 108px;
-    margin-left: calc(9 * 51px);
-}
 
 div#main div.character_sheet div.fate {
     border: 0px solid #35fbd6;
-    width: 160px;
+    background-color: #993333;
+    width: 165px;
     height: 155px;
     position: absolute;
     margin-top: 442px;
     margin-left: 800px;
 }
-div#main div.character_sheet div.fate input#fate_fate {
+div#main div.character_sheet div.fate table {
+    width: 140px;
+    margin-top: 15px;
+    margin-left: 12px;
+}
+div#main div.character_sheet div.fate table tr {
+    min-height: 52px;
+}
+div#main div.character_sheet div.fate table tr td {
+    min-height: 35px;
+    min-width: 42px;
+    text-align: center;
+}
+div#main div.character_sheet div.fate table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.fate table tr td.head {
+    font-size: 150%;
+    text-align: left;
+}
+div#main div.character_sheet div.fate table tr td input {
     height: 35px;
     width: 43px;
-    margin-top: 64px;
-    margin-left: 105px;
+    position: relative;
 }
-div#main div.character_sheet div.fate input#fate_fortune {
-    height: 35px;
-    width: 43px;
-    margin-top: 103px;
-    margin-left: 105px;
-}
-
 
 div#main div.character_sheet div.resilience {
     border: 0px solid #35fbd6;
@@ -553,11 +472,21 @@ div#main div.character_sheet div.movement {
     margin-top: 603px;
     margin-left: 800px;
 }
+div#main div.character_sheet div.movement h2 {
+    border: 1px solid #35fbd6;
+    font-size: 250%;
+    margin-top: 15px;
+    margin-left: 37%;
+    padding: 0px;
+    display: block;
+    position: absolute;
+}
 div#main div.character_sheet div.movement input#movement_movement {
     height: 37px;
     width: 90px;
     margin-top: 67px;
     margin-left: 178px;
+    position: absolute;
 }
 div#main div.character_sheet div.movement input#movement_walk {
     height: 37px;
@@ -573,24 +502,91 @@ div#main div.character_sheet div.movement input#movement_run {
 }
 
 div#main div.character_sheet div.basic_skills {
-    border: 0px solid #35fbd6;
+    border: 1px solid #35fbd6;
+    background-color: #97D7F4;
     width: 486px;
     min-height: 103px;
     position: absolute;
     margin-top: 729px;
     margin-left: 118px;
 }
-div#main div.character_sheet div.basic_skills div.basic_skills_top {
-
-    height: 105px;
+div#main div.character_sheet div.basic_skills table {
+    border: 1px solid #000000;
+    background-color: #660000;
+    width: 450px;
+    margin-top: 10px;
+    margin-left: 20px;
 }
-div#main div.character_sheet div.basic_skill {
+div#main div.character_sheet div.basic_skills table tr {
+    border: 1px solid #000000;
+}
+div#main div.character_sheet div.basic_skills table tr th  {
+    border: 1px solid #000000;
+}
+div#main div.character_sheet div.basic_skills table tr th.block_name  {
+    font-size: 36px;
+}
+div#main div.character_sheet div.basic_skills table tr.block_header  {
+    font-size: 20px;
+}
+div#main div.character_sheet div.basic_skills table tr td {
+    border: 1px solid #000000;
+    padding: 0px;
+    margin: 0px;
+    font-size: 18px;
+    text-align: center;
+}
+div#main div.character_sheet div.basic_skills table tr td.left  {
+    text-align: left;
+    padding-left: 10px;
+}
+div#main div.character_sheet div.basic_skills table tr td.characteristics  {
+    padding: 0px;
+    margin: 0px;
+    width: 50px;
+    height: 32px;
+}
+div#main div.character_sheet div.basic_skills table tr td.edit {
+    height: 32px;
+    width: 32px;
+}
+div#main div.character_sheet div.basic_skills table tr td.edit input  {
+    padding: 0px;
+    margin: 0px;
+    height: 30px;
+    width: 30px;
+    position: relative;
+}
+
+
+
+div#main div.character_sheet div.talents {
     border: 1px solid #35fbd6;
-    margin-left: 38px;
-    height: 38px;
-    float:left;
-    clear: left;
-    vertical-align: middle;
+    background-color: #97D7F4;
+    width: 486px;
+    min-height: 103px;
+    position: absolute;
+    margin-top: 729px;
+    margin-left: 825px;
+}
+div#main div.character_sheet div.talents table {
+    border: 1px solid #000000;
+    background-color: #660000;
+    width: 450px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+div#main div.character_sheet div.talents table tr {
+    border: 1px solid #000000;
+}
+div#main div.character_sheet div.talents table tr th  {
+    border: 1px solid #000000;
+}
+div#main div.character_sheet div.talents table tr th.block_name  {
+    font-size: 36px;
+}
+div#main div.character_sheet div.talents table tr.block_header  {
+    font-size: 20px;
 }
 
 @media only screen and (min-width:601px) {
