@@ -230,7 +230,7 @@ div#main div.character_sheet input {
 }
 
 div#main div.character_sheet div.head {
-    background-color: #c4a314;
+    /* background-color: #c4a314; */
     width: 1455px;
     height: 180px;
     margin-left: 117px;
@@ -305,7 +305,7 @@ div#main div.character_sheet div.head table tr td  input#eyes {
 }
 
 div#main div.character_sheet div.characteristics {
-    background-color: #abc818;
+    /* background-color: #abc818; */
     width: 700px;
     height: 280px;
     margin-left: 117px;
@@ -338,19 +338,19 @@ div#main div.character_sheet div.characteristics input {
 }
 
 div#main div.character_sheet div.right {
-    background-color: #469933;
+    /* background-color: #469933; */
     width: 700px;
     margin-left: 840px;
 }
 
 div#main div.character_sheet div.right div.fate_resistance_exp {
-    background-color: #d9c721;
+    /* background-color: #d9c721; */
     width: 700px;
     position:relative
 }
 
 div#main div.character_sheet div.right div.fate_resistance_exp div.fate {
-    background-color: #10d010;
+    /* background-color: #10d010; */
     width: 150px;
     float: left;
 }
@@ -379,7 +379,7 @@ div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr
 }
 
 div#main div.character_sheet div.right div.fate_resistance_exp div.resilience {
-    background-color: #9c23ba;
+    /* background-color: #9c23ba; */
     width: 320px;
     float: left;
 }
@@ -423,7 +423,7 @@ div#main div.character_sheet div.right div.fate_resistance_exp div.resilience ta
 }
 
 div#main div.character_sheet div.right div.fate_resistance_exp div.experience {
-    background-color: #993333;
+    /* background-color: #993333; */
     width: 230px;
     float: left;
 }
@@ -465,7 +465,7 @@ div#main div.character_sheet div.right div.fate_resistance_exp div.experience ta
     width: 60px;
 }
 div#main div.character_sheet div.right div.movement {
-    background-color: #1310b3;
+    /* background-color: #1310b3; */
     width: 700px;
 }
 div#main div.character_sheet div.right div.movement table {
@@ -507,7 +507,7 @@ div#main div.character_sheet div.right div.movement table tr td input#movement_r
 }
 
 div#main div.character_sheet div.basic_skills {
-    background-color: #993333;
+    /* background-color: #993333; */
     width: 700px;
     min-height: 103px;
     margin-left: 118px;
@@ -560,10 +560,13 @@ div#main div.character_sheet div.basic_skills table tr td.edit input  {
     position: relative;
 }
 
-div#main div.character_sheet div.talents {
-    background-color: #993333;
-    width: 700px;
+div#main div.character_sheet div.talents_ambitions_party {
     margin-left: 840px;
+}
+
+div#main div.character_sheet div.talents {
+    /* background-color: #993333; */
+    width: 700px;
 }
 div#main div.character_sheet div.talents table {
     border: 0px solid #000000;
@@ -584,15 +587,12 @@ div#main div.character_sheet div.talents table tr.block_header  {
 }
 
 div#main div.character_sheet div.ambitiosn {
-    border: 1px solid #128fd3;
+    border: 0px solid #128fd3;
     width: 700px;
-    float: left;
-    margin-left: 120px;
     margin-bottom: 10px;
 }
 div#main div.character_sheet div.ambitiosn table {
     width: 700px;
-    margin-left: 12px;
 }
 div#main div.character_sheet div.ambitiosn table tr {
     min-height: 52px;
@@ -612,16 +612,13 @@ div#main div.character_sheet div.ambitiosn table tr td.head {
 }
 
 div#main div.character_sheet div.party {
-    border: 1px solid #d312a9;
+    border: 0px solid #d312a9;
     width: 700px;
-    margin-left: 840px;
     margin-bottom: 10px;
 }
 
 div#main div.character_sheet div.party table {
     width: 700px;
-
-    margin-left: 20px;
 }
 div#main div.character_sheet div.party table tr {
     min-height: 52px;
@@ -637,6 +634,214 @@ div#main div.character_sheet div.party table tr td.title {
 div#main div.character_sheet div.party table tr td.head {
     font-size: 150%;
     text-align: left;
+    padding-left: 10px;
+}
+
+div#main div.character_sheet div.sheer2_left {
+    /* background-color: #25c840; */
+    width: 940px;
+
+    float: left;
+    margin-left: 135px;
+}
+
+div#main div.character_sheet div.sheer2_left table.armour {
+    /* background-color: #ddd91f; */
+    width: 940px;
+}
+
+div#main div.character_sheet div.sheer2_left table.armour tr.title {
+    font-size: 200%;
+    text-align: center;
+}
+div#main div.character_sheet div.sheer2_left table.armour tr.header {
+    font-size: 150%;
+    text-align: center;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom {
+    /* background-color: #128fd3; */
+    width: 940px;
+    height: 300px;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings {
+    /* background-color: #dbb50b; */
+    width: 50%;
+    float: left;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table {
+    /* background-color: #35fbd6; */
+    width: 95%;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right {
+    /* background-color: #666666; */
+    width: 50%;
+    float: left;
+}
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.psychology {
+    /* background-color: #660000; */
+    min-height: 30%;
+    margin-top: 10px;
+    text-align: center;
+}
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.coruption_mutation {
+    /* background-color: #129bb3; */
+    min-height: 30%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom {
+    /* background-color: #35fbd6; */
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left {
+    /* background-color: #660000; */
+    width: 45%;
+    float: left;
+}
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table {
+    width: 95%;
+
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table  td.title {
+    font-size: 150%;
+    text-align: center;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table  td.header {
+    font-weight: bold;
+    width: 15%;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right {
+    /* background-color: #452304; */
+    width: 45%;
+    float: left;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table {
+    width: 100%;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table  td.title {
+    font-size: 150%;
+    text-align: center;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table  td.header {
+    font-weight: bold;
+    width: 15%;
+}
+
+div#main div.character_sheet div.sheer2_right {
+    /* background-color: #d02e2e; */
+    width: 480px;
+    float: left;
+}
+
+div#main div.character_sheet div.sheer2_right div.sheet2_ap {
+    background-color: #d02e2e;
+    background-image: url("img/WFRP_-_Character_Sheet-2_ap.png");
+    width: 472px;
+    height: 727px;
+    float: left;
+}
+
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input {
+
+    width: 50px;
+    height: 50px;
+}
+
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#head {
+    margin-left: 46px;
+    margin-top: 120px;
+    position: absolute;
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#left_arm {
+    margin-left: 355px;
+    margin-top: 190px;
+    position: absolute;
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#right_arm {
+    margin-left: 45px;
+    margin-top: 280px;
+    position: absolute;
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#body {
+    margin-left: 358px;
+    margin-top: 358px;
+    position: absolute;
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#left_leg {
+    margin-left: 358px;
+    margin-top: 552px;
+    position: absolute;
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#right_leg {
+    margin-left: 45px;
+    margin-top: 455px;
+    position: absolute;
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#shield {
+    margin-left: 45px;
+    margin-top: 590px;
+    position: absolute;
+}
+
+div#main div.character_sheet div.sheer2_right div.sheet2_wounds {
+
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_wounds table {
+    width: 480px;
+}
+
+div#main div.character_sheet div.sheer2_right div.sheet2_wounds td.title {
+    font-size: 200%;
+    text-align: center;
+}
+div#main div.character_sheet div.sheer2_right div.sheet2_wounds td.header {
+    font-weight: bold;
+    text-align: center;
+    width: 80px;
+}
+
+div#main div.character_sheet table.weapons {
+    width: 1420px;
+    margin-left: 135px;
+    padding-top: 20px;
+}
+
+div#main div.character_sheet table.weapons tr.title {
+    font-size: 200%;
+    text-align: center;
+}
+div#main div.character_sheet table.weapons tr.header {
+    font-size: 150%;
+    text-align: center;
+    padding-left: 10px;
+}
+
+div#main div.character_sheet table.spells {
+    width: 1420px;
+    margin-left: 135px;
+    padding-top: 20px;
+}
+
+div#main div.character_sheet table.spells tr.title {
+    font-size: 200%;
+    text-align: center;
+}
+div#main div.character_sheet table.spells tr.header {
+    font-size: 150%;
+    text-align: center;
     padding-left: 10px;
 }
 
