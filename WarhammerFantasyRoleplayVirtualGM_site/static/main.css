@@ -162,49 +162,17 @@ div#main_top_bar div.user {
     line-height: 35px;
 }
 
+div#main {
+    padding: 0 0 0 0;
+    width: auto;
+    overflow: hidden;
+    position: relative;
+}
+
 div#main h3.main {
     font-size : 20px;
     border-bottom : 0px solid #666666;
     margin-bottom : 10px;
-}
-
-div#main div#tournamentDetail ol.players_classification li.round {
-    margin : 15px 0 15px 0;
-}
-
-div#main div#tournamentDetail h3 {
-    font-size : 16px;
-    margin : 3px 0 3px 0;
-}
-
-div#main div#tournamentDetail h4 {
-    font-size : 16px;
-    margin : 3px 0 3px 0;
-}
-
-div#main div#tournamentDetail li.roundHead {
-    margin : 0 0 0 15px;
-}
-
-div#main div#tournamentDetail li.roundHead h5 {
-    font-size : 12px;
-    color : #000000;
-}
-
-div#main div#tournamentDetail li.roundHead li.roundDetail {
-    margin : 0 0 0 15px;
-}
-
-div#main div#tournamentDetail ol.players_classification {
-    margin : 0 0 0 25px;
-}
-
-div#main div#tournamentDetail ul.players_classification {
-    margin : 0 0 0 25px;
-}
-
-div#main div#tournamentDetail ul.players_classification li.small {
-    font-size : 9px;
 }
 
 div#main div#blog {
@@ -230,19 +198,29 @@ div#main div#blog div.blog_content_info p {
 div#main div#blog div.blog_content .news-text {
     font-size: 13px;
 }
-div#main div.character_sheet {
-    background-image: url("img/WFRP_-_Character_Sheet-1.png");
-    background-color: #c4a314;
-    width: 1693px;
-    height: 2126px;
-}
-div#main div.character_sheet div.top {
+
+div#main div.top {
     background-image: url("img/WFRP_-_Character_Sheet-1_head.png");
     background-color: #c4a314;
     border: 0px solid #35fbd6;
     width: 1693px;
     height: 259px;
-    position: absolute;
+}
+div#main div.bottom {
+    background-image: url("img/WFRP_-_Character_Sheet-1_bottom.png");
+    background-color: #c4a314;
+    border: 0px solid #35fbd6;
+    width: 1693px;
+    height: 118px;
+    bottom: 0;
+}
+
+
+div#main div.character_sheet {
+    background-image: url("img/WFRP_-_Character_Sheet-1_middle.png");
+    /* background-color: #c4a314; */
+    /* border: 1px solid #FF0000; */
+    width: 1693px;
 }
 
 div#main div.character_sheet input {
@@ -252,103 +230,89 @@ div#main div.character_sheet input {
 }
 
 div#main div.character_sheet div.head {
-    border: 0px solid #35fbd6;
+    background-color: #c4a314;
     width: 1455px;
-    height: 160px;
-    position: absolute;
-    margin-top: 259px;
+    height: 180px;
     margin-left: 117px;
 }
 
-div#main div.character_sheet div.head input#character_sheet_name {
+div#main div.character_sheet div.head table {
+    width: 1420px;
+    height: 170px;
+    margin-left: 12px;
+}
+div#main div.character_sheet div.head table tr {
+}
+div#main div.character_sheet div.head table tr td {
+    text-align: center;
+}
+div#main div.character_sheet div.head table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.head table tr td.head {
+    font-size: 103%;
+    text-align: right;
+}
+div#main div.character_sheet div.head table tr td input {
     height: 32px;
+    position: relative;
+}
+
+div#main div.character_sheet div.head table tr td input#character_sheet_name {
     width: 625px;
-    margin-top: 7px;
-    margin-left: 98px;
 }
 
-div#main div.character_sheet div.head input#species {
-    height: 32px;
-    width: 270;
-    margin-top: 7px;
-    margin-left: 813px;
+div#main div.character_sheet div.head table tr td input#species {
+    width: 270px;
 }
 
-div#main div.character_sheet div.head input#class {
-    height: 32px;
-    width: 270;
-    margin-top: 7px;
-    margin-left: 1163px;
+div#main div.character_sheet div.head table tr td  input#class {
+    width: 270px;
 }
 
-div#main div.character_sheet div.head input#carrer {
-    height: 32px;
+div#main div.character_sheet div.head table tr td  input#carrer {
     width: 620px;
-    margin-top: 46px;
-    margin-left: 103px;
 }
 
-div#main div.character_sheet div.head input#carrer_level {
-    height: 32px;
-    width: 570px;
-    margin-top: 46px;
-    margin-left: 865px;
+div#main div.character_sheet div.head table tr td  input#carrer_level {
+    width: 620px;
 }
 
-div#main div.character_sheet div.head input#carrer_path {
-    height: 32px;
-    width: 935px;
-    margin-top: 86px;
-    margin-left: 156px;
+div#main div.character_sheet div.head table tr td  input#carrer_path {
+    width: 1005;
 }
 
-div#main div.character_sheet div.head input#status {
-    height: 32px;
+div#main div.character_sheet div.head table tr td  input#status {
     width: 265px;
-    margin-top: 86px;
-    margin-left: 1169px;
 }
 
-div#main div.character_sheet div.head input#age {
-    height: 32px;
+div#main div.character_sheet div.head table tr td  input#age {
     width: 305px;
-    margin-top: 125px;
-    margin-left: 78px;
 }
 
-div#main div.character_sheet div.head input#height {
-    height: 32px;
+div#main div.character_sheet div.head table tr td  input#height {
     width: 255px;
-    margin-top: 125px;
-    margin-left: 473px;
 }
 
-div#main div.character_sheet div.head input#hair {
+div#main div.character_sheet div.head table tr td  input#hair {
     height: 32px;
     width: 300px;
-    margin-top: 125px;
-    margin-left: 793px;
 }
 
-div#main div.character_sheet div.head input#eyes {
+div#main div.character_sheet div.head table tr td  input#eyes {
     height: 32px;
     width: 280px;
-    margin-top: 125px;
-    margin-left: 1153px;
 }
 
 div#main div.character_sheet div.characteristics {
-    border: 0px solid #35fbd6;
-    background-color: #993333;
-    width: 675px;
+    background-color: #abc818;
+    width: 700px;
     height: 280px;
-    margin-top: 440px;
     margin-left: 117px;
-    position: absolute;
+    float: left;
 }
 div#main div.character_sheet div.characteristics table {
     width: 635px;
-    margin-top: 13px;
     margin-left: 10px;
 }
 div#main div.character_sheet div.characteristics table tr {
@@ -373,155 +337,192 @@ div#main div.character_sheet div.characteristics input {
     position: relative;
 }
 
+div#main div.character_sheet div.right {
+    background-color: #469933;
+    width: 700px;
+    margin-left: 840px;
+}
 
-div#main div.character_sheet div.fate {
-    border: 0px solid #35fbd6;
-    background-color: #993333;
-    width: 165px;
-    height: 155px;
-    position: absolute;
-    margin-top: 442px;
-    margin-left: 800px;
+div#main div.character_sheet div.right div.fate_resistance_exp {
+    background-color: #d9c721;
+    width: 700px;
+    position:relative
 }
-div#main div.character_sheet div.fate table {
+
+div#main div.character_sheet div.right div.fate_resistance_exp div.fate {
+    background-color: #10d010;
+    width: 150px;
+    float: left;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.fate table {
     width: 140px;
-    margin-top: 15px;
-    margin-left: 12px;
 }
-div#main div.character_sheet div.fate table tr {
+div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr {
     min-height: 52px;
 }
-div#main div.character_sheet div.fate table tr td {
+div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td {
     min-height: 35px;
     min-width: 42px;
     text-align: center;
 }
-div#main div.character_sheet div.fate table tr td.title {
+div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.fate table tr td.head {
+div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td.head {
     font-size: 150%;
     text-align: left;
 }
-div#main div.character_sheet div.fate table tr td input {
+div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td input {
     height: 35px;
     width: 43px;
     position: relative;
 }
 
-div#main div.character_sheet div.resilience {
-    border: 0px solid #35fbd6;
-    width: 330px;
-    height: 155px;
-    position: absolute;
-    margin-top: 442px;
-    margin-left: 975px;
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience {
+    background-color: #9c23ba;
+    width: 320px;
+    float: left;
 }
-div#main div.character_sheet div.resilience input#resilience_resilience {
+
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table {
+    width: 140px;
+    margin-left: 10px;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr {
+    min-height: 52px;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td {
+    min-height: 35px;
+    min-width: 42px;
+    text-align: center;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td.head {
+    font-size: 120%;
+    text-align: center;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input {
+    height: 35px;
+    width: 43px;
+    position: relative;
+}
+
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_resilience {
     height: 37px;
     width: 105px;
-    margin-top: 103px;
-    margin-left: 11px;
 }
-div#main div.character_sheet div.resilience input#resilience_resolve {
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_resolve {
     height: 37px;
     width: 82px;
-    margin-top: 103px;
-    margin-left: 120px;
 }
-div#main div.character_sheet div.resilience input#resilience_motivation {
+div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_motivation {
     height: 37px;
     width: 110px;
-    margin-top: 103px;
-    margin-left: 206px;
 }
 
-div#main div.character_sheet div.experience {
-    border: 0px solid #35fbd6;
-    width: 255px;
-    height: 155px;
-    position: absolute;
-    margin-top: 442px;
-    margin-left: 1318px;
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience {
+    background-color: #993333;
+    width: 230px;
+    float: left;
 }
-div#main div.character_sheet div.experience input#experience_current {
+
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table {
+    width: 140px;
+    margin-left: 12px;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr {
+    min-height: 52px;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td {
+    min-height: 35px;
+    min-width: 42px;
+    text-align: center;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td.head {
+    font-size: 120%;
+    text-align: center;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input {
+    height: 35px;
+    width: 43px;
+    position: relative;
+}
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_current {
     height: 37px;
     width: 80px;
-    margin-top: 103px;
-    margin-left: 7px;
 }
-div#main div.character_sheet div.experience input#experience_spent {
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_spent {
     height: 37px;
     width: 70px;
-    margin-top: 103px;
-    margin-left: 94px;
 }
-div#main div.character_sheet div.experience input#experience_total {
+div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_total {
     height: 37px;
     width: 60px;
-    margin-top: 103px;
-    margin-left: 168px;
+}
+div#main div.character_sheet div.right div.movement {
+    background-color: #1310b3;
+    width: 700px;
+}
+div#main div.character_sheet div.right div.movement table {
+    width: 700px;
+    margin-left: 12px;
+}
+div#main div.character_sheet div.right div.movement table tr {
+    min-height: 52px;
+}
+div#main div.character_sheet div.right div.movement table tr td {
+    min-height: 35px;
+    min-width: 42px;
+    text-align: center;
+}
+div#main div.character_sheet div.right div.movement table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.right div.movement table tr td.head {
+    font-size: 150%;
+    text-align: left;
+    padding-left: 10px;
+}
+div#main div.character_sheet div.right div.movement table tr td input {
+    position: relative;
 }
 
+div#main div.character_sheet div.right div.movement table tr td input#movement_movement {
+    height: 37px;
+    width: 90px;
 
-div#main div.character_sheet div.movement {
-    border: 0px solid #35fbd6;
-    width: 774px;
-    height: 117px;
-    position: absolute;
-    margin-top: 603px;
-    margin-left: 800px;
 }
-div#main div.character_sheet div.movement h2 {
-    border: 1px solid #35fbd6;
-    font-size: 250%;
-    margin-top: 15px;
-    margin-left: 37%;
-    padding: 0px;
-    display: block;
-    position: absolute;
-}
-div#main div.character_sheet div.movement input#movement_movement {
+div#main div.character_sheet div.right div.movement table tr td input#movement_walk {
     height: 37px;
     width: 90px;
-    margin-top: 67px;
-    margin-left: 178px;
-    position: absolute;
 }
-div#main div.character_sheet div.movement input#movement_walk {
+div#main div.character_sheet div.right div.movement table tr td input#movement_run {
     height: 37px;
     width: 90px;
-    margin-top: 67px;
-    margin-left: 415px;
-}
-div#main div.character_sheet div.movement input#movement_run {
-    height: 37px;
-    width: 90px;
-    margin-top: 67px;
-    margin-left: 654px;
 }
 
 div#main div.character_sheet div.basic_skills {
-    border: 1px solid #35fbd6;
-    background-color: #97D7F4;
-    width: 486px;
+    background-color: #993333;
+    width: 700px;
     min-height: 103px;
-    position: absolute;
-    margin-top: 729px;
     margin-left: 118px;
+    float: left;
 }
 div#main div.character_sheet div.basic_skills table {
-    border: 1px solid #000000;
-    background-color: #660000;
+    border: 0px solid #000000;
     width: 450px;
-    margin-top: 10px;
     margin-left: 20px;
 }
 div#main div.character_sheet div.basic_skills table tr {
-    border: 1px solid #000000;
+    border: 0px solid #000000;
 }
 div#main div.character_sheet div.basic_skills table tr th  {
-    border: 1px solid #000000;
+    border: 0px solid #000000;
 }
 div#main div.character_sheet div.basic_skills table tr th.block_name  {
     font-size: 36px;
@@ -530,8 +531,9 @@ div#main div.character_sheet div.basic_skills table tr.block_header  {
     font-size: 20px;
 }
 div#main div.character_sheet div.basic_skills table tr td {
-    border: 1px solid #000000;
-    padding: 0px;
+    border: 0px solid #000000;
+    padding-left: 3px;
+    padding-right: 3px;
     margin: 0px;
     font-size: 18px;
     text-align: center;
@@ -558,35 +560,84 @@ div#main div.character_sheet div.basic_skills table tr td.edit input  {
     position: relative;
 }
 
-
-
 div#main div.character_sheet div.talents {
-    border: 1px solid #35fbd6;
-    background-color: #97D7F4;
-    width: 486px;
-    min-height: 103px;
-    position: absolute;
-    margin-top: 729px;
-    margin-left: 825px;
+    background-color: #993333;
+    width: 700px;
+    margin-left: 840px;
 }
 div#main div.character_sheet div.talents table {
-    border: 1px solid #000000;
-    background-color: #660000;
+    border: 0px solid #000000;
     width: 450px;
-    margin-top: 10px;
     margin-left: 20px;
 }
 div#main div.character_sheet div.talents table tr {
-    border: 1px solid #000000;
+    border: 0px solid #000000;
 }
 div#main div.character_sheet div.talents table tr th  {
-    border: 1px solid #000000;
+    border: 0px solid #000000;
 }
 div#main div.character_sheet div.talents table tr th.block_name  {
     font-size: 36px;
 }
 div#main div.character_sheet div.talents table tr.block_header  {
     font-size: 20px;
+}
+
+div#main div.character_sheet div.ambitiosn {
+    border: 1px solid #128fd3;
+    width: 700px;
+    float: left;
+    margin-left: 120px;
+    margin-bottom: 10px;
+}
+div#main div.character_sheet div.ambitiosn table {
+    width: 700px;
+    margin-left: 12px;
+}
+div#main div.character_sheet div.ambitiosn table tr {
+    min-height: 52px;
+}
+div#main div.character_sheet div.ambitiosn table tr td {
+    min-height: 35px;
+    min-width: 42px;
+    text-align: center;
+}
+div#main div.character_sheet div.ambitiosn table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.ambitiosn table tr td.head {
+    font-size: 150%;
+    text-align: left;
+    padding-left: 10px;
+}
+
+div#main div.character_sheet div.party {
+    border: 1px solid #d312a9;
+    width: 700px;
+    margin-left: 840px;
+    margin-bottom: 10px;
+}
+
+div#main div.character_sheet div.party table {
+    width: 700px;
+
+    margin-left: 20px;
+}
+div#main div.character_sheet div.party table tr {
+    min-height: 52px;
+}
+div#main div.character_sheet div.party table tr td {
+    min-height: 35px;
+    min-width: 42px;
+    text-align: center;
+}
+div#main div.character_sheet div.party table tr td.title {
+    font-size: 200%;
+}
+div#main div.character_sheet div.party table tr td.head {
+    font-size: 150%;
+    text-align: left;
+    padding-left: 10px;
 }
 
 @media only screen and (min-width:601px) {

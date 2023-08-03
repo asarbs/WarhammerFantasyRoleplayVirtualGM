@@ -9,27 +9,91 @@
     {% endwith %}
 </form> {% endcomment %}
 
+<div class="top"> </div>
 <div class="character_sheet">
-    <div class="top"> </div>
+
     <div class="head">
-        <input type="text" id="character_sheet_name" name="fname">
-        <input type="text" id="species" name="fname">
-        <input type="text" id="class" name="fname">
-
-        <input type="text" id="carrer" name="fname">
-        <input type="text" id="carrer_level" name="fname">
-
-        <input type="text" id="carrer_path" name="fname">
-        <input type="text" id="status" name="fname">
-
-        <input type="text" id="age" name="fname">
-        <input type="text" id="height" name="fname">
-        <input type="text" id="hair" name="fname">
-        <input type="text" id="eyes" name="fname">
+        <table border="0">
+            <tr>
+                <td class="head">
+                    Name
+                </td>
+                <td colspan="3">
+                    <input type="text" id="character_sheet_name" name="fname">
+                </td>
+                <td class="head">
+                    Species
+                </td>
+                <td>
+                    <input type="text" id="species" name="fname">
+                </td>
+                <td class="head">
+                    Class
+                </td>
+                <td>
+                    <input type="text" id="class" name="fname">
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Carrer
+                </td>
+                <td colspan="3">
+                    <input type="text" id="carrer" name="fname">
+                </td>
+                <td class="head">
+                    Carrer Level
+                </td>
+                <td colspan="3">
+                    <input type="text" id="carrer_level" name="fname">
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Carrer Path
+                </td>
+                <td colspan="5">
+                    <input type="text" id="carrer_path" name="fname">
+                </td>
+                <td class="head">
+                    Status
+                </td>
+                <td>
+                    <input type="text" id="status" name="fname">
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Age
+                </td>
+                <td>
+                    <input type="text" id="age" name="fname">
+                </td>
+                <td class="head">
+                    Height
+                </td>
+                <td>
+                    <input type="text" id="height" name="fname">
+                </td>
+                <td class="head">
+                    Hair
+                </td>
+                <td>
+                    <input type="text" id="hair" name="fname">
+                </td>
+                <td class="head">
+                    Eyes
+                </td>
+                <td>
+                    <input type="text" id="eyes" name="fname">
+                </td>
+            </tr>
+        </table>
     </div>
-
+</div>
+<div class="character_sheet">
     <div class="characteristics">
-        <table border="1">
+        <table border="0">
             <tr>
                 <td colspan="11" class="title">
                     CHARACTERISTICS
@@ -90,43 +154,121 @@
         </table>
     </div>
 
-    <div class="fate">
-        <table border="0">
-            <tr>
-                <td colspan="2" class="title">
-                    FATE
-                </td>
-            </tr>
-            <tr>
-                <td class="head">Fate</td>
-                <td><input type="text" id="fate_fate" name="fname"></td>
-            </tr>
-            <tr>
-                <td class="head">Fortune</td>
-                <td><input type="text" id="fate_fortune" name="fname"></td>
-            </tr>
-        </table>
+    <div class="right">
+        <div class="fate_resistance_exp">
+            <div class="fate">
+                <table border="0">
+                    <tr>
+                        <td colspan="2" class="title">
+                            FATE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head">Fate</td>
+                        <td><input type="text" id="fate_fate" name="fname"></td>
+                    </tr>
+                    <tr>
+                        <td class="head">Fortune</td>
+                        <td><input type="text" id="fate_fortune" name="fname"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="resilience">
+                <table>
+                    <tr>
+                        <td colspan="3" class="title">
+                            RESILIENCE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head">
+                            Resilience
+                        </td>
+                        <td class="head">
+                            Resolve
+                        </td>
+                        <td class="head">
+                            Motivation
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="resilience_resilience" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="resilience_resolve" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="resilience_motivation" name="fname">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="experience">
+                <table>
+                    <tr>
+                        <td colspan="3" class="title">
+                            EXPERIENCE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head">
+                            Current
+                        </td>
+                        <td class="head">
+                            Spent
+                        </td>
+                        <td class="head">
+                            Total
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="experience_current" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="experience_spent" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="experience_total" name="fname">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="movement">
+            <table border="0">
+                <tr>
+                    <td colspan="6" class="title">
+                        MOVEMENT
+                    </td>
+                </tr>
+                <tr>
+                    <td class="head">
+                        Movement
+                    </td>
+                    <td>
+                        <input type="text" id="movement_movement" name="fname">
+                    </td>
+                    <td class="head">
+                        Walk
+                    </td>
+                    <td>
+                        <input type="text" id="movement_walk" name="fname">
+                    </td>
+                    <td class="head">
+                        Run
+                    </td>
+                    <td>
+                        <input type="text" id="movement_run" name="fname">
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-
-    <div class="resilience">
-        <input type="text" id="resilience_resilience" name="fname">
-        <input type="text" id="resilience_resolve" name="fname">
-        <input type="text" id="resilience_motivation" name="fname">
-    </div>
-
-    <div class="experience">
-        <input type="text" id="experience_current" name="fname">
-        <input type="text" id="experience_spent" name="fname">
-        <input type="text" id="experience_total" name="fname">
-    </div>
-
-    <div class="movement">
-        <h2>MOVEMENT</h2>
-        <input type="text" id="movement_movement" name="fname">
-        <input type="text" id="movement_walk" name="fname">
-        <input type="text" id="movement_run" name="fname">
-    </div>
-
+    <div class="clear"></div>
+</div>
+<div class="character_sheet">
     <div class="basic_skills">
         <table>
             <tr>
@@ -190,7 +332,78 @@
             </tr>
         </table>
     </div>
-
+    <div class="clear"></div>
 </div>
+<div class="character_sheet">
+    <div class="ambitiosn">
+        <table border="0">
+            <tr>
+                <td class="title" colspan="2">
+                    AMBITIOSN
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Short-term
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td  class="head">
+                    Long-term
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="party">
+        <table border="0">
+            <tr>
+                <td class="title" colspan="2">
+                    PARTY
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Party Name
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Short-term
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Long-term
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Members
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div class="bottom"></div>
 
 {% endblock %}
