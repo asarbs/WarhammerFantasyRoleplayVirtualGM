@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from WarhammerFantasyRoleplayVirtualGM_app.validators import validator_sex
 
 # Create your models here.
 
@@ -38,6 +39,19 @@ class Campaign2Player(models.Model):
 
 class Species(models.Model):
     name = models.CharField(max_length= 50)
+    random_interal_start = models.IntegerField(default=0, verbose_name="random_interal_start")
+    random_interal_end = models.IntegerField(default=0, verbose_name="random_interal_start")
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+class ExampleName(models.Model):
+    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    name = models.CharField(max_length= 50, unique=True)
+    sex = models.CharField(validators = [validator_sex], max_length=1, default="f")
 
     def __str__(self):
         return u"{0}".format(self.name)

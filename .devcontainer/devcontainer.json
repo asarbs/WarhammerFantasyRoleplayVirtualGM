@@ -21,7 +21,8 @@
 				"chop-dbhi.multiline-string-editor",
 				"mhutchie.git-graph",
 				"aeschli.vscode-css-formatter",
-				"mohd-akram.vscode-html-format"
+				"mohd-akram.vscode-html-format",
+				"alexcvzz.vscode-sqlite"
 			]		
 		}
 	}
