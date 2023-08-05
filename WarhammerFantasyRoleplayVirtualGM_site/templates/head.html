@@ -5,32 +5,13 @@
 
 <link rel="stylesheet" href="{% static "main.css" %}" />
 <link rel="stylesheet" href="{% static "table.css" %}" />
-<script src="{% static "character.js" %}"></script>
-<script src="{% static "jquery/src/jquery.js" %}"></script>
 
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="{% static "character.js" %}"></script>
 <script type="text/javascript">
-    function showMenu() {
-        var element = document.getElementById("menu");
-        if(element.style.display == "" || element.style.display == "none")
-        {
-            element.style.display = "inline"
-        }
-        else if( element.style.display == "inline")
-        {
-            element.style.display = "none"
-        }
-    }
-    function hideShowMenu(){
-        var width = window.innerWidth;
-        if(width <= 480)
-        {
-            document.getElementById("menu").style.display = "none"
-        }
-        else if (width > 480)
-        {
-            document.getElementById("menu").style.display = "inline"
-        }
-    }
+    $(document).ready(function() {
+        main();
+    });
 
     function getCookie(cname)
     {
