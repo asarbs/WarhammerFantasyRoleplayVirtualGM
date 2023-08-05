@@ -1,0 +1,3 @@
+[submodule "WarhammerFantasyRoleplayVirtualGM_site/static/jquery"]
+	path = WarhammerFantasyRoleplayVirtualGM_site/static/jquery
+	url = git://github.com/jquery/jquery.git

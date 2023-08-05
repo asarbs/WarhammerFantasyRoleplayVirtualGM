@@ -9,6 +9,8 @@
     {% endwith %}
 </form> {% endcomment %}
 
+{{ characker_id }}
+
 <div class="top"> </div>
 <div class="character_sheet">
 
@@ -25,7 +27,11 @@
                     Species
                 </td>
                 <td>
-                    <input type="text" id="species" name="fname">
+                    <select name="species" id="species">
+                        {% for specie in species %}
+                        <option value="{{ specie.name }}">{{ specie.name }}</option>
+                        {% endfor %}
+                    </select>
                 </td>
                 <td class="head">
                     Class
@@ -305,7 +311,7 @@
                     <input type="text" id="basic_skills_adv__{{ basic_skill.id }}" name="fname">
                 </td>
                 <td>
-                    C
+                    {{ basic_skill.adv }}
                 </td>
             </tr>
         {% endfor %}

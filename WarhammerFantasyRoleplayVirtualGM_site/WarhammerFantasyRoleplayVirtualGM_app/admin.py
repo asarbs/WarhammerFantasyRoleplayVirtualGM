@@ -14,7 +14,8 @@ class CampaignAdmin(admin.ModelAdmin):
     pass
 
 class CharacterAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("player", "name",)
+
 
 class SpeciesAdmin(admin.ModelAdmin):
     list_display = ("name", "random_interal_start", "random_interal_end")
@@ -55,6 +56,8 @@ class ExampleNameAdmin(admin.ModelAdmin):
     list_display = ("name", "species", "sex")
     list_filter = ("species", "sex")
 
+class Character2SkillAdmin(admin.ModelAdmin):
+    pass
 
 
 from . import models
@@ -72,3 +75,4 @@ admin.site.register(models.Eyes ,EyesAdmin)
 admin.site.register(models.Skils ,SkillsAdmin)
 admin.site.register(models.Talent ,TalenAdmin)
 admin.site.register(models.Campaign2Player, Campaign2PlayerAdmin)
+admin.site.register(models.Character2Skill, Character2SkillAdmin)

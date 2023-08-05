@@ -5,6 +5,8 @@
 
 <link rel="stylesheet" href="{% static "main.css" %}" />
 <link rel="stylesheet" href="{% static "table.css" %}" />
+<script src="{% static "character.js" %}"></script>
+<script src="{% static "jquery/src/jquery.js" %}"></script>
 
 <script type="text/javascript">
     function showMenu() {
@@ -29,7 +31,7 @@
             document.getElementById("menu").style.display = "inline"
         }
     }
-    
+
     function getCookie(cname)
     {
         var name = cname + "=";
@@ -41,7 +43,7 @@
         }
         return "";
     }
-    
+
     function hideCookie()
         {
             document.cookie="cookie_allow=true; expires=365; path=/";
@@ -57,7 +59,7 @@
             }
         }
     );
-    
+
     </script>
 
 </head>

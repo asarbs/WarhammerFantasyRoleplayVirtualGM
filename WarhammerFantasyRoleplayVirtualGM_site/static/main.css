@@ -226,7 +226,14 @@ div#main div.character_sheet {
 div#main div.character_sheet input {
     background-color: rgba(21, 121, 112, 0.1);
     border: 1px solid #FF0000;
+    height: 32px;
     position: absolute;
+}
+
+div#main div.character_sheet select {
+    background-color: rgba(21, 121, 112, 0.1);
+    border: 1px solid #FF0000;
+    height: 32px;
 }
 
 div#main div.character_sheet div.head {
@@ -262,7 +269,7 @@ div#main div.character_sheet div.head table tr td input#character_sheet_name {
     width: 625px;
 }
 
-div#main div.character_sheet div.head table tr td input#species {
+div#main div.character_sheet div.head table tr td select#species {
     width: 270px;
 }
 

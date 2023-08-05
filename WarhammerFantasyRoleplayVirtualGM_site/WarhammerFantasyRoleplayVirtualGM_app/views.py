@@ -20,6 +20,10 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Player
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
 from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Skill
+from WarhammerFantasyRoleplayVirtualGM_app.models import Species
+
 
 # Create your views here.
 from django.http import HttpResponse
@@ -47,9 +51,29 @@ def addCharacter(request):
     basic_skills_criterion1 = Q(id__gte = 1)
     basic_skills_criterion2 = Q(id__lte = 26)
     basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").order_by('name').values()
+    player = Player.objects.get(user=request.user)
+    character = Character(player=player, career_path_id='1', ch_class_id='1', eyes_id='1', hair_id='1', species_id='1')
+    character.save()
+
+    for skill in basic_skills:
+        c2s = Character2Skill(characters_id=character.id, skills_id = skill['id'])
+        c2s.save()
+
+    skills_values = Character2Skill.objects.filter(characters_id=character.id)
+    for skill in basic_skills:
+        for skill_val in skills_values:
+
+            if skill['id'] == skill_val.skills_id:
+                skill['adv'] = skill_val.adv
+        logger.warning(skill)
+
+    species = Species.objects.all()
+
 
     context = {
-        'basic_skills': basic_skills
+        'characker_id': character.id,
+        'basic_skills': basic_skills,
+        'species': species
         }
     return render(request, 'addCharacter.html',context)
 
