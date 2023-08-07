@@ -11,5 +11,7 @@ urlpatterns = [
     path('remindPassword', views.RemindPassword, name="remindPassword"),
     path("createCampaign", views.createCampaign, name="createCampaign"),
     path("detailsCampaign/<int:CampaignId>", views.detailsCampaign, name="detailsCampaign"),
-    path('addCharacter', views.addCharacter, name="addCharacter")
+    path('addCharacter', views.addCharacter, name="addCharacter"),
+    path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
+    path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
 ]

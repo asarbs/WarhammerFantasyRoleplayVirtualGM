@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.forms import Form
 from django.forms import CharField
 from django.forms import PasswordInput
 from django.views.generic.edit import UpdateView
 from django.db.models import Q
+
+import random
 
 from django.urls import reverse
 
@@ -62,11 +64,8 @@ def addCharacter(request):
     skills_values = Character2Skill.objects.filter(characters_id=character.id)
     for skill in basic_skills:
         for skill_val in skills_values:
-
             if skill['id'] == skill_val.skills_id:
                 skill['adv'] = skill_val.adv
-        logger.warning(skill)
-
     species = Species.objects.all()
 
 
@@ -76,6 +75,43 @@ def addCharacter(request):
         'species': species
         }
     return render(request, 'addCharacter.html',context)
+
+def ajax_save_character_species(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        species_id = request.POST['species_id']
+
+        logger.info("{} {}".format(character_id, species_id))
+
+        character = Character.objects.get(id = character_id)
+        character.species = Species.objects.get(id = species_id)
+        character.save()
+
+        return JsonResponse({'status': 'ok'})
+    logger.error("ajax_save_character_species is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_randomSpecies(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        species_list = Species.objects.all()
+        r = random.randrange(1, 100)
+        species = None
+        for s in species_list:
+
+            if r >= s.random_interal_start and r <= s.random_interal_end:
+                species = s
+                break
+
+        logger.info("ajax_randomSpecies: r={}, character_id={}, species.id={}".format(r, character_id, species.id))
+        character = Character.objects.get(id = character_id)
+        character.species = species
+        character.save()
+
+        return JsonResponse({'status': 'ok', 'species_id': species.id})
+    logger.error("ajax_save_character_species is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)

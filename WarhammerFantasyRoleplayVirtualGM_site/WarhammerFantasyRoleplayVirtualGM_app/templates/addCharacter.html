@@ -9,7 +9,7 @@
     {% endwith %}
 </form> {% endcomment %}
 
-{{ characker_id }}
+<input type="text" id="characer_id" name="characer_id" value="{{ characker_id }}">
 
 <div class="top"> </div>
 <div class="character_sheet">
@@ -21,15 +21,15 @@
                     Name
                 </td>
                 <td colspan="3">
-                    <input type="text" id="character_sheet_name" name="fname">
+                    <input type="text" id="character_sheet_name" name="character_sheet_name">
                 </td>
                 <td class="head">
-                    Species
+                    Species <img src="{% static "/img/dice_icon.png" %}" id="img_random_species"/>
                 </td>
                 <td>
-                    <select name="species" id="species">
+                    <select name="species" id="species" value="1">
                         {% for specie in species %}
-                        <option value="{{ specie.name }}">{{ specie.name }}</option>
+                        <option value="{{ specie.id }}">{{ specie.name }}</option>
                         {% endfor %}
                     </select>
                 </td>
