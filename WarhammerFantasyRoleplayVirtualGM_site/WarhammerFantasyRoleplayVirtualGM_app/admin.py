@@ -59,6 +59,8 @@ class ExampleNameAdmin(admin.ModelAdmin):
 class Character2SkillAdmin(admin.ModelAdmin):
     pass
 
+class RefBookAdmin(admin.ModelAdmin):
+    ordering = ("name",)
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
@@ -76,3 +78,4 @@ admin.site.register(models.Skils ,SkillsAdmin)
 admin.site.register(models.Talent ,TalenAdmin)
 admin.site.register(models.Campaign2Player, Campaign2PlayerAdmin)
 admin.site.register(models.Character2Skill, Character2SkillAdmin)
+admin.site.register(models.RefBook, RefBookAdmin)

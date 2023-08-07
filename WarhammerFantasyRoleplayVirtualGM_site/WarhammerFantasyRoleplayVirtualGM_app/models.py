@@ -4,6 +4,13 @@ from WarhammerFantasyRoleplayVirtualGM_app.validators import validator_sex
 
 # Create your models here.
 
+class RefBook(models.Model):
+    name = models.CharField(max_length= 250)
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
 
 class Campaign(models.Model):
     name = models.CharField(max_length= 250)
