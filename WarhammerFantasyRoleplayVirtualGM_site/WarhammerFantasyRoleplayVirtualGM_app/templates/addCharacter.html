@@ -11,6 +11,25 @@
 
 <input type="text" id="characer_id" name="characer_id" value="{{ characker_id }}">
 
+<div class="create_character">
+    <div class="header">
+        <h1>Species</h1>
+        <p id="BonusExperiencePoints">Bonus Experience Points: <span id="BonusExperiencePoints">0</span> XP</p>
+    </div>
+    <div class="create_character_body">
+        <div class="step_1_species">
+            <select name="species" id="species" value="1">
+                {% for specie in species %}
+                <option value="{{ specie.id }}">{{ specie.name }}</option>
+                {% endfor %}
+            </select>
+
+            <img src="{% static "/img/dice_icon.png" %}" id="img_random_species"/>
+        </div>
+    </div>
+    <div class="bottom"><img src="{% static "/img/arrow_right.png" %} "></div>
+</div>
+
 <div class="top"> </div>
 <div class="character_sheet">
 
@@ -24,7 +43,7 @@
                     <input type="text" id="character_sheet_name" name="character_sheet_name">
                 </td>
                 <td class="head">
-                    Species <img src="{% static "/img/dice_icon.png" %}" id="img_random_species"/>
+                    Species
                 </td>
                 <td>
                     <select name="species" id="species" value="1">

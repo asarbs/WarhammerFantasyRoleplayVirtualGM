@@ -215,17 +215,58 @@ div#main div.bottom {
     bottom: 0;
 }
 
+div#main div.create_character {
+    background-image: url("img/create_character_background.jpeg");
+    border-radius: 25px;
+    border: 3px solid #9d5009;
+    min-width: 1600px;
+    min-height: 400px;
+    padding: 20px;
+    margin-left: 26px;
+    margin-top: 50px;
+    position:fixed;
+    z-index: 1000;
+    font-size: 150%;
+}
+
+div#main div.create_character img#img_random_species{
+    background-color: #c4a314;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 800px;
+    display:block;
+}
+
+div#main div.create_character div.header h1 {
+    text-align: center;
+    border-bottom: 3px solid #9d5009;
+}
+
+div#main div.create_character div.header p {
+    border-bottom: 1px solid #9d5009;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-left: 10px;
+}
+
+div#main div.create_character div.create_character_body {
+    min-height: 400px;
+}
+
+div#main div.create_character div.bottom {
+    background: none;
+    border: 0px solid #35fbd6;
+    text-align: right;
+    width: 100%;
+    height: 62px;
+    bottom: 0;
+}
 
 div#main div.character_sheet {
     background-image: url("img/WFRP_-_Character_Sheet-1_middle.png");
     /* background-color: #c4a314; */
     /* border: 1px solid #FF0000; */
     width: 1693px;
-}
-
-div#main div.character_sheet img{
-    height: 20px;
-    margin-top: 10px;
 }
 
 div#main div.character_sheet input {

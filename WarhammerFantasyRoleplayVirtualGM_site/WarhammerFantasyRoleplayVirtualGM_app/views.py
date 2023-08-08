@@ -87,7 +87,7 @@ def ajax_save_character_species(request):
         character.species = Species.objects.get(id = species_id)
         character.save()
 
-        return JsonResponse({'status': 'ok'})
+        return JsonResponse({'status': 'ok', 'species_id': species_id})
     logger.error("ajax_save_character_species is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
