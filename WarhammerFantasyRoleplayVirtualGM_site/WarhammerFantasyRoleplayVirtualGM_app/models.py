@@ -12,6 +12,15 @@ class RefBook(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+class Reference(models.Model):
+    refBook = models.ForeignKey(RefBook, on_delete=models.CASCADE, verbose_name="Reference Book")
+    page = models.IntegerField(default=0, verbose_name="Page")
+    def __str__(self):
+        return u"{0}, {1}".format(self.refBook.name, self.page)
+
+    def __unicode__(self):
+        return u"{0}, {1}".format(self.refBook.name, self.page)
+
 class Campaign(models.Model):
     name = models.CharField(max_length= 250)
     party_name = models.CharField(max_length= 250, default="")
@@ -84,8 +93,28 @@ class CareerPath(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+class Class(models.Model):
+    name = models.CharField(max_length= 50)
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
 class Career(models.Model):
     name = models.CharField(max_length= 50)
+    ch_class = models.ForeignKey(Class, verbose_name="Class", default="1", on_delete=models.CASCADE)
+    random_table_human_start = models.IntegerField(default="0", verbose_name="random_table_human_start")
+    random_table_human_end = models.IntegerField(default="0", verbose_name="random_table_human_end")
+    random_table_dwarf_start = models.IntegerField(default="0", verbose_name="random_table_dwarf_start")
+    random_table_dwarf_end = models.IntegerField(default="0", verbose_name="random_table_dwarf_end")
+    random_table_halfling_start = models.IntegerField(default="0", verbose_name="random_table_halfling_start")
+    random_table_halfling_end = models.IntegerField(default="0", verbose_name="random_table_halfling_end")
+    random_table_high_elf_start = models.IntegerField(default="0", verbose_name="random_table_high_elf_start")
+    random_table_high_elf_end = models.IntegerField(default="0", verbose_name="random_table_high_elf_end")
+    random_table_wood_elf_start = models.IntegerField(default="0", verbose_name="random_table_wood_elf_start")
+    random_table_wood_elf_end = models.IntegerField(default="0", verbose_name="random_table_wood_elf_end")
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -145,7 +174,8 @@ class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
     name = models.CharField(max_length= 50)
     species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
-    ch_class = models.ForeignKey(CharacterClass, verbose_name="Class", on_delete=models.CASCADE)
+    ch_class = models.ForeignKey(Class, verbose_name="Class", on_delete=models.CASCADE, null=True)
+    career = models.ForeignKey(Career, verbose_name="Career", on_delete=models.CASCADE, null=True)
     career_level = models.IntegerField(default="1", verbose_name="Career  Level")
     career_path = models.ForeignKey(CareerPath, verbose_name="CareerPath", on_delete=models.CASCADE, null=True)
     status = models.ForeignKey(Status, verbose_name="Status", on_delete=models.CASCADE, null=True)

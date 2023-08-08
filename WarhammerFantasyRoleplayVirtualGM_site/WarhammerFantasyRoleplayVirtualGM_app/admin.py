@@ -30,7 +30,9 @@ class CareerPathAdmin(admin.ModelAdmin):
     pass
 
 class CareerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("ch_class", "name", "random_table_human_start", "random_table_human_end","random_table_dwarf_start","random_table_dwarf_end","random_table_halfling_start","random_table_halfling_end","random_table_high_elf_start","random_table_high_elf_end","random_table_wood_elf_start","random_table_wood_elf_end")
+    ordering = ("name", )
+    list_filter = ("ch_class",)
 
 class StatusAdmin(admin.ModelAdmin):
     pass
@@ -62,6 +64,10 @@ class Character2SkillAdmin(admin.ModelAdmin):
 class RefBookAdmin(admin.ModelAdmin):
     ordering = ("name",)
 
+class ReferenceAdmin(admin.ModelAdmin):
+    list_display = ("refBook","page")
+    list_filter = ("refBook",)
+
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
@@ -79,3 +85,4 @@ admin.site.register(models.Talent ,TalenAdmin)
 admin.site.register(models.Campaign2Player, Campaign2PlayerAdmin)
 admin.site.register(models.Character2Skill, Character2SkillAdmin)
 admin.site.register(models.RefBook, RefBookAdmin)
+admin.site.register(models.Reference, ReferenceAdmin)
