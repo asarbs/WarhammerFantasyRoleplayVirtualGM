@@ -17,17 +17,32 @@
         <p id="BonusExperiencePoints">Bonus Experience Points: <span id="BonusExperiencePoints">0</span> XP</p>
     </div>
     <div class="create_character_body">
-        <div class="step_1_species">
+        <div id="step_1_species" class="create_character_steps">
             <select name="species" id="species" value="1">
                 {% for specie in species %}
                 <option value="{{ specie.id }}">{{ specie.name }}</option>
                 {% endfor %}
             </select>
 
-            <img src="{% static "/img/dice_icon.png" %}" id="img_random_species"/>
+            <img src="{% static "/img/dice_icon.png" %}" id="img_random_species" class="img_random" />
+        </div>
+        <div id="step_2_class" class="create_character_steps">
+            <ol>
+            <li id="create_character_steps_li_1">Roll 1d100 on the Random Class and Career Table. If you
+            don’t like the result, move to step 2. If you keep the result,
+            gain +50 XP.</li>
+            <li id="create_character_steps_li_2">Roll twice more on the table, bringing your total to 3 choices.
+            If one of the three now suits you, select one and gain +25 XP.
+            If not, move to Step 3.</li>
+            <li id="create_character_steps_li_3">Choose your Class and Career, or keep rerolling on the table
+            until you get something you like. There is no XP bonus for
+            this.</li>
+            </ol>
+
+            <img src="{% static "/img/dice_icon.png" %}" id="img_random_class" class="img_random" />
         </div>
     </div>
-    <div class="bottom"><img src="{% static "/img/arrow_right.png" %} "></div>
+    <div class="bottom"><img src="{% static "/img/arrow_right.png" %} " id="img_character_creaton_next"></div>
 </div>
 
 <div class="top"> </div>

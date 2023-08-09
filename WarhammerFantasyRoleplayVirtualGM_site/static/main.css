@@ -229,7 +229,7 @@ div#main div.create_character {
     font-size: 150%;
 }
 
-div#main div.create_character img#img_random_species{
+div#main div.create_character img.img_random{
     background-color: #c4a314;
     height: 50px;
     margin-top: 10px;
@@ -251,6 +251,10 @@ div#main div.create_character div.header p {
 
 div#main div.create_character div.create_character_body {
     min-height: 400px;
+}
+
+div#main div.create_character div.create_character_body div.create_character_steps {
+    display: none;
 }
 
 div#main div.create_character div.bottom {

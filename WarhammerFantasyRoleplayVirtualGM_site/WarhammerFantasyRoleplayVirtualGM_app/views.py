@@ -25,6 +25,8 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Skill
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
+from WarhammerFantasyRoleplayVirtualGM_app.models import ExampleName
+from WarhammerFantasyRoleplayVirtualGM_app.models import Career
 
 
 # Create your views here.
@@ -52,7 +54,7 @@ def createCampaign(request):
 def addCharacter(request):
     basic_skills_criterion1 = Q(id__gte = 1)
     basic_skills_criterion2 = Q(id__lte = 26)
-    basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").order_by('name').values()
+    basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").values()
     player = Player.objects.get(user=request.user)
     character = Character(player=player, career_path_id='1', ch_class_id='1', eyes_id='1', hair_id='1', species_id='1')
     character.save()
@@ -94,6 +96,7 @@ def ajax_save_character_species(request):
 def ajax_randomSpecies(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
         species_list = Species.objects.all()
         r = random.randrange(1, 100)
         species = None
@@ -103,15 +106,49 @@ def ajax_randomSpecies(request):
                 species = s
                 break
 
-        logger.info("ajax_randomSpecies: r={}, character_id={}, species.id={}".format(r, character_id, species.id))
-        character = Character.objects.get(id = character_id)
+        names = ExampleName.objects.filter(species = species)
+        name = names[random.randrange(0, len(names))]
+
+        character.name = name.name
         character.species = species
         character.save()
 
-        return JsonResponse({'status': 'ok', 'species_id': species.id})
-    logger.error("ajax_save_character_species is GET")
+        return JsonResponse({'status': 'ok', 'species_id': species.id, 'name': name.name})
+    logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+def ajax_randomClass(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+
+        r = random.randrange(1, 100)
+        career = None
+        conditions = {
+            1: [Q(random_table_high_elf_start__lte = r) , Q(random_table_high_elf_end__gte = r)],
+            2: [Q(random_table_human_start__lte = r), Q(random_table_human_end__gte = r)],
+            3: [Q(random_table_halfling_start__lte = r), Q(random_table_halfling_end__gte = r) ],
+            4: [Q(random_table_dwarf_start__lte = r), Q(random_table_dwarf_end__gte = r) ],
+            5: [Q(random_table_wood_elf_start__lte = r), Q(random_table_wood_elf_end__gte = r) ],
+        }
+        if character.species.id >=1 and character.species.id <= 5:
+            career_criterion1 = conditions[character.species.id][0]
+            career_criterion2 = conditions[character.species.id][1]
+            queryset = Career.objects.filter(career_criterion1 & career_criterion2)
+            career = queryset.first()
+        else:
+            logger.error("ajax_randomClass incorect species.id={}".format(character.species.id))
+
+        if career is not None:
+            character.career = career
+            character.ch_class = career.ch_class
+            character.save()
+            return JsonResponse({'status': 'ok', 'career_name': career.name, 'ch_class_name': character.ch_class.name})
+        else:
+            logger.error("ajax_randomClass career not found: career={}".format(career))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_randomClass is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
