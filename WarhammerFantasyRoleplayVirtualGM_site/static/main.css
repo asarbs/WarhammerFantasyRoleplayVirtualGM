@@ -250,6 +250,33 @@ div#main div.create_character img.img_random{
     display:block;
 }
 
+div#main div.create_character table {
+    width: 635px;
+    margin-left: 10px;
+}
+div#main div.create_character table tr {
+    min-height: 52px;
+}
+div#main div.create_character table tr td {
+    min-height: 52px;
+    min-width: 53px;
+    text-align: center;
+}
+
+div#main div.create_character table tr td.title {
+    font-size: 200%;
+}
+div#main div.create_character table tr td.head {
+    font-size: 150%;
+    text-align: left;
+}
+div#main div.create_character table tr td input {
+    height: 52px;
+    width: 53px;
+    position: relative;
+    text-align: center;
+}
+
 div#main div.create_character div.header h1 {
     text-align: center;
     border-bottom: 3px solid #9d5009;
@@ -409,6 +436,7 @@ div#main div.character_sheet div.characteristics input {
     height: 52px;
     width: 53px;
     position: relative;
+    text-align: center;
 }
 
 div#main div.character_sheet div.right {

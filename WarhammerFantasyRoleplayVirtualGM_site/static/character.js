@@ -1,13 +1,35 @@
 
 var character_creation_state = {
     bonus_xp: 0,
+
+    characteristics_ws_initial     : 0,
+    characteristics_bs_initial     : 0,
+    characteristics_s_initial      : 0,
+    characteristics_t_initial      : 0,
+    characteristics_i_initial      : 0,
+    characteristics_ag_initial     : 0,
+    characteristics_dex_initial    : 0,
+    characteristics_int_initial    : 0,
+    characteristics_wp_initial     : 0,
+    characteristics_fel_initial    : 0,
+    characteristics_ws_advances    : 0,
+    characteristics_bs_advances    : 0,
+    characteristics_s_advances     : 0,
+    characteristics_t_advances     : 0,
+    characteristics_i_advances     : 0,
+    characteristics_ag_advances    : 0,
+    characteristics_dex_advances   : 0,
+    characteristics_int_advances   : 0,
+    characteristics_wp_advances    : 0,
+    characteristics_fel_advances   : 0,
+
     character_creation_step: 0,
     class_selection_random: 0,
 }
 
 
 
-const character_creation_steps = ["step_1_species", "step_2_class"]
+const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics"]
 
 function species_change() {
     val = $(this).find(":selected").val()
@@ -59,6 +81,39 @@ function randomSpecies() {
 
 function updateBonusExperiencePoints() {
     $("span#BonusExperiencePoints").text(character_creation_state['bonus_xp']);
+
+    $("input#characteristics_ws_initial"  ).val(character_creation_state["characteristics_ws_initial" ])
+    $("input#characteristics_bs_initial"  ).val(character_creation_state["characteristics_bs_initial" ])
+    $("input#characteristics_s_initial"   ).val(character_creation_state["characteristics_s_initial"  ])
+    $("input#characteristics_t_initial"   ).val(character_creation_state["characteristics_t_initial"  ])
+    $("input#characteristics_i_initial"   ).val(character_creation_state["characteristics_i_initial"  ])
+    $("input#characteristics_ag_initial"  ).val(character_creation_state["characteristics_ag_initial" ])
+    $("input#characteristics_dex_initial" ).val(character_creation_state["characteristics_dex_initial"])
+    $("input#characteristics_int_initial" ).val(character_creation_state["characteristics_int_initial"])
+    $("input#characteristics_wp_initial"  ).val(character_creation_state["characteristics_wp_initial" ])
+    $("input#characteristics_fel_initial" ).val(character_creation_state["characteristics_fel_initial"])
+
+    $("input#characteristics_ws_advances"  ).val(character_creation_state["characteristics_ws_advances" ])
+    $("input#characteristics_bs_advances"  ).val(character_creation_state["characteristics_bs_advances" ])
+    $("input#characteristics_s_advances"   ).val(character_creation_state["characteristics_s_advances"  ])
+    $("input#characteristics_t_advances"   ).val(character_creation_state["characteristics_t_advances"  ])
+    $("input#characteristics_i_advances"   ).val(character_creation_state["characteristics_i_advances"  ])
+    $("input#characteristics_ag_advances"  ).val(character_creation_state["characteristics_ag_advances" ])
+    $("input#characteristics_dex_advances" ).val(character_creation_state["characteristics_dex_advances"])
+    $("input#characteristics_int_advances" ).val(character_creation_state["characteristics_int_advances"])
+    $("input#characteristics_wp_advances"  ).val(character_creation_state["characteristics_wp_advances" ])
+    $("input#characteristics_fel_advances" ).val(character_creation_state["characteristics_fel_advances"])
+
+    $("input#characteristics_ws_current"  ).val(character_creation_state["characteristics_ws_initial" ] + character_creation_state["characteristics_ws_advances" ] )
+    $("input#characteristics_bs_current"  ).val(character_creation_state["characteristics_bs_initial" ] + character_creation_state["characteristics_bs_advances" ] )
+    $("input#characteristics_s_current"   ).val(character_creation_state["characteristics_s_initial"  ] + character_creation_state["characteristics_s_advances"  ] )
+    $("input#characteristics_t_current"   ).val(character_creation_state["characteristics_t_initial"  ] + character_creation_state["characteristics_t_advances"  ] )
+    $("input#characteristics_i_current"   ).val(character_creation_state["characteristics_i_initial"  ] + character_creation_state["characteristics_i_advances"  ] )
+    $("input#characteristics_ag_current"  ).val(character_creation_state["characteristics_ag_initial" ] + character_creation_state["characteristics_ag_advances" ] )
+    $("input#characteristics_dex_current" ).val(character_creation_state["characteristics_dex_initial"] + character_creation_state["characteristics_dex_advances"] )
+    $("input#characteristics_int_current" ).val(character_creation_state["characteristics_int_initial"] + character_creation_state["characteristics_int_advances"] )
+    $("input#characteristics_wp_current"  ).val(character_creation_state["characteristics_wp_initial" ] + character_creation_state["characteristics_wp_advances" ] )
+    $("input#characteristics_fel_current" ).val(character_creation_state["characteristics_fel_initial"] + character_creation_state["characteristics_fel_advances"] )
 }
 
 
