@@ -15,4 +15,5 @@ urlpatterns = [
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
     path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
     path('ajax_randomClass', views.ajax_randomClass, name="ajax_randomClass"),
+    path('ajax_saveName', views.ajax_saveName, name="ajax_saveName"),
 ]

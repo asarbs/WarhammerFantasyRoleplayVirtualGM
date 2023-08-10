@@ -150,6 +150,23 @@ def ajax_randomClass(request):
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+
+def ajax_saveName(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+
+        if character is not None:
+            character.name = request.POST['name']
+            logger.debug("character name: {}".format(character.name))
+            character.save()
+            return JsonResponse({'status': 'ok', 'name': character.name})
+        else:
+            logger.error("ajax_randomClass career not found: career={}".format(career))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_randomClass is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
     dic ={'camaing': c}

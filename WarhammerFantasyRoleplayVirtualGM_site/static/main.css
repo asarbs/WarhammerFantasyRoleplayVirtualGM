@@ -223,10 +223,23 @@ div#main div.create_character {
     min-height: 400px;
     padding: 20px;
     margin-left: 26px;
-    margin-top: 50px;
+    margin-top: 150px;
     position:fixed;
     z-index: 1000;
     font-size: 150%;
+}
+
+div#main div.create_character input {
+    background-color: rgba(21, 121, 112, 0.1);
+    border: 1px solid #FF0000;
+    height: 32px;
+    position: absolute;
+}
+
+div#main div.create_character select {
+    background-color: rgba(21, 121, 112, 0.1);
+    border: 1px solid #FF0000;
+    height: 32px;
 }
 
 div#main div.create_character img.img_random{
@@ -255,6 +268,10 @@ div#main div.create_character div.create_character_body {
 
 div#main div.create_character div.create_character_body div.create_character_steps {
     display: none;
+}
+
+div#main div.create_character div.create_character_body div.create_character_steps ol li p {
+    font-weight: normal;
 }
 
 div#main div.create_character div.bottom {
