@@ -7,6 +7,7 @@ from django.views.generic.edit import UpdateView
 from django.db.models import Q
 
 import random
+import math
 
 from django.urls import reverse
 
@@ -27,6 +28,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Skill
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import ExampleName
 from WarhammerFantasyRoleplayVirtualGM_app.models import Career
+from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
 
 
 # Create your views here.
@@ -83,11 +85,11 @@ def ajax_save_character_species(request):
         character_id = request.POST['characer_id']
         species_id = request.POST['species_id']
 
-        logger.info("{} {}".format(character_id, species_id))
-
         character = Character.objects.get(id = character_id)
         character.species = Species.objects.get(id = species_id)
         character.save()
+
+        logger.info("ajax_save_character_species: {} -> {}".format(character.name, character.species.name))
 
         return JsonResponse({'status': 'ok', 'species_id': species_id})
     logger.error("ajax_save_character_species is GET")
@@ -162,7 +164,59 @@ def ajax_saveName(request):
             character.save()
             return JsonResponse({'status': 'ok', 'name': character.name})
         else:
-            logger.error("ajax_randomClass career not found: career={}".format(career))
+            logger.error("ajax_saveName character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_randomClass is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_saveAttributes(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+        rat = RandomAttributesTable.objects.get(species=character.species)
+        if character is not None:
+            character.characteristics_ws_initial = rat.weapon_skill + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_bs_initial = rat.ballistic_skill + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_s_initial = rat.strength + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_t_initial = rat.toughness + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_i_initial = rat.initiative + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_ag_initial = rat.agility + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_dex_initial = rat.dexterity + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_int_initial = rat.intelligence + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_wp_initial = rat.willpower + random.randrange(1, 10) + random.randrange(1, 10)
+            character.characteristics_fel_initial = rat.fellowship + random.randrange(1, 10) + random.randrange(1, 10)
+            character.fate_fate = rat.fate
+            character.fate_fortune = rat.fate
+            character.resilience_resilience = rat.resilience
+            character.resilience_resolve = rat.resilience
+            character.movement_movement = rat.movement
+            SB = math.floor(character.characteristics_s_initial / 10.0)
+            TB = math.floor(character.characteristics_t_initial / 10.0)
+            WPB = math.floor(character.characteristics_wp_initial / 10.0)
+            character.wounds = SB + (2 * TB) + WPB
+            character.save()
+            ret = {'status': 'ok',
+                   'extra_points': rat.extra_points,
+                   'characteristics_ws_initial': character.characteristics_ws_initial,
+                   'characteristics_bs_initial': character.characteristics_bs_initial,
+                   'characteristics_s_initial': character.characteristics_s_initial,
+                   'characteristics_t_initial': character.characteristics_t_initial,
+                   'characteristics_i_initial': character.characteristics_i_initial,
+                   'characteristics_ag_initial': character.characteristics_ag_initial,
+                   'characteristics_dex_initial': character.characteristics_dex_initial,
+                   'characteristics_int_initial': character.characteristics_int_initial,
+                   'characteristics_wp_initial': character.characteristics_wp_initial,
+                   'characteristics_fel_initial': character.characteristics_fel_initial,
+                   'fate_fate': character.fate_fate,
+                   'fate_fortune': character.fate_fortune,
+                   'resilience_resilience': character.resilience_resilience,
+                   'resilience_resolve': character.resilience_resilience,
+                   'movement_movement': character.movement_movement,
+                   'wounds': character.wounds
+            }
+            return JsonResponse(ret)
+        else:
+            logger.error("ajax_saveAttributes not found: character_id={}".format(character_id))
             return JsonResponse({'status': 'Invalid request'}, status=400)
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)

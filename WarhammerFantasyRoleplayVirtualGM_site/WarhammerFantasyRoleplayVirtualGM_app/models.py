@@ -75,15 +75,6 @@ class ExampleName(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
-class CharacterClass(models.Model):
-    name = models.CharField(max_length= 50)
-
-    def __str__(self):
-        return u"{0}".format(self.name)
-
-    def __unicode__(self):
-        return u"{0}".format(self.name)
-
 class CareerPath(models.Model):
     name = models.CharField(max_length= 50)
 
@@ -203,6 +194,7 @@ class Character(models.Model):
     characteristics_int_advances = models.IntegerField(default="0", verbose_name="int_advances")
     characteristics_wp_advances = models.IntegerField(default="0", verbose_name="wp_advances")
     characteristics_fel_advances = models.IntegerField(default="0", verbose_name="fel_advances")
+    wounds = models.IntegerField(default="0", verbose_name="wounds")
     fate_fate = models.IntegerField(default="0", verbose_name="fate_fate")
     fate_fortune = models.IntegerField(default="0", verbose_name="fate_fortune")
     resilience_resilience = models.IntegerField(default="0", verbose_name="resilience_resilience")
@@ -228,3 +220,25 @@ class Character2Skill(models.Model):
     skills = models.ForeignKey(Skils, on_delete=models.CASCADE)
     adv = models.IntegerField(default="0", verbose_name="adv")
 
+class RandomAttributesTable(models.Model):
+    species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
+    weapon_skill = models.IntegerField(default="0", verbose_name="weapon_skill")
+    ballistic_skill = models.IntegerField(default="0", verbose_name="ballistic_skill")
+    strength = models.IntegerField(default="0", verbose_name="strength")
+    toughness = models.IntegerField(default="0", verbose_name="toughness")
+    initiative = models.IntegerField(default="0", verbose_name="initiative")
+    agility = models.IntegerField(default="0", verbose_name="agility")
+    dexterity = models.IntegerField(default="0", verbose_name="dexterity")
+    intelligence = models.IntegerField(default="0", verbose_name="intelligence")
+    willpower = models.IntegerField(default="0", verbose_name="willpower")
+    fellowship = models.IntegerField(default="0", verbose_name="fellowship")
+    fate = models.IntegerField(default="0", verbose_name="fate")
+    resilience = models.IntegerField(default="0", verbose_name="resilience")
+    extra_points = models.IntegerField(default="0", verbose_name="extra_points")
+    movement = models.IntegerField(default="0", verbose_name="movement")
+
+    def __str__(self):
+        return u"{0}".format(self.species.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.species.name)

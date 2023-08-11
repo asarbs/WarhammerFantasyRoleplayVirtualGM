@@ -23,7 +23,12 @@ class SpeciesAdmin(admin.ModelAdmin):
     ordering = ("random_interal_start", )
 
 
-class CharacterClassAdmin(admin.ModelAdmin):
+class RandomAttributesTableAdmin(admin.ModelAdmin):
+    list_display = ("species", "weapon_skill", "ballistic_skill", "strength", "toughness", "initiative", "agility", "dexterity", "intelligence", "willpower", "fellowship", "fate", "resilience", "extra_points", "movement")
+    list_editable = ("weapon_skill", "ballistic_skill", "strength", "toughness", "initiative", "agility", "dexterity", "intelligence", "willpower", "fellowship", "fate", "resilience", "extra_points", "movement")
+    ordering = ("species", )
+
+class ClassAdmin(admin.ModelAdmin):
     pass
 
 class CareerPathAdmin(admin.ModelAdmin):
@@ -74,7 +79,7 @@ admin.site.register(models.Character, CharacterAdmin)
 admin.site.register(models.Campaign, CampaignAdmin)
 admin.site.register(models.Species ,SpeciesAdmin)
 admin.site.register(models.ExampleName ,ExampleNameAdmin)
-admin.site.register(models.CharacterClass ,CharacterClassAdmin)
+admin.site.register(models.Class , ClassAdmin)
 admin.site.register(models.CareerPath ,CareerPathAdmin)
 admin.site.register(models.Career ,CareerAdmin)
 admin.site.register(models.Status ,StatusAdmin)
@@ -86,3 +91,4 @@ admin.site.register(models.Campaign2Player, Campaign2PlayerAdmin)
 admin.site.register(models.Character2Skill, Character2SkillAdmin)
 admin.site.register(models.RefBook, RefBookAdmin)
 admin.site.register(models.Reference, ReferenceAdmin)
+admin.site.register(models.RandomAttributesTable, RandomAttributesTableAdmin)

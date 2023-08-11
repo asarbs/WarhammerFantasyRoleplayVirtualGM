@@ -30,6 +30,7 @@ var character_creation_state = {
 
 
 const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics"]
+const character_creation_steps_header = ["Species", "Class", "Characteristics"]
 
 function species_change() {
     val = $(this).find(":selected").val()
@@ -80,7 +81,7 @@ function randomSpecies() {
 }
 
 function updateBonusExperiencePoints() {
-    $("span#BonusExperiencePoints").text(character_creation_state['bonus_xp']);
+    $("input#experience_current").val(character_creation_state['bonus_xp']);
 
     $("input#characteristics_ws_initial"  ).val(character_creation_state["characteristics_ws_initial" ])
     $("input#characteristics_bs_initial"  ).val(character_creation_state["characteristics_bs_initial" ])
@@ -122,26 +123,23 @@ function nextStep() {
     $("div#"+ character_creation_steps[character_creation_state['character_creation_step']]).hide(200);
     character_creation_state['character_creation_step']++
     $("div#"+ character_creation_steps[character_creation_state['character_creation_step']]).show(200);
+    $("div.create_character div.header h1").text(character_creation_steps_header[character_creation_state['character_creation_step']])
 }
 
 function randomClass() {
     if(character_creation_state['class_selection_random'] == 0) {
         character_creation_state['bonus_xp'] += 50
         character_creation_state['class_selection_random']++
-        $("li#create_character_steps_li_1").css({'font-weight': 'bold'});
-
     }
     else if(character_creation_state['class_selection_random'] == 1) {
         character_creation_state['bonus_xp'] -= 50
         character_creation_state['bonus_xp'] += 25
         character_creation_state['class_selection_random']++
-        $("li#create_character_steps_li_2").css({'font-weight': 'bold'});
     }
     else if(character_creation_state['class_selection_random'] == 2) {
         character_creation_state['bonus_xp'] -= 25
         character_creation_state['bonus_xp'] += 0
         character_creation_state['class_selection_random'] = 3
-        $("li#create_character_steps_li_3").css({'font-weight': 'bold'});
     }
 
     characer_id = $("input[name='characer_id']").val()
@@ -154,19 +152,33 @@ function randomClass() {
         success: function(data) {
             $("input#carrer").val(data['career_name']);
             $("input#class").val(data['ch_class_name']);
-            $("li#create_character_steps_li_"+character_creation_state['class_selection_random']+" p:first").text( data['ch_class_name']+ " / " + data['career_name'])
         }
     });
 }
 
 function saveName(e) {
-    n = $("input#character_sheet_name_1").val();
-    $("input#character_sheet_name").val(n)
+    n = $("input#character_sheet_name").val();
 
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
         url: "ajax_saveName",
+        data: {
+            characer_id: characer_id,
+            name: n,
+        },
+        success: function(data) {
+        }
+    });
+}
+
+function attributes() {
+    console.log("attributes")
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveAttributes",
         data: {
             characer_id: characer_id,
             name: n,
@@ -182,12 +194,13 @@ function main() {
     });
 
     $("select[name='species']").on("change", species_change);
-    $("img#img_random_species").click(randomSpecies);
-
     $("img#img_character_creaton_next").click(nextStep);
+
+    $("img#img_random_species").click(randomSpecies);
     $("div#"+ character_creation_steps[0]).show();
     $("img#img_random_class").click(randomClass);
-    $("input#character_sheet_name_1").keyup(saveName);
+    $("input#character_sheet_name").keyup(saveName);
+    $("img#img_random_characteristics").click(attributes);
 
     setInterval(updateBonusExperiencePoints, 100);
 }

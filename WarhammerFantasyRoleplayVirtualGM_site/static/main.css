@@ -217,94 +217,49 @@ div#main div.bottom {
 
 div#main div.create_character {
     background-image: url("img/create_character_background.jpeg");
-    border-radius: 25px;
+    border-radius: 15px;
     border: 3px solid #9d5009;
-    min-width: 1600px;
-    min-height: 400px;
+    width: 300px;
+    max-height: 600px;
     padding: 20px;
-    margin-left: 26px;
+    margin-left: -220px;
     margin-top: 150px;
     position:fixed;
     z-index: 1000;
     font-size: 150%;
 }
 
-div#main div.create_character input {
-    background-color: rgba(21, 121, 112, 0.1);
-    border: 1px solid #FF0000;
+div#main div.create_character img.img_random {
+    /* background-color: #c4a314; */
+    height: 15px;
+}
+
+div#main div.create_character img.img_random:hover {
+    cursor: pointer;
+}
+
+div#main div.create_character img#img_character_creaton_next {
     height: 32px;
-    position: absolute;
+    bottom: 0;
+}
+div#main div.create_character img#img_character_creaton_next:hover {
+    cursor: pointer;
 }
 
-div#main div.create_character select {
-    background-color: rgba(21, 121, 112, 0.1);
-    border: 1px solid #FF0000;
-    height: 32px;
-}
-
-div#main div.create_character img.img_random{
-    background-color: #c4a314;
-    height: 50px;
-    margin-top: 10px;
-    margin-left: 800px;
-    display:block;
-}
-
-div#main div.create_character table {
-    width: 635px;
-    margin-left: 10px;
-}
-div#main div.create_character table tr {
-    min-height: 52px;
-}
-div#main div.create_character table tr td {
-    min-height: 52px;
-    min-width: 53px;
-    text-align: center;
-}
-
-div#main div.create_character table tr td.title {
-    font-size: 200%;
-}
-div#main div.create_character table tr td.head {
-    font-size: 150%;
-    text-align: left;
-}
-div#main div.create_character table tr td input {
-    height: 52px;
-    width: 53px;
-    position: relative;
-    text-align: center;
+div#main div.create_character div.create_character_steps {
+    display: none;
 }
 
 div#main div.create_character div.header h1 {
     text-align: center;
     border-bottom: 3px solid #9d5009;
-}
-
-div#main div.create_character div.header p {
-    border-bottom: 1px solid #9d5009;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    padding-left: 10px;
-}
-
-div#main div.create_character div.create_character_body {
-    min-height: 400px;
-}
-
-div#main div.create_character div.create_character_body div.create_character_steps {
-    display: none;
-}
-
-div#main div.create_character div.create_character_body div.create_character_steps ol li p {
-    font-weight: normal;
+    font-size: 110%;
 }
 
 div#main div.create_character div.bottom {
     background: none;
     border: 0px solid #35fbd6;
-    text-align: right;
+    text-align: center;
     width: 100%;
     height: 62px;
     bottom: 0;
@@ -557,6 +512,7 @@ div#main div.character_sheet div.right div.fate_resistance_exp div.experience ta
 div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_current {
     height: 37px;
     width: 80px;
+    text-align: center;
 }
 div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_spent {
     height: 37px;
