@@ -58,7 +58,7 @@ def addCharacter(request):
     basic_skills_criterion2 = Q(id__lte = 26)
     basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").values()
     player = Player.objects.get(user=request.user)
-    character = Character(player=player, career_path_id='1', ch_class_id='1', eyes_id='1', hair_id='1', species_id='1')
+    character = Character(player=player, career_path_id='1', ch_class_id='1', eyes_id='1', hair_id='1', species_id='2')
     character.save()
 
     for skill in basic_skills:

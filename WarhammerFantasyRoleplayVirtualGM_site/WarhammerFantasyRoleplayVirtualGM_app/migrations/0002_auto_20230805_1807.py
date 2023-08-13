@@ -2,6 +2,44 @@
 
 from django.db import migrations, models
 
+from WarhammerFantasyRoleplayVirtualGM_app.models import Species
+
+def add_species(apps, schema_editor):
+    data = [{
+        'id': 1,
+        'name': 'High Elf',
+        'random_interal_start': 99,
+        'random_interal_end': 99,
+    },
+    {
+        'id': 2,
+        'name': 'Human',
+        'random_interal_start': 1,
+        'random_interal_end': 90,
+    },
+    {
+        'id': 3,
+        'name': 'Halfling',
+        'random_interal_start': 91,
+        'random_interal_end': 94,
+    },
+    {
+        'id': 4,
+        'name': 'Dwarf',
+        'random_interal_start': 95,
+        'random_interal_end': 98,
+    },      
+        {
+        'id': 5,
+        'name': 'Wood Elf',
+        'random_interal_start': 100,
+        'random_interal_end': 100,
+    },   
+    ]
+
+    for d in data:
+        s = Species(id = d['id'], name=d['name'], random_interal_start=d['random_interal_start'], random_interal_end=d['random_interal_end'])
+        s.save()
 
 class Migration(migrations.Migration):
 
@@ -20,4 +58,5 @@ class Migration(migrations.Migration):
             name='random_interal_start',
             field=models.IntegerField(default=0, verbose_name='random_interal_start'),
         ),
+        migrations.RunPython(add_species),
     ]

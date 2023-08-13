@@ -3,7 +3,12 @@ FROM debian
 USER root
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y python3 python3-django python3-pip git meld python3-bs4 pipx
+RUN apt-get install -y python3 
+RUN apt-get install -y python3-django 
+RUN apt-get install -y python3-pip 
+RUN apt-get install -y git 
+RUN apt-get install -y python3-bs4 
+RUN apt-get install -y pipx
 RUN rm -f /usr/lib/python3.x/EXTERNALLY-MANAGED
 RUN pip3 install requests django-static-jquery --break-system-packages
 
