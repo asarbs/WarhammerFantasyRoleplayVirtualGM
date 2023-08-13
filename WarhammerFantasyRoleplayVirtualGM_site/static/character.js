@@ -2,29 +2,44 @@
 var character_creation_state = {
     bonus_xp: 0,
 
-    characteristics_ws_initial     : 0,
-    characteristics_bs_initial     : 0,
-    characteristics_s_initial      : 0,
-    characteristics_t_initial      : 0,
-    characteristics_i_initial      : 0,
-    characteristics_ag_initial     : 0,
-    characteristics_dex_initial    : 0,
-    characteristics_int_initial    : 0,
-    characteristics_wp_initial     : 0,
-    characteristics_fel_initial    : 0,
-    characteristics_ws_advances    : 0,
-    characteristics_bs_advances    : 0,
-    characteristics_s_advances     : 0,
-    characteristics_t_advances     : 0,
-    characteristics_i_advances     : 0,
-    characteristics_ag_advances    : 0,
-    characteristics_dex_advances   : 0,
-    characteristics_int_advances   : 0,
-    characteristics_wp_advances    : 0,
-    characteristics_fel_advances   : 0,
+    characteristics_ws_initial      : 0,
+    characteristics_bs_initial      : 0,
+    characteristics_s_initial       : 0,
+    characteristics_t_initial       : 0,
+    characteristics_i_initial       : 0,
+    characteristics_ag_initial      : 0,
+    characteristics_dex_initial     : 0,
+    characteristics_int_initial     : 0,
+    characteristics_wp_initial      : 0,
+    characteristics_fel_initial     : 0,
+    characteristics_ws_advances     : 0,
+    characteristics_bs_advances     : 0,
+    characteristics_s_advances      : 0,
+    characteristics_t_advances      : 0,
+    characteristics_i_advances      : 0,
+    characteristics_ag_advances     : 0,
+    characteristics_dex_advances    : 0,
+    characteristics_int_advances    : 0,
+    characteristics_wp_advances     : 0,
+    characteristics_fel_advances    : 0,
+    fate_fate                       : 0,
+    fate_fortune                    : 0,
+    resilience_resilience           : 0,
+    resilience_resolve              : 0,
+    movement_movement               : 0,
+    wounds                          : 0,
 
     character_creation_step: 0,
     class_selection_random: 0,
+    characteristics_selection_random: 0,
+    movement: {
+        0: {'walk': 0,"run": 0},
+        3: {'walk': 6,"run": 12},
+        4: {'walk': 8,"run": 16},
+        5: {'walk': 10,"run": 20},
+    },
+
+    avalible_attribute_points: 100
 }
 
 
@@ -115,6 +130,16 @@ function updateBonusExperiencePoints() {
     $("input#characteristics_int_current" ).val(character_creation_state["characteristics_int_initial"] + character_creation_state["characteristics_int_advances"] )
     $("input#characteristics_wp_current"  ).val(character_creation_state["characteristics_wp_initial" ] + character_creation_state["characteristics_wp_advances" ] )
     $("input#characteristics_fel_current" ).val(character_creation_state["characteristics_fel_initial"] + character_creation_state["characteristics_fel_advances"] )
+    $("input#fate_fate"                   ).val(character_creation_state["fate_fate"] )
+    $("input#fate_fortune"                ).val(character_creation_state["fate_fortune"] )
+    $("input#resilience_resilience"       ).val(character_creation_state["resilience_resilience"] )
+    $("input#resilience_resolve"          ).val(character_creation_state["resilience_resolve"] )
+    $("input#movement_movement"           ).val(character_creation_state["movement_movement"] )
+    $("input#movement_walk"               ).val(character_creation_state['movement'][character_creation_state["movement_movement"]]['walk'])
+    $("input#movement_run"                ).val(character_creation_state['movement'][character_creation_state["movement_movement"]]['run'])
+    $("input#wounds"                      ).val(character_creation_state["wounds"] )
+    $("span#avalible_attribute_points"    ).text(character_creation_state["avalible_attribute_points"] )
+
 }
 
 
@@ -175,15 +200,238 @@ function saveName(e) {
 function attributes() {
     console.log("attributes")
 
+    if(character_creation_state['characteristics_selection_random'] == 0) {
+        character_creation_state['bonus_xp'] += 50
+        character_creation_state['characteristics_selection_random']++
+    }
+    else if(character_creation_state['characteristics_selection_random'] == 1) {
+        character_creation_state['bonus_xp'] -= 50
+        character_creation_state['bonus_xp'] += 25
+        character_creation_state['characteristics_selection_random']++
+    }
+    else if(character_creation_state['characteristics_selection_random'] == 2) {
+        character_creation_state['bonus_xp'] -= 25
+        character_creation_state['bonus_xp'] += 0
+        character_creation_state['characteristics_selection_random'] = 3
+    }
+
+    if(character_creation_state['characteristics_selection_random'] == 4) {
+        return;
+    }
+
+    if(character_creation_state['characteristics_selection_random'] == 3) {
+        var quantity = jQuery('.quantity input').each( function() {
+            jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUp(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDown(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
+          });
+        character_creation_state['characteristics_selection_random'] = 4
+        species = $("select#species").val()
+        console.log(species)
+        character_creation_state['characteristics_ws_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ws_initial'   ];
+        character_creation_state['characteristics_bs_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_bs_initial'   ];
+        character_creation_state['characteristics_s_initial'    ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_s_initial'    ];
+        character_creation_state['characteristics_t_initial'    ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_t_initial'    ];
+        character_creation_state['characteristics_i_initial'    ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_i_initial'    ];
+        character_creation_state['characteristics_ag_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ag_initial'   ];
+        character_creation_state['characteristics_dex_initial'  ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_dex_initial'  ];
+        character_creation_state['characteristics_int_initial'  ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_int_initial'  ];
+        character_creation_state['characteristics_wp_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_wp_initial'   ];
+        character_creation_state['characteristics_fel_initial'  ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_fel_initial'  ];
+
+        $('input#characteristics_ws_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ws_initial'   ]);
+        $('input#characteristics_bs_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_bs_initial'   ]);
+        $('input#characteristics_s_initial'    ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_s_initial'    ]);
+        $('input#characteristics_t_initial'    ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_t_initial'    ]);
+        $('input#characteristics_i_initial'    ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_i_initial'    ]);
+        $('input#characteristics_ag_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ag_initial'   ]);
+        $('input#characteristics_dex_initial'  ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_dex_initial'  ]);
+        $('input#characteristics_int_initial'  ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_int_initial'  ]);
+        $('input#characteristics_wp_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_wp_initial'   ]);
+        $('input#characteristics_fel_initial'  ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_fel_initial'  ]);
+        $('input#characteristics_ws_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_ws_initial'   ]);
+        $('input#characteristics_bs_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_bs_initial'   ]);
+        $('input#characteristics_s_initial'    ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_s_initial'    ]);
+        $('input#characteristics_t_initial'    ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_t_initial'    ]);
+        $('input#characteristics_i_initial'    ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_i_initial'    ]);
+        $('input#characteristics_ag_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_ag_initial'   ]);
+        $('input#characteristics_dex_initial'  ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_dex_initial'  ]);
+        $('input#characteristics_int_initial'  ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_int_initial'  ]);
+        $('input#characteristics_wp_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_wp_initial'   ]);
+        $('input#characteristics_fel_initial'  ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_fel_initial'  ]);
+
+        character_creation_state['avalible_attribute_points'] =  character_creation_state['avalible_attribute_points'] - 40;
+
+        return;
+    }
+
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
         url: "ajax_saveAttributes",
         data: {
             characer_id: characer_id,
-            name: n,
         },
         success: function(data) {
+            data['extra_points'];
+            character_creation_state['characteristics_ws_initial']  = data['characteristics_ws_initial'];
+            character_creation_state['characteristics_bs_initial']  = data['characteristics_bs_initial'];
+            character_creation_state['characteristics_s_initial']   = data['characteristics_s_initial'];
+            character_creation_state['characteristics_t_initial']   = data['characteristics_t_initial'];
+            character_creation_state['characteristics_i_initial']   = data['characteristics_i_initial'];
+            character_creation_state['characteristics_ag_initial']  = data['characteristics_ag_initial'];
+            character_creation_state['characteristics_dex_initial'] = data['characteristics_dex_initial'];
+            character_creation_state['characteristics_int_initial'] = data['characteristics_int_initial'];
+            character_creation_state['characteristics_wp_initial']  = data['characteristics_wp_initial'];
+            character_creation_state['characteristics_fel_initial'] = data['characteristics_fel_initial'];
+            character_creation_state['fate_fate']                   = data['fate_fate'];
+            character_creation_state['fate_fortune']                = data['fate_fortune'];
+            character_creation_state['resilience_resilience']       = data['resilience_resilience'];
+            character_creation_state['resilience_resolve']          = data['resilience_resolve'];
+            character_creation_state['movement_movement']           = data['movement_movement'];
+            character_creation_state['wounds']                      = data['wounds'];
+        }
+    });
+}
+
+function btnUp(input_id) {
+    if(character_creation_state['avalible_attribute_points'] <= 0) {
+        return
+    }
+
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+
+
+
+    if ((oldValue + step) > max) {
+        return
+    } else {
+      var newVal = oldValue + step;
+    }
+
+    console.log("btnUp: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    character_creation_state[input_id]  = newVal
+    inp.val(newVal);
+    inp.trigger("change");
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveAttribute",
+        data: {
+            characer_id: characer_id,
+            input_id: input_id,
+            'newVal': {
+                'characteristics_ws_initial'    : $('input#characteristics_ws_initial'  ).val(),
+                'characteristics_bs_initial'    : $('input#characteristics_bs_initial'  ).val(),
+                'characteristics_s_initial'     : $('input#characteristics_s_initial'   ).val(),
+                'characteristics_t_initial'     : $('input#characteristics_t_initial'   ).val(),
+                'characteristics_i_initial'     : $('input#characteristics_i_initial'   ).val(),
+                'characteristics_ag_initial'    : $('input#characteristics_ag_initial'  ).val(),
+                'characteristics_dex_initial'   : $('input#characteristics_dex_initial' ).val(),
+                'characteristics_int_initial'   : $('input#characteristics_int_initial' ).val(),
+                'characteristics_wp_initial'    : $('input#characteristics_wp_initial'  ).val(),
+                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val()
+            }
+        },
+        success: function(data) {
+            console.log(data)
+            character_creation_state['characteristics_ws_initial']  = data['characteristics_ws_initial'];
+            character_creation_state['characteristics_bs_initial']  = data['characteristics_bs_initial'];
+            character_creation_state['characteristics_s_initial']   = data['characteristics_s_initial'];
+            character_creation_state['characteristics_t_initial']   = data['characteristics_t_initial'];
+            character_creation_state['characteristics_i_initial']   = data['characteristics_i_initial'];
+            character_creation_state['characteristics_ag_initial']  = data['characteristics_ag_initial'];
+            character_creation_state['characteristics_dex_initial'] = data['characteristics_dex_initial'];
+            character_creation_state['characteristics_int_initial'] = data['characteristics_int_initial'];
+            character_creation_state['characteristics_wp_initial']  = data['characteristics_wp_initial'];
+            character_creation_state['characteristics_fel_initial'] = data['characteristics_fel_initial'];
+            character_creation_state['fate_fate']                   = data['fate_fate'];
+            character_creation_state['fate_fortune']                = data['fate_fortune'];
+            character_creation_state['resilience_resilience']       = data['resilience_resilience'];
+            character_creation_state['resilience_resolve']          = data['resilience_resolve'];
+            character_creation_state['movement_movement']           = data['movement_movement'];
+            character_creation_state['wounds']                      = data['wounds'];
+            character_creation_state['avalible_attribute_points']--
+        }
+    });
+
+  }
+
+function btnDown(input_id) {
+    if(character_creation_state['avalible_attribute_points'] >= 60) {
+        return
+    }
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+
+    if ((oldValue - step) < min) {
+      return
+    } else {
+      var newVal = oldValue - step;
+    }
+
+    console.log("btnDown: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    character_creation_state[input_id]  = newVal
+    inp.val(newVal);
+    inp.trigger("change");
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveAttribute",
+        data: {
+            characer_id: characer_id,
+            input_id: input_id,
+            'newVal': {
+                'characteristics_ws_initial'    : $('input#characteristics_ws_initial'  ).val(),
+                'characteristics_bs_initial'    : $('input#characteristics_bs_initial'  ).val(),
+                'characteristics_s_initial'     : $('input#characteristics_s_initial'   ).val(),
+                'characteristics_t_initial'     : $('input#characteristics_t_initial'   ).val(),
+                'characteristics_i_initial'     : $('input#characteristics_i_initial'   ).val(),
+                'characteristics_ag_initial'    : $('input#characteristics_ag_initial'  ).val(),
+                'characteristics_dex_initial'   : $('input#characteristics_dex_initial' ).val(),
+                'characteristics_int_initial'   : $('input#characteristics_int_initial' ).val(),
+                'characteristics_wp_initial'    : $('input#characteristics_wp_initial'  ).val(),
+                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val()
+            }
+        },
+        success: function(data) {
+            character_creation_state['characteristics_ws_initial']  = data['characteristics_ws_initial'];
+            character_creation_state['characteristics_bs_initial']  = data['characteristics_bs_initial'];
+            character_creation_state['characteristics_s_initial']   = data['characteristics_s_initial'];
+            character_creation_state['characteristics_t_initial']   = data['characteristics_t_initial'];
+            character_creation_state['characteristics_i_initial']   = data['characteristics_i_initial'];
+            character_creation_state['characteristics_ag_initial']  = data['characteristics_ag_initial'];
+            character_creation_state['characteristics_dex_initial'] = data['characteristics_dex_initial'];
+            character_creation_state['characteristics_int_initial'] = data['characteristics_int_initial'];
+            character_creation_state['characteristics_wp_initial']  = data['characteristics_wp_initial'];
+            character_creation_state['characteristics_fel_initial'] = data['characteristics_fel_initial'];
+            character_creation_state['fate_fate']                   = data['fate_fate'];
+            character_creation_state['fate_fortune']                = data['fate_fortune'];
+            character_creation_state['resilience_resilience']       = data['resilience_resilience'];
+            character_creation_state['resilience_resolve']          = data['resilience_resolve'];
+            character_creation_state['movement_movement']           = data['movement_movement'];
+            character_creation_state['wounds']                      = data['wounds'];
+            character_creation_state['avalible_attribute_points']++
+        }
+    });
+  }
+
+function getRandomAttributesTable() {
+    $.ajax({
+        type: "POST",
+        url: "ajax_getRandomAttributesTable",
+        data: {
+        },
+        success: function(data) {
+            character_creation_state['RandomAttributesTable'] = data
+            console.log(character_creation_state)
         }
     });
 }
@@ -192,6 +440,8 @@ function main() {
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     });
+
+    getRandomAttributesTable();
 
     $("select[name='species']").on("change", species_change);
     $("img#img_character_creaton_next").click(nextStep);

@@ -223,7 +223,7 @@ div#main div.create_character {
     max-height: 600px;
     padding: 20px;
     margin-left: -220px;
-    margin-top: 150px;
+    margin-top: 50px;
     position:fixed;
     z-index: 1000;
     font-size: 150%;
@@ -391,7 +391,7 @@ div#main div.character_sheet div.characteristics input {
     height: 52px;
     width: 53px;
     position: relative;
-    text-align: center;
+    text-align: left;
 }
 
 div#main div.character_sheet div.right {

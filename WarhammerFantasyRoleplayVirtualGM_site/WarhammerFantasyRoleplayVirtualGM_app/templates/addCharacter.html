@@ -29,6 +29,7 @@
         <b>Step 1</b> +50 XP. </br>
         <b>Step 2</b> +25 XP. </br>
         <b>Step 3</b> +0 XP. </br>
+        <p>Avalible attribute points: <span id="avalible_attribute_points">0</span></p>
         <img src="{% static "/img/dice_icon.png" %}" id="img_random_characteristics" class="img_random" />
     </div>
         <div class="bottom"><img src="{% static "/img/arrow_right.png" %} " id="img_character_creaton_next"></div>
@@ -143,16 +144,16 @@
             </tr>
             <tr class="quantity">
                 <td class="head">Inital</td>
-                <td><input type="text" id="characteristics_ws_initial" name="fname" min="1" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_bs_initial" name="fname max="9" step="1" value="0""></td>
-                <td><input type="text" id="characteristics_s_initial" name="fname" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_t_initial" name="fname" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_i_initial" name="fname" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_ag_initial" name="fname" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_dex_initial" name="fname" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_int_initial" name="fname" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_wp_initial" name="fname" max="9" step="1" value="0"></td>
-                <td><input type="text" id="characteristics_fel_initial" name="fname" max="9" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_ws_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_bs_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_s_initial"   name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_t_initial"   name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_i_initial"   name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_ag_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_dex_initial" name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_int_initial" name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_wp_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="text" id="characteristics_fel_initial" name="fname" min="4" max="18" step="1" value="0"></td>
             </tr>
             <tr class="quantity">
                 <td class="head">Advaces</td>
@@ -749,7 +750,7 @@
             <input type="text" id="shield" name="fname">
         </div>
         <div class="sheet2_wounds">
-            <table border="0">
+            <table border="1">
                 <tr>
                     <td class="title" colspan="3">
                         WOUNDS
@@ -790,6 +791,7 @@
                         Wounds
                     </td>
                     <td>
+                        <input type="text" id="Wounds" value="0">
                     </td>
                 </tr>
             </table>

@@ -169,10 +169,33 @@ def ajax_saveName(request):
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+def ajax_getRandomAttributesTable(request):
+    if request.method == 'POST':
+        rat = RandomAttributesTable.objects.all()
+        ret = {}
+        for r in rat:
+            ret[r.species.id] = {
+                "characteristics_ws_initial" : r.weapon_skill,
+                "characteristics_bs_initial" : r.ballistic_skill,
+                "characteristics_s_initial" : r.strength,
+                "characteristics_t_initial" : r.toughness,
+                "characteristics_i_initial" : r.initiative,
+                "characteristics_ag_initial" : r.agility,
+                "characteristics_dex_initial" : r.dexterity,
+                "characteristics_int_initial" : r.intelligence,
+                "characteristics_wp_initial" : r.willpower,
+                "characteristics_fel_initial" : r.fellowship,
+            }
+        logger.info(ret)
+        return JsonResponse(ret)
+    logger.error("ajax_randomClass is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
 def ajax_saveAttributes(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
         character = Character.objects.get(id = character_id)
+        logger.info("ajax_saveAttributes: character={}; species={}".format(character, character.species))
         rat = RandomAttributesTable.objects.get(species=character.species)
         if character is not None:
             character.characteristics_ws_initial = rat.weapon_skill + random.randrange(1, 10) + random.randrange(1, 10)
@@ -219,6 +242,53 @@ def ajax_saveAttributes(request):
             logger.error("ajax_saveAttributes not found: character_id={}".format(character_id))
             return JsonResponse({'status': 'Invalid request'}, status=400)
     logger.error("ajax_randomClass is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_saveAttribute(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+        print(request.POST)
+        if character is not None:
+            character.characteristics_ws_initial    = int(request.POST['newVal[characteristics_ws_initial]'])
+            character.characteristics_bs_initial    = int(request.POST['newVal[characteristics_bs_initial]'])
+            character.characteristics_s_initial     = int(request.POST['newVal[characteristics_s_initial]'])
+            character.characteristics_t_initial     = int(request.POST['newVal[characteristics_t_initial]'])
+            character.characteristics_i_initial     = int(request.POST['newVal[characteristics_i_initial]'])
+            character.characteristics_ag_initial    = int(request.POST['newVal[characteristics_ag_initial]'])
+            character.characteristics_dex_initial   = int(request.POST['newVal[characteristics_dex_initial]'])
+            character.characteristics_int_initial   = int(request.POST['newVal[characteristics_int_initial]'])
+            character.characteristics_wp_initial    = int(request.POST['newVal[characteristics_wp_initial]'])
+            character.characteristics_fel_initial   = int(request.POST['newVal[characteristics_fel_initial]'])
+
+            SB = math.floor(int(character.characteristics_s_initial) / 10.0)
+            TB = math.floor(int(character.characteristics_t_initial) / 10.0)
+            WPB = math.floor(int(character.characteristics_wp_initial) / 10.0)
+            character.wounds = SB + (2 * TB) + WPB
+            character.save()
+            ret = {'status': 'ok',
+                   'characteristics_ws_initial':    int(character.characteristics_ws_initial),
+                   'characteristics_bs_initial':    int(character.characteristics_bs_initial),
+                   'characteristics_s_initial':     int(character.characteristics_s_initial),
+                   'characteristics_t_initial':     int(character.characteristics_t_initial),
+                   'characteristics_i_initial':     int(character.characteristics_i_initial),
+                   'characteristics_ag_initial':    int(character.characteristics_ag_initial),
+                   'characteristics_dex_initial':   int(character.characteristics_dex_initial),
+                   'characteristics_int_initial':   int(character.characteristics_int_initial),
+                   'characteristics_wp_initial':    int(character.characteristics_wp_initial),
+                   'characteristics_fel_initial':   int(character.characteristics_fel_initial),
+                   'fate_fate':                     int(character.fate_fate),
+                   'fate_fortune':                  int(character.fate_fortune),
+                   'resilience_resilience':         int(character.resilience_resilience),
+                   'resilience_resolve':            int(character.resilience_resilience),
+                   'movement_movement':             int(character.movement_movement),
+                   'wounds':                        int(character.wounds)
+            }
+            return JsonResponse(ret)
+        else:
+            logger.error("ajax_saveAttribute not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_saveAttribute is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
 def detailsCampaign(request, CampaignId):

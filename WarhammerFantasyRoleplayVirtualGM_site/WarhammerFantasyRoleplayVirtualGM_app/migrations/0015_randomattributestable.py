@@ -24,7 +24,7 @@ def add_AttributesTable(apps, schema_editor):
         'extra_points': 3,
         'movement': 4,
         },
-        {'species': Species.objects.get(id=3),
+        {'species': Species.objects.get(id=4),
         'weapon_skill': 30,
         'ballistic_skill': 20,
         'strength': 20,

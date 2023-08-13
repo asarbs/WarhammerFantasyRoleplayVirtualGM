@@ -163,7 +163,7 @@ class Talent(models.Model):
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
-    name = models.CharField(max_length= 50)
+    name = models.CharField(max_length= 50, verbose_name="Character name")
     species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
     ch_class = models.ForeignKey(Class, verbose_name="Class", on_delete=models.CASCADE, null=True)
     career = models.ForeignKey(Career, verbose_name="Career", on_delete=models.CASCADE, null=True)
@@ -199,7 +199,7 @@ class Character(models.Model):
     fate_fortune = models.IntegerField(default="0", verbose_name="fate_fortune")
     resilience_resilience = models.IntegerField(default="0", verbose_name="resilience_resilience")
     resilience_resolve = models.IntegerField(default="0", verbose_name="resilience_resolve")
-    resilience_motivation = models.IntegerField(default="0", verbose_name="resilience_motivation")
+    resilience_motivation = models.CharField(max_length= 50, verbose_name="Character Motivation")
     experience_current = models.IntegerField(default="0", verbose_name="experience_current")
     experience_spent = models.IntegerField(default="0", verbose_name="experience_spent")
     experience_total = models.IntegerField(default="0", verbose_name="experience_total")
