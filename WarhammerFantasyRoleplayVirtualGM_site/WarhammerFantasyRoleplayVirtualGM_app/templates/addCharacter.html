@@ -30,6 +30,7 @@
         <b>Step 2</b> +25 XP. </br>
         <b>Step 3</b> +0 XP. </br>
         <p>Avalible attribute points: <span id="avalible_attribute_points">0</span></p>
+        <p>Avalible extra points: <span id="avalible_extra_points">0</span></p>
         <img src="{% static "/img/dice_icon.png" %}" id="img_random_characteristics" class="img_random" />
     </div>
         <div class="bottom"><img src="{% static "/img/arrow_right.png" %} " id="img_character_creaton_next"></div>
@@ -193,13 +194,13 @@
                             FATE
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="quantity_fate">
                         <td class="head">Fate</td>
-                        <td><input type="text" id="fate_fate" name="fname"></td>
+                        <td><input type="text" id="fate_fate" name="fname" min="2" max="5" step="1" value="0"></td>
                     </tr>
-                    <tr>
+                    <tr class="quantity_fate">
                         <td class="head">Fortune</td>
-                        <td><input type="text" id="fate_fortune" name="fname"></td>
+                        <td><input type="text" id="fate_fortune" name="fname" min="2" max="5" step="1" value="0"></td>
                     </tr>
                 </table>
             </div>

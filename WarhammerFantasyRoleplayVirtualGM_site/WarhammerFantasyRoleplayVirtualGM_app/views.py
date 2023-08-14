@@ -186,7 +186,7 @@ def ajax_getRandomAttributesTable(request):
                 "characteristics_wp_initial" : r.willpower,
                 "characteristics_fel_initial" : r.fellowship,
             }
-        logger.info(ret)
+        logger.debug(ret)
         return JsonResponse(ret)
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -289,6 +289,27 @@ def ajax_saveAttribute(request):
             logger.error("ajax_saveAttribute not found: character_id={}".format(character_id))
             return JsonResponse({'status': 'Invalid request'}, status=400)
     logger.error("ajax_saveAttribute is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_saveFate_and_fortune(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+        print(request.POST)
+        if character is not None:
+            character.fate_fate    = int(request.POST['newVal[fate_fate]'])
+            character.fate_fortune    = int(request.POST['newVal[fate_fortune]'])
+            character.save()
+            ret = {'status': 'ok',
+                   'fate_fate':    int(character.fate_fate),
+                   'fate_fortune':     int(character.fate_fortune),
+            }
+            logger.debug(ret)
+            return JsonResponse(ret)
+        else:
+            logger.error("ajax_saveFate_and_fortune not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_saveFate_and_fortune is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
 def detailsCampaign(request, CampaignId):

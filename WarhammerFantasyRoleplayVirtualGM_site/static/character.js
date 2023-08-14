@@ -39,7 +39,8 @@ var character_creation_state = {
         5: {'walk': 10,"run": 20},
     },
 
-    avalible_attribute_points: 100
+    avalible_attribute_points       : 100,
+    extra_points                    : 0,
 }
 
 
@@ -139,6 +140,7 @@ function updateBonusExperiencePoints() {
     $("input#movement_run"                ).val(character_creation_state['movement'][character_creation_state["movement_movement"]]['run'])
     $("input#wounds"                      ).val(character_creation_state["wounds"] )
     $("span#avalible_attribute_points"    ).text(character_creation_state["avalible_attribute_points"] )
+    $("span#avalible_extra_points"        ).text(character_creation_state["extra_points"] )
 
 }
 
@@ -288,6 +290,7 @@ function attributes() {
             character_creation_state['resilience_resolve']          = data['resilience_resolve'];
             character_creation_state['movement_movement']           = data['movement_movement'];
             character_creation_state['wounds']                      = data['wounds'];
+            character_creation_state['extra_points']                = data['extra_points'];
         }
     });
 }
@@ -423,6 +426,92 @@ function btnDown(input_id) {
     });
   }
 
+  function btnUpFate(input_id) {
+    if(character_creation_state['extra_points'] <= 0) {
+        console.error("btnUpFate: " + character_creation_state['extra_points'] + " <= 0" )
+        return
+    }
+
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+
+    if ((oldValue + step) > max) {
+        console.error("btnUpFate: (oldValue + step) > max" )
+      return
+    } else {
+      var newVal = oldValue + step;
+    }
+
+    character_creation_state[input_id]  = newVal
+    inp.val(newVal);
+    inp.trigger("change");
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveFate_and_fortune",
+        data: {
+            characer_id: characer_id,
+            input_id: input_id,
+            'newVal': {
+                'fate_fate'    : $('input#fate_fate'  ).val(),
+                'fate_fortune'    : $('input#fate_fortune'  ).val(),
+            }
+        },
+        success: function(data) {
+            character_creation_state['fate_fate']  = data['fate_fate'];
+            character_creation_state['fate_fortune']  = data['fate_fortune'];
+            character_creation_state['extra_points']--
+        }
+    });
+
+  }
+
+function btnDownFate(input_id) {
+    if(character_creation_state['extra_points'] >= 3) {
+        console.error("btnUpFate: " + character_creation_state['extra_points'] + " >= 3" )
+        return
+    }
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+
+    if ((oldValue - step) < min) {
+        console.error("btnDownFate: (oldValue["+oldValue+"] - step["+step+"]) < min["+min+"]" )
+      return
+    } else {
+      var newVal = oldValue - step;
+    }
+
+    character_creation_state[input_id]  = newVal
+    inp.val(newVal);
+    inp.trigger("change");
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveFate_and_fortune",
+        data: {
+            characer_id: characer_id,
+            input_id: input_id,
+            'newVal': {
+                'fate_fate'     : $('input#fate_fate').val(),
+                'fate_fortune'  : $('input#fate_fortune').val(),
+            }
+        },
+        success: function(data) {
+            character_creation_state['fate_fate']  = data['fate_fate'];
+            character_creation_state['fate_fortune']  = data['fate_fortune'];
+            character_creation_state['extra_points']++
+        }
+    });
+  }
+
 function getRandomAttributesTable() {
     $.ajax({
         type: "POST",
@@ -442,6 +531,9 @@ function main() {
     });
 
     getRandomAttributesTable();
+    var quantity = jQuery('.quantity_fate input').each( function() {
+        jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpFate(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownFate(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
+    });
 
     $("select[name='species']").on("change", species_change);
     $("img#img_character_creaton_next").click(nextStep);

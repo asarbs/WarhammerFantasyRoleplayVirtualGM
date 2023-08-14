@@ -19,4 +19,5 @@ urlpatterns = [
     path('ajax_saveAttributes', views.ajax_saveAttributes, name="ajax_saveAttributes"),
     path('ajax_saveAttribute', views.ajax_saveAttribute, name="ajax_saveAttributea"),
     path('ajax_getRandomAttributesTable', views.ajax_getRandomAttributesTable, name="ajax_getRandomAttributesTable"),
+    path('ajax_saveFate_and_fortune', views.ajax_saveFate_and_fortune, name="ajax_saveFate_and_fortune"),
 ]
