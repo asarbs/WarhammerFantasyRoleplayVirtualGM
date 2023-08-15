@@ -147,9 +147,10 @@ class Eyes(models.Model):
         return u"{0}".format(self.name)
 
 class Skils(models.Model):
-    name = models.CharField(max_length= 50)
+    name = models.CharField(max_length= 50, unique=True)
     characteristics = models.CharField(max_length= 3, default="")
     description = models.TextField(verbose_name="Description", default="")
+    ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return u"{0}".format(self.name)

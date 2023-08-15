@@ -1,4 +1,8 @@
 from django.contrib import admin
+from django.forms import forms, Textarea
+from django.db import models
+from tinymce.widgets import TinyMCE
+
 
 # Register your models here.
 class PlayerAdmin(admin.ModelAdmin):
@@ -55,7 +59,11 @@ class EyesAdmin(admin.ModelAdmin):
     ordering = ("species",'random_table_start')
 
 class SkillsAdmin(admin.ModelAdmin):
-    list_display = ("name", "characteristics", "description")
+    formfield_overrides = {
+          models.TextField: {'widget': TinyMCE()}
+    }
+    list_display = ("name", "characteristics", "description", 'ref')
+    list_editable = ("characteristics", 'description', "ref")
     ordering = ("name",)
 
 class TalenAdmin(admin.ModelAdmin):
