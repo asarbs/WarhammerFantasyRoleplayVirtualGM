@@ -1,6 +1,10 @@
 from django.urls import path
+from django.urls import re_path as url
+
+from dal import autocomplete
 
 from . import views
+from .models import Eyes, Hair
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -20,4 +24,9 @@ urlpatterns = [
     path('ajax_saveAttribute', views.ajax_saveAttribute, name="ajax_saveAttributea"),
     path('ajax_getRandomAttributesTable', views.ajax_getRandomAttributesTable, name="ajax_getRandomAttributesTable"),
     path('ajax_saveFate_and_fortune', views.ajax_saveFate_and_fortune, name="ajax_saveFate_and_fortune"),
+    path('ajax_saveAge', views.ajax_saveAge, name="ajax_saveAge"),
+    path('ajax_saveHeight', views.ajax_saveHeight, name="ajax_saveHeight"),
+    path('ajax_saveHair', views.ajax_saveHair, name="ajax_saveHair"),
+    path('ajax_saveEyes', views.ajax_saveEyes, name="ajax_saveEyes"),
+
 ]

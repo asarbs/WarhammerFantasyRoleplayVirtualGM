@@ -43,10 +43,16 @@ class StatusAdmin(admin.ModelAdmin):
     pass
 
 class HairAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("species", "random_table_start", "random_table_end", "name")
+    list_filter = ("species",)
+    list_editable = ("name",)
+    ordering = ("species",'random_table_start')
 
 class EyesAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("species", "random_table_start", "random_table_end", "name")
+    list_filter = ("species",)
+    list_editable = ("name",)
+    ordering = ("species",'random_table_start')
 
 class SkillsAdmin(admin.ModelAdmin):
     list_display = ("name", "characteristics", "description")

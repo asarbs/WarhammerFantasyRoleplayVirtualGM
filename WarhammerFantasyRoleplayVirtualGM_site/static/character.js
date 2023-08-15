@@ -66,13 +66,28 @@ function species_change() {
         success: function(data) {
             $("select#species").val(data['species_id']);
             character_creation_state['bonus_xp'] = 0;
+
+            $("select#hair").empty()
+            $("select#eyes").empty()
+
+            $.each(character_creation_state['RandomHairTable'][val], function(i, item) {
+                console.log(item)
+                $("select#hair").append($('<option>', {value: item.val, text: item.name}))
+            });
+            $.each(character_creation_state['RandomEyesTable'][val], function(i, item) {
+                $("select#eyes").append($('<option>', {value: item.val, text: item.name}))
+            });
+
+            $("input#age").val(data['age'])
+            $("input#height").val(data['height'])
+            $("select#hair").val(data['hair'])
+            $("select#eyes").val(data['eyes'])
         }
     });
 
 }
 
 function randomSpecies() {
-    console.log("randomSpecies")
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     });
@@ -86,12 +101,29 @@ function randomSpecies() {
             characer_id: characer_id,
         },
         success: function(data) {
-            val = $("select#species").val();
-            console.log("status: " + data['status'] + "; species_id: " + val + " -> " + data['species_id']);
+            console.log("hair:" + data['hair'] + " eyes:"+ data['eyes'])
+
             $("select#species").val(data['species_id']);
             character_creation_state['bonus_xp'] = 20;
             $("input#character_sheet_name").val(data['name'])
             $("input#character_sheet_name_1").val(data['name'])
+            $("input#age").val(data['age'])
+            $("input#height").val(data['height'])
+
+            species_val = $("select#species").val();
+            $("select#hair").empty()
+            $("select#eyes").empty()
+            $.each(character_creation_state['RandomHairTable'][species_val], function(i, item) {
+                console.log(item)
+                $("select#hair").append($('<option>', {value: item.val, text: item.name}))
+            });
+            $.each(character_creation_state['RandomEyesTable'][species_val], function(i, item) {
+                $("select#eyes").append($('<option>', {value: item.val, text: item.name}))
+            });
+
+            $("select#hair").val(data['hair'])
+            $("select#eyes").val(data['eyes'])
+
         }
     });
 }
@@ -193,6 +225,66 @@ function saveName(e) {
         data: {
             characer_id: characer_id,
             name: n,
+        },
+        success: function(data) {
+        }
+    });
+}
+function saveAge(e) {
+    n = parseInt($("input#age").val());
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveAge",
+        data: {
+            characer_id: characer_id,
+            age: n,
+        },
+        success: function(data) {
+        }
+    });
+}
+function saveHeight(e) {
+    n = parseInt($("input#height").val());
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveHeight",
+        data: {
+            characer_id: characer_id,
+            height: n,
+        },
+        success: function(data) {
+        }
+    });
+}
+function saveHair(e) {
+    n = $('select#hair').find(":selected").val()
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveHair",
+        data: {
+            characer_id: characer_id,
+            hair: n,
+        },
+        success: function(data) {
+        }
+    });
+}
+function saveEyes(e) {
+    n = $('select#eyes').find(":selected").val()
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveEyes",
+        data: {
+            characer_id: characer_id,
+            eyes: n,
         },
         success: function(data) {
         }
@@ -519,7 +611,10 @@ function getRandomAttributesTable() {
         data: {
         },
         success: function(data) {
-            character_creation_state['RandomAttributesTable'] = data
+            console.log(data)
+            character_creation_state['RandomAttributesTable'] = data['attributesTable']
+            character_creation_state['RandomHairTable'] = data['hairTable']
+            character_creation_state['RandomEyesTable'] = data['eyesTable']
             console.log(character_creation_state)
         }
     });
@@ -535,13 +630,20 @@ function main() {
         jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpFate(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownFate(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
     });
 
-    $("select[name='species']").on("change", species_change);
+    $("select#species").on("change", species_change);
     $("img#img_character_creaton_next").click(nextStep);
 
     $("img#img_random_species").click(randomSpecies);
     $("div#"+ character_creation_steps[0]).show();
     $("img#img_random_class").click(randomClass);
     $("input#character_sheet_name").keyup(saveName);
+
+    $("input#age").keyup(saveAge);
+    $("input#height").keyup(saveHeight);
+    $("select#hair").on("change", saveHair);
+    $("select#eyes").on("change", saveEyes);
+
+
     $("img#img_random_characteristics").click(attributes);
 
     setInterval(updateBonusExperiencePoints, 100);

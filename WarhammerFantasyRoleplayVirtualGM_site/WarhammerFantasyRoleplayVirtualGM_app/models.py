@@ -124,6 +124,9 @@ class Status(models.Model):
 
 class Hair(models.Model):
     name = models.CharField(max_length= 50)
+    species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
+    random_table_start = models.IntegerField(default="0", verbose_name="random_table_human_start")
+    random_table_end = models.IntegerField(default="0", verbose_name="random_table_human_end")
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -133,6 +136,9 @@ class Hair(models.Model):
 
 class Eyes(models.Model):
     name = models.CharField(max_length= 50)
+    species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
+    random_table_start = models.IntegerField(default="0", verbose_name="random_table_human_start")
+    random_table_end = models.IntegerField(default="0", verbose_name="random_table_human_end")
 
     def __str__(self):
         return u"{0}".format(self.name)

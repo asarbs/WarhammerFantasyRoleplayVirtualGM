@@ -29,6 +29,10 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import ExampleName
 from WarhammerFantasyRoleplayVirtualGM_app.models import Career
 from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
+from WarhammerFantasyRoleplayVirtualGM_app.models import Eyes
+from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
+
+from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
 
 # Create your views here.
@@ -58,7 +62,7 @@ def addCharacter(request):
     basic_skills_criterion2 = Q(id__lte = 26)
     basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").values()
     player = Player.objects.get(user=request.user)
-    character = Character(player=player, career_path_id='1', ch_class_id='1', eyes_id='1', hair_id='1', species_id='2')
+    character = Character(player=player)
     character.save()
 
     for skill in basic_skills:
@@ -84,14 +88,25 @@ def ajax_save_character_species(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
         species_id = request.POST['species_id']
+        species = Species.objects.get(id=species_id)
+        eyes_rand = random.randrange(1, 10) + random.randrange(1, 10)
+        hair_rand = random.randrange(1, 10) + random.randrange(1, 10)
+
+        q_species = Q(species=species)
 
         character = Character.objects.get(id = character_id)
         character.species = Species.objects.get(id = species_id)
+        character.eyes = Eyes.objects.get(q_species & Q(random_table_start__lte = eyes_rand) & Q(random_table_end__gte = eyes_rand))
+        character.hair = Hair.objects.get(q_species & Q(random_table_start__lte = hair_rand) & Q(random_table_end__gte = hair_rand))
+        character.age = get_age(species.name)
+        character.height = get_height(species.name)
+
+
         character.save()
 
         logger.info("ajax_save_character_species: {} -> {}".format(character.name, character.species.name))
 
-        return JsonResponse({'status': 'ok', 'species_id': species_id})
+        return JsonResponse({'status': 'ok', 'species_id': species_id, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height})
     logger.error("ajax_save_character_species is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
@@ -101,9 +116,10 @@ def ajax_randomSpecies(request):
         character = Character.objects.get(id = character_id)
         species_list = Species.objects.all()
         r = random.randrange(1, 100)
+        eyes_rand = random.randrange(1, 10) + random.randrange(1, 10)
+        hair_rand = random.randrange(1, 10) + random.randrange(1, 10)
         species = None
         for s in species_list:
-
             if r >= s.random_interal_start and r <= s.random_interal_end:
                 species = s
                 break
@@ -111,11 +127,17 @@ def ajax_randomSpecies(request):
         names = ExampleName.objects.filter(species = species)
         name = names[random.randrange(0, len(names))]
 
+        q_species = Q(species=species)
+
         character.name = name.name
         character.species = species
+        character.eyes = Eyes.objects.get(q_species & Q(random_table_start__lte = eyes_rand) & Q(random_table_end__gte = eyes_rand))
+        character.hair = Hair.objects.get(q_species & Q(random_table_start__lte = hair_rand) & Q(random_table_end__gte = hair_rand))
+        character.age = get_age(species.name)
+        character.height = get_height(species.name)
         character.save()
 
-        return JsonResponse({'status': 'ok', 'species_id': species.id, 'name': name.name})
+        return JsonResponse({'status': 'ok', 'species_id': species.id, 'name': name.name, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height})
     logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
@@ -172,9 +194,9 @@ def ajax_saveName(request):
 def ajax_getRandomAttributesTable(request):
     if request.method == 'POST':
         rat = RandomAttributesTable.objects.all()
-        ret = {}
+        ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}}
         for r in rat:
-            ret[r.species.id] = {
+            ret['attributesTable'][r.species.id] = {
                 "characteristics_ws_initial" : r.weapon_skill,
                 "characteristics_bs_initial" : r.ballistic_skill,
                 "characteristics_s_initial" : r.strength,
@@ -186,7 +208,16 @@ def ajax_getRandomAttributesTable(request):
                 "characteristics_wp_initial" : r.willpower,
                 "characteristics_fel_initial" : r.fellowship,
             }
-        logger.debug(ret)
+        for r in Eyes.objects.all():
+            if r.species.id not in ret['eyesTable']:
+                ret['eyesTable'][r.species.id] = []
+            ret['eyesTable'][r.species.id].append({'val': r.id, 'name': r.name})
+        for r in Hair.objects.all():
+            if r.species.id not in ret['hairTable']:
+                ret['hairTable'][r.species.id] = []
+            ret['hairTable'][r.species.id].append({'val': r.id, 'name': r.name})
+
+        # logger.debug(ret)
         return JsonResponse(ret)
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -310,6 +341,79 @@ def ajax_saveFate_and_fortune(request):
             logger.error("ajax_saveFate_and_fortune not found: character_id={}".format(character_id))
             return JsonResponse({'status': 'Invalid request'}, status=400)
     logger.error("ajax_saveFate_and_fortune is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_saveAge(request):
+    if request.method == 'POST':
+        logger.debug(request.POST)
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+        if character is not None:
+            character.age    = int(request.POST['age'])
+            character.save()
+            ret = {'status': 'ok'  }
+            logger.debug(ret)
+            return JsonResponse(ret)
+        else:
+            logger.error("ajax_saveAge not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_saveAge is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_saveHeight(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+        if character is not None:
+            character.height    = int(request.POST['height'])
+            character.save()
+            ret = {'status': 'ok'  }
+            logger.debug(ret)
+            return JsonResponse(ret)
+        else:
+            logger.error("ajax_saveHeight not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_saveHeight is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_saveHair(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+        if character is not None:
+            hair, created = Hair.objects.get_or_create(name=request.POST['hair'])
+            if created:
+                character.hair    = hair
+                character.save()
+                ret = {'status': 'ok'  }
+                logger.debug(ret)
+                return JsonResponse(ret)
+            else :
+                logger.error("ajax_saveHair: hair:{}; character_id:{}".format(request.POST['hair'],character_id ))
+        else:
+            logger.error("ajax_saveHair not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_saveHair is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_saveEyes(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        character = Character.objects.get(id = character_id)
+        if character is not None:
+            eye_color, created = Eyes.objects.get_or_create(name=request.POST['eyes'])
+            if created:
+                character.eyes    = eye_color
+                character.save()
+                ret = {'status': 'ok'  }
+                logger.debug(ret)
+                return JsonResponse(ret)
+            else :
+                logger.error("ajax_saveEyes: eyesColor:{}; character_id:{}".format(request.POST['eyes'],character_id ))
+        else:
+            logger.error("ajax_saveEyes not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_saveEyes is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
 def detailsCampaign(request, CampaignId):
