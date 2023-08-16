@@ -3,6 +3,8 @@ from django.forms import forms, Textarea
 from django.db import models
 from tinymce.widgets import TinyMCE
 
+from WarhammerFantasyRoleplayVirtualGM_app.forms import SpeciesForm
+
 
 # Register your models here.
 class PlayerAdmin(admin.ModelAdmin):
@@ -22,6 +24,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 
 class SpeciesAdmin(admin.ModelAdmin):
+    form = SpeciesForm
     list_display = ("name", "random_interal_start", "random_interal_end")
     list_editable = ("random_interal_start", "random_interal_end")
     ordering = ("random_interal_start", )
@@ -36,6 +39,7 @@ class ClassAdmin(admin.ModelAdmin):
     pass
 
 class CareerPathAdmin(admin.ModelAdmin):
+
     pass
 
 class CareerAdmin(admin.ModelAdmin):
@@ -60,15 +64,21 @@ class EyesAdmin(admin.ModelAdmin):
 
 class SkillsAdmin(admin.ModelAdmin):
     formfield_overrides = {
-          models.TextField: {'widget': TinyMCE()}
+          models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
     }
-    list_display = ("name", "characteristics", "description", 'ref')
-    list_editable = ("characteristics", 'description', "ref")
+    list_display = ("name", "characteristics", 'ref')
+    list_editable = ("characteristics", "ref")
     ordering = ("name",)
+    save_as=True
 
 class TalenAdmin(admin.ModelAdmin):
-    list_display = ("name", "description")
+    formfield_overrides = {
+          models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
+    }
+    list_display = ("name", 'max', 'tests', 'ref')
+    list_editable = ("ref",)
     ordering = ("name",)
+    save_as=True
 
 class Campaign2PlayerAdmin(admin.ModelAdmin):
     pass
@@ -86,6 +96,18 @@ class RefBookAdmin(admin.ModelAdmin):
 class ReferenceAdmin(admin.ModelAdmin):
     list_display = ("refBook","page")
     list_filter = ("refBook",)
+
+class CareersAdvanceSchemeAdmin(admin.ModelAdmin):
+    pass
+
+class TrappingAdmin(admin.ModelAdmin):
+    pass
+
+class RandomTalentsTableAdmin(admin.ModelAdmin):
+    list_display = ("talent", "any","random_interal_start", "random_interal_end")
+    list_editable = ("random_interal_start", "random_interal_end", "any")
+    ordering = ("random_interal_start",)
+
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
@@ -106,3 +128,6 @@ admin.site.register(models.Character2Skill, Character2SkillAdmin)
 admin.site.register(models.RefBook, RefBookAdmin)
 admin.site.register(models.Reference, ReferenceAdmin)
 admin.site.register(models.RandomAttributesTable, RandomAttributesTableAdmin)
+admin.site.register(models.CareersAdvanceScheme, CareersAdvanceSchemeAdmin)
+admin.site.register(models.Trapping, TrappingAdmin)
+admin.site.register(models.RandomTalentsTable, RandomTalentsTableAdmin)

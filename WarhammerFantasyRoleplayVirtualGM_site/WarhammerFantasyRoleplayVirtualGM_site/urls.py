@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
 from django.contrib.auth import views as auth_views
 from WarhammerFantasyRoleplayVirtualGM_app import views as MainView
+from WarhammerFantasyRoleplayVirtualGM_app.views import *
 
 admin.autodiscover()
 
@@ -26,5 +28,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(next_page= '/login/'), name='logout'),
     path('admin/', admin.site.urls),
-    path('tiny_mce/', include('tinymce.urls'))
+    path('tiny_mce/', include('tinymce.urls')),
+    path('skills-autocomplete/', AutocompleteSkills.as_view(), name='skills-autocomplete'),
+    path('talent-autocomplete/', AutocompleteTalent.as_view(), name='talent-autocomplete'),
 ]

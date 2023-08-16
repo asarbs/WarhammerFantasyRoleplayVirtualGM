@@ -13,6 +13,9 @@ class RefBook(models.Model):
         return u"{0}".format(self.name)
 
 class Reference(models.Model):
+    class Meta:
+        ordering = ['refBook', 'page']
+
     refBook = models.ForeignKey(RefBook, on_delete=models.CASCADE, verbose_name="Reference Book")
     page = models.IntegerField(default=0, verbose_name="Page")
     def __str__(self):
@@ -33,6 +36,41 @@ class Campaign(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+
+class Skils(models.Model):
+    name = models.CharField(max_length= 50, unique=True)
+    characteristics = models.CharField(max_length= 3, default="")
+    description = models.TextField(verbose_name="Description", default="")
+    ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+class Talent(models.Model):
+    name = models.CharField(max_length= 50)
+    max =  models.CharField(max_length= 50, default="")
+    tests = models.CharField(max_length= 50, default="", blank=True, null=True)
+    description = models.TextField(verbose_name="Description", default="")
+    ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+class Trapping(models.Model):
+    name = models.CharField(max_length= 50)
+    description = models.TextField(verbose_name="Description", default="")
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
 
 class Player(models.Model):
     user = models.OneToOneField(User, verbose_name='Player', on_delete=models.CASCADE)
@@ -56,7 +94,9 @@ class Campaign2Player(models.Model):
 class Species(models.Model):
     name = models.CharField(max_length= 50)
     random_interal_start = models.IntegerField(default=0, verbose_name="random_interal_start")
-    random_interal_end = models.IntegerField(default=0, verbose_name="random_interal_start")
+    random_interal_end = models.IntegerField(default=0, verbose_name="random_interal_end")
+    skills = models.ManyToManyField(Skils)
+    talents = models.ManyToManyField(Talent)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -68,15 +108,6 @@ class ExampleName(models.Model):
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
     name = models.CharField(max_length= 50, unique=True)
     sex = models.CharField(validators = [validator_sex], max_length=1, default="f")
-
-    def __str__(self):
-        return u"{0}".format(self.name)
-
-    def __unicode__(self):
-        return u"{0}".format(self.name)
-
-class CareerPath(models.Model):
-    name = models.CharField(max_length= 50)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -107,11 +138,51 @@ class Career(models.Model):
     random_table_wood_elf_start = models.IntegerField(default="0", verbose_name="random_table_wood_elf_start")
     random_table_wood_elf_end = models.IntegerField(default="0", verbose_name="random_table_wood_elf_end")
 
+
     def __str__(self):
         return u"{0}".format(self.name)
 
     def __unicode__(self):
         return u"{0}".format(self.name)
+
+class CareerPath(models.Model):
+    name = models.CharField(max_length= 50)
+    skills = models.ManyToManyField(Skils)
+    talents = models.ManyToManyField(Talent)
+    trappings = models.ManyToManyField(Trapping)
+    earning_money = models.CharField(max_length= 50, verbose_name="Earning Money", default="default")
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+
+class CareersAdvanceScheme(models.Model):
+    class Meta:
+        ordering = ['career']
+    career = models.ForeignKey(Career, verbose_name="Career", on_delete=models.CASCADE)
+    characteristics_ws_initial = models.IntegerField(default="0", verbose_name="ws")
+    characteristics_bs_initial = models.IntegerField(default="0", verbose_name="bs")
+    characteristics_s_initial = models.IntegerField(default="0", verbose_name="s")
+    characteristics_t_initial = models.IntegerField(default="0", verbose_name="t")
+    characteristics_i_initial = models.IntegerField(default="0", verbose_name="i")
+    characteristics_ag_initial = models.IntegerField(default="0", verbose_name="ag")
+    characteristics_dex_initial = models.IntegerField(default="0", verbose_name="dex")
+    characteristics_int_initial = models.IntegerField(default="0", verbose_name="int")
+    characteristics_wp_initial = models.IntegerField(default="0", verbose_name="wp")
+    characteristics_fel_initial = models.IntegerField(default="0", verbose_name="fel")
+    advances_level_1 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_1')
+    advances_level_2 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_2')
+    advances_level_3 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_3')
+    advances_level_4 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_4')
+
+    def __str__(self):
+        return u"{0} Advance Scheme".format(self.career.name)
+
+    def __unicode__(self):
+        return u"{0} Advance Scheme".format(self.career.name)
 
 class Status(models.Model):
     name = models.CharField(max_length= 50)
@@ -146,27 +217,6 @@ class Eyes(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
-class Skils(models.Model):
-    name = models.CharField(max_length= 50, unique=True)
-    characteristics = models.CharField(max_length= 3, default="")
-    description = models.TextField(verbose_name="Description", default="")
-    ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return u"{0}".format(self.name)
-
-    def __unicode__(self):
-        return u"{0}".format(self.name)
-
-class Talent(models.Model):
-    name = models.CharField(max_length= 50)
-    description = models.TextField(verbose_name="Description", default="")
-
-    def __str__(self):
-        return u"{0}".format(self.name)
-
-    def __unicode__(self):
-        return u"{0}".format(self.name)
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
@@ -249,3 +299,15 @@ class RandomAttributesTable(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.species.name)
+
+class RandomTalentsTable(models.Model):
+    talent = models.ForeignKey(Talent, verbose_name="Talent", on_delete=models.CASCADE, null=True)
+    random_interal_start = models.IntegerField(default=0, verbose_name="random_interal_start")
+    random_interal_end = models.IntegerField(default=0, verbose_name="random_interal_end")
+    any = models.BooleanField(default=False, verbose_name="Any")
+
+    def __str__(self):
+        return u"{0}".format(self.talent.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.talent.name)

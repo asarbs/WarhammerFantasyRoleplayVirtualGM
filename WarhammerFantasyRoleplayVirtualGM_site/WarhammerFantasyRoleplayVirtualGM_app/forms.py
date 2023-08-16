@@ -5,6 +5,8 @@ from django.forms import PasswordInput
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 
+from dal import autocomplete
+
 from . import models
 
 class UserForm(ModelForm):
@@ -29,3 +31,13 @@ class CreateCampaignForm(ModelForm):
     class Meta:
         model = models.Campaign
         fields = ['name', 'party_name', 'ambitions_shortterm', 'ambitions_longterm']
+
+
+class SpeciesForm(ModelForm):
+    class Meta:
+        model = models.Species
+        fields = ('__all__')
+        widgets = {
+            'skills': autocomplete.ModelSelect2Multiple(url='skills-autocomplete'),
+            'talents': autocomplete.ModelSelect2Multiple(url='talent-autocomplete')
+        }

@@ -11,6 +11,7 @@ import math
 
 from django.urls import reverse
 
+from dal import autocomplete
 
 import logging
 logger = logging.getLogger(__name__)
@@ -31,6 +32,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Career
 from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
 from WarhammerFantasyRoleplayVirtualGM_app.models import Eyes
 from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
+from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -495,3 +497,30 @@ Tournament Calculator admin (Bartosz Skorupa)
     else:
         remindPasswordForm = RemindPasswordForm()
     return render(request, 'RemindPassword.html', dict(form=remindPasswordForm))
+
+
+class AutocompleteSkills(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Skils.objects.none()
+
+        qs = Skils.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
+
+class AutocompleteTalent(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Talent.objects.none()
+
+        qs = Talent.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
