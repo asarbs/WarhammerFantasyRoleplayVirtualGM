@@ -22,8 +22,9 @@
 				"mhutchie.git-graph",
 				"aeschli.vscode-css-formatter",
 				"mohd-akram.vscode-html-format",
-				"alexcvzz.vscode-sqlite"
-			]		
+				"alexcvzz.vscode-sqlite",
+				"ZainChen.json",
+			]
 		}
 	}
 

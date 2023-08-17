@@ -28,6 +28,7 @@ var character_creation_state = {
     resilience_resolve              : 0,
     movement_movement               : 0,
     wounds                          : 0,
+    skills: [],
 
     character_creation_step: 0,
     class_selection_random: 0,
@@ -49,12 +50,11 @@ const character_creation_steps = ["step_1_species", "step_2_class", "step_3_char
 const character_creation_steps_header = ["Species", "Class", "Characteristics"]
 
 function species_change() {
-    val = $(this).find(":selected").val()
-    characer_id = $("input[name='characer_id']").val()
-
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     });
+    val = $(this).find(":selected").val()
+    characer_id = $("input[name='characer_id']").val()
 
     $.ajax({
         type: "POST",
@@ -64,6 +64,8 @@ function species_change() {
             species_id: val
         },
         success: function(data) {
+            console.log("hair:" + data['hair'] + " eyes:"+ data['eyes'])
+
             $("select#species").val(data['species_id']);
             character_creation_state['bonus_xp'] = 0;
 
@@ -84,7 +86,6 @@ function species_change() {
             $("select#eyes").val(data['eyes'])
         }
     });
-
 }
 
 function randomSpecies() {
@@ -99,31 +100,35 @@ function randomSpecies() {
         url: "ajax_randomSpecies",
         data: {
             characer_id: characer_id,
+
         },
         success: function(data) {
             console.log("hair:" + data['hair'] + " eyes:"+ data['eyes'])
 
             $("select#species").val(data['species_id']);
             character_creation_state['bonus_xp'] = 20;
-            $("input#character_sheet_name").val(data['name'])
-            $("input#character_sheet_name_1").val(data['name'])
-            $("input#age").val(data['age'])
-            $("input#height").val(data['height'])
 
             species_val = $("select#species").val();
             $("select#hair").empty()
             $("select#eyes").empty()
+
             $.each(character_creation_state['RandomHairTable'][species_val], function(i, item) {
-                console.log(item)
                 $("select#hair").append($('<option>', {value: item.val, text: item.name}))
             });
             $.each(character_creation_state['RandomEyesTable'][species_val], function(i, item) {
                 $("select#eyes").append($('<option>', {value: item.val, text: item.name}))
             });
+            $.each(data['species_skills'], function(i, item) {
+                character_creation_state['skills'].push(item)
+            })
 
+
+            $("input#age").val(data['age'])
+            $("input#height").val(data['height'])
             $("select#hair").val(data['hair'])
             $("select#eyes").val(data['eyes'])
-
+            $("input#character_sheet_name").val(data['name'])
+            $("input#character_sheet_name_1").val(data['name'])
         }
     });
 }

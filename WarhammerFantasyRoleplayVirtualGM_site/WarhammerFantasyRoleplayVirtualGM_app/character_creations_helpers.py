@@ -1,5 +1,8 @@
 import random
 
+from WarhammerFantasyRoleplayVirtualGM_app.models import Species
+from WarhammerFantasyRoleplayVirtualGM_app.models import RandomTalentsTable
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -30,3 +33,12 @@ def get_height(species: str):
     elif species in ("High Elf", "Wood Elf"):
         return 94 + random_d10(1)
     return -1
+
+def get_species_tallens(speceies_id: int):
+    species_talents = list(Species.objects.get(id=speceies_id).talents)
+    talens = list(RandomTalentsTable.objects.all())
+    if speceies_id == 2:
+        species_talents.append(random.sample(talens, 3))
+    elif speceies_id == 3:
+        species_talents.append(random.sample(talens, 2))
+    return species_talents

@@ -8,6 +8,7 @@ from django.db.models import Q
 
 import random
 import math
+import json
 
 from django.urls import reverse
 
@@ -102,13 +103,14 @@ def ajax_save_character_species(request):
         character.hair = Hair.objects.get(q_species & Q(random_table_start__lte = hair_rand) & Q(random_table_end__gte = hair_rand))
         character.age = get_age(species.name)
         character.height = get_height(species.name)
-
-
         character.save()
+
+        species_skills = species.skills
+        species_tallents = []
 
         logger.info("ajax_save_character_species: {} -> {}".format(character.name, character.species.name))
 
-        return JsonResponse({'status': 'ok', 'species_id': species_id, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height})
+        return JsonResponse({'status': 'ok', 'species_id': species_id, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height, 'species_skills': species_skills, 'species_tallents':species_tallents})
     logger.error("ajax_save_character_species is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
@@ -139,7 +141,12 @@ def ajax_randomSpecies(request):
         character.height = get_height(species.name)
         character.save()
 
-        return JsonResponse({'status': 'ok', 'species_id': species.id, 'name': name.name, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height})
+        species_skills = []
+        for ss in species.skills.all():
+            species_skills.append({'id': ss.id, 'name': ss.name, 'characteristics': ss.characteristics, 'description': ss.description})
+        species_tallents = []
+
+        return JsonResponse({'status': 'ok', 'species_id': species.id, 'name': name.name, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height, 'species_skills': species_skills, 'species_tallents':species_tallents})
     logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
