@@ -29,7 +29,10 @@ var character_creation_state = {
     movement_movement               : 0,
     wounds                          : 0,
     skills: [],
+    skills_species: {
 
+    },
+    talents: [],
     character_creation_step: 0,
     class_selection_random: 0,
     characteristics_selection_random: 0,
@@ -46,8 +49,8 @@ var character_creation_state = {
 
 
 
-const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics"]
-const character_creation_steps_header = ["Species", "Class", "Characteristics"]
+const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills']
+const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills"]
 
 function species_change() {
     $.ajaxSetup({
@@ -79,6 +82,17 @@ function species_change() {
             $.each(character_creation_state['RandomEyesTable'][val], function(i, item) {
                 $("select#eyes").append($('<option>', {value: item.val, text: item.name}))
             });
+            character_creation_state['skills'] = []
+            $("table#skills_table tr.block_body").remove()
+            $.each(data['species_skills'], function(i, item) {
+                character_creation_state['skills'].push(item)
+            })
+            fill_species_skills_select();
+
+            $("table#talents_table tr.block_body").remove()
+            $.each(data['species_tallents'], function(i, item) {
+                character_creation_state['talents'].push(item)
+            })
 
             $("input#age").val(data['age'])
             $("input#height").val(data['height'])
@@ -118,8 +132,17 @@ function randomSpecies() {
             $.each(character_creation_state['RandomEyesTable'][species_val], function(i, item) {
                 $("select#eyes").append($('<option>', {value: item.val, text: item.name}))
             });
+            character_creation_state['skills'] = []
+            $("table#skills_table tr.block_body").remove()
             $.each(data['species_skills'], function(i, item) {
                 character_creation_state['skills'].push(item)
+            })
+            fill_species_skills_select();
+
+            character_creation_state['talents'] = []
+            $("table#talents_table tr.block_body").remove()
+            $.each(data['species_tallents'], function(i, item) {
+                character_creation_state['talents'].push(item)
             })
 
 
@@ -133,7 +156,7 @@ function randomSpecies() {
     });
 }
 
-function updateBonusExperiencePoints() {
+function updateCharacterState() {
     $("input#experience_current").val(character_creation_state['bonus_xp']);
 
     $("input#characteristics_ws_initial"  ).val(character_creation_state["characteristics_ws_initial" ])
@@ -179,6 +202,40 @@ function updateBonusExperiencePoints() {
     $("span#avalible_attribute_points"    ).text(character_creation_state["avalible_attribute_points"] )
     $("span#avalible_extra_points"        ).text(character_creation_state["extra_points"] )
 
+    $.each(character_creation_state['skills'], function(i, item) {
+        if(!$('#skills_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
+            new_row = '<tr class="block_body">'
+            new_row += '<td id="skills_name__'+item.id+'" class="left">'+item.name+'</td>'
+            new_row += '<td class="characteristics">'+item.characteristics+'</td>'
+            new_row += '<td class="edit"><input type="text" id="skills_characteristics__'+item.id+'" name="fname"></td>'
+            new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" name="fname"></td>'
+            new_row += '<td class="edit"><input type="text" id="skills__'+item.id+'" name="fname"></td>'
+            new_row += '</tr>'
+            $("#skills_table").append(new_row)
+        }
+
+        skill_char =character_creation_state["characteristics_"+item.characteristics.toLowerCase()+"_initial" ] + character_creation_state["characteristics_"+item.characteristics.toLowerCase()+"_advances"]
+        $('#skills_characteristics__'+item.id).val(skill_char)
+        $('#skills_adv__'+item.id).val(item.adv)
+        $('#skills__'+item.id).val(skill_char + item.adv)
+        if(character_creation_state['character_creation_step'] == 3 && item.type == "species_skill"){
+            $('#skills_name__'+item.id).css("font-weight","Bold");
+        } else {
+            $('#skills_name__'+item.id).css("font-weight","Normal");
+        }
+    });
+
+    $.each(character_creation_state['talents'], function(i, item) {
+        if(!$('#talents_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
+            console.log()
+            new_row = '<tr class="block_body">'
+            new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
+            new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" name="fname"></td>'
+            new_row += '<td class="description">'+item.description+'</td>'
+            new_row += '</tr>'
+            $("#talents_table").append(new_row)
+        }
+    });
 }
 
 
@@ -188,6 +245,28 @@ function nextStep() {
     character_creation_state['character_creation_step']++
     $("div#"+ character_creation_steps[character_creation_state['character_creation_step']]).show(200);
     $("div.create_character div.header h1").text(character_creation_steps_header[character_creation_state['character_creation_step']])
+    if(character_creation_state['character_creation_step'] == 3) {
+        fill_species_skills_select();
+    }
+}
+
+function fill_species_skills_select() {
+    $("select#species_skills_5_1 option").remove()
+    $("select#species_skills_5_2 option").remove()
+    $("select#species_skills_5_3 option").remove()
+    $("select#species_skills_3_1 option").remove()
+    $("select#species_skills_3_2 option").remove()
+    $("select#species_skills_3_3 option").remove()
+    $.each(character_creation_state['skills'], function (i, item) {
+        if (character_creation_state['character_creation_step'] == 3 && item.type == "species_skill") {
+            $("select#species_skills_5_1").append($('<option>', { value: item.id, text: item.name }));
+            $("select#species_skills_5_2").append($('<option>', { value: item.id, text: item.name }));
+            $("select#species_skills_5_3").append($('<option>', { value: item.id, text: item.name }));
+            $("select#species_skills_3_1").append($('<option>', { value: item.id, text: item.name }));
+            $("select#species_skills_3_2").append($('<option>', { value: item.id, text: item.name }));
+            $("select#species_skills_3_3").append($('<option>', { value: item.id, text: item.name }));
+        }
+    });
 }
 
 function randomClass() {
@@ -625,6 +704,43 @@ function getRandomAttributesTable() {
     });
 }
 
+
+
+function saveSkillAdv(eventData, points) {
+    new_adv_id = $(eventData.currentTarget).val()
+    old_skill_adv = character_creation_state['skills_species'][eventData.currentTarget.id]
+    console.log(old_skill_adv)
+    character_creation_state['skills_species'][eventData.currentTarget.id] = new_adv_id
+    $.each(character_creation_state['skills'], function(i, item) {
+        if(item.id == old_skill_adv) {
+            item.adv = 0
+        }
+        if(item.id == new_adv_id) {
+            item.adv = points
+            characer_id = $("input[name='characer_id']").val()
+            $.ajax({
+                type: "POST",
+                url: "ajax_saveSkillAdv",
+                data: {
+                    characer_id: characer_id,
+                    skill_id: new_adv_id,
+                    points: points,
+                    old_skill_adv: old_skill_adv
+                },
+                success: function(data) {
+                }
+            });
+        }
+    });
+}
+function saveSkillAdv5(eventData) {
+    saveSkillAdv(eventData, 5);
+}
+
+function saveSkillAdv3(eventData) {
+    saveSkillAdv(eventData, 3);
+}
+
 function main() {
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
@@ -648,8 +764,21 @@ function main() {
     $("select#hair").on("change", saveHair);
     $("select#eyes").on("change", saveEyes);
 
+    var eventData5_1
+    var eventData5_2
+    var eventData5_3
+    var eventData3_1
+    var eventData3_2
+    var eventData3_3
+
+    $("select#species_skills_5_1").on("change", eventData5_1, saveSkillAdv5);
+    $("select#species_skills_5_2").on("change", eventData5_2, saveSkillAdv5);
+    $("select#species_skills_5_3").on("change", eventData5_3, saveSkillAdv5);
+    $("select#species_skills_3_1").on("change", eventData3_1, saveSkillAdv3);
+    $("select#species_skills_3_2").on("change", eventData3_2, saveSkillAdv3);
+    $("select#species_skills_3_3").on("change", eventData3_3, saveSkillAdv3);
 
     $("img#img_random_characteristics").click(attributes);
 
-    setInterval(updateBonusExperiencePoints, 100);
+    setInterval(updateCharacterState, 100);
 }

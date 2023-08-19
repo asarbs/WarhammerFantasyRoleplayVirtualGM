@@ -1,3 +1,4 @@
+import django
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.forms import Form
@@ -34,6 +35,8 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
 from WarhammerFantasyRoleplayVirtualGM_app.models import Eyes
 from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
+from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -69,7 +72,7 @@ def addCharacter(request):
     character.save()
 
     for skill in basic_skills:
-        c2s = Character2Skill(characters_id=character.id, skills_id = skill['id'])
+        c2s = Character2Skill(characters_id=character.id, skills_id = skill['id'], type=Character2Skill.SkillType.BASIC_SKILL)
         c2s.save()
 
     skills_values = Character2Skill.objects.filter(characters_id=character.id)
@@ -105,10 +108,27 @@ def ajax_save_character_species(request):
         character.height = get_height(species.name)
         character.save()
 
-        species_skills = species.skills
-        species_tallents = []
+        species_skills = {}
 
-        logger.info("ajax_save_character_species: {} -> {}".format(character.name, character.species.name))
+        Character2Skill.objects.filter(characters=character, type=Character2Skill.SkillType.NORMAL_SKILL).delete()
+        basic_skills = Character2Skill.objects.filter(characters=character)
+        for ss in basic_skills.all():
+            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'type': 'basic_skill'}
+
+        created = -1
+        for ss in species.skills.all():
+            species_skills[ss.id] = {'id': ss.id, 'name': ss.name, 'characteristics': ss.characteristics, 'description': ss.description, 'adv': 0, 'type': 'species_skill'}
+            try:
+                ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0, type=Character2Skill.SkillType.NORMAL_SKILL)
+                ch2Skill.save()
+            except django.db.utils.IntegrityError as e:
+                logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
+
+        Character2Talent.objects.filter(characters=character).delete()
+        species_tallents = get_species_tallens(species)
+        for st in species_tallents:
+            ch2t, created = Character2Talent.objects.get_or_create(characters=character, talent_id=st['id'], taken=0)
+            ch2t.save()
 
         return JsonResponse({'status': 'ok', 'species_id': species_id, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height, 'species_skills': species_skills, 'species_tallents':species_tallents})
     logger.error("ajax_save_character_species is GET")
@@ -141,12 +161,39 @@ def ajax_randomSpecies(request):
         character.height = get_height(species.name)
         character.save()
 
-        species_skills = []
+        species_skills = {}
+        Character2Skill.objects.filter(characters=character, type=Character2Skill.SkillType.NORMAL_SKILL).delete()
+        basic_skills = Character2Skill.objects.filter(characters=character)
+        for ss in basic_skills.all():
+            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'type': 'basic_skill'}
+        created = -1
         for ss in species.skills.all():
-            species_skills.append({'id': ss.id, 'name': ss.name, 'characteristics': ss.characteristics, 'description': ss.description})
-        species_tallents = []
+            species_skills[ss.id] = {'id': ss.id, 'name': ss.name, 'characteristics': ss.characteristics, 'description': ss.description, 'adv': 0, 'type': 'species_skill'}
+            try:
+                ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0, type=Character2Skill.SkillType.NORMAL_SKILL)
+                ch2Skill.save()
+            except django.db.utils.IntegrityError as e:
+                logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
 
-        return JsonResponse({'status': 'ok', 'species_id': species.id, 'name': name.name, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height, 'species_skills': species_skills, 'species_tallents':species_tallents})
+
+
+        species_tallents = get_species_tallens(species)
+        Character2Talent.objects.filter(characters=character).delete()
+        for st in species_tallents:
+            ch2t, created = Character2Talent.objects.get_or_create(characters=character, talent_id=st['id'], taken=0)
+            ch2t.save()
+        res = {'status': 'ok',
+               'species_id': species.id,
+               'name': name.name,
+               'eyes': character.eyes.id,
+               'hair': character.hair.id,
+               'age': character.age,
+               'height': character.height,
+               'species_skills': species_skills,
+               'species_tallents':species_tallents
+               }
+
+        return JsonResponse(res)
     logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
@@ -425,6 +472,33 @@ def ajax_saveEyes(request):
     logger.error("ajax_saveEyes is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+def ajax_saveSkillAdv(request):
+    if request.method == 'POST':
+        character_id = request.POST['characer_id']
+        logger.info(request.POST)
+        # logger.info("character_id={}; skill_id={}; points={}; old_skill_adv={}".format(character_id, request.POST['skill_id'], request.POST['points'], request.POST['old_skill_adv']))
+        ch2skill = Character2Skill.objects.get(characters_id=character_id, skills_id=request.POST['skill_id'])
+        if ch2skill is not None:
+            ch2skill.adv =request.POST['points']
+            ch2skill.save()
+        else:
+            logger.error("ajax_saveSkillAdv not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+        old_skill_adv = request.POST.get('old_skill_adv', None)
+        if old_skill_adv is not None:
+            ch2skill = Character2Skill.objects.get(characters_id=character_id, skills_id=request.POST['old_skill_adv'])
+            if ch2skill is not None:
+                ch2skill.adv = 0
+                ch2skill.save()
+            else:
+                logger.error("ajax_saveSkillAdv not found: character_id={}".format(character_id))
+                return JsonResponse({'status': 'Invalid request'}, status=400)
+
+        ret = {'status': 'ok'  }
+        return JsonResponse(ret)
+    logger.error("ajax_saveSkillAdv is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
     dic ={'camaing': c}
@@ -515,7 +589,7 @@ class AutocompleteSkills(autocomplete.Select2QuerySetView):
         qs = Skils.objects.all()
 
         if self.q:
-            qs = qs.filter(name__istartswith=self.q)
+            qs = qs.filter(name__istartswith=self.q).order_by('name')
 
         return qs
 
@@ -528,6 +602,19 @@ class AutocompleteTalent(autocomplete.Select2QuerySetView):
         qs = Talent.objects.all()
 
         if self.q:
-            qs = qs.filter(name__istartswith=self.q)
+            qs = qs.filter(name__istartswith=self.q).order_by('name')
+
+        return qs
+
+class AutocompleteTrappings(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Trapping.objects.none()
+
+        qs = Trapping.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q).order_by('name')
 
         return qs

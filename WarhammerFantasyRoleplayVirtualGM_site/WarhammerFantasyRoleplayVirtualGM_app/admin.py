@@ -2,8 +2,10 @@ from django.contrib import admin
 from django.forms import forms, Textarea
 from django.db import models
 from tinymce.widgets import TinyMCE
+from django.db.models import Q
 
 from WarhammerFantasyRoleplayVirtualGM_app.forms import SpeciesForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import CareerPathForm
 
 
 # Register your models here.
@@ -39,8 +41,21 @@ class ClassAdmin(admin.ModelAdmin):
     pass
 
 class CareerPathAdmin(admin.ModelAdmin):
+    form = CareerPathForm
+    list_display = ("careers", "name", "earning_money")
+    #list_editable = (,)
+    # list_filter = ("careers",)
+    ordering = ("name", )
+    list_max_show_all = 1500
+    list_per_page = 1000
 
-    pass
+    def careers(self, obj):
+        Q1 = Q(advances_level_1 = obj.id)
+        Q2 = Q(advances_level_2 = obj.id)
+        Q3 = Q(advances_level_3 = obj.id)
+        Q4 = Q(advances_level_4 = obj.id)
+        return models.CareersAdvanceScheme.objects.get(Q1 | Q2 | Q3 | Q4).career
+    careers.short_description = 'careers'
 
 class CareerAdmin(admin.ModelAdmin):
     list_display = ("ch_class", "name", "random_table_human_start", "random_table_human_end","random_table_dwarf_start","random_table_dwarf_end","random_table_halfling_start","random_table_halfling_end","random_table_high_elf_start","random_table_high_elf_end","random_table_wood_elf_start","random_table_wood_elf_end")
@@ -70,6 +85,8 @@ class SkillsAdmin(admin.ModelAdmin):
     list_editable = ("characteristics", "ref")
     ordering = ("name",)
     save_as=True
+    list_max_show_all = 1500
+    list_per_page = 1000
 
 class TalenAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -79,6 +96,8 @@ class TalenAdmin(admin.ModelAdmin):
     list_editable = ("ref",)
     ordering = ("name",)
     save_as=True
+    list_max_show_all = 1500
+    list_per_page = 1000
 
 class Campaign2PlayerAdmin(admin.ModelAdmin):
     pass
@@ -101,12 +120,14 @@ class CareersAdvanceSchemeAdmin(admin.ModelAdmin):
     pass
 
 class TrappingAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("name",)
 
 class RandomTalentsTableAdmin(admin.ModelAdmin):
     list_display = ("talent", "any","random_interal_start", "random_interal_end")
     list_editable = ("random_interal_start", "random_interal_end", "any")
     ordering = ("random_interal_start",)
+    list_max_show_all = 1500
+    list_per_page = 1000
 
 
 from . import models

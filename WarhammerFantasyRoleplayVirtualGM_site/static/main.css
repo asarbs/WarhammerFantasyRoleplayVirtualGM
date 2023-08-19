@@ -628,21 +628,33 @@ div#main div.character_sheet div.talents {
     width: 700px;
 }
 div#main div.character_sheet div.talents table {
-    border: 0px solid #000000;
     width: 450px;
     margin-left: 20px;
 }
 div#main div.character_sheet div.talents table tr {
-    border: 0px solid #000000;
+
 }
 div#main div.character_sheet div.talents table tr th  {
-    border: 0px solid #000000;
+
 }
 div#main div.character_sheet div.talents table tr th.block_name  {
     font-size: 36px;
 }
 div#main div.character_sheet div.talents table tr.block_header  {
     font-size: 20px;
+}
+
+div#main div.character_sheet div.talents table tr td.edit {
+    height: 32px;
+    width: 32px;
+    text-align: center;
+}
+div#main div.character_sheet div.talents table tr td.edit input  {
+    padding: 0px;
+    margin: 0px;
+    height: 30px;
+    width: 30px;
+    position: relative;
 }
 
 div#main div.character_sheet div.ambitiosn {

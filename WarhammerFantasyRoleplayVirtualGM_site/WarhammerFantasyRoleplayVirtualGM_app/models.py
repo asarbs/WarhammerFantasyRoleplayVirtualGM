@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from WarhammerFantasyRoleplayVirtualGM_app.validators import validator_sex
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -62,8 +63,12 @@ class Talent(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+    @property
+    def my_talent_id(self):
+        return self.id
+
 class Trapping(models.Model):
-    name = models.CharField(max_length= 50)
+    name = models.CharField(max_length= 50, unique=True)
     description = models.TextField(verbose_name="Description", default="")
 
     def __str__(self):
@@ -160,19 +165,25 @@ class CareerPath(models.Model):
 
 
 class CareersAdvanceScheme(models.Model):
+    class Marked(models.TextChoices):
+        NONE = "NO", _('NONE')
+        CROSS = 'CR', _('CROSS')
+        HALBERD = 'HA', _('HALBERD')
+        SKULL = 'SK', _('SKULL')
+        SHIELD = 'SH', _('SHIELD')
     class Meta:
         ordering = ['career']
     career = models.ForeignKey(Career, verbose_name="Career", on_delete=models.CASCADE)
-    characteristics_ws_initial = models.IntegerField(default="0", verbose_name="ws")
-    characteristics_bs_initial = models.IntegerField(default="0", verbose_name="bs")
-    characteristics_s_initial = models.IntegerField(default="0", verbose_name="s")
-    characteristics_t_initial = models.IntegerField(default="0", verbose_name="t")
-    characteristics_i_initial = models.IntegerField(default="0", verbose_name="i")
-    characteristics_ag_initial = models.IntegerField(default="0", verbose_name="ag")
-    characteristics_dex_initial = models.IntegerField(default="0", verbose_name="dex")
-    characteristics_int_initial = models.IntegerField(default="0", verbose_name="int")
-    characteristics_wp_initial = models.IntegerField(default="0", verbose_name="wp")
-    characteristics_fel_initial = models.IntegerField(default="0", verbose_name="fel")
+    characteristics_ws_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_bs_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_s_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_t_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_i_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_ag_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_dex_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_int_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_wp_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_fel_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
     advances_level_1 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_1')
     advances_level_2 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_2')
     advances_level_3 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_3')
@@ -273,9 +284,23 @@ class Character(models.Model):
         return u"{0}".format(self.name)
 
 class Character2Skill(models.Model):
+    class SkillType(models.TextChoices):
+        BASIC_SKILL = 'BS', _('BASIC SKILL')
+        NORMAL_SKILL = 'NS', _('NORMAL SKILL')
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     skills = models.ForeignKey(Skils, on_delete=models.CASCADE)
     adv = models.IntegerField(default="0", verbose_name="adv")
+    type = models.CharField(max_length=2, choices=SkillType.choices, default=SkillType.BASIC_SKILL)
+    class Meta:
+        unique_together = ('characters', 'skills',)
+
+class Character2Talent(models.Model):
+    characters = models.ForeignKey(Character, on_delete=models.CASCADE)
+    talent = models.ForeignKey(Talent, on_delete=models.CASCADE)
+    taken = models.IntegerField(default="0", verbose_name="adv")
+    class Meta:
+        unique_together = ('characters', 'talent',)
+
 
 class RandomAttributesTable(models.Model):
     species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
@@ -311,3 +336,27 @@ class RandomTalentsTable(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.talent.name)
+
+    @property
+    def name(self):
+        return self.talent.name
+
+    @property
+    def max(self):
+        return self.talent.max
+
+    @property
+    def tests(self):
+        return self.talent.tests
+
+    @property
+    def description(self):
+        return self.talent.description
+
+    @property
+    def ref(self):
+        return self.talent.ref
+
+    @property
+    def my_talent_id(self):
+        return self.talent.id

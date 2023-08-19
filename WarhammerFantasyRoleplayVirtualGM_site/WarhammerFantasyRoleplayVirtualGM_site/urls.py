@@ -31,4 +31,5 @@ urlpatterns = [
     path('tiny_mce/', include('tinymce.urls')),
     path('skills-autocomplete/', AutocompleteSkills.as_view(), name='skills-autocomplete'),
     path('talent-autocomplete/', AutocompleteTalent.as_view(), name='talent-autocomplete'),
+    path('trappings-autocomplete/', AutocompleteTrappings.as_view(), name='trappings-autocomplete'),
 ]

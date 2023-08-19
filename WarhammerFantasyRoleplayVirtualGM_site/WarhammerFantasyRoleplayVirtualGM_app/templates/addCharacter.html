@@ -33,6 +33,59 @@
         <p>Avalible extra points: <span id="avalible_extra_points">0</span></p>
         <img src="{% static "/img/dice_icon.png" %}" id="img_random_characteristics" class="img_random" />
     </div>
+    <div  id="step_4_species_skills" class="create_character_steps">
+        Each Species has a variety of Skills and Talents to choose from. You may choose 3 Skills to gain 5 Advances each, and 3 Skills to gain 3 Advances each.
+        <table>
+            <tr>
+                <td>
+                    +5 adv:
+                </td>
+                <td>
+                    <select name="species_skills_5_1" id="species_skills_5_1" value="1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    +5 adv:
+                </td>
+                <td>
+                    <select name="species_skills_5_2" id="species_skills_5_2" value="1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    +5 adv:
+                </td>
+                <td>
+                    <select name="species_skills_5_3" id="species_skills_5_3" value="1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    +3 adv:
+                </td>
+                <td>
+                    <select name="species_skills_3_1" id="species_skills_3_1" value="1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    +3 adv:
+                </td>
+                <td>
+                    <select name="species_skills_3_2" id="species_skills_3_2" value="1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    +3 adv:
+                </td>
+                <td>
+                    <select name="species_skills_3_3" id="species_skills_3_3" value="1"></select>
+                </td>
+            </tr>
+        </table>
+    </div>
         <div class="bottom"><img src="{% static "/img/arrow_right.png" %} " id="img_character_creaton_next"></div>
 </div>
 
@@ -309,7 +362,7 @@
 </div>
 <div class="character_sheet">
     <div class="basic_skills">
-        <table>
+        <table id='skills_table'>
             <tr>
                 <th colspan="5" class="block_name">
                     BASIC SKILL
@@ -330,21 +383,21 @@
                 </th>
             </tr>
         {% for basic_skill in basic_skills %}
-            <tr>
-                <td class="left">
+            <tr class="block_body">
+                <td id="skills_name__{{ basic_skill.id }}" class="left">
                 {{ basic_skill.name }}
                 </td>
                 <td class="characteristics">
                 {{ basic_skill.characteristics }}
                 </td>
                 <td class="edit">
-                    <input type="text" id="basic_skills_characteristics_{{ basic_skill.id }}" name="fname">
+                    <input type="text" id="skills_characteristics__{{ basic_skill.id }}" name="fname">
                 </td>
                 <td class="edit">
-                    <input type="text" id="basic_skills_adv__{{ basic_skill.id }}" name="fname">
+                    <input type="text" id="skills_adv__{{ basic_skill.id }}" name="fname">
                 </td>
-                <td>
-                    {{ basic_skill.adv }}
+                <td class="edit">
+                    <input type="text" id="skills__{{ basic_skill.id }}" name="fname">
                 </td>
             </tr>
         {% endfor %}
@@ -353,7 +406,7 @@
 
     <div class="talents_ambitions_party">
         <div class="talents">
-            <table>
+            <table id="talents_table" border="0">
                 <tr>
                     <th colspan="3" class="block_name">
                         TALENTS
@@ -370,39 +423,7 @@
                         Description
                     </th>
                 </tr>
-                <tr class="block_header">
-                    <th>
-                        Talent Name
-                    </th>
-                    <th>
-                        Times Taken
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                </tr>
-                <tr class="block_header">
-                    <th>
-                        Talent Name
-                    </th>
-                    <th>
-                        Times Taken
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                </tr>
-                <tr class="block_header">
-                    <th>
-                        Talent Name
-                    </th>
-                    <th>
-                        Times Taken
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                </tr>
+
             </table>
         </div>
         <div class="ambitiosn">

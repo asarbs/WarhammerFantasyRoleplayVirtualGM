@@ -41,3 +41,13 @@ class SpeciesForm(ModelForm):
             'skills': autocomplete.ModelSelect2Multiple(url='skills-autocomplete'),
             'talents': autocomplete.ModelSelect2Multiple(url='talent-autocomplete')
         }
+
+class CareerPathForm(ModelForm):
+    class Meta:
+        model = models.Species
+        fields = ('__all__')
+        widgets = {
+            'skills': autocomplete.ModelSelect2Multiple(url='skills-autocomplete'),
+            'talents': autocomplete.ModelSelect2Multiple(url='talent-autocomplete'),
+            'trappings': autocomplete.ModelSelect2Multiple(url='trappings-autocomplete')
+        }

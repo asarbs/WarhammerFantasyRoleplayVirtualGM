@@ -28,5 +28,6 @@ urlpatterns = [
     path('ajax_saveHeight', views.ajax_saveHeight, name="ajax_saveHeight"),
     path('ajax_saveHair', views.ajax_saveHair, name="ajax_saveHair"),
     path('ajax_saveEyes', views.ajax_saveEyes, name="ajax_saveEyes"),
+    path('ajax_saveSkillAdv', views.ajax_saveSkillAdv, name="ajax_saveEyes"),
 
 ]
