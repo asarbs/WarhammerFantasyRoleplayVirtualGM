@@ -37,6 +37,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
+from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -72,7 +73,7 @@ def addCharacter(request):
     character.save()
 
     for skill in basic_skills:
-        c2s = Character2Skill(characters_id=character.id, skills_id = skill['id'], type=Character2Skill.SkillType.BASIC_SKILL)
+        c2s = Character2Skill(characters_id=character.id, skills_id = skill['id'], is_basic_skill=True)
         c2s.save()
 
     skills_values = Character2Skill.objects.filter(characters_id=character.id)
@@ -162,26 +163,27 @@ def ajax_randomSpecies(request):
         character.save()
 
         species_skills = {}
-        Character2Skill.objects.filter(characters=character, type=Character2Skill.SkillType.NORMAL_SKILL).delete()
+        Character2Skill.objects.filter(characters=character, is_basic_skill=False, is_species_skill=True, is_carrer_skill=True).delete()
         basic_skills = Character2Skill.objects.filter(characters=character)
         for ss in basic_skills.all():
-            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'type': 'basic_skill'}
+            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_carrer_skill': ss.is_carrer_skill}
         created = -1
+
         for ss in species.skills.all():
-            species_skills[ss.id] = {'id': ss.id, 'name': ss.name, 'characteristics': ss.characteristics, 'description': ss.description, 'adv': 0, 'type': 'species_skill'}
             try:
-                ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0, type=Character2Skill.SkillType.NORMAL_SKILL)
+                ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0)
+                ch2Skill.is_species_skill = True
                 ch2Skill.save()
+                species_skills[ss.id] = {'id': ch2Skill.skills.id, 'name': ch2Skill.skills.name, 'characteristics': ch2Skill.skills.characteristics, 'description': ch2Skill.skills.description, 'adv': ch2Skill.adv , 'is_basic_skill':ch2Skill.is_basic_skill , 'is_species_skill': ch2Skill.is_species_skill, 'is_carrer_skill': ch2Skill.is_carrer_skill}
             except django.db.utils.IntegrityError as e:
                 logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
-
-
 
         species_tallents = get_species_tallens(species)
         Character2Talent.objects.filter(characters=character).delete()
         for st in species_tallents:
             ch2t, created = Character2Talent.objects.get_or_create(characters=character, talent_id=st['id'], taken=0)
             ch2t.save()
+
         res = {'status': 'ok',
                'species_id': species.id,
                'name': name.name,
@@ -503,6 +505,11 @@ def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
     dic ={'camaing': c}
     return render(request, 'detailsCampaign.html', dic)
+
+
+def showCareersAdvanceSchemes(request, casId):
+        cas = CareersAdvanceScheme.objects.get(id=casId)
+        return render(request, 'showCareersAdvanceSchemes.html', {'cas':cas} )
 
 class ChangePasswordForm(Form):
     new_password = CharField(widget=PasswordInput(), label="New Password")

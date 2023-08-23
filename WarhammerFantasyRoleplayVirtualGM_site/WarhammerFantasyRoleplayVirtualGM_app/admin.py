@@ -44,7 +44,7 @@ class CareerPathAdmin(admin.ModelAdmin):
     form = CareerPathForm
     list_display = ("careers", "name", "earning_money")
     #list_editable = (,)
-    # list_filter = ("careers",)
+    list_filter = ("earning_money",)
     ordering = ("name", )
     list_max_show_all = 1500
     list_per_page = 1000
@@ -81,8 +81,8 @@ class SkillsAdmin(admin.ModelAdmin):
     formfield_overrides = {
           models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
     }
-    list_display = ("name", "characteristics", 'ref')
-    list_editable = ("characteristics", "ref")
+    list_display = ("name", "characteristics", 'ref', 'skils_parent')
+    list_editable = ("characteristics", "ref", 'skils_parent')
     ordering = ("name",)
     save_as=True
     list_max_show_all = 1500
@@ -92,8 +92,8 @@ class TalenAdmin(admin.ModelAdmin):
     formfield_overrides = {
           models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
     }
-    list_display = ("name", 'max', 'tests', 'ref')
-    list_editable = ("ref",)
+    list_display = ("name", 'max', 'tests', 'ref', 'talent_parent')
+    list_editable = ("ref", 'talent_parent')
     ordering = ("name",)
     save_as=True
     list_max_show_all = 1500
@@ -107,7 +107,8 @@ class ExampleNameAdmin(admin.ModelAdmin):
     list_filter = ("species", "sex")
 
 class Character2SkillAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("characters", "skills", "adv", "is_basic_skill", "is_species_skill", "is_carrer_skill")
+    list_filter = ("characters",)
 
 class RefBookAdmin(admin.ModelAdmin):
     ordering = ("name",)
@@ -117,7 +118,8 @@ class ReferenceAdmin(admin.ModelAdmin):
     list_filter = ("refBook",)
 
 class CareersAdvanceSchemeAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('career', 'characteristics_ws_initial', 'characteristics_bs_initial', 'characteristics_s_initial', 'characteristics_t_initial', 'characteristics_i_initial', 'characteristics_ag_initial', 'characteristics_dex_initial', 'characteristics_int_initial', 'characteristics_wp_initial', 'characteristics_fel_initial', 'advances_level_1', 'advances_level_2', 'advances_level_3', 'advances_level_4')
+    list_editable = ('characteristics_ws_initial', 'characteristics_bs_initial', 'characteristics_s_initial', 'characteristics_t_initial', 'characteristics_i_initial', 'characteristics_ag_initial', 'characteristics_dex_initial', 'characteristics_int_initial', 'characteristics_wp_initial', 'characteristics_fel_initial', 'advances_level_1', 'advances_level_2', 'advances_level_3', 'advances_level_4')
 
 class TrappingAdmin(admin.ModelAdmin):
     ordering = ("name",)

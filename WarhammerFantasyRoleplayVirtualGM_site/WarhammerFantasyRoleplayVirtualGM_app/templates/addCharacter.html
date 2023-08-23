@@ -362,10 +362,10 @@
 </div>
 <div class="character_sheet">
     <div class="basic_skills">
-        <table id='skills_table'>
+        <table id='skills_table' border="1">
             <tr>
-                <th colspan="5" class="block_name">
-                    BASIC SKILL
+                <th colspan="8" class="block_name">
+                    SKILLS
                 </th>
             </tr>
             <tr class="block_header">
@@ -380,6 +380,15 @@
                 </th>
                 <th>
                     Skill
+                </th>
+                <th>
+                    BS
+                </th>
+                <th>
+                    SS
+                </th>
+                <th>
+                    CS
                 </th>
             </tr>
         {% for basic_skill in basic_skills %}
@@ -398,6 +407,15 @@
                 </td>
                 <td class="edit">
                     <input type="text" id="skills__{{ basic_skill.id }}" name="fname">
+                </td>
+                <td class="">
+                    <img  id="skills__is_basic_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
+                </td>
+                <td class="">
+                    <img id="skills__is_carrer_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
+                </td>
+                <td class="">
+                    <img id="skills__is_species_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
                 </td>
             </tr>
         {% endfor %}

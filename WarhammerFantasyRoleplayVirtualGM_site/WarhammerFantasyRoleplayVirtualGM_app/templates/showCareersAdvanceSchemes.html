@@ -1,0 +1,69 @@
+{% extends "index.html" %}
+
+{% load player %}
+{% load static %}
+
+{% block main %}
+
+<div class="character_sheet">
+    <div class="characteristics">
+        <h2>{{ cas.career.name }}</h2>
+        <table border="0">
+            <tr>
+                <td colspan="10" class="title">
+                    CHARACTERISTICS
+                </td>
+            </tr>
+            <tr>
+                <td class="head">WS</td>
+                <td class="head">BA</td>
+                <td class="head">S</td>
+                <td class="head">T</td>
+                <td class="head">I</td>
+                <td class="head">Ag</td>
+                <td class="head">Dex</td>
+                <td class="head">Int</td>
+                <td class="head">WP</td>
+                <td class="head">Fel</td>
+            </tr>
+            <tr class="quantity">
+                <td><img src="{% static cas.characteristics_ws_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_bs_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_s_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_t_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_i_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_ag_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_dex_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_int_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_wp_initial %}.png"></td>
+                <td><img src="{% static cas.characteristics_fel_initial %}.png"></td>
+            </tr>
+        </table>
+
+        <ol>
+            <li><h3>{{ cas.advances_level_1.name }} - {{ cas.advances_level_1.earning_money }}</h3>
+                <b>Skills:</b>{{ cas.advances_level_1.skills.all|join:", " }}<br>
+                <b>Talents:</b>{{ cas.advances_level_1.talents.all|join:", " }} <br>
+                <b>Trappings:</b>{{ cas.advances_level_1.trappings.all|join:", " }}
+            </li>
+            <li><h3>{{ cas.advances_level_2.name }} - {{ cas.advances_level_2.earning_money }}</h3>
+                <b>Skills:</b>{{ cas.advances_level_2.skills.all|join:", " }}<br>
+                <b>Talents:</b>{{ cas.advances_level_2.talents.all|join:", " }} <br>
+                <b>Trappings:</b>{{ cas.advances_level_2.trappings.all|join:", " }}
+            </li>
+            <li><h3>{{ cas.advances_level_3.name }} - {{ cas.advances_level_3.earning_money }}</h3>
+                <b>Skills:</b>{{ cas.advances_level_3.skills.all|join:", " }}<br>
+                <b>Talents:</b>{{ cas.advances_level_3.talents.all|join:", " }} <br>
+                <b>Trappings:</b>{{ cas.advances_level_3.trappings.all|join:", " }}
+            </li>
+            <li><h3>{{ cas.advances_level_4.name }} - {{ cas.advances_level_4.earning_money }}</h3>
+                <b>Skills:</b>{{ cas.advances_level_4.skills.all|join:", " }}<br>
+                <b>Talents:</b>{{ cas.advances_level_4.talents.all|join:", " }} <br>
+                <b>Trappings:</b>{{ cas.advances_level_4.trappings.all|join:", " }}
+            </li>
+        </ol>
+
+    </div>
+</div>
+
+{% endblock %}

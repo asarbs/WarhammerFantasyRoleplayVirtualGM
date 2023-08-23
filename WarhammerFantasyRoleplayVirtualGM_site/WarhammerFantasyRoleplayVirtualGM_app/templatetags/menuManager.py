@@ -3,7 +3,9 @@ from django.urls import reverse
 from django import template
 from django.utils.safestring import mark_safe
 
-from WarhammerFantasyRoleplayVirtualGM_app.models import Player, Campaign2Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
 
 class MenuElement(object):
     def __init__(self, name, url="", visible=True):
@@ -108,6 +110,14 @@ class MenuManager(object):
                 if player_campaign:
                     for campaign in player_campaign:
                         self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
+
+        self.l.append(MenuHeader("Careers Advance Schemes"))
+        if not request.user.is_anonymous:
+            cas = CareersAdvanceScheme.objects.all().order_by("career__name")
+            for c in cas:
+                self.l[2].addChildraen(MenuElement(c.career.name, reverse("showCareersAdvanceSchemes", args=(c.id,) )))
+
+
 
         # self.l.append( MenuElement("League", "/tc_league/leagueList") )
         # if module == "tc_league":

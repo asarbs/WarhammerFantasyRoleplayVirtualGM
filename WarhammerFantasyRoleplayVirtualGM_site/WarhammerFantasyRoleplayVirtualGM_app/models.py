@@ -43,6 +43,7 @@ class Skils(models.Model):
     characteristics = models.CharField(max_length= 3, default="")
     description = models.TextField(verbose_name="Description", default="")
     ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
+    skils_parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -56,6 +57,7 @@ class Talent(models.Model):
     tests = models.CharField(max_length= 50, default="", blank=True, null=True)
     description = models.TextField(verbose_name="Description", default="")
     ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
+    talent_parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -166,7 +168,7 @@ class CareerPath(models.Model):
 
 class CareersAdvanceScheme(models.Model):
     class Marked(models.TextChoices):
-        NONE = "NO", _('NONE')
+        NONE = "NO", _(' ')
         CROSS = 'CR', _('CROSS')
         HALBERD = 'HA', _('HALBERD')
         SKULL = 'SK', _('SKULL')
@@ -174,16 +176,16 @@ class CareersAdvanceScheme(models.Model):
     class Meta:
         ordering = ['career']
     career = models.ForeignKey(Career, verbose_name="Career", on_delete=models.CASCADE)
-    characteristics_ws_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_bs_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_s_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_t_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_i_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_ag_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_dex_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_int_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_wp_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
-    characteristics_fel_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE)
+    characteristics_ws_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Weapon Skill")
+    characteristics_bs_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Ballistic Skill")
+    characteristics_s_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Strength")
+    characteristics_t_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Toughness")
+    characteristics_i_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Initiative")
+    characteristics_ag_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Agility")
+    characteristics_dex_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Dexterity")
+    characteristics_int_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Intelligence")
+    characteristics_wp_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Willpower")
+    characteristics_fel_initial = models.CharField(max_length=2, choices=Marked.choices, default=Marked.NONE, verbose_name="Fellowship")
     advances_level_1 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_1')
     advances_level_2 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_2')
     advances_level_3 = models.ForeignKey(CareerPath, on_delete=models.CASCADE, related_name='advances_level_3')
@@ -284,13 +286,13 @@ class Character(models.Model):
         return u"{0}".format(self.name)
 
 class Character2Skill(models.Model):
-    class SkillType(models.TextChoices):
-        BASIC_SKILL = 'BS', _('BASIC SKILL')
-        NORMAL_SKILL = 'NS', _('NORMAL SKILL')
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     skills = models.ForeignKey(Skils, on_delete=models.CASCADE)
     adv = models.IntegerField(default="0", verbose_name="adv")
-    type = models.CharField(max_length=2, choices=SkillType.choices, default=SkillType.BASIC_SKILL)
+    is_basic_skill = models.BooleanField(default=False)
+    is_species_skill = models.BooleanField(default=False)
+    is_carrer_skill = models.BooleanField(default=False)
+
     class Meta:
         unique_together = ('characters', 'skills',)
 

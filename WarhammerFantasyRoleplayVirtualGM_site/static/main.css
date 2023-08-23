@@ -364,7 +364,7 @@ div#main div.character_sheet div.head table tr td  input#eyes {
 div#main div.character_sheet div.characteristics {
     /* background-color: #abc818; */
     width: 700px;
-    height: 280px;
+    min-height: 280px;
     margin-left: 117px;
     float: left;
 }
@@ -385,7 +385,7 @@ div#main div.character_sheet div.characteristics table tr td.title {
 }
 div#main div.character_sheet div.characteristics table tr td.head {
     font-size: 150%;
-    text-align: left;
+    text-align: center;
 }
 
 div#main div.character_sheet div.characteristics input {
@@ -573,15 +573,13 @@ div#main div.character_sheet div.basic_skills {
     float: left;
 }
 div#main div.character_sheet div.basic_skills table {
-    border: 0px solid #000000;
-    width: 450px;
+
+    width: 650px;
     margin-left: 20px;
 }
 div#main div.character_sheet div.basic_skills table tr {
-    border: 0px solid #000000;
 }
 div#main div.character_sheet div.basic_skills table tr th  {
-    border: 0px solid #000000;
 }
 div#main div.character_sheet div.basic_skills table tr th.block_name  {
     font-size: 36px;
@@ -590,7 +588,6 @@ div#main div.character_sheet div.basic_skills table tr.block_header  {
     font-size: 20px;
 }
 div#main div.character_sheet div.basic_skills table tr td {
-    border: 0px solid #000000;
     padding-left: 3px;
     padding-right: 3px;
     margin: 0px;

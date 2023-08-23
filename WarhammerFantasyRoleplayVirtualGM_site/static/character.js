@@ -136,6 +136,7 @@ function randomSpecies() {
             $("table#skills_table tr.block_body").remove()
             $.each(data['species_skills'], function(i, item) {
                 character_creation_state['skills'].push(item)
+                console.log(item.name +":"+item.is_basic_skill+":"+item.is_carrer_skill)
             })
             fill_species_skills_select();
 
@@ -210,6 +211,9 @@ function updateCharacterState() {
             new_row += '<td class="edit"><input type="text" id="skills_characteristics__'+item.id+'" name="fname"></td>'
             new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" name="fname"></td>'
             new_row += '<td class="edit"><input type="text" id="skills__'+item.id+'" name="fname"></td>'
+            new_row += '<td class=""><img id="skills__is_basic_skill__'+item.id+'" src="/static/NO.png"></td>'
+            new_row += '<td class=""><img id="skills__is_carrer_skill__'+item.id+'" src="/static/NO.png"></td>'
+            new_row += '<td class=""><img id="skills__is_species_skill__'+item.id+'" src="/static/NO.png"></td>'
             new_row += '</tr>'
             $("#skills_table").append(new_row)
         }
@@ -218,11 +222,22 @@ function updateCharacterState() {
         $('#skills_characteristics__'+item.id).val(skill_char)
         $('#skills_adv__'+item.id).val(item.adv)
         $('#skills__'+item.id).val(skill_char + item.adv)
-        if(character_creation_state['character_creation_step'] == 3 && item.type == "species_skill"){
-            $('#skills_name__'+item.id).css("font-weight","Bold");
+        if(item.is_basic_skill == true) {
+            $('img#skills__is_basic_skill__'+item.id).attr("src", "/static/img/tick.png")
         } else {
-            $('#skills_name__'+item.id).css("font-weight","Normal");
+            $('img#skills__is_basic_skill__'+item.id).attr("src", "/static/NO.png")
         }
+        if(item.is_carrer_skill == true) {
+            $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/img/tick.png")
+        } else {
+            $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/NO.png")
+        }
+        if(item.is_species_skill == true) {
+            $('img#skills__is_species_skill__'+item.id).attr("src", "/static/img/tick.png")
+        } else {
+            $('img#skills__is_species_skill__'+item.id).attr("src", "/static/NO.png")
+        }
+
     });
 
     $.each(character_creation_state['talents'], function(i, item) {
@@ -258,7 +273,7 @@ function fill_species_skills_select() {
     $("select#species_skills_3_2 option").remove()
     $("select#species_skills_3_3 option").remove()
     $.each(character_creation_state['skills'], function (i, item) {
-        if (character_creation_state['character_creation_step'] == 3 && item.type == "species_skill") {
+        if (character_creation_state['character_creation_step'] == 3 && item.is_species_skill == true) {
             $("select#species_skills_5_1").append($('<option>', { value: item.id, text: item.name }));
             $("select#species_skills_5_2").append($('<option>', { value: item.id, text: item.name }));
             $("select#species_skills_5_3").append($('<option>', { value: item.id, text: item.name }));
