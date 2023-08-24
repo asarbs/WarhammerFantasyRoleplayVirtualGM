@@ -225,7 +225,25 @@ def ajax_randomClass(request):
             character.career = career
             character.ch_class = career.ch_class
             character.save()
-            return JsonResponse({'status': 'ok', 'career_name': career.name, 'ch_class_name': character.ch_class.name})
+
+            for ss in CareersAdvanceScheme.objects.get(career=career).advances_level_1.skills:
+                try:
+                    ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0)
+                    ch2Skill.is_carrer_skill = True
+                    ch2Skill.save()
+                except django.db.utils.IntegrityError as e:
+                    logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
+
+            skills = {}
+            for ss in Character2Skill.objects.get(character=character):
+                skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_carrer_skill': ss.is_carrer_skill}
+
+
+            return JsonResponse({'status': 'ok',
+                                 'career_name': career.name,
+                                 'ch_class_name': character.ch_class.name,
+                                 'skills': skills
+                                 })
         else:
             logger.error("ajax_randomClass career not found: career={}".format(career))
             return JsonResponse({'status': 'Invalid request'}, status=400)

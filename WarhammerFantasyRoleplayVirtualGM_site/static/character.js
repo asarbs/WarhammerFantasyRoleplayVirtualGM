@@ -117,7 +117,7 @@ function randomSpecies() {
 
         },
         success: function(data) {
-            console.log("hair:" + data['hair'] + " eyes:"+ data['eyes'])
+            console.debug("hair:" + data['hair'] + " eyes:"+ data['eyes'])
 
             $("select#species").val(data['species_id']);
             character_creation_state['bonus_xp'] = 20;
@@ -136,9 +136,21 @@ function randomSpecies() {
             $("table#skills_table tr.block_body").remove()
             $.each(data['species_skills'], function(i, item) {
                 character_creation_state['skills'].push(item)
-                console.log(item.name +":"+item.is_basic_skill+":"+item.is_carrer_skill)
             })
             fill_species_skills_select();
+
+            character_creation_state['skills'].sort((a,b) =>  {
+                let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
+                console.log(fa +":"+fb)
+                if(fa < fb) {
+                    return -1;
+                }
+                if(fa > fb) {
+                    return 1;
+                }
+                return 0;
+            });
+
 
             character_creation_state['talents'] = []
             $("table#talents_table tr.block_body").remove()
