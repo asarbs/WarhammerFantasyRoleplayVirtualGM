@@ -49,8 +49,8 @@ var character_creation_state = {
 
 
 
-const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills']
-const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills"]
+const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_carrer_skills']
+const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "Carrer Skills"]
 
 function species_change() {
     $.ajaxSetup({
@@ -135,13 +135,14 @@ function randomSpecies() {
             character_creation_state['skills'] = []
             $("table#skills_table tr.block_body").remove()
             $.each(data['species_skills'], function(i, item) {
+                console.info(item.name+"; "+item.is_basic_skill+"; "+item.is_species_skill+"; "+ item.is_carrer_skill);
                 character_creation_state['skills'].push(item)
             })
             fill_species_skills_select();
 
             character_creation_state['skills'].sort((a,b) =>  {
+
                 let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
-                console.log(fa +":"+fb)
                 if(fa < fb) {
                     return -1;
                 }
@@ -275,6 +276,9 @@ function nextStep() {
     if(character_creation_state['character_creation_step'] == 3) {
         fill_species_skills_select();
     }
+    if(character_creation_state['character_creation_step'] == 4) {
+        fill_career_skills_select();
+    }
 }
 
 function fill_species_skills_select() {
@@ -293,6 +297,40 @@ function fill_species_skills_select() {
             $("select#species_skills_3_2").append($('<option>', { value: item.id, text: item.name }));
             $("select#species_skills_3_3").append($('<option>', { value: item.id, text: item.name }));
         }
+    });
+}
+
+function fill_career_skills_select() {
+    $.each(character_creation_state['skills'], function(i, item) {
+        if(item.is_carrer_skill == true) {
+            $("#step_5_carrer_skills").append('<label for="career_skills_slider__'+item.id+'">'+item.name+'</label><input type="range" min="0" max="40" value="0" class="career_skills_slider" id="career_skills_slider__'+item.id+'" skill_id="'+item.id+'"><br>');
+        }
+    });
+
+    $("input.career_skills_slider").on("change", function() {
+        item_val = $(this).val();
+        item_id = $(this).attr("skill_id");
+
+        var sum = 0;
+        $(".career_skills_slider").each( function(index) {
+            sum += parseInt($(this).val());
+        });
+
+        console.log(typeof sum)
+        var over_40 = 0
+        if(sum > 40) {
+            over_40 = sum - 40
+            console.log("career_skills to big:"+ over_40.toString() );
+            $("#step_5_carrer_skills_error").fadeIn("slow")
+        }
+        setTimeout(function(){ $("#step_5_carrer_skills_error").fadeOut() }, 5000);
+        $(this).val(item_val - over_40);
+        $("#step_5_carrer_skills_sum").text(sum-over_40);
+        $.each(character_creation_state['skills'], function(i, item) {
+            if(item.id == item_id) {
+                item.adv = item_val - over_40;
+            }
+        });
     });
 }
 
@@ -322,6 +360,27 @@ function randomClass() {
         success: function(data) {
             $("input#carrer").val(data['career_name']);
             $("input#class").val(data['ch_class_name']);
+
+            character_creation_state['skills'] = []
+            $("table#skills_table tr.block_body").remove()
+            $.each(data['skills'], function(i, item) {
+                console.info(item.name+"; "+item.is_basic_skill+"; "+item.is_species_skill+"; "+ item.is_carrer_skill);
+                character_creation_state['skills'].push(item)
+            })
+            fill_species_skills_select();
+
+            character_creation_state['skills'].sort((a,b) =>  {
+
+                let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
+                if(fa < fb) {
+                    return -1;
+                }
+                if(fa > fb) {
+                    return 1;
+                }
+                return 0;
+            });
+
         }
     });
 }

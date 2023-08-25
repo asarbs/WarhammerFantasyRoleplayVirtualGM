@@ -226,7 +226,7 @@ def ajax_randomClass(request):
             character.ch_class = career.ch_class
             character.save()
 
-            for ss in CareersAdvanceScheme.objects.get(career=career).advances_level_1.skills:
+            for ss in CareersAdvanceScheme.objects.get(career=career).advances_level_1.skills.all():
                 try:
                     ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0)
                     ch2Skill.is_carrer_skill = True
@@ -235,7 +235,8 @@ def ajax_randomClass(request):
                     logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
 
             skills = {}
-            for ss in Character2Skill.objects.get(character=character):
+            for ss in Character2Skill.objects.filter(characters=character).all():
+                logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_carrer_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_carrer_skill))
                 skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_carrer_skill': ss.is_carrer_skill}
 
 
