@@ -1,56 +1,579 @@
 
-var character_creation_state = {
-    bonus_xp: 0,
+class Skill {
+    #adv_standard        = 0;
+    #adv_carrer          = 0;
+    #adv_species         = 0;
+    #characteristics     = "";
+    #description         = "";
+    #id                  = 0;
+    #is_basic_skill      = false;
+    #is_carrer_skill     = false;
+    #is_species_skill    = false;
+    #name                = "";
+    constructor() {}
 
-    characteristics_ws_initial      : 0,
-    characteristics_bs_initial      : 0,
-    characteristics_s_initial       : 0,
-    characteristics_t_initial       : 0,
-    characteristics_i_initial       : 0,
-    characteristics_ag_initial      : 0,
-    characteristics_dex_initial     : 0,
-    characteristics_int_initial     : 0,
-    characteristics_wp_initial      : 0,
-    characteristics_fel_initial     : 0,
-    characteristics_ws_advances     : 0,
-    characteristics_bs_advances     : 0,
-    characteristics_s_advances      : 0,
-    characteristics_t_advances      : 0,
-    characteristics_i_advances      : 0,
-    characteristics_ag_advances     : 0,
-    characteristics_dex_advances    : 0,
-    characteristics_int_advances    : 0,
-    characteristics_wp_advances     : 0,
-    characteristics_fel_advances    : 0,
-    fate_fate                       : 0,
-    fate_fortune                    : 0,
-    resilience_resilience           : 0,
-    resilience_resolve              : 0,
-    movement_movement               : 0,
-    wounds                          : 0,
-    skills: [],
-    skills_species: {
+    adv() {
+        return this.#adv_standard + this.#adv_carrer + this.#adv_species;
+    }
+};
 
-    },
-    talents: [],
-    character_creation_step: 0,
-    class_selection_random: 0,
-    characteristics_selection_random: 0,
-    movement: {
+class CharacterParameters {
+    #name                               = "";
+    #age                                = 0
+    #height                             = 0
+    #hair                               = ""
+    #eyes                               = ""
+    #bonus_xp                           = 0;
+    #characteristics_ws_initial         = 0;
+    #characteristics_bs_initial         = 0;
+    #characteristics_s_initial          = 0;
+    #characteristics_t_initial          = 0;
+    #characteristics_i_initial          = 0;
+    #characteristics_ag_initial         = 0;
+    #characteristics_dex_initial        = 0;
+    #characteristics_int_initial        = 0;
+    #characteristics_wp_initial         = 0;
+    #characteristics_fel_initial        = 0;
+    #characteristics_ws_advances        = 0;
+    #characteristics_bs_advances        = 0;
+    #characteristics_s_advances         = 0;
+    #characteristics_t_advances         = 0;
+    #characteristics_i_advances         = 0;
+    #characteristics_ag_advances        = 0;
+    #characteristics_dex_advances       = 0;
+    #characteristics_int_advances       = 0;
+    #characteristics_wp_advances        = 0;
+    #characteristics_fel_advances       = 0;
+    #fate_fate                          = 0;
+    #fate_fortune                       = 0;
+    #resilience_resilience              = 0;
+    #resilience_resolve                 = 0;
+    #movement_movement                  = 0;
+    #wounds                             = 0;
+    #skills                             = {};
+    #talents                            = {};
+    #character_creation_step            = 0;
+    #class_selection_random             = 0;
+    #characteristics_selection_random   = 0;
+    #avalible_attribute_points          = 100;
+    #extra_points                       = 0;
+    #RandomAttributesTable              = [];
+    #RandomHairTable                    = [];
+    #RandomEyesTable                    = [];
+    movement = {
         0: {'walk': 0,"run": 0},
         3: {'walk': 6,"run": 12},
         4: {'walk': 8,"run": 16},
         5: {'walk': 10,"run": 20},
-    },
+        };
 
-    avalible_attribute_points       : 100,
-    extra_points                    : 0,
-}
+    constructor() {
+    }
+
+    set RandomAttributesTable(table) {
+        this.#RandomAttributesTable = table;
+    }
+    set RandomHairTable(table) {
+        this.#RandomHairTable = table;
+    }
+    set RandomEyesTable(table) {
+        this.#RandomEyesTable = table;
+    }
+    set name(name) {
+        if(typeof name === "string")
+            this.#name = name;
+        else
+            throw "" + name + " is not a string";
+    }
+    get name() {
+        return this.#name;
+    }
+    set hair(hair) {
+        if(typeof hair === "string")
+            this.#hair = hair;
+        else
+            throw "" + hair + " is not a string";
+    }
+    set eyes(eyes) {
+        if(typeof eyes === "string")
+            this.#eyes = eyes;
+        else
+            throw "" + eyes + " is not a string";
+    }
+    set age(age) {
+        if(typeof age === "number")
+            this.#age = age;
+        else
+            throw "" + age + " is not a string";
+    }
+    get age() {
+        return this.#age;
+    }
+    set height(height) {
+        if(typeof height === "number")
+            this.#height = height;
+        else
+            throw "" + height + " is not a string";
+    }
+    get height() {
+        return this.#height
+    }
+
+    set bonus_xp(bonus_xp) {
+        if(typeof bonus_xp === "number")
+            this.#bonus_xp = bonus_xp;
+        else
+            throw "bonus_xp[" + bonus_xp + "] is not a string";
+    }
+    get bonus_xp() {
+        return this.#bonus_xp;
+    }
 
 
+    set characteristics_ws_initial(characteristics_ws_initial) {
+        if(typeof characteristics_ws_initial === "number")
+            this.#characteristics_ws_initial = characteristics_ws_initial;
+        else
+            throw "characteristics_ws_initial[" + characteristics_ws_initial + "] is not a string";
+    }
+    get characteristics_ws_initial() {
+        return this.#characteristics_ws_initial;
+    }
 
+
+    set characteristics_bs_initial(characteristics_bs_initial) {
+        if(typeof characteristics_bs_initial === "number")
+            this.#characteristics_bs_initial = characteristics_bs_initial;
+        else
+            throw "characteristics_bs_initial[" + characteristics_bs_initial + "] is not a string";
+    }
+    get characteristics_bs_initial() {
+        return this.#characteristics_bs_initial;
+    }
+
+
+    set characteristics_s_initial(characteristics_s_initial) {
+        if(typeof characteristics_s_initial === "number")
+            this.#characteristics_s_initial = characteristics_s_initial;
+        else
+            throw "characteristics_s_initial[" + characteristics_s_initial + "] is not a string";
+    }
+    get characteristics_s_initial() {
+        return this.#characteristics_s_initial;
+    }
+
+
+    set characteristics_t_initial(characteristics_t_initial) {
+        if(typeof characteristics_t_initial === "number")
+            this.#characteristics_t_initial = characteristics_t_initial;
+        else
+            throw "characteristics_t_initial[" + characteristics_t_initial + "] is not a string";
+    }
+    get characteristics_t_initial() {
+        return this.#characteristics_t_initial;
+    }
+
+
+    set characteristics_i_initial(characteristics_i_initial) {
+        if(typeof characteristics_i_initial === "number")
+            this.#characteristics_i_initial = characteristics_i_initial;
+        else
+            throw "characteristics_i_initial[" + characteristics_i_initial + "] is not a string";
+    }
+    get characteristics_i_initial() {
+        return this.#characteristics_i_initial;
+    }
+
+
+    set characteristics_ag_initial(characteristics_ag_initial) {
+        if(typeof characteristics_ag_initial === "number")
+            this.#characteristics_ag_initial = characteristics_ag_initial;
+        else
+            throw "characteristics_ag_initial[" + characteristics_ag_initial + "] is not a string";
+    }
+    get characteristics_ag_initial() {
+        return this.#characteristics_ag_initial;
+    }
+
+
+    set characteristics_dex_initial(characteristics_dex_initial) {
+        if(typeof characteristics_dex_initial === "number")
+            this.#characteristics_dex_initial = characteristics_dex_initial;
+        else
+            throw "characteristics_dex_initial[" + characteristics_dex_initial + "] is not a string";
+    }
+    get characteristics_dex_initial() {
+        return this.#characteristics_dex_initial;
+    }
+
+
+    set characteristics_int_initial(characteristics_int_initial) {
+        if(typeof characteristics_int_initial === "number")
+            this.#characteristics_int_initial = characteristics_int_initial;
+        else
+            throw "characteristics_int_initial[" + characteristics_int_initial + "] is not a string";
+    }
+    get characteristics_int_initial() {
+        return this.#characteristics_int_initial;
+    }
+
+
+    set characteristics_wp_initial(characteristics_wp_initial) {
+        if(typeof characteristics_wp_initial === "number")
+            this.#characteristics_wp_initial = characteristics_wp_initial;
+        else
+            throw "characteristics_wp_initial[" + characteristics_wp_initial + "] is not a string";
+    }
+    get characteristics_wp_initial() {
+        return this.#characteristics_wp_initial;
+    }
+
+
+    set characteristics_fel_initial(characteristics_fel_initial) {
+        if(typeof characteristics_fel_initial === "number")
+            this.#characteristics_fel_initial = characteristics_fel_initial;
+        else
+            throw "characteristics_fel_initial[" + characteristics_fel_initial + "] is not a string";
+    }
+    get characteristics_fel_initial() {
+        return this.#characteristics_fel_initial;
+    }
+
+
+    set characteristics_ws_advances(characteristics_ws_advances) {
+        if(typeof characteristics_ws_advances === "number")
+            this.#characteristics_ws_advances = characteristics_ws_advances;
+        else
+            throw "characteristics_ws_advances[" + characteristics_ws_advances + "] is not a string";
+    }
+    get characteristics_ws_advances() {
+        return this.#characteristics_ws_advances;
+    }
+
+
+    set characteristics_bs_advances(characteristics_bs_advances) {
+        if(typeof characteristics_bs_advances === "number")
+            this.#characteristics_bs_advances = characteristics_bs_advances;
+        else
+            throw "characteristics_bs_advances[" + characteristics_bs_advances + "] is not a string";
+    }
+    get characteristics_bs_advances() {
+        return this.#characteristics_bs_advances;
+    }
+
+
+    set characteristics_s_advances(characteristics_s_advances) {
+        if(typeof characteristics_s_advances === "number")
+            this.#characteristics_s_advances = characteristics_s_advances;
+        else
+            throw "characteristics_s_advances[" + characteristics_s_advances + "] is not a string";
+    }
+    get characteristics_s_advances() {
+        return this.#characteristics_s_advances;
+    }
+
+
+    set characteristics_t_advances(characteristics_t_advances) {
+        if(typeof characteristics_t_advances === "number")
+            this.#characteristics_t_advances = characteristics_t_advances;
+        else
+            throw "characteristics_t_advances[" + characteristics_t_advances + "] is not a string";
+    }
+    get characteristics_t_advances() {
+        return this.#characteristics_t_advances;
+    }
+
+
+    set characteristics_i_advances(characteristics_i_advances) {
+        if(typeof characteristics_i_advances === "number")
+            this.#characteristics_i_advances = characteristics_i_advances;
+        else
+            throw "characteristics_i_advances[" + characteristics_i_advances + "] is not a string";
+    }
+    get characteristics_i_advances() {
+        return this.#characteristics_i_advances;
+    }
+
+
+    set characteristics_ag_advances(characteristics_ag_advances) {
+        if(typeof characteristics_ag_advances === "number")
+            this.#characteristics_ag_advances = characteristics_ag_advances;
+        else
+            throw "characteristics_ag_advances[" + characteristics_ag_advances + "] is not a string";
+    }
+    get characteristics_ag_advances() {
+        return this.#characteristics_ag_advances;
+    }
+
+
+    set characteristics_dex_advances(characteristics_dex_advances) {
+        if(typeof characteristics_dex_advances === "number")
+            this.#characteristics_dex_advances = characteristics_dex_advances;
+        else
+            throw "characteristics_dex_advances[" + characteristics_dex_advances + "] is not a string";
+    }
+    get characteristics_dex_advances() {
+        return this.#characteristics_dex_advances;
+    }
+
+
+    set characteristics_int_advances(characteristics_int_advances) {
+        if(typeof characteristics_int_advances === "number")
+            this.#characteristics_int_advances = characteristics_int_advances;
+        else
+            throw "characteristics_int_advances[" + characteristics_int_advances + "] is not a string";
+    }
+    get characteristics_int_advances() {
+        return this.#characteristics_int_advances;
+    }
+
+
+    set characteristics_wp_advances(characteristics_wp_advances) {
+        if(typeof characteristics_wp_advances === "number")
+            this.#characteristics_wp_advances = characteristics_wp_advances;
+        else
+            throw "characteristics_wp_advances[" + characteristics_wp_advances + "] is not a string";
+    }
+    get characteristics_wp_advances() {
+        return this.#characteristics_wp_advances;
+    }
+
+
+    set characteristics_fel_advances(characteristics_fel_advances) {
+        if(typeof characteristics_fel_advances === "number")
+            this.#characteristics_fel_advances = characteristics_fel_advances;
+        else
+            throw "characteristics_fel_advances[" + characteristics_fel_advances + "] is not a string";
+    }
+    get characteristics_fel_advances() {
+        return this.#characteristics_fel_advances;
+    }
+
+
+    set fate_fate(fate_fate) {
+        if(typeof fate_fate === "number")
+            this.#fate_fate = fate_fate;
+        else
+            throw "fate_fate[" + fate_fate + "] is not a string";
+    }
+    get fate_fate() {
+        return this.#fate_fate;
+    }
+
+
+    set fate_fortune(fate_fortune) {
+        if(typeof fate_fortune === "number")
+            this.#fate_fortune = fate_fortune;
+        else
+            throw "fate_fortune[" + fate_fortune + "] is not a string";
+    }
+    get fate_fortune() {
+        return this.#fate_fortune;
+    }
+
+
+    set resilience_resilience(resilience_resilience) {
+        if(typeof resilience_resilience === "number")
+            this.#resilience_resilience = resilience_resilience;
+        else
+            throw "resilience_resilience[" + resilience_resilience + "] is not a string";
+    }
+    get resilience_resilience() {
+        return this.#resilience_resilience;
+    }
+
+
+    set resilience_resolve(resilience_resolve) {
+        if(typeof resilience_resolve === "number")
+            this.#resilience_resolve = resilience_resolve;
+        else
+            throw "resilience_resolve[" + resilience_resolve + "] is not a string";
+    }
+    get resilience_resolve() {
+        return this.#resilience_resolve;
+    }
+
+
+    set movement_movement(movement_movement) {
+        if(typeof movement_movement === "number")
+            this.#movement_movement = movement_movement;
+        else
+            throw "movement_movement[" + movement_movement + "] is not a string";
+    }
+    get movement_movement() {
+        return this.#movement_movement;
+    }
+
+
+    set wounds(wounds) {
+        if(typeof wounds === "number")
+            this.#wounds = wounds;
+        else
+            throw "wounds[" + wounds + "] is not a string";
+    }
+    get wounds() {
+        return this.#wounds;
+    }
+
+
+    set character_creation_step(character_creation_step) {
+        if(typeof character_creation_step === "number")
+            this.#character_creation_step = character_creation_step;
+        else
+            throw "character_creation_step[" + character_creation_step + "] is not a string";
+    }
+    get character_creation_step() {
+        return this.#character_creation_step;
+    }
+
+
+    set class_selection_random(class_selection_random) {
+        if(typeof class_selection_random === "number")
+            this.#class_selection_random = class_selection_random;
+        else
+            throw "class_selection_random[" + class_selection_random + "] is not a string";
+    }
+    get class_selection_random() {
+        return this.#class_selection_random;
+    }
+
+
+    set characteristics_selection_random(characteristics_selection_random) {
+        if(typeof characteristics_selection_random === "number")
+            this.#characteristics_selection_random = characteristics_selection_random;
+        else
+            throw "characteristics_selection_random[" + characteristics_selection_random + "] is not a string";
+    }
+    get characteristics_selection_random() {
+        return this.#characteristics_selection_random;
+    }
+
+
+    set avalible_attribute_points(avalible_attribute_points) {
+        if(typeof avalible_attribute_points === "number")
+            this.#avalible_attribute_points = avalible_attribute_points;
+        else
+            throw "avalible_attribute_points[" + avalible_attribute_points + "] is not a string";
+    }
+    get avalible_attribute_points() {
+        return this.#avalible_attribute_points;
+    }
+
+
+    set extra_points(extra_points) {
+        if(typeof extra_points === "number")
+            this.#extra_points = extra_points;
+        else
+            throw "extra_points[" + extra_points + "] is not a string";
+    }
+    get extra_points() {
+        return this.#extra_points;
+    }
+};
+
+const characterParameters = new CharacterParameters();
 const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_carrer_skills']
 const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "Carrer Skills"]
+
+function updateCharacterState() {
+    $("input#character_sheet_name").val(characterParameters.name);
+    $("input#age").val(characterParameters.age);
+    $("input#height").val(characterParameters.height);
+
+    $("input#experience_current").val(characterParameters.bonus_xp);
+
+    $("input#characteristics_ws_initial"  ).val(characterParameters.characteristics_ws_initial)
+    $("input#characteristics_bs_initial"  ).val(characterParameters.characteristics_bs_initial)
+    $("input#characteristics_s_initial"   ).val(characterParameters.characteristics_s_initial)
+    $("input#characteristics_t_initial"   ).val(characterParameters.characteristics_t_initial)
+    $("input#characteristics_i_initial"   ).val(characterParameters.characteristics_i_initial)
+    $("input#characteristics_ag_initial"  ).val(characterParameters.characteristics_ag_initial)
+    $("input#characteristics_dex_initial" ).val(characterParameters.characteristics_dex_initial)
+    $("input#characteristics_int_initial" ).val(characterParameters.characteristics_int_initial)
+    $("input#characteristics_wp_initial"  ).val(characterParameters.characteristics_wp_initial)
+    $("input#characteristics_fel_initial" ).val(characterParameters.characteristics_fel_initial)
+
+    $("input#characteristics_ws_advances"  ).val(characterParameters.characteristics_ws_advances)
+    $("input#characteristics_bs_advances"  ).val(characterParameters.characteristics_bs_advances)
+    $("input#characteristics_s_advances"   ).val(characterParameters.characteristics_s_advances)
+    $("input#characteristics_t_advances"   ).val(characterParameters.characteristics_t_advances)
+    $("input#characteristics_i_advances"   ).val(characterParameters.characteristics_i_advances)
+    $("input#characteristics_ag_advances"  ).val(characterParameters.characteristics_ag_advances)
+    $("input#characteristics_dex_advances" ).val(characterParameters.characteristics_dex_advances)
+    $("input#characteristics_int_advances" ).val(characterParameters.characteristics_int_advances)
+    $("input#characteristics_wp_advances"  ).val(characterParameters.characteristics_wp_advances)
+    $("input#characteristics_fel_advances" ).val(characterParameters.characteristics_fel_advances)
+
+    $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_initial  + characterParameters.characteristics_ws_advances)
+    $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_initial  + characterParameters.characteristics_bs_advances)
+    $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_initial   + characterParameters.characteristics_s_advances)
+    $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_initial   + characterParameters.characteristics_t_advances )
+    $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_initial   + characterParameters.characteristics_i_advances)
+    $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_initial  + characterParameters.characteristics_ag_advances)
+    $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_initial + characterParameters.characteristics_dex_advances)
+    $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_initial + characterParameters.characteristics_int_advances)
+    $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_initial  + characterParameters.characteristics_wp_advances)
+    $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_initial + characterParameters.characteristics_fel_advances)
+    $("input#fate_fate"                   ).val(characterParameters.fate_fate)
+    $("input#fate_fortune"                ).val(characterParameters.fate_fortune)
+    $("input#resilience_resilience"       ).val(characterParameters.resilience_resilience)
+    $("input#resilience_resolve"          ).val(characterParameters.resilience_resolve)
+    $("input#movement_movement"           ).val(characterParameters.movement_movement)
+    $("input#movement_walk"               ).val(characterParameters.movement[characterParameters.movement_movement]['walk'])
+    $("input#movement_run"                ).val(characterParameters.movement[characterParameters.movement_movement]['run'])
+    $("input#wounds"                      ).val(characterParameters.wounds)
+    $("span#avalible_attribute_points"    ).text(characterParameters.avalible_attribute_points)
+    $("span#avalible_extra_points"        ).text(characterParameters.extra_points)
+
+    // $.each(character_creation_state['skills'], function(i, item) {
+    //     if(!$('#skills_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
+    //         new_row = '<tr class="block_body">'
+    //         new_row += '<td id="skills_name__'+item.id+'" class="left">'+item.name+'</td>'
+    //         new_row += '<td class="characteristics">'+item.characteristics+'</td>'
+    //         new_row += '<td class="edit"><input type="text" id="skills_characteristics__'+item.id+'" name="fname"></td>'
+    //         new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" name="fname"></td>'
+    //         new_row += '<td class="edit"><input type="text" id="skills__'+item.id+'" name="fname"></td>'
+    //         new_row += '<td class=""><img id="skills__is_basic_skill__'+item.id+'" src="/static/NO.png"></td>'
+    //         new_row += '<td class=""><img id="skills__is_carrer_skill__'+item.id+'" src="/static/NO.png"></td>'
+    //         new_row += '<td class=""><img id="skills__is_species_skill__'+item.id+'" src="/static/NO.png"></td>'
+    //         new_row += '</tr>'
+    //         $("#skills_table").append(new_row)
+    //     }
+
+    //     skill_char =character_creation_state["characteristics_"+item.characteristics.toLowerCase()+"_initial" ] + character_creation_state["characteristics_"+item.characteristics.toLowerCase()+"_advances"]
+    //     $('#skills_characteristics__'+item.id).val(skill_char)
+    //     $('#skills_adv__'+item.id).val(item.adv)
+    //     $('#skills__'+item.id).val(skill_char + item.adv)
+    //     if(item.is_basic_skill == true) {
+    //         $('img#skills__is_basic_skill__'+item.id).attr("src", "/static/img/tick.png")
+    //     } else {
+    //         $('img#skills__is_basic_skill__'+item.id).attr("src", "/static/NO.png")
+    //     }
+    //     if(item.is_carrer_skill == true) {
+    //         $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/img/tick.png")
+    //     } else {
+    //         $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/NO.png")
+    //     }
+    //     if(item.is_species_skill == true) {
+    //         $('img#skills__is_species_skill__'+item.id).attr("src", "/static/img/tick.png")
+    //     } else {
+    //         $('img#skills__is_species_skill__'+item.id).attr("src", "/static/NO.png")
+    //     }
+
+    // });
+
+    // $.each(character_creation_state['talents'], function(i, item) {
+    //     if(!$('#talents_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
+    //         console.log()
+    //         new_row = '<tr class="block_body">'
+    //         new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
+    //         new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" name="fname"></td>'
+    //         new_row += '<td class="description">'+item.description+'</td>'
+    //         new_row += '</tr>'
+    //         $("#talents_table").append(new_row)
+    //     }
+    // });
+}
 
 function species_change() {
     $.ajaxSetup({
@@ -170,101 +693,7 @@ function randomSpecies() {
     });
 }
 
-function updateCharacterState() {
-    $("input#experience_current").val(character_creation_state['bonus_xp']);
 
-    $("input#characteristics_ws_initial"  ).val(character_creation_state["characteristics_ws_initial" ])
-    $("input#characteristics_bs_initial"  ).val(character_creation_state["characteristics_bs_initial" ])
-    $("input#characteristics_s_initial"   ).val(character_creation_state["characteristics_s_initial"  ])
-    $("input#characteristics_t_initial"   ).val(character_creation_state["characteristics_t_initial"  ])
-    $("input#characteristics_i_initial"   ).val(character_creation_state["characteristics_i_initial"  ])
-    $("input#characteristics_ag_initial"  ).val(character_creation_state["characteristics_ag_initial" ])
-    $("input#characteristics_dex_initial" ).val(character_creation_state["characteristics_dex_initial"])
-    $("input#characteristics_int_initial" ).val(character_creation_state["characteristics_int_initial"])
-    $("input#characteristics_wp_initial"  ).val(character_creation_state["characteristics_wp_initial" ])
-    $("input#characteristics_fel_initial" ).val(character_creation_state["characteristics_fel_initial"])
-
-    $("input#characteristics_ws_advances"  ).val(character_creation_state["characteristics_ws_advances" ])
-    $("input#characteristics_bs_advances"  ).val(character_creation_state["characteristics_bs_advances" ])
-    $("input#characteristics_s_advances"   ).val(character_creation_state["characteristics_s_advances"  ])
-    $("input#characteristics_t_advances"   ).val(character_creation_state["characteristics_t_advances"  ])
-    $("input#characteristics_i_advances"   ).val(character_creation_state["characteristics_i_advances"  ])
-    $("input#characteristics_ag_advances"  ).val(character_creation_state["characteristics_ag_advances" ])
-    $("input#characteristics_dex_advances" ).val(character_creation_state["characteristics_dex_advances"])
-    $("input#characteristics_int_advances" ).val(character_creation_state["characteristics_int_advances"])
-    $("input#characteristics_wp_advances"  ).val(character_creation_state["characteristics_wp_advances" ])
-    $("input#characteristics_fel_advances" ).val(character_creation_state["characteristics_fel_advances"])
-
-    $("input#characteristics_ws_current"  ).val(character_creation_state["characteristics_ws_initial" ] + character_creation_state["characteristics_ws_advances" ] )
-    $("input#characteristics_bs_current"  ).val(character_creation_state["characteristics_bs_initial" ] + character_creation_state["characteristics_bs_advances" ] )
-    $("input#characteristics_s_current"   ).val(character_creation_state["characteristics_s_initial"  ] + character_creation_state["characteristics_s_advances"  ] )
-    $("input#characteristics_t_current"   ).val(character_creation_state["characteristics_t_initial"  ] + character_creation_state["characteristics_t_advances"  ] )
-    $("input#characteristics_i_current"   ).val(character_creation_state["characteristics_i_initial"  ] + character_creation_state["characteristics_i_advances"  ] )
-    $("input#characteristics_ag_current"  ).val(character_creation_state["characteristics_ag_initial" ] + character_creation_state["characteristics_ag_advances" ] )
-    $("input#characteristics_dex_current" ).val(character_creation_state["characteristics_dex_initial"] + character_creation_state["characteristics_dex_advances"] )
-    $("input#characteristics_int_current" ).val(character_creation_state["characteristics_int_initial"] + character_creation_state["characteristics_int_advances"] )
-    $("input#characteristics_wp_current"  ).val(character_creation_state["characteristics_wp_initial" ] + character_creation_state["characteristics_wp_advances" ] )
-    $("input#characteristics_fel_current" ).val(character_creation_state["characteristics_fel_initial"] + character_creation_state["characteristics_fel_advances"] )
-    $("input#fate_fate"                   ).val(character_creation_state["fate_fate"] )
-    $("input#fate_fortune"                ).val(character_creation_state["fate_fortune"] )
-    $("input#resilience_resilience"       ).val(character_creation_state["resilience_resilience"] )
-    $("input#resilience_resolve"          ).val(character_creation_state["resilience_resolve"] )
-    $("input#movement_movement"           ).val(character_creation_state["movement_movement"] )
-    $("input#movement_walk"               ).val(character_creation_state['movement'][character_creation_state["movement_movement"]]['walk'])
-    $("input#movement_run"                ).val(character_creation_state['movement'][character_creation_state["movement_movement"]]['run'])
-    $("input#wounds"                      ).val(character_creation_state["wounds"] )
-    $("span#avalible_attribute_points"    ).text(character_creation_state["avalible_attribute_points"] )
-    $("span#avalible_extra_points"        ).text(character_creation_state["extra_points"] )
-
-    $.each(character_creation_state['skills'], function(i, item) {
-        if(!$('#skills_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
-            new_row = '<tr class="block_body">'
-            new_row += '<td id="skills_name__'+item.id+'" class="left">'+item.name+'</td>'
-            new_row += '<td class="characteristics">'+item.characteristics+'</td>'
-            new_row += '<td class="edit"><input type="text" id="skills_characteristics__'+item.id+'" name="fname"></td>'
-            new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" name="fname"></td>'
-            new_row += '<td class="edit"><input type="text" id="skills__'+item.id+'" name="fname"></td>'
-            new_row += '<td class=""><img id="skills__is_basic_skill__'+item.id+'" src="/static/NO.png"></td>'
-            new_row += '<td class=""><img id="skills__is_carrer_skill__'+item.id+'" src="/static/NO.png"></td>'
-            new_row += '<td class=""><img id="skills__is_species_skill__'+item.id+'" src="/static/NO.png"></td>'
-            new_row += '</tr>'
-            $("#skills_table").append(new_row)
-        }
-
-        skill_char =character_creation_state["characteristics_"+item.characteristics.toLowerCase()+"_initial" ] + character_creation_state["characteristics_"+item.characteristics.toLowerCase()+"_advances"]
-        $('#skills_characteristics__'+item.id).val(skill_char)
-        $('#skills_adv__'+item.id).val(item.adv)
-        $('#skills__'+item.id).val(skill_char + item.adv)
-        if(item.is_basic_skill == true) {
-            $('img#skills__is_basic_skill__'+item.id).attr("src", "/static/img/tick.png")
-        } else {
-            $('img#skills__is_basic_skill__'+item.id).attr("src", "/static/NO.png")
-        }
-        if(item.is_carrer_skill == true) {
-            $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/img/tick.png")
-        } else {
-            $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/NO.png")
-        }
-        if(item.is_species_skill == true) {
-            $('img#skills__is_species_skill__'+item.id).attr("src", "/static/img/tick.png")
-        } else {
-            $('img#skills__is_species_skill__'+item.id).attr("src", "/static/NO.png")
-        }
-
-    });
-
-    $.each(character_creation_state['talents'], function(i, item) {
-        if(!$('#talents_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
-            console.log()
-            new_row = '<tr class="block_body">'
-            new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
-            new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" name="fname"></td>'
-            new_row += '<td class="description">'+item.description+'</td>'
-            new_row += '</tr>'
-            $("#talents_table").append(new_row)
-        }
-    });
-}
 
 
 function nextStep() {
@@ -308,7 +737,7 @@ function fill_career_skills_select() {
     });
 
     $("input.career_skills_slider").on("change", function() {
-        item_val = $(this).val();
+        item_val = parseInt($(this).val());
         item_id = $(this).attr("skill_id");
 
         var sum = 0;
@@ -328,7 +757,7 @@ function fill_career_skills_select() {
         $("#step_5_carrer_skills_sum").text(sum-over_40);
         $.each(character_creation_state['skills'], function(i, item) {
             if(item.id == item_id) {
-                item.adv = item_val - over_40;
+                item.adv = parseInt(item.adv) + item_val - over_40;
             }
         });
     });
@@ -781,11 +1210,9 @@ function getRandomAttributesTable() {
         data: {
         },
         success: function(data) {
-            console.log(data)
-            character_creation_state['RandomAttributesTable'] = data['attributesTable']
-            character_creation_state['RandomHairTable'] = data['hairTable']
-            character_creation_state['RandomEyesTable'] = data['eyesTable']
-            console.log(character_creation_state)
+            characterParameters.RandomAttributesTable = data['attributesTable'];
+            characterParameters.RandomHairTable = data['hairTable'];
+            characterParameters.RandomEyesTable = data['eyesTable'];
         }
     });
 }
@@ -833,38 +1260,38 @@ function main() {
     });
 
     getRandomAttributesTable();
-    var quantity = jQuery('.quantity_fate input').each( function() {
-        jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpFate(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownFate(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
-    });
+    // var quantity = jQuery('.quantity_fate input').each( function() {
+    //     jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpFate(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownFate(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
+    // });
 
-    $("select#species").on("change", species_change);
-    $("img#img_character_creaton_next").click(nextStep);
+    // $("select#species").on("change", species_change);
+    // $("img#img_character_creaton_next").click(nextStep);
 
-    $("img#img_random_species").click(randomSpecies);
-    $("div#"+ character_creation_steps[0]).show();
-    $("img#img_random_class").click(randomClass);
-    $("input#character_sheet_name").keyup(saveName);
+    // $("img#img_random_species").click(randomSpecies);
+    // $("div#"+ character_creation_steps[0]).show();
+    // $("img#img_random_class").click(randomClass);
+    // $("input#character_sheet_name").keyup(saveName);
 
-    $("input#age").keyup(saveAge);
-    $("input#height").keyup(saveHeight);
-    $("select#hair").on("change", saveHair);
-    $("select#eyes").on("change", saveEyes);
+    // $("input#age").keyup(saveAge);
+    // $("input#height").keyup(saveHeight);
+    // $("select#hair").on("change", saveHair);
+    // $("select#eyes").on("change", saveEyes);
 
-    var eventData5_1
-    var eventData5_2
-    var eventData5_3
-    var eventData3_1
-    var eventData3_2
-    var eventData3_3
+    // var eventData5_1
+    // var eventData5_2
+    // var eventData5_3
+    // var eventData3_1
+    // var eventData3_2
+    // var eventData3_3
 
-    $("select#species_skills_5_1").on("change", eventData5_1, saveSkillAdv5);
-    $("select#species_skills_5_2").on("change", eventData5_2, saveSkillAdv5);
-    $("select#species_skills_5_3").on("change", eventData5_3, saveSkillAdv5);
-    $("select#species_skills_3_1").on("change", eventData3_1, saveSkillAdv3);
-    $("select#species_skills_3_2").on("change", eventData3_2, saveSkillAdv3);
-    $("select#species_skills_3_3").on("change", eventData3_3, saveSkillAdv3);
+    // $("select#species_skills_5_1").on("change", eventData5_1, saveSkillAdv5);
+    // $("select#species_skills_5_2").on("change", eventData5_2, saveSkillAdv5);
+    // $("select#species_skills_5_3").on("change", eventData5_3, saveSkillAdv5);
+    // $("select#species_skills_3_1").on("change", eventData3_1, saveSkillAdv3);
+    // $("select#species_skills_3_2").on("change", eventData3_2, saveSkillAdv3);
+    // $("select#species_skills_3_3").on("change", eventData3_3, saveSkillAdv3);
 
-    $("img#img_random_characteristics").click(attributes);
+    // $("img#img_random_characteristics").click(attributes);
 
     setInterval(updateCharacterState, 100);
 }
