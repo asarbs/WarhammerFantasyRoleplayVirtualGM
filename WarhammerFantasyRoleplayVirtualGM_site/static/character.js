@@ -122,6 +122,8 @@ class CharacterParameters {
     #needUpdate                         = false;
     #species_id                         = 0;
     #talentsNeedUpdate                  = false;
+    #career_name                        = "";
+    #ch_class_name                      = "";
     movement = {
         0: {'walk': 0,"run": 0},
         3: {'walk': 6,"run": 12},
@@ -136,11 +138,20 @@ class CharacterParameters {
     set RandomAttributesTable(table) {
         this.#RandomAttributesTable = table;
     }
+    get RandomAttributesTable() {
+        return this.#RandomAttributesTable;
+    }
     set RandomHairTable(table) {
         this.#RandomHairTable = table;
     }
+    get RandomHairTable() {
+        return this.#RandomHairTable
+    }
     set RandomEyesTable(table) {
         this.#RandomEyesTable = table;
+    }
+    get RandomEyesTable() {
+        return this.#RandomEyesTable;
     }
     set name(name) {
         if(typeof name === "string")
@@ -487,6 +498,24 @@ class CharacterParameters {
     get species_id() {
         return this.#species_id
     }
+    set career_name(career_name) {
+        if(typeof career_name instanceof String)
+            this.#career_name = career_name;
+        else
+            throw "career_name[" + career_name + "] is not a String";
+    }
+    get career_name() {
+        return this.#career_name
+    }
+    set ch_class_name(ch_class_name) {
+        if(typeof ch_class_name instanceof String)
+            this.#ch_class_name = ch_class_name;
+        else
+            throw "ch_class_name[" + ch_class_name + "] is not a String";
+    }
+    get ch_class_name() {
+        return this.#ch_class_name
+    }
 
     getCharacteristicsCurrent(name) {
         if(name === "WS")
@@ -590,6 +619,9 @@ class CharacterParameters {
         $("input#height").val(characterParameters.height);
         $("select#species").val(this.#species_id);
 
+        $("input#carrer").val(this.#career_name);
+        $("input#class").val(this.#ch_class_name);
+
         $("input#experience_current").val(characterParameters.bonus_xp);
 
         $("input#characteristics_ws_initial"  ).val(characterParameters.characteristics_ws_initial)
@@ -637,18 +669,6 @@ class CharacterParameters {
 
         this.updateSkillTable()
         this.updateTalentsTable()
-
-        // $.each(character_creation_state['talents'], function(i, item) {
-        //     if(!$('#talents_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
-        //         console.log()
-        //         new_row = '<tr class="block_body">'
-        //         new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
-        //         new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" name="fname"></td>'
-        //         new_row += '<td class="description">'+item.description+'</td>'
-        //         new_row += '</tr>'
-        //         $("#talents_table").append(new_row)
-        //     }
-        // });
     }
     appendSkill(skill_params) {
         this.#skills[skill_params['id']] = new Skill(skill_params['id'],
@@ -790,13 +810,6 @@ function randomSpecies() {
             });
 
             selectSpeciesTalent(data['species_tallents']);
-
-            // $("input#age").val(data['age'])
-            // $("input#height").val(data['height'])
-            // $("select#hair").val(data['hair'])
-            // $("select#eyes").val(data['eyes'])
-            // $("input#character_sheet_name").val(data['name'])
-            // $("input#character_sheet_name_1").val(data['name'])
         }
     });
 }
@@ -872,19 +885,19 @@ function fill_career_skills_select() {
 }
 
 function randomClass() {
-    if(character_creation_state['class_selection_random'] == 0) {
-        character_creation_state['bonus_xp'] += 50
-        character_creation_state['class_selection_random']++
+    if(characterParameters.class_selection_random == 0) {
+        characterParameters.bonus_xp += 50
+        characterParameters.class_selection_random++
     }
-    else if(character_creation_state['class_selection_random'] == 1) {
-        character_creation_state['bonus_xp'] -= 50
-        character_creation_state['bonus_xp'] += 25
-        character_creation_state['class_selection_random']++
+    else if(characterParameters.class_selection_random == 1) {
+        characterParameters.bonus_xp -= 50
+        characterParameters.bonus_xp += 25
+        characterParameters.class_selection_random++
     }
-    else if(character_creation_state['class_selection_random'] == 2) {
-        character_creation_state['bonus_xp'] -= 25
-        character_creation_state['bonus_xp'] += 0
-        character_creation_state['class_selection_random'] = 3
+    else if(characterParameters.class_selection_random == 2) {
+        characterParameters.bonus_xp -= 25
+        characterParameters.bonus_xp += 0
+        characterParameters.class_selection_random = 3
     }
 
     characer_id = $("input[name='characer_id']").val()
@@ -895,29 +908,11 @@ function randomClass() {
             characer_id: characer_id,
         },
         success: function(data) {
-            $("input#carrer").val(data['career_name']);
-            $("input#class").val(data['ch_class_name']);
-
-            character_creation_state['skills'] = []
-            $("table#skills_table tr.block_body").remove()
+            characterParameters.carrer = data['career_name'];
+            characterParameters.class = data['ch_class_name'];
             $.each(data['skills'], function(i, item) {
-                console.info(item.name+"; "+item.is_basic_skill+"; "+item.is_species_skill+"; "+ item.is_carrer_skill);
-                character_creation_state['skills'].push(item)
+                characterParameters.appendSkill(item);
             })
-            fill_species_skills_select();
-
-            character_creation_state['skills'].sort((a,b) =>  {
-
-                let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
-                if(fa < fb) {
-                    return -1;
-                }
-                if(fa > fb) {
-                    return 1;
-                }
-                return 0;
-            });
-
         }
     });
 }
@@ -998,68 +993,102 @@ function saveEyes(e) {
     });
 }
 
-function attributes() {
-    console.log("attributes")
+function randomAttributes() {
+    console.log("randomAttributes")
 
-    if(character_creation_state['characteristics_selection_random'] == 0) {
-        character_creation_state['bonus_xp'] += 50
-        character_creation_state['characteristics_selection_random']++
+    if(characterParameters.characteristics_selection_random == 0) {
+        characterParameters.bonus_xp += 50
+        characterParameters.characteristics_selection_random++
     }
-    else if(character_creation_state['characteristics_selection_random'] == 1) {
-        character_creation_state['bonus_xp'] -= 50
-        character_creation_state['bonus_xp'] += 25
-        character_creation_state['characteristics_selection_random']++
+    else if(characterParameters.characteristics_selection_random == 1) {
+        characterParameters.bonus_xp -= 50
+        characterParameters.bonus_xp += 25
+        characterParameters.characteristics_selection_random++
     }
-    else if(character_creation_state['characteristics_selection_random'] == 2) {
-        character_creation_state['bonus_xp'] -= 25
-        character_creation_state['bonus_xp'] += 0
-        character_creation_state['characteristics_selection_random'] = 3
+    else if(characterParameters.characteristics_selection_random == 2) {
+        characterParameters.bonus_xp -= 25
+        characterParameters.bonus_xp += 0
+        characterParameters.characteristics_selection_random = 3
     }
 
-    if(character_creation_state['characteristics_selection_random'] == 4) {
+    if(characterParameters.characteristics_selection_random == 4) {
+
+        characterParameters.characteristics_ws_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_ws_initial'   ];
+        characterParameters.characteristics_bs_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_bs_initial'   ];
+        characterParameters.characteristics_s_initial           = 4 + characterParameters.RandomAttributesTable[species]['characteristics_s_initial'    ];
+        characterParameters.characteristics_t_initial           = 4 + characterParameters.RandomAttributesTable[species]['characteristics_t_initial'    ];
+        characterParameters.characteristics_i_initial           = 4 + characterParameters.RandomAttributesTable[species]['characteristics_i_initial'    ];
+        characterParameters.characteristics_ag_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_ag_initial'   ];
+        characterParameters.characteristics_dex_initial         = 4 + characterParameters.RandomAttributesTable[species]['characteristics_dex_initial'  ];
+        characterParameters.characteristics_int_initial         = 4 + characterParameters.RandomAttributesTable[species]['characteristics_int_initial'  ];
+        characterParameters.characteristics_wp_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_wp_initial'   ];
+        characterParameters.characteristics_fel_initial         = 4 + characterParameters.RandomAttributesTable[species]['characteristics_fel_initial'  ];
+
+        $('input#characteristics_ws_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_ws_initial'   ]);
+        $('input#characteristics_bs_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_bs_initial'   ]);
+        $('input#characteristics_s_initial'    ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_s_initial'    ]);
+        $('input#characteristics_t_initial'    ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_t_initial'    ]);
+        $('input#characteristics_i_initial'    ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_i_initial'    ]);
+        $('input#characteristics_ag_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_ag_initial'   ]);
+        $('input#characteristics_dex_initial'  ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_dex_initial'  ]);
+        $('input#characteristics_int_initial'  ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_int_initial'  ]);
+        $('input#characteristics_wp_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_wp_initial'   ]);
+        $('input#characteristics_fel_initial'  ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_fel_initial'  ]);
+        $('input#characteristics_ws_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_ws_initial'   ]);
+        $('input#characteristics_bs_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_bs_initial'   ]);
+        $('input#characteristics_s_initial'    ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_s_initial'    ]);
+        $('input#characteristics_t_initial'    ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_t_initial'    ]);
+        $('input#characteristics_i_initial'    ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_i_initial'    ]);
+        $('input#characteristics_ag_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_ag_initial'   ]);
+        $('input#characteristics_dex_initial'  ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_dex_initial'  ]);
+        $('input#characteristics_int_initial'  ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_int_initial'  ]);
+        $('input#characteristics_wp_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_wp_initial'   ]);
+        $('input#characteristics_fel_initial'  ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_fel_initial'  ]);
+
+        characterParameters.avalible_attribute_points =  characterParameters.avalible_attribute_points - 40;
         return;
     }
 
-    if(character_creation_state['characteristics_selection_random'] == 3) {
+    if(characterParameters.characteristics_selection_random == 3) {
         var quantity = jQuery('.quantity input').each( function() {
             jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUp(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDown(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
           });
-        character_creation_state['characteristics_selection_random'] = 4
+          characterParameters.characteristics_selection_random = 4
         species = $("select#species").val()
-        console.log(species)
-        character_creation_state['characteristics_ws_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ws_initial'   ];
-        character_creation_state['characteristics_bs_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_bs_initial'   ];
-        character_creation_state['characteristics_s_initial'    ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_s_initial'    ];
-        character_creation_state['characteristics_t_initial'    ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_t_initial'    ];
-        character_creation_state['characteristics_i_initial'    ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_i_initial'    ];
-        character_creation_state['characteristics_ag_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ag_initial'   ];
-        character_creation_state['characteristics_dex_initial'  ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_dex_initial'  ];
-        character_creation_state['characteristics_int_initial'  ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_int_initial'  ];
-        character_creation_state['characteristics_wp_initial'   ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_wp_initial'   ];
-        character_creation_state['characteristics_fel_initial'  ] = 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_fel_initial'  ];
+        console.log(species);
+        characterParameters.characteristics_ws_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_ws_initial'   ];
+        characterParameters.characteristics_bs_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_bs_initial'   ];
+        characterParameters.characteristics_s_initial           = 4 + characterParameters.RandomAttributesTable[species]['characteristics_s_initial'    ];
+        characterParameters.characteristics_t_initial           = 4 + characterParameters.RandomAttributesTable[species]['characteristics_t_initial'    ];
+        characterParameters.characteristics_i_initial           = 4 + characterParameters.RandomAttributesTable[species]['characteristics_i_initial'    ];
+        characterParameters.characteristics_ag_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_ag_initial'   ];
+        characterParameters.characteristics_dex_initial         = 4 + characterParameters.RandomAttributesTable[species]['characteristics_dex_initial'  ];
+        characterParameters.characteristics_int_initial         = 4 + characterParameters.RandomAttributesTable[species]['characteristics_int_initial'  ];
+        characterParameters.characteristics_wp_initial          = 4 + characterParameters.RandomAttributesTable[species]['characteristics_wp_initial'   ];
+        characterParameters.characteristics_fel_initial         = 4 + characterParameters.RandomAttributesTable[species]['characteristics_fel_initial'  ];
 
-        $('input#characteristics_ws_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ws_initial'   ]);
-        $('input#characteristics_bs_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_bs_initial'   ]);
-        $('input#characteristics_s_initial'    ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_s_initial'    ]);
-        $('input#characteristics_t_initial'    ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_t_initial'    ]);
-        $('input#characteristics_i_initial'    ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_i_initial'    ]);
-        $('input#characteristics_ag_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_ag_initial'   ]);
-        $('input#characteristics_dex_initial'  ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_dex_initial'  ]);
-        $('input#characteristics_int_initial'  ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_int_initial'  ]);
-        $('input#characteristics_wp_initial'   ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_wp_initial'   ]);
-        $('input#characteristics_fel_initial'  ).attr('min', 4 + character_creation_state['RandomAttributesTable'][species]['characteristics_fel_initial'  ]);
-        $('input#characteristics_ws_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_ws_initial'   ]);
-        $('input#characteristics_bs_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_bs_initial'   ]);
-        $('input#characteristics_s_initial'    ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_s_initial'    ]);
-        $('input#characteristics_t_initial'    ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_t_initial'    ]);
-        $('input#characteristics_i_initial'    ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_i_initial'    ]);
-        $('input#characteristics_ag_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_ag_initial'   ]);
-        $('input#characteristics_dex_initial'  ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_dex_initial'  ]);
-        $('input#characteristics_int_initial'  ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_int_initial'  ]);
-        $('input#characteristics_wp_initial'   ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_wp_initial'   ]);
-        $('input#characteristics_fel_initial'  ).attr('max', 18 + character_creation_state['RandomAttributesTable'][species]['characteristics_fel_initial'  ]);
+        $('input#characteristics_ws_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_ws_initial'   ]);
+        $('input#characteristics_bs_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_bs_initial'   ]);
+        $('input#characteristics_s_initial'    ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_s_initial'    ]);
+        $('input#characteristics_t_initial'    ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_t_initial'    ]);
+        $('input#characteristics_i_initial'    ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_i_initial'    ]);
+        $('input#characteristics_ag_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_ag_initial'   ]);
+        $('input#characteristics_dex_initial'  ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_dex_initial'  ]);
+        $('input#characteristics_int_initial'  ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_int_initial'  ]);
+        $('input#characteristics_wp_initial'   ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_wp_initial'   ]);
+        $('input#characteristics_fel_initial'  ).attr('min',  4 + characterParameters.RandomAttributesTable[species]['characteristics_fel_initial'  ]);
+        $('input#characteristics_ws_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_ws_initial'   ]);
+        $('input#characteristics_bs_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_bs_initial'   ]);
+        $('input#characteristics_s_initial'    ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_s_initial'    ]);
+        $('input#characteristics_t_initial'    ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_t_initial'    ]);
+        $('input#characteristics_i_initial'    ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_i_initial'    ]);
+        $('input#characteristics_ag_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_ag_initial'   ]);
+        $('input#characteristics_dex_initial'  ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_dex_initial'  ]);
+        $('input#characteristics_int_initial'  ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_int_initial'  ]);
+        $('input#characteristics_wp_initial'   ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_wp_initial'   ]);
+        $('input#characteristics_fel_initial'  ).attr('max', 18 + characterParameters.RandomAttributesTable[species]['characteristics_fel_initial'  ]);
 
-        character_creation_state['avalible_attribute_points'] =  character_creation_state['avalible_attribute_points'] - 40;
+        characterParameters.avalible_attribute_points =  characterParameters.avalible_attribute_points - 40;
 
         return;
     }
@@ -1072,30 +1101,29 @@ function attributes() {
             characer_id: characer_id,
         },
         success: function(data) {
-            data['extra_points'];
-            character_creation_state['characteristics_ws_initial']  = data['characteristics_ws_initial'];
-            character_creation_state['characteristics_bs_initial']  = data['characteristics_bs_initial'];
-            character_creation_state['characteristics_s_initial']   = data['characteristics_s_initial'];
-            character_creation_state['characteristics_t_initial']   = data['characteristics_t_initial'];
-            character_creation_state['characteristics_i_initial']   = data['characteristics_i_initial'];
-            character_creation_state['characteristics_ag_initial']  = data['characteristics_ag_initial'];
-            character_creation_state['characteristics_dex_initial'] = data['characteristics_dex_initial'];
-            character_creation_state['characteristics_int_initial'] = data['characteristics_int_initial'];
-            character_creation_state['characteristics_wp_initial']  = data['characteristics_wp_initial'];
-            character_creation_state['characteristics_fel_initial'] = data['characteristics_fel_initial'];
-            character_creation_state['fate_fate']                   = data['fate_fate'];
-            character_creation_state['fate_fortune']                = data['fate_fortune'];
-            character_creation_state['resilience_resilience']       = data['resilience_resilience'];
-            character_creation_state['resilience_resolve']          = data['resilience_resolve'];
-            character_creation_state['movement_movement']           = data['movement_movement'];
-            character_creation_state['wounds']                      = data['wounds'];
-            character_creation_state['extra_points']                = data['extra_points'];
+            characterParameters.characteristics_ws_initial  = data['characteristics_ws_initial'];
+            characterParameters.characteristics_bs_initial  = data['characteristics_bs_initial'];
+            characterParameters.characteristics_s_initial   = data['characteristics_s_initial'];
+            characterParameters.characteristics_t_initial   = data['characteristics_t_initial'];
+            characterParameters.characteristics_i_initial   = data['characteristics_i_initial'];
+            characterParameters.characteristics_ag_initial  = data['characteristics_ag_initial'];
+            characterParameters.characteristics_dex_initial = data['characteristics_dex_initial'];
+            characterParameters.characteristics_int_initial = data['characteristics_int_initial'];
+            characterParameters.characteristics_wp_initial  = data['characteristics_wp_initial'];
+            characterParameters.characteristics_fel_initial = data['characteristics_fel_initial'];
+            characterParameters.fate_fate                   = data['fate_fate'];
+            characterParameters.fate_fortune                = data['fate_fortune'];
+            characterParameters.resilience_resilience       = data['resilience_resilience'];
+            characterParameters.resilience_resolve          = data['resilience_resolve'];
+            characterParameters.movement_movement           = data['movement_movement'];
+            characterParameters.wounds                      = data['wounds'];
+            characterParameters.extra_points                = data['extra_points'];
         }
     });
 }
 
 function btnUp(input_id) {
-    if(character_creation_state['avalible_attribute_points'] <= 0) {
+    if(characterParameters.avalible_attribute_points <= 0) {
         return
     }
 
@@ -1114,7 +1142,7 @@ function btnUp(input_id) {
     }
 
     console.log("btnUp: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
-    character_creation_state[input_id]  = newVal
+    characterParameters.input_id  = newVal
     inp.val(newVal);
     inp.trigger("change");
 
@@ -1140,30 +1168,30 @@ function btnUp(input_id) {
         },
         success: function(data) {
             console.log(data)
-            character_creation_state['characteristics_ws_initial']  = data['characteristics_ws_initial'];
-            character_creation_state['characteristics_bs_initial']  = data['characteristics_bs_initial'];
-            character_creation_state['characteristics_s_initial']   = data['characteristics_s_initial'];
-            character_creation_state['characteristics_t_initial']   = data['characteristics_t_initial'];
-            character_creation_state['characteristics_i_initial']   = data['characteristics_i_initial'];
-            character_creation_state['characteristics_ag_initial']  = data['characteristics_ag_initial'];
-            character_creation_state['characteristics_dex_initial'] = data['characteristics_dex_initial'];
-            character_creation_state['characteristics_int_initial'] = data['characteristics_int_initial'];
-            character_creation_state['characteristics_wp_initial']  = data['characteristics_wp_initial'];
-            character_creation_state['characteristics_fel_initial'] = data['characteristics_fel_initial'];
-            character_creation_state['fate_fate']                   = data['fate_fate'];
-            character_creation_state['fate_fortune']                = data['fate_fortune'];
-            character_creation_state['resilience_resilience']       = data['resilience_resilience'];
-            character_creation_state['resilience_resolve']          = data['resilience_resolve'];
-            character_creation_state['movement_movement']           = data['movement_movement'];
-            character_creation_state['wounds']                      = data['wounds'];
-            character_creation_state['avalible_attribute_points']--
+            characterParameters.characteristics_ws_initial  = data['characteristics_ws_initial'];
+            characterParameters.characteristics_bs_initial  = data['characteristics_bs_initial'];
+            characterParameters.characteristics_s_initial   = data['characteristics_s_initial'];
+            characterParameters.characteristics_t_initial   = data['characteristics_t_initial'];
+            characterParameters.characteristics_i_initial   = data['characteristics_i_initial'];
+            characterParameters.characteristics_ag_initial  = data['characteristics_ag_initial'];
+            characterParameters.characteristics_dex_initial = data['characteristics_dex_initial'];
+            characterParameters.characteristics_int_initial = data['characteristics_int_initial'];
+            characterParameters.characteristics_wp_initial  = data['characteristics_wp_initial'];
+            characterParameters.characteristics_fel_initial = data['characteristics_fel_initial'];
+            characterParameters.fate_fate                   = data['fate_fate'];
+            characterParameters.fate_fortune                = data['fate_fortune'];
+            characterParameters.resilience_resilience       = data['resilience_resilience'];
+            characterParameters.resilience_resolve          = data['resilience_resolve'];
+            characterParameters.movement_movement           = data['movement_movement'];
+            characterParameters.wounds                      = data['wounds'];
+            characterParameters.avalible_attribute_points--
         }
     });
 
   }
 
 function btnDown(input_id) {
-    if(character_creation_state['avalible_attribute_points'] >= 60) {
+    if(characterParameters.avalible_attribute_points >= 60) {
         return
     }
     inp = $('input#'+input_id);
@@ -1179,7 +1207,7 @@ function btnDown(input_id) {
     }
 
     console.log("btnDown: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
-    character_creation_state[input_id]  = newVal
+    characterParameters.input_id  = newVal
     inp.val(newVal);
     inp.trigger("change");
 
@@ -1204,30 +1232,30 @@ function btnDown(input_id) {
             }
         },
         success: function(data) {
-            character_creation_state['characteristics_ws_initial']  = data['characteristics_ws_initial'];
-            character_creation_state['characteristics_bs_initial']  = data['characteristics_bs_initial'];
-            character_creation_state['characteristics_s_initial']   = data['characteristics_s_initial'];
-            character_creation_state['characteristics_t_initial']   = data['characteristics_t_initial'];
-            character_creation_state['characteristics_i_initial']   = data['characteristics_i_initial'];
-            character_creation_state['characteristics_ag_initial']  = data['characteristics_ag_initial'];
-            character_creation_state['characteristics_dex_initial'] = data['characteristics_dex_initial'];
-            character_creation_state['characteristics_int_initial'] = data['characteristics_int_initial'];
-            character_creation_state['characteristics_wp_initial']  = data['characteristics_wp_initial'];
-            character_creation_state['characteristics_fel_initial'] = data['characteristics_fel_initial'];
-            character_creation_state['fate_fate']                   = data['fate_fate'];
-            character_creation_state['fate_fortune']                = data['fate_fortune'];
-            character_creation_state['resilience_resilience']       = data['resilience_resilience'];
-            character_creation_state['resilience_resolve']          = data['resilience_resolve'];
-            character_creation_state['movement_movement']           = data['movement_movement'];
-            character_creation_state['wounds']                      = data['wounds'];
-            character_creation_state['avalible_attribute_points']++
+            characterParameters.characteristics_ws_initial  = data['characteristics_ws_initial'];
+            characterParameters.characteristics_bs_initial  = data['characteristics_bs_initial'];
+            characterParameters.characteristics_s_initial   = data['characteristics_s_initial'];
+            characterParameters.characteristics_t_initial   = data['characteristics_t_initial'];
+            characterParameters.characteristics_i_initial   = data['characteristics_i_initial'];
+            characterParameters.characteristics_ag_initial  = data['characteristics_ag_initial'];
+            characterParameters.characteristics_dex_initial = data['characteristics_dex_initial'];
+            characterParameters.characteristics_int_initial = data['characteristics_int_initial'];
+            characterParameters.characteristics_wp_initial  = data['characteristics_wp_initial'];
+            characterParameters.characteristics_fel_initial = data['characteristics_fel_initial'];
+            characterParameters.fate_fate                   = data['fate_fate'];
+            characterParameters.fate_fortune                = data['fate_fortune'];
+            characterParameters.resilience_resilience       = data['resilience_resilience'];
+            characterParameters.resilience_resolve          = data['resilience_resolve'];
+            characterParameters.movement_movement           = data['movement_movement'];
+            characterParameters.wounds                      = data['wounds'];
+            characterParameters.avalible_attribute_points++
         }
     });
   }
 
 function btnUpFate(input_id) {
-    if(character_creation_state['extra_points'] <= 0) {
-        console.error("btnUpFate: " + character_creation_state['extra_points'] + " <= 0" )
+    if(characterParameters.extra_points <= 0) {
+        console.error("btnUpFate: " + characterParameters.extra_points + " <= 0" )
         return
     }
 
@@ -1244,7 +1272,7 @@ function btnUpFate(input_id) {
       var newVal = oldValue + step;
     }
 
-    character_creation_state[input_id]  = newVal
+    characterParameters.input_id  = newVal
     inp.val(newVal);
     inp.trigger("change");
 
@@ -1261,17 +1289,17 @@ function btnUpFate(input_id) {
             }
         },
         success: function(data) {
-            character_creation_state['fate_fate']  = data['fate_fate'];
-            character_creation_state['fate_fortune']  = data['fate_fortune'];
-            character_creation_state['extra_points']--
+            characterParameters.fate_fate  = data['fate_fate'];
+            characterParameters.fate_fortune  = data['fate_fortune'];
+            characterParameters.extra_points--
         }
     });
 
   }
 
 function btnDownFate(input_id) {
-    if(character_creation_state['extra_points'] >= 3) {
-        console.error("btnUpFate: " + character_creation_state['extra_points'] + " >= 3" )
+    if(characterParameters.extra_points >= 3) {
+        console.error("btnUpFate: " + characterParameters.extra_points + " >= 3" )
         return
     }
     inp = $('input#'+input_id);
@@ -1287,7 +1315,7 @@ function btnDownFate(input_id) {
       var newVal = oldValue - step;
     }
 
-    character_creation_state[input_id]  = newVal
+    characterParameters.input_id  = newVal
     inp.val(newVal);
     inp.trigger("change");
 
@@ -1304,9 +1332,9 @@ function btnDownFate(input_id) {
             }
         },
         success: function(data) {
-            character_creation_state['fate_fate']  = data['fate_fate'];
-            character_creation_state['fate_fortune']  = data['fate_fortune'];
-            character_creation_state['extra_points']++
+            characterParameters.fate_fate  = data['fate_fate'];
+            characterParameters.fate_fortune  = data['fate_fortune'];
+            characterParameters.extra_points++
         }
     });
 }
@@ -1376,7 +1404,7 @@ function main() {
     $("img#img_random_species").click(randomSpecies);
     $("div#"+ character_creation_steps[0]).show();
 
-    // $("img#img_random_class").click(randomClass);
+    $("img#img_random_class").click(randomClass);
     // $("input#character_sheet_name").keyup(saveName);
 
     // $("input#age").keyup(saveAge);
@@ -1398,7 +1426,7 @@ function main() {
     // $("select#species_skills_3_2").on("change", eventData3_2, saveSkillAdv3);
     // $("select#species_skills_3_3").on("change", eventData3_3, saveSkillAdv3);
 
-    // $("img#img_random_characteristics").click(attributes);
+    $("img#img_random_characteristics").click(randomAttributes);
 
     setInterval(function() {
         characterParameters.updateCharacterState();
