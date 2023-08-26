@@ -805,15 +805,15 @@ function randomSpecies() {
 
 
 function nextStep() {
-    console.log("div#"+ character_creation_steps[character_creation_state['character_creation_step']]);
-    $("div#"+ character_creation_steps[character_creation_state['character_creation_step']]).hide(200);
-    character_creation_state['character_creation_step']++
-    $("div#"+ character_creation_steps[character_creation_state['character_creation_step']]).show(200);
-    $("div.create_character div.header h1").text(character_creation_steps_header[character_creation_state['character_creation_step']])
-    if(character_creation_state['character_creation_step'] == 3) {
+    console.log("div#"+ character_creation_steps[characterParameters.character_creation_step]);
+    $("div#"+ character_creation_steps[characterParameters.character_creation_step]).hide(200);
+    characterParameters.character_creation_step++
+    $("div#"+ character_creation_steps[characterParameters.character_creation_step]).show(200);
+    $("div.create_character div.header h1").text(character_creation_steps_header[characterParameters.character_creation_step])
+    if(characterParameters.character_creation_step == 3) {
         fill_species_skills_select();
     }
-    if(character_creation_state['character_creation_step'] == 4) {
+    if(characterParameters.character_creation_step == 4) {
         fill_career_skills_select();
     }
 }
