@@ -291,7 +291,7 @@ class Character2Skill(models.Model):
     adv = models.IntegerField(default="0", verbose_name="adv")
     is_basic_skill = models.BooleanField(default=False)
     is_species_skill = models.BooleanField(default=False)
-    is_carrer_skill = models.BooleanField(default=False)
+    is_career_skill = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('characters', 'skills',)

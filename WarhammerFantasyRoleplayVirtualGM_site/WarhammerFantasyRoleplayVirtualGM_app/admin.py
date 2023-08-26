@@ -107,7 +107,7 @@ class ExampleNameAdmin(admin.ModelAdmin):
     list_filter = ("species", "sex")
 
 class Character2SkillAdmin(admin.ModelAdmin):
-    list_display = ("characters", "skills", "adv", "is_basic_skill", "is_species_skill", "is_carrer_skill")
+    list_display = ("characters", "skills", "adv", "is_basic_skill", "is_species_skill", "is_career_skill")
     list_filter = ("characters",)
 
 class RefBookAdmin(admin.ModelAdmin):

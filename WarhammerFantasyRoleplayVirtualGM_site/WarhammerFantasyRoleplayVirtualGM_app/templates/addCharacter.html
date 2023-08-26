@@ -88,10 +88,10 @@
             </tr>
         </table>
     </div>
-    <div  id="step_5_carrer_skills" class="create_character_steps">
-        Allocate <span id="step_5_carrer_skills_sum">0</span>/40 Advances to your eight starting Skills<br>
+    <div  id="step_5_career_skills" class="create_character_steps">
+        Allocate <span id="step_5_career_skills_sum">0</span>/40 Advances to your eight starting Skills<br>
 
-        <span id="step_5_carrer_skills_error">You can't spend more then 40 points on adv.</span><br>
+        <span id="step_5_career_skills_error">You can't spend more then 40 points on adv.</span><br>
     </div>
         <div class="bottom"><img src="{% static "/img/arrow_right.png" %} " id="img_character_creaton_next"></div>
 </div>
@@ -127,24 +127,24 @@
             </tr>
             <tr>
                 <td class="head">
-                    Carrer
+                    career
                 </td>
                 <td colspan="3">
-                    <input type="text" id="carrer" name="fname">
+                    <input type="text" id="career" name="fname">
                 </td>
                 <td class="head">
-                    Carrer Level
+                    Career Level
                 </td>
                 <td colspan="3">
-                    <input type="text" id="carrer_level" name="fname">
+                    <input type="text" id="career_level" name="fname">
                 </td>
             </tr>
             <tr>
                 <td class="head">
-                    Carrer Path
+                    Career Path
                 </td>
                 <td colspan="5">
-                    <input type="text" id="carrer_path" name="fname">
+                    <input type="text" id="career_path" name="fname">
                 </td>
                 <td class="head">
                     Status
@@ -370,6 +370,7 @@
 <div class="character_sheet">
     <div class="basic_skills">
         <table id='skills_table' border="0">
+            <thead>
             <tr>
                 <th colspan="8" class="block_name">
                     SKILLS
@@ -398,6 +399,8 @@
                     SS
                 </th>
             </tr>
+        </thead>
+        <tbody>
         {% comment %} {% for basic_skill in basic_skills %}
             <tr class="block_body">
                 <td id="skills_name__{{ basic_skill.id }}" class="left">
@@ -419,13 +422,14 @@
                     <img  id="skills__is_basic_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
                 </td>
                 <td class="">
-                    <img id="skills__is_carrer_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
+                    <img id="skills__is_career_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
                 </td>
                 <td class="">
                     <img id="skills__is_species_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
                 </td>
             </tr>
         {% endfor %} {% endcomment %}
+        </tbody>
         </table>
     </div>
 

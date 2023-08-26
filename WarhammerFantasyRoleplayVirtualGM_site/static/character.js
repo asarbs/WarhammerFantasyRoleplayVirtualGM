@@ -1,26 +1,26 @@
 
 class Skill {
     #adv_standard        = 0;
-    #adv_carrer          = 0;
+    #adv_career          = 0;
     #adv_species         = 0;
     #characteristics     = "";
     #description         = "";
     #id                  = 0;
     #is_basic_skill      = false;
-    #is_carrer_skill     = false;
+    #is_career_skill     = false;
     #is_species_skill    = false;
     #name                = "";
-    constructor(id, name, characteristics, description, is_basic_skill, is_carrer_skill, is_species_skill, adv_standard, adv_carrer, adv_species ) {
+    constructor(id, name, characteristics, description, is_basic_skill, is_career_skill, is_species_skill, adv_standard, adv_career, adv_species ) {
         console.log("Skill \""+ name + "\" added");
         this.#id = id;
         this.#name = name;
         this.#characteristics = characteristics;
         this.#description = description;
         this.#is_basic_skill = is_basic_skill;
-        this.#is_carrer_skill = is_carrer_skill;
+        this.#is_career_skill = is_career_skill;
         this.#is_species_skill = is_species_skill
         this.#adv_standard = adv_standard
-        this.#adv_carrer = adv_carrer
+        this.#adv_career = adv_career
         this.#adv_species = adv_species
     }
     get id() {
@@ -35,8 +35,8 @@ class Skill {
     get is_basic_skill() {
         return this.#is_basic_skill
     }
-    get is_carrer_skill() {
-        return this.#is_carrer_skill
+    get is_career_skill() {
+        return this.#is_career_skill
     }
     get is_species_skill() {
         return this.#is_species_skill
@@ -47,9 +47,9 @@ class Skill {
         else
             throw "" + adv + " is not a number";
     }
-    set adv_carrer(adv) {
+    set adv_career(adv) {
         if(typeof adv === "number")
-            this.#adv_carrer = adv;
+            this.#adv_career = adv;
         else
             throw "" + adv + " is not a number";
     }
@@ -60,7 +60,7 @@ class Skill {
             throw "" + adv + " is not a number";
     }
     get adv() {
-        return this.#adv_standard + this.#adv_carrer + this.#adv_species;
+        return this.#adv_standard + this.#adv_career + this.#adv_species;
     }
 };
 
@@ -95,60 +95,64 @@ class Talent {
 }
 
 class CharacterParameters {
-    #name                               = "";
     #age                                = 0
-    #height                             = 0
-    #hair                               = ""
-    #eyes                               = ""
+    #avalible_attribute_points          = 100;
     #bonus_xp                           = 0;
-    #characteristics_ws_initial         = 0;
-    #characteristics_bs_initial         = 0;
-    #characteristics_s_initial          = 0;
-    #characteristics_t_initial          = 0;
-    #characteristics_i_initial          = 0;
-    #characteristics_ag_initial         = 0;
-    #characteristics_dex_initial        = 0;
-    #characteristics_int_initial        = 0;
-    #characteristics_wp_initial         = 0;
-    #characteristics_fel_initial        = 0;
-    #characteristics_ws_advances        = 0;
-    #characteristics_bs_advances        = 0;
-    #characteristics_s_advances         = 0;
-    #characteristics_t_advances         = 0;
-    #characteristics_i_advances         = 0;
+    #career_level                       = 0;
+    #career_name                        = "";
+    #career_path                        = "";
+    #ch_class_name                      = "";
+    #character_creation_step            = 0;
     #characteristics_ag_advances        = 0;
+    #characteristics_ag_initial         = 0;
+    #characteristics_bs_advances        = 0;
+    #characteristics_bs_initial         = 0;
     #characteristics_dex_advances       = 0;
-    #characteristics_int_advances       = 0;
-    #characteristics_wp_advances        = 0;
+    #characteristics_dex_initial        = 0;
     #characteristics_fel_advances       = 0;
+    #characteristics_fel_initial        = 0;
+    #characteristics_i_advances         = 0;
+    #characteristics_i_initial          = 0;
+    #characteristics_int_advances       = 0;
+    #characteristics_int_initial        = 0;
+    #characteristics_s_advances         = 0;
+    #characteristics_s_initial          = 0;
+    #characteristics_selection_random   = 0;
+    #characteristics_t_advances         = 0;
+    #characteristics_t_initial          = 0;
+    #characteristics_wp_advances        = 0;
+    #characteristics_wp_initial         = 0;
+    #characteristics_ws_advances        = 0;
+    #characteristics_ws_initial         = 0;
+    #class_selection_random             = 0;
+    #extra_points                       = 0;
+    #eyes                               = ""
     #fate_fate                          = 0;
     #fate_fortune                       = 0;
+    #hair                               = ""
+    #height                             = 0
+    #movement_movement                  = 0;
+    #name                               = "";
+    #needUpdate                         = false;
+    #RandomAttributesTable              = [];
+    #RandomEyesTable                    = [];
+    #RandomHairTable                    = [];
     #resilience_resilience              = 0;
     #resilience_resolve                 = 0;
-    #movement_movement                  = 0;
-    #wounds                             = 0;
     #skills                             = {};
-    #talents                            = {};
-    #character_creation_step            = 0;
-    #class_selection_random             = 0;
-    #characteristics_selection_random   = 0;
-    #avalible_attribute_points          = 100;
-    #extra_points                       = 0;
-    #RandomAttributesTable              = [];
-    #RandomHairTable                    = [];
-    #RandomEyesTable                    = [];
-    #needUpdate                         = false;
     #species_id                         = 0;
+    #status                             = "";
+    #talents                            = {};
     #talentsNeedUpdate                  = false;
-    #career_name                        = "";
-    #ch_class_name                      = "";
+    #wounds                             = 0;
+    skills_species                      = {};
     movement = {
         0: {'walk': 0,"run": 0},
         3: {'walk': 6,"run": 12},
         4: {'walk': 8,"run": 16},
         5: {'walk': 10,"run": 20},
         };
-    skills_species                      = {};
+
     constructor() {
         console.log("CharacterParameters::constructor");
     }
@@ -180,22 +184,22 @@ class CharacterParameters {
         return this.#name;
     }
     set hair(hair) {
-        if(typeof hair === "string")
+        if(typeof hair === "number")
             this.#hair = hair;
         else
-            throw "" + hair + " is not a string";
+            throw "hair: " + hair + " is not a number";
     }
     set eyes(eyes) {
-        if(typeof eyes === "string")
+        if(typeof eyes === "number")
             this.#eyes = eyes;
         else
-            throw "" + eyes + " is not a string";
+            throw "eyes: " + eyes + " is not a number";
     }
     set age(age) {
         if(typeof age === "number")
             this.#age = age;
         else
-            throw "" + age + " is not a string";
+            throw "age:" + age + " is not a number";
     }
     get age() {
         return this.#age;
@@ -204,7 +208,7 @@ class CharacterParameters {
         if(typeof height === "number")
             this.#height = height;
         else
-            throw "" + height + " is not a string";
+            throw "height" + height + " is not a height";
     }
     get height() {
         return this.#height
@@ -516,7 +520,7 @@ class CharacterParameters {
         return this.#species_id
     }
     set career_name(career_name) {
-        if(typeof career_name instanceof String)
+        if(typeof career_name === "string")
             this.#career_name = career_name;
         else
             throw "career_name[" + career_name + "] is not a String";
@@ -525,13 +529,40 @@ class CharacterParameters {
         return this.#career_name
     }
     set ch_class_name(ch_class_name) {
-        if(typeof ch_class_name instanceof String)
+        if(typeof ch_class_name === "string")
             this.#ch_class_name = ch_class_name;
         else
             throw "ch_class_name[" + ch_class_name + "] is not a String";
     }
     get ch_class_name() {
         return this.#ch_class_name
+    }
+    set career_path(career_path) {
+        if(typeof career_path === "string")
+            this.#career_path = career_path;
+        else
+            throw "career_path[" + career_path + "] is not a String";
+    }
+    get career_path() {
+        return this.#career_path;
+    }
+    set status(status) {
+        if(typeof status === "string")
+            this.#status = status;
+        else
+            throw "status[" + status + "] is not a String";
+    }
+    get status() {
+        return this.#status;
+    }
+    set career_level(career_level) {
+        if(typeof career_level === "number")
+            this.#career_level = career_level;
+        else
+            throw "career_level[" + career_level + "] is not a number";
+    }
+    get career_level() {
+        return career_level;
     }
 
     getCharacteristicsCurrent(name) {
@@ -583,7 +614,7 @@ class CharacterParameters {
                 new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" name="fname"></td>'
                 new_row += '<td class="edit"><input type="text" id="skills__'+item.id+'" name="fname"></td>'
                 new_row += '<td class=""><img id="skills__is_basic_skill__'+item.id+'" src="/static/NO.png"></td>'
-                new_row += '<td class=""><img id="skills__is_carrer_skill__'+item.id+'" src="/static/NO.png"></td>'
+                new_row += '<td class=""><img id="skills__is_career_skill__'+item.id+'" src="/static/NO.png"></td>'
                 new_row += '<td class=""><img id="skills__is_species_skill__'+item.id+'" src="/static/NO.png"></td>'
                 new_row += '</tr>'
                 $("#skills_table").append(new_row)
@@ -597,10 +628,10 @@ class CharacterParameters {
             } else {
                 $('img#skills__is_basic_skill__'+item.id).attr("src", "/static/NO.png")
             }
-            if(item.is_carrer_skill == true) {
-                $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/img/tick.png")
+            if(item.is_career_skill == true) {
+                $('img#skills__is_career_skill__'+item.id).attr("src", "/static/img/tick.png")
             } else {
-                $('img#skills__is_carrer_skill__'+item.id).attr("src", "/static/NO.png")
+                $('img#skills__is_career_skill__'+item.id).attr("src", "/static/NO.png")
             }
             if(item.is_species_skill == true) {
                 $('img#skills__is_species_skill__'+item.id).attr("src", "/static/img/tick.png")
@@ -636,8 +667,11 @@ class CharacterParameters {
         $("input#height").val(characterParameters.height);
         $("select#species").val(this.#species_id);
 
-        $("input#carrer").val(this.#career_name);
+        $("input#career").val(this.#career_name);
         $("input#class").val(this.#ch_class_name);
+        $("input#career_path").val(this.#career_path);
+        $("input#status").val(this.#status);
+        $("input#career_level").val(this.#career_level);
 
         $("input#experience_current").val(characterParameters.bonus_xp);
 
@@ -693,7 +727,7 @@ class CharacterParameters {
                                                     skill_params['characteristics'],
                                                     skill_params['description'],
                                                     skill_params['is_basic_skill'],
-                                                    skill_params['is_carrer_skill'],
+                                                    skill_params['is_career_skill'],
                                                     skill_params['is_species_skill'],
                                                     skill_params['adv'],
                                                     skill_params['adv'],
@@ -719,8 +753,8 @@ class CharacterParameters {
 };
 
 const characterParameters = new CharacterParameters();
-const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_carrer_skills']
-const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "Carrer Skills"]
+const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_career_skills']
+const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "career Skills"]
 
 
 
@@ -775,6 +809,7 @@ function species_change() {
 }
 
 function selectSpeciesTalent(talens) {
+
     $.each(talens, function(i, item) {
         radio = '<input type="radio" id="SpeciesTalent_'+item['id']+'" name="SpeciesTalent" value="'+item['id']+'"><label for="SpeciesTalent_'+item['id']+'">'+item['name']+'</label><br>';
         $("div#step_1_species_talent_selection").append(radio)
@@ -825,10 +860,14 @@ function randomSpecies() {
         success: function(data) {
             console.log(data);
             characterParameters.needUpdate = true;
-            console.debug("hair:" + data['hair'] + " eyes:"+ data['eyes'])
-            characterParameters.bonus_xp = 20;
-            characterParameters.species_id = data['species_id'];
-            characterParameters.name = data['name'];
+
+            characterParameters.bonus_xp    = 20;
+            characterParameters.species_id  = data['species_id'];
+            characterParameters.name        = data['name'];
+            characterParameters.age         = data['age']
+            characterParameters.height      = data['height']
+            characterParameters.hair        = data['hair']
+            characterParameters.eyes        = data['eyes']
             $.each(data['species_skills'], function(i, item) {
                 characterParameters.appendSkill(item);
             });
@@ -879,8 +918,8 @@ function fill_species_skills_select() {
 
 function fill_career_skills_select() {
     $.each(characterParameters.skills, function(i, item) {
-        if(item.is_carrer_skill == true) {
-            $("#step_5_carrer_skills").append('<label for="career_skills_slider__'+item.id+'">'+item.name+'</label><input type="range" min="0" max="40" value="0" class="career_skills_slider" id="career_skills_slider__'+item.id+'" skill_id="'+item.id+'"><br>');
+        if(item.is_career_skill == true) {
+            $("#step_5_career_skills").append('<label for="career_skills_slider__'+item.id+'">'+item.name+'</label><input type="range" min="0" max="40" value="0" class="career_skills_slider" id="career_skills_slider__'+item.id+'" skill_id="'+item.id+'"><br>');
         }
     });
 
@@ -898,12 +937,12 @@ function fill_career_skills_select() {
         if(sum > 40) {
             over_40 = sum - 40
             console.log("career_skills to big:"+ over_40.toString() );
-            $("#step_5_carrer_skills_error").fadeIn("slow")
+            $("#step_5_career_skills_error").fadeIn("slow")
         }
-        setTimeout(function(){ $("#step_5_carrer_skills_error").fadeOut() }, 5000);
+        setTimeout(function(){ $("#step_5_career_skills_error").fadeOut() }, 5000);
         $(this).val(item_val - over_40);
-        $("#step_5_carrer_skills_sum").text(sum-over_40);
-        characterParameters.getSkill(item_id).adv_carrer = item_val
+        $("#step_5_career_skills_sum").text(sum-over_40);
+        characterParameters.getSkill(item_id).adv_career = item_val
 
     });
 }
@@ -932,8 +971,11 @@ function randomClass() {
             characer_id: characer_id,
         },
         success: function(data) {
-            characterParameters.carrer = data['career_name'];
-            characterParameters.class = data['ch_class_name'];
+            characterParameters.career_name     = data['career_name'];
+            characterParameters.ch_class_name   = data['ch_class_name'];
+            characterParameters.career_path     = data['career_path'];
+            characterParameters.status          = data['status'];
+            characterParameters.career_level    = data['career_level'];
             $.each(data['skills'], function(i, item) {
                 characterParameters.appendSkill(item);
             })
@@ -1458,4 +1500,5 @@ function main() {
     setInterval(function() {
         characterParameters.updateCharacterState();
     }, 100);
+
 }

@@ -163,10 +163,10 @@ def ajax_randomSpecies(request):
         character.save()
 
         species_skills = {}
-        Character2Skill.objects.filter(characters=character, is_basic_skill=False, is_species_skill=True, is_carrer_skill=True).delete()
+        Character2Skill.objects.filter(characters=character, is_basic_skill=False, is_species_skill=True, is_career_skill=True).delete()
         basic_skills = Character2Skill.objects.filter(characters=character)
         for ss in basic_skills.all():
-            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_carrer_skill': ss.is_carrer_skill}
+            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
         created = -1
 
         for ss in species.skills.all():
@@ -174,7 +174,7 @@ def ajax_randomSpecies(request):
                 ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0)
                 ch2Skill.is_species_skill = True
                 ch2Skill.save()
-                species_skills[ss.id] = {'id': ch2Skill.skills.id, 'name': ch2Skill.skills.name, 'characteristics': ch2Skill.skills.characteristics, 'description': ch2Skill.skills.description, 'adv': ch2Skill.adv , 'is_basic_skill':ch2Skill.is_basic_skill , 'is_species_skill': ch2Skill.is_species_skill, 'is_carrer_skill': ch2Skill.is_carrer_skill}
+                species_skills[ss.id] = {'id': ch2Skill.skills.id, 'name': ch2Skill.skills.name, 'characteristics': ch2Skill.skills.characteristics, 'description': ch2Skill.skills.description, 'adv': ch2Skill.adv , 'is_basic_skill':ch2Skill.is_basic_skill , 'is_species_skill': ch2Skill.is_species_skill, 'is_career_skill': ch2Skill.is_career_skill}
             except django.db.utils.IntegrityError as e:
                 logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
 
@@ -252,25 +252,28 @@ def ajax_randomClass(request):
             character.career = career
             character.ch_class = career.ch_class
             character.save()
-
-            for ss in CareersAdvanceScheme.objects.get(career=career).advances_level_1.skills.all():
+            ad = CareersAdvanceScheme.objects.get(career=career).advances_level_1
+            for ss in ad.skills.all():
                 try:
                     ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0)
-                    ch2Skill.is_carrer_skill = True
+                    ch2Skill.is_career_skill = True
                     ch2Skill.save()
                 except django.db.utils.IntegrityError as e:
                     logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
 
             skills = {}
             for ss in Character2Skill.objects.filter(characters=character).all():
-                logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_carrer_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_carrer_skill))
-                skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_carrer_skill': ss.is_carrer_skill}
+                logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
+                skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
 
 
             return JsonResponse({'status': 'ok',
                                  'career_name': career.name,
                                  'ch_class_name': character.ch_class.name,
-                                 'skills': skills
+                                 'skills': skills,
+                                 'career_path': ad.name,
+                                 'status': ad.earning_money,
+                                 'career_level' : 1
                                  })
         else:
             logger.error("ajax_randomClass career not found: career={}".format(career))

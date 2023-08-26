@@ -250,7 +250,7 @@ div#main div.create_character div.create_character_steps {
     display: none;
 }
 
-div#main div.create_character div.create_character_steps span#step_5_carrer_skills_error {
+div#main div.create_character div.create_character_steps span#step_5_career_skills_error {
     color: #FF0000;
     display:none;
 }
@@ -332,15 +332,15 @@ div#main div.character_sheet div.head table tr td  input#class {
     width: 270px;
 }
 
-div#main div.character_sheet div.head table tr td  input#carrer {
+div#main div.character_sheet div.head table tr td  input#career {
     width: 620px;
 }
 
-div#main div.character_sheet div.head table tr td  input#carrer_level {
+div#main div.character_sheet div.head table tr td  input#career_level {
     width: 620px;
 }
 
-div#main div.character_sheet div.head table tr td  input#carrer_path {
+div#main div.character_sheet div.head table tr td  input#career_path {
     width: 1005;
 }
 
