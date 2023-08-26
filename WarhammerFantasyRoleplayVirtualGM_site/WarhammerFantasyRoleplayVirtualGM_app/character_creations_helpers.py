@@ -3,6 +3,8 @@ import random
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import RandomTalentsTable
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
 
 import logging
 logger = logging.getLogger(__name__)
@@ -55,3 +57,18 @@ def get_species_tallens(speceies: Species):
         }
         species_talents_list.append(dic_talent)
     return species_talents_list
+
+def get_character_talents(character: Character):
+    characterTalents = Character2Talent.objects.filter(characters=character)
+    talents_list = []
+    for st in characterTalents:
+        dic_talent = {
+            'id': st.talent.my_talent_id,
+            'name': st.talent.name,
+            'max':  st.talent.max,
+            'tests': st.talent.tests,
+            'description': st.talent.description,
+            'ref': str(st.talent.ref)
+        }
+        talents_list.append(dic_talent)
+    return talents_list

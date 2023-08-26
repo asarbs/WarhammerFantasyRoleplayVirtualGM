@@ -179,10 +179,6 @@ def ajax_randomSpecies(request):
                 logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
 
         species_tallents = get_species_tallens(species)
-        Character2Talent.objects.filter(characters=character).delete()
-        for st in species_tallents:
-            ch2t, created = Character2Talent.objects.get_or_create(characters=character, talent_id=st['id'], taken=0)
-            ch2t.save()
 
         res = {'status': 'ok',
                'species_id': species.id,
@@ -198,6 +194,37 @@ def ajax_randomSpecies(request):
         return JsonResponse(res)
     logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_addTalentToCharacter(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    character_id = request.POST['characer_id']
+    talent_id = request.POST['new_talent_id']
+    try:
+        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=0)
+        char2tal.save();
+    except django.db.utils.IntegrityError as e:
+        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
+    return JsonResponse({'status': 'ok'})
+
+def ajax_replaceTalentToCharacter(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    character_id = request.POST['characer_id']
+    new_talent_id = request.POST['new_talent_id']
+    old_talent_id = request.POST['old_talent_id']
+    logger.debug("character_id={}; new_talent_id={}; old_talent_id={}".format(character_id, new_talent_id, old_talent_id))
+    try:
+        Character2Talent.objects.get(characters_id=character_id, talent_id=old_talent_id).delete()
+    except Character2Talent.DoesNotExist as e:
+        logger.debug("{}: old_talent_id={};".format(e, old_talent_id))
+    try:
+        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=new_talent_id, taken=0)
+        char2tal.save();
+    except django.db.utils.IntegrityError as e:
+        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
+    talents = get_character_talents(Character.objects.get(id = character_id))
+    return JsonResponse({'status': 'ok', 'talents': talents})
 
 def ajax_randomClass(request):
     if request.method == 'POST':

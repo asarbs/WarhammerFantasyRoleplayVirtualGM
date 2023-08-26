@@ -17,6 +17,8 @@
     </div>
     <div id="step_1_species" class="create_character_steps">
         Your Character will be a Human, Dwarf, Halfling, High Elf, or Wood Elf. Alternatively, you can roll <img src="{% static "/img/dice_icon.png" %}" id="img_random_species" class="img_random" />, consult the Random Species Table, and gain +20 XP if you accept the result.
+        <div id="step_1_species_talent_selection">
+        </div>
     </div>
     <div id="step_2_class" class="create_character_steps">
         You can simply choose your Class and Career from the options below, write them down on your Character Sheet and move on to step 3. Alternatively, if you are unsure which to choose, or just want to randomly select for bonus XP: <br>
@@ -199,7 +201,7 @@
             <tr>
                 <td class="head">&nbsp;</td>
                 <td class="head">WS</td>
-                <td class="head">BA</td>
+                <td class="head">BS</td>
                 <td class="head">S</td>
                 <td class="head">T</td>
                 <td class="head">I</td>
@@ -367,7 +369,7 @@
 </div>
 <div class="character_sheet">
     <div class="basic_skills">
-        <table id='skills_table' border="1">
+        <table id='skills_table' border="0">
             <tr>
                 <th colspan="8" class="block_name">
                     SKILLS
@@ -396,7 +398,7 @@
                     SS
                 </th>
             </tr>
-        {% for basic_skill in basic_skills %}
+        {% comment %} {% for basic_skill in basic_skills %}
             <tr class="block_body">
                 <td id="skills_name__{{ basic_skill.id }}" class="left">
                 {{ basic_skill.name }}
@@ -423,7 +425,7 @@
                     <img id="skills__is_species_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
                 </td>
             </tr>
-        {% endfor %}
+        {% endfor %} {% endcomment %}
         </table>
     </div>
 
