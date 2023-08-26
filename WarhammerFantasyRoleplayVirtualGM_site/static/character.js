@@ -41,6 +41,24 @@ class Skill {
     get is_species_skill() {
         return this.#is_species_skill
     }
+    set adv_standard(adv) {
+        if(typeof adv === "number")
+            this.#adv_standard = adv;
+        else
+            throw "" + adv + " is not a number";
+    }
+    set adv_carrer(adv) {
+        if(typeof adv === "number")
+            this.#adv_carrer = adv;
+        else
+            throw "" + adv + " is not a number";
+    }
+    set adv_species(adv) {
+        if(typeof adv === "number")
+            this.#adv_species = adv;
+        else
+            throw "" + adv + " is not a number";
+    }
     get adv() {
         return this.#adv_standard + this.#adv_carrer + this.#adv_species;
     }
@@ -130,11 +148,10 @@ class CharacterParameters {
         4: {'walk': 8,"run": 16},
         5: {'walk': 10,"run": 20},
         };
-
+    skills_species                      = {};
     constructor() {
         console.log("CharacterParameters::constructor");
     }
-
     set RandomAttributesTable(table) {
         this.#RandomAttributesTable = table;
     }
@@ -682,6 +699,13 @@ class CharacterParameters {
                                                     skill_params['adv'],
                                                     skill_params['adv']);
     }
+    get skills() {
+        return this.#skills;
+    }
+    getSkill(id) {
+        console.log("get_skill("+id+")");
+        return this.#skills[id];
+    }
     appendTalent(talent_params) {
         //constructor(id, name, max, test, description)
         this.#talents = {};
@@ -832,14 +856,17 @@ function nextStep() {
 }
 
 function fill_species_skills_select() {
+    console.log("fill_species_skills_select: characterParameters.character_creation_step="+ characterParameters.character_creation_step);
+    console.log(characterParameters.skills);
     $("select#species_skills_5_1 option").remove()
     $("select#species_skills_5_2 option").remove()
     $("select#species_skills_5_3 option").remove()
     $("select#species_skills_3_1 option").remove()
     $("select#species_skills_3_2 option").remove()
     $("select#species_skills_3_3 option").remove()
-    $.each(character_creation_state['skills'], function (i, item) {
-        if (character_creation_state['character_creation_step'] == 3 && item.is_species_skill == true) {
+    $.each(characterParameters.skills, function (i, item) {
+        console.log(item.name+":"+item.is_species_skill);
+        if (characterParameters.character_creation_step == 3 && item.is_species_skill == true) {
             $("select#species_skills_5_1").append($('<option>', { value: item.id, text: item.name }));
             $("select#species_skills_5_2").append($('<option>', { value: item.id, text: item.name }));
             $("select#species_skills_5_3").append($('<option>', { value: item.id, text: item.name }));
@@ -851,7 +878,7 @@ function fill_species_skills_select() {
 }
 
 function fill_career_skills_select() {
-    $.each(character_creation_state['skills'], function(i, item) {
+    $.each(characterParameters.skills, function(i, item) {
         if(item.is_carrer_skill == true) {
             $("#step_5_carrer_skills").append('<label for="career_skills_slider__'+item.id+'">'+item.name+'</label><input type="range" min="0" max="40" value="0" class="career_skills_slider" id="career_skills_slider__'+item.id+'" skill_id="'+item.id+'"><br>');
         }
@@ -876,11 +903,8 @@ function fill_career_skills_select() {
         setTimeout(function(){ $("#step_5_carrer_skills_error").fadeOut() }, 5000);
         $(this).val(item_val - over_40);
         $("#step_5_carrer_skills_sum").text(sum-over_40);
-        $.each(character_creation_state['skills'], function(i, item) {
-            if(item.id == item_id) {
-                item.adv = parseInt(item.adv) + item_val - over_40;
-            }
-        });
+        characterParameters.getSkill(item_id).adv_carrer = item_val
+
     });
 }
 
@@ -1355,15 +1379,18 @@ function getRandomAttributesTable() {
 
 function saveSkillAdv(eventData, points) {
     new_adv_id = $(eventData.currentTarget).val()
-    old_skill_adv = character_creation_state['skills_species'][eventData.currentTarget.id]
-    console.log(old_skill_adv)
-    character_creation_state['skills_species'][eventData.currentTarget.id] = new_adv_id
-    $.each(character_creation_state['skills'], function(i, item) {
-        if(item.id == old_skill_adv) {
-            item.adv = 0
+    skill = characterParameters.getSkill(new_adv_id);
+
+    old_skill_adv_db_id = characterParameters.skills_species[eventData.currentTarget.id]
+    skill.adv_species = parseInt(new_adv_id)
+    characterParameters.skills_species[eventData.currentTarget.id] = new_adv_id;
+
+    $.each(characterParameters.skills, function(i, item) {
+        if(item.id == old_skill_adv_db_id) {
+            item.adv_species = 0
         }
         if(item.id == new_adv_id) {
-            item.adv = points
+            item.adv_species = parseInt(points)
             characer_id = $("input[name='characer_id']").val()
             $.ajax({
                 type: "POST",
@@ -1372,7 +1399,7 @@ function saveSkillAdv(eventData, points) {
                     characer_id: characer_id,
                     skill_id: new_adv_id,
                     points: points,
-                    old_skill_adv: old_skill_adv
+                    old_skill_adv: old_skill_adv_db_id
                 },
                 success: function(data) {
                 }
@@ -1412,19 +1439,19 @@ function main() {
     // $("select#hair").on("change", saveHair);
     // $("select#eyes").on("change", saveEyes);
 
-    // var eventData5_1
-    // var eventData5_2
-    // var eventData5_3
-    // var eventData3_1
-    // var eventData3_2
-    // var eventData3_3
+    var eventData5_1
+    var eventData5_2
+    var eventData5_3
+    var eventData3_1
+    var eventData3_2
+    var eventData3_3
 
-    // $("select#species_skills_5_1").on("change", eventData5_1, saveSkillAdv5);
-    // $("select#species_skills_5_2").on("change", eventData5_2, saveSkillAdv5);
-    // $("select#species_skills_5_3").on("change", eventData5_3, saveSkillAdv5);
-    // $("select#species_skills_3_1").on("change", eventData3_1, saveSkillAdv3);
-    // $("select#species_skills_3_2").on("change", eventData3_2, saveSkillAdv3);
-    // $("select#species_skills_3_3").on("change", eventData3_3, saveSkillAdv3);
+    $("select#species_skills_5_1").on("change", eventData5_1, saveSkillAdv5);
+    $("select#species_skills_5_2").on("change", eventData5_2, saveSkillAdv5);
+    $("select#species_skills_5_3").on("change", eventData5_3, saveSkillAdv5);
+    $("select#species_skills_3_1").on("change", eventData3_1, saveSkillAdv3);
+    $("select#species_skills_3_2").on("change", eventData3_2, saveSkillAdv3);
+    $("select#species_skills_3_3").on("change", eventData3_3, saveSkillAdv3);
 
     $("img#img_random_characteristics").click(randomAttributes);
 
