@@ -14,6 +14,7 @@ RUN apt-get install -y python3-pip
 RUN apt-get install -y git
 RUN apt-get install -y python3-bs4
 RUN apt-get install -y pipx
+RUN apt-get install -y sqlite3
 RUN rm -f /usr/lib/python3.x/EXTERNALLY-MANAGED
 RUN pip3 install requests django-static-jquery django-autocomplete-light django-tinymce django-tables2 --break-system-packages
 
