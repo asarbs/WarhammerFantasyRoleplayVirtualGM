@@ -19,25 +19,27 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
-from WarhammerFantasyRoleplayVirtualGM_app.models import Player
+from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
-from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
+from WarhammerFantasyRoleplayVirtualGM_app.models import Career
+from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Skill
-from WarhammerFantasyRoleplayVirtualGM_app.models import Species
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
+from WarhammerFantasyRoleplayVirtualGM_app.models import ClassTrappings
 from WarhammerFantasyRoleplayVirtualGM_app.models import ExampleName
-from WarhammerFantasyRoleplayVirtualGM_app.models import Career
-from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
 from WarhammerFantasyRoleplayVirtualGM_app.models import Eyes
 from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
+from WarhammerFantasyRoleplayVirtualGM_app.models import Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
+from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
+from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
-from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
-from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Trappingl
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -170,6 +172,8 @@ def ajax_randomClass(request):
             character.career = career
             character.ch_class = career.ch_class
             character.save()
+
+            Character2Skill.objects.filter(characters=character).delete()
             ad = CareersAdvanceScheme.objects.get(career=career).advances_level_1
             for ss in ad.skills.all():
                 try:
@@ -185,13 +189,41 @@ def ajax_randomClass(request):
                 skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
 
 
+            Character2Trappingl.objects.filter(characters=character).delete()
+            for classTraping in ClassTrappings.objects.filter(ch_class=career.ch_class).all():
+                try:
+                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=classTraping.trapping, enc=0)
+                    logger.debug("ClassTrappings.trapping.id={} name={};".format(classTraping.trapping.id, classTraping.trapping.name))
+                    ch2STrappingl.save()
+                except django.db.utils.IntegrityError as e:
+                    logger.debug("UNIQUE constraint failed: characters:{} Trappings:{} created:{}".format(character.id, classTraping.trapping.name, created))
+
+            for trapping in ad.trappings.all():
+                try:
+                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=trapping, enc=0)
+                    logger.debug("ad.trapping.id={} name={}".format(ch2STrappingl.id, ch2STrappingl.trapping.name))
+                    ch2STrappingl.save()
+                except django.db.utils.IntegrityError as e:
+                    logger.debug("UNIQUE constraint failed: characters:{} Trappings:{} created:{}".format(character.id, trapping.name, created))
+
+            trappings = {}
+            for ch2STrappingl in Character2Trappingl.objects.filter(characters=character).all():
+                logger.debug("'id': {}, 'name': {}, 'description': {}, 'enc': {}".format(ch2STrappingl.id, ch2STrappingl.trapping.name, ch2STrappingl.trapping.description, ch2STrappingl.enc))
+                trappings[ch2STrappingl.id] = {
+                    'id': ch2STrappingl.id,
+                    'name': ch2STrappingl.trapping.name,
+                    'description': ch2STrappingl.trapping.description,
+                    'enc': ch2STrappingl.enc
+                }
+
             return JsonResponse({'status': 'ok',
                                  'career_name': career.name,
                                  'ch_class_name': character.ch_class.name,
                                  'skills': skills,
                                  'career_path': ad.name,
                                  'status': ad.earning_money,
-                                 'career_level' : 1
+                                 'career_level' : 1,
+                                 'trappings': trappings
                                  })
         else:
             logger.error("ajax_randomClass career not found: career={}".format(career))

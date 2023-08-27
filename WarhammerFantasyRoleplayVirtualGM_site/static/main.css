@@ -744,11 +744,22 @@ div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trapping
     float: left;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table {
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table {
     /* background-color: #35fbd6; */
     width: 95%;
     margin-left: 10px;
     margin-top: 10px;
+}
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr th.block_name  {
+    font-size: 36px;
+}
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr.block_header  {
+    font-size: 20px;
+}
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit input  {
+    position: relative;
+    width: 36px;
 }
 
 div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right {

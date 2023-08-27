@@ -6,6 +6,7 @@ from django.db.models import Q
 
 from WarhammerFantasyRoleplayVirtualGM_app.forms import SpeciesForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import CareerPathForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import ClassTrappingsForm
 
 
 # Register your models here.
@@ -132,6 +133,16 @@ class RandomTalentsTableAdmin(admin.ModelAdmin):
     list_per_page = 1000
 
 
+class ClassTrappingsAdmin(admin.ModelAdmin):
+    form = ClassTrappingsForm
+    list_display = ("ch_class", "trapping")
+    ordering = ("ch_class",)
+    list_filter = ("ch_class",)
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
+
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
@@ -154,3 +165,4 @@ admin.site.register(models.RandomAttributesTable, RandomAttributesTableAdmin)
 admin.site.register(models.CareersAdvanceScheme, CareersAdvanceSchemeAdmin)
 admin.site.register(models.Trapping, TrappingAdmin)
 admin.site.register(models.RandomTalentsTable, RandomTalentsTableAdmin)
+admin.site.register(models.ClassTrappings, ClassTrappingsAdmin)

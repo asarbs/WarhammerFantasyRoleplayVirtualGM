@@ -285,6 +285,14 @@ class Character(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+class Character2Trappingl(models.Model):
+    characters = models.ForeignKey(Character, on_delete=models.CASCADE)
+    trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
+    enc = models.IntegerField(default="0", verbose_name="enc")
+
+    class Meta:
+        unique_together = ('characters', 'trapping',)
+
 class Character2Skill(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     skills = models.ForeignKey(Skils, on_delete=models.CASCADE)
@@ -362,3 +370,16 @@ class RandomTalentsTable(models.Model):
     @property
     def my_talent_id(self):
         return self.talent.id
+
+class ClassTrappings(models.Model):
+    ch_class = models.ForeignKey(Class, verbose_name="Class", default="1", on_delete=models.CASCADE)
+    trapping = models.ForeignKey(Trapping, verbose_name="Trapping", default="1", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('ch_class', 'trapping',)
+
+    def __str__(self):
+        return u"{0} - {1}".format(self.ch_class.name, self.trapping.name)
+
+    def __unicode__(self):
+        return u"{0} - {1}".format(self.ch_class.name, self.trapping.name)

@@ -63,7 +63,53 @@ class Skill {
         return this.#adv_standard + this.#adv_career + this.#adv_species;
     }
 };
-
+class Trapping {
+    #id             = 0
+    #name           = ""
+    #enc            = 0
+    #description    = "";
+    constructor(id, name, enc, description) {
+        this.#id = id;
+        this.#name = name;
+        this.#enc = enc;
+        this.#description = description;
+    }
+    get id() {
+        return this.#id;
+    }
+    set name(name) {
+        if(typeof name === "string") {
+            this.#name = name;
+            $("td#trappings_name_"+this.#id).val(name);
+        }
+        else
+            throw "" + name + " is not a string";
+    }
+    get name() {
+        return this.#name;
+    }
+    set enc(enc) {
+        if(typeof enc === "string") {
+            this.#enc = enc;
+            $("td#trappings_enc_"+this.#id).val(enc);
+        }
+        else
+            throw "Trapping enc=" + enc + " is not a string";
+    }
+    get enc() {
+        return this.#enc;
+    }
+    set description(description) {
+        if(typeof enc === "string") {
+            this.#description = description;
+        }
+        else
+            throw "Trapping description=" + enc + " is not a string";
+    }
+    get enc() {
+        return this.#description;
+    }
+}
 class Talent {
     #id             = 0
     #name           = ""
@@ -140,6 +186,7 @@ class CharacterParameters {
     #resilience_resilience              = 0;
     #resilience_resolve                 = 0;
     #skills                             = {};
+    #trappings                          = {};
     #species_id                         = 0;
     #status                             = "";
     #talents                            = {};
@@ -753,7 +800,7 @@ class CharacterParameters {
         $("table#talents_table tr.block_body").remove();
         $.each(this.#talents, function(i, item) {
             var new_row = ""
-            if(!$('#talents_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
+            if(!$('#talents_adv__'+item.id).length) {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
                 new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" name="fname"></td>'
@@ -763,10 +810,32 @@ class CharacterParameters {
             }
         });
     }
+    updateTrappingsTable() {
+        if(!this.trappingsNeedUpdate) {
+            return;
+        }
+        console.log("updateTrappingsTable");
+        this.trappingsNeedUpdate = false;
+        $("table#trappings_table tr.block_body").remove();
+        $.each(this.#trappings, function(i, item) {
+            console.log("updateTrappingsTable: "+item.id);
+            var new_row = ""
+            if(!$('#trappings_enc__'+item.id).length) {
+                new_row = '<tr class="block_body">'
+                new_row += '<td id="trappings_name__'+item.id+'" class="left">'+item.name+'</td>'
+                new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname"></td>'
+                new_row += '</tr>'
+                $("#trappings_table").append(new_row)
+            }
+        });
+    }
+
+
     updateCharacterState() {
         this.updateStaticCharacterSheet();
         this.updateSkillTable()
         this.updateTalentsTable()
+        this.updateTrappingsTable()
     }
     appendSkill(skill_params) {
         this.#skills[skill_params['id']] = new Skill(skill_params['id'],
@@ -787,8 +856,23 @@ class CharacterParameters {
         console.log("get_skill("+id+")");
         return this.#skills[id];
     }
+    deleteSkills() {
+        console.log("deleteSkills");
+        this.#skills = {};
+    }
+    appendTrappings(trapping) {
+        console.log("appendTrappings:"+ trapping['id']+"; "+trapping['name']+"; "+trapping['description']+"; "+trapping['enc']);
+        this.#trappings[trapping['id']] = new Trapping(trapping['id'],
+                                                    trapping['name'],
+                                                    trapping['description'],
+                                                    trapping['enc']);
+        this.trappingsNeedUpdate = true;
+    }
+    deleteTrappings() {
+        console.log("deleteTrappings");
+        this.#trappings = {};
+    }
     appendTalent(talent_params) {
-        //constructor(id, name, max, test, description)
         this.#talents = {};
         this.#talents[talent_params['id']] = new Talent(talent_params['id'],
         talent_params['name'],
@@ -1015,8 +1099,13 @@ function randomClass() {
             characterParameters.career_path     = data['career_path'];
             characterParameters.status          = data['status'];
             characterParameters.career_level    = data['career_level'];
+            characterParameters.deleteSkills()
             $.each(data['skills'], function(i, item) {
                 characterParameters.appendSkill(item);
+            })
+            characterParameters.deleteTrappings()
+            $.each(data['trappings'], function(i, item) {
+                characterParameters.appendTrappings(item);
             })
         }
     });
