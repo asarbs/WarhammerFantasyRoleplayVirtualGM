@@ -93,105 +93,23 @@ def addCharacter(request):
 
 def ajax_save_character_species(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
         species_id = request.POST['species_id']
         species = Species.objects.get(id=species_id)
-        eyes_rand = random.randrange(1, 10) + random.randrange(1, 10)
-        hair_rand = random.randrange(1, 10) + random.randrange(1, 10)
-
-        q_species = Q(species=species)
-
-        character = Character.objects.get(id = character_id)
-        character.species = Species.objects.get(id = species_id)
-        character.eyes = Eyes.objects.get(q_species & Q(random_table_start__lte = eyes_rand) & Q(random_table_end__gte = eyes_rand))
-        character.hair = Hair.objects.get(q_species & Q(random_table_start__lte = hair_rand) & Q(random_table_end__gte = hair_rand))
-        character.age = get_age(species.name)
-        character.height = get_height(species.name)
-        character.save()
-
-        species_skills = {}
-
-        Character2Skill.objects.filter(characters=character, type=Character2Skill.SkillType.NORMAL_SKILL).delete()
-        basic_skills = Character2Skill.objects.filter(characters=character)
-        for ss in basic_skills.all():
-            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'type': 'basic_skill'}
-
-        created = -1
-        for ss in species.skills.all():
-            species_skills[ss.id] = {'id': ss.id, 'name': ss.name, 'characteristics': ss.characteristics, 'description': ss.description, 'adv': 0, 'type': 'species_skill'}
-            try:
-                ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0, type=Character2Skill.SkillType.NORMAL_SKILL)
-                ch2Skill.save()
-            except django.db.utils.IntegrityError as e:
-                logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
-
-        Character2Talent.objects.filter(characters=character).delete()
-        species_tallents = get_species_tallens(species)
-        for st in species_tallents:
-            ch2t, created = Character2Talent.objects.get_or_create(characters=character, talent_id=st['id'], taken=0)
-            ch2t.save()
-
-        return JsonResponse({'status': 'ok', 'species_id': species_id, 'eyes': character.eyes.id, 'hair': character.hair.id, 'age': character.age, 'height': character.height, 'species_skills': species_skills, 'species_tallents':species_tallents})
+        return set_character_species(species=species, character_id=request.POST['characer_id'])
     logger.error("ajax_save_character_species is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
 def ajax_randomSpecies(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
-        character = Character.objects.get(id = character_id)
         species_list = Species.objects.all()
         r = random.randrange(1, 100)
-        eyes_rand = random.randrange(1, 10) + random.randrange(1, 10)
-        hair_rand = random.randrange(1, 10) + random.randrange(1, 10)
         species = None
         for s in species_list:
             if r >= s.random_interal_start and r <= s.random_interal_end:
                 species = s
                 break
+        return set_character_species(species=species, character_id=request.POST['characer_id'])
 
-        names = ExampleName.objects.filter(species = species)
-        name = names[random.randrange(0, len(names))]
-
-        q_species = Q(species=species)
-
-        character.name = name.name
-        character.species = species
-        character.eyes = Eyes.objects.get(q_species & Q(random_table_start__lte = eyes_rand) & Q(random_table_end__gte = eyes_rand))
-        character.hair = Hair.objects.get(q_species & Q(random_table_start__lte = hair_rand) & Q(random_table_end__gte = hair_rand))
-        character.age = get_age(species.name)
-        character.height = get_height(species.name)
-        character.save()
-
-        species_skills = {}
-        Character2Skill.objects.filter(characters=character, is_basic_skill=False, is_species_skill=True, is_career_skill=True).delete()
-        basic_skills = Character2Skill.objects.filter(characters=character)
-        for ss in basic_skills.all():
-            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
-        created = -1
-
-        for ss in species.skills.all():
-            try:
-                ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0)
-                ch2Skill.is_species_skill = True
-                ch2Skill.save()
-                species_skills[ss.id] = {'id': ch2Skill.skills.id, 'name': ch2Skill.skills.name, 'characteristics': ch2Skill.skills.characteristics, 'description': ch2Skill.skills.description, 'adv': ch2Skill.adv , 'is_basic_skill':ch2Skill.is_basic_skill , 'is_species_skill': ch2Skill.is_species_skill, 'is_career_skill': ch2Skill.is_career_skill}
-            except django.db.utils.IntegrityError as e:
-                logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
-
-        species_tallents = get_species_tallens(species)
-
-        res = {'status': 'ok',
-               'species_id': species.id,
-               'name': name.name,
-               'eyes': character.eyes.id,
-               'hair': character.hair.id,
-               'age': character.age,
-               'height': character.height,
-               'species_skills': species_skills,
-               'species_tallents':species_tallents
-               }
-
-        return JsonResponse(res)
     logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
@@ -489,7 +407,6 @@ def ajax_saveHair(request):
         hair = request.POST['hair']
         character = Character.objects.get(id = character_id)
         if character is not None:
-            logger.debug("hair:{}".format(hair))
             hair = Hair.objects.get(id=hair)
             character.hair    = hair
             character.save()
@@ -507,15 +424,12 @@ def ajax_saveEyes(request):
         character_id = request.POST['characer_id']
         character = Character.objects.get(id = character_id)
         if character is not None:
-            eye_color, created = Eyes.objects.get_or_create(name=request.POST['eyes'])
-            if created:
-                character.eyes    = eye_color
-                character.save()
-                ret = {'status': 'ok'  }
-                logger.debug(ret)
-                return JsonResponse(ret)
-            else :
-                logger.error("ajax_saveEyes: eyesColor:{}; character_id:{}".format(request.POST['eyes'],character_id ))
+            eye_color = Eyes.objects.get(name=request.POST['eyes'])
+            character.eyes = eye_color
+            character.save()
+            ret = {'status': 'ok'  }
+            logger.debug(ret)
+            return JsonResponse(ret)
         else:
             logger.error("ajax_saveEyes not found: character_id={}".format(character_id))
             return JsonResponse({'status': 'Invalid request'}, status=400)

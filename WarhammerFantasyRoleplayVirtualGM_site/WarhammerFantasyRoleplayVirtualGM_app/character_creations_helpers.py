@@ -1,10 +1,29 @@
 import random
 
+import django
+from django.http import JsonResponse
+from django.db.models import Q
+
+from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
+from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
+from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import Career
+from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Skill
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
+from WarhammerFantasyRoleplayVirtualGM_app.models import ExampleName
+from WarhammerFantasyRoleplayVirtualGM_app.models import Eyes
+from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
+from WarhammerFantasyRoleplayVirtualGM_app.models import Player
+from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
+from WarhammerFantasyRoleplayVirtualGM_app.models import RandomTalentsTable
+from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
-from WarhammerFantasyRoleplayVirtualGM_app.models import RandomTalentsTable
-from WarhammerFantasyRoleplayVirtualGM_app.models import Character
-from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
+from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 
 import logging
 logger = logging.getLogger(__name__)
@@ -72,3 +91,52 @@ def get_character_talents(character: Character):
         }
         talents_list.append(dic_talent)
     return talents_list
+
+def set_character_species(species: Species, character_id: int):
+        character = Character.objects.get(id = character_id)
+        eyes_rand = random.randrange(1, 10) + random.randrange(1, 10)
+        hair_rand = random.randrange(1, 10) + random.randrange(1, 10)
+
+        names = ExampleName.objects.filter(species = species)
+        name = names[random.randrange(0, len(names))]
+
+        q_species = Q(species=species)
+
+        character.name = name.name
+        character.species = species
+        character.eyes = Eyes.objects.get(q_species & Q(random_table_start__lte = eyes_rand) & Q(random_table_end__gte = eyes_rand))
+        character.hair = Hair.objects.get(q_species & Q(random_table_start__lte = hair_rand) & Q(random_table_end__gte = hair_rand))
+        character.age = get_age(species.name)
+        character.height = get_height(species.name)
+        character.save()
+
+        species_skills = {}
+        Character2Skill.objects.filter(characters=character, is_basic_skill=False, is_species_skill=True, is_career_skill=True).delete()
+        basic_skills = Character2Skill.objects.filter(characters=character)
+        for ss in basic_skills.all():
+            species_skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
+        created = -1
+
+        for ss in species.skills.all():
+            try:
+                ch2Skill, created = Character2Skill.objects.get_or_create(characters=character, skills=ss, adv=0)
+                ch2Skill.is_species_skill = True
+                ch2Skill.save()
+                species_skills[ss.id] = {'id': ch2Skill.skills.id, 'name': ch2Skill.skills.name, 'characteristics': ch2Skill.skills.characteristics, 'description': ch2Skill.skills.description, 'adv': ch2Skill.adv , 'is_basic_skill':ch2Skill.is_basic_skill , 'is_species_skill': ch2Skill.is_species_skill, 'is_career_skill': ch2Skill.is_career_skill}
+            except django.db.utils.IntegrityError as e:
+                logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
+
+        species_tallents = get_species_tallens(species)
+
+        res = {'status': 'ok',
+               'species_id': species.id,
+               'name': name.name,
+               'eyes': character.eyes.id,
+               'hair': character.hair.id,
+               'age': character.age,
+               'height': character.height,
+               'species_skills': species_skills,
+               'species_tallents':species_tallents
+               }
+
+        return JsonResponse(res)

@@ -521,7 +521,7 @@ class CharacterParameters {
     set movement_movement(movement_movement) {
         if(typeof movement_movement === "number") {
             this.#movement_movement = movement_movement;
-            $("input#movement_movement"           ).val(characterParameters.movement_movement)  
+            $("input#movement_movement"           ).val(characterParameters.movement_movement)
             $("input#movement_walk"               ).val(characterParameters.movement[characterParameters.movement_movement]['walk'])
             $("input#movement_run"                ).val(characterParameters.movement[characterParameters.movement_movement]['run'])
         }
@@ -803,7 +803,7 @@ const character_creation_steps_header = ["Species", "Class", "Characteristics", 
 
 
 
-function species_change() {
+function selectSpecies() {
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     });
@@ -818,37 +818,21 @@ function species_change() {
             species_id: val
         },
         success: function(data) {
-            console.log("hair:" + data['hair'] + " eyes:"+ data['eyes'])
+            console.log(data);
+            characterParameters.needUpdate = true;
 
-            $("select#species").val(data['species_id']);
-            character_creation_state['bonus_xp'] = 0;
-
-            $("select#hair").empty()
-            $("select#eyes").empty()
-
-            $.each(character_creation_state['RandomHairTable'][val], function(i, item) {
-                console.log(item)
-                $("select#hair").append($('<option>', {value: item.val, text: item.name}))
-            });
-            $.each(character_creation_state['RandomEyesTable'][val], function(i, item) {
-                $("select#eyes").append($('<option>', {value: item.val, text: item.name}))
-            });
-            character_creation_state['skills'] = []
-            $("table#skills_table tr.block_body").remove()
+            characterParameters.bonus_xp    = 0;
+            characterParameters.species_id  = data['species_id'];
+            characterParameters.name        = data['name'];
+            characterParameters.age         = data['age']
+            characterParameters.height      = data['height']
+            characterParameters.hair        = data['hair']
+            characterParameters.eyes        = data['eyes']
             $.each(data['species_skills'], function(i, item) {
-                character_creation_state['skills'].push(item)
-            })
-            fill_species_skills_select();
+                characterParameters.appendSkill(item);
+            });
 
-            $("table#talents_table tr.block_body").remove()
-            $.each(data['species_tallents'], function(i, item) {
-                character_creation_state['talents'].push(item)
-            })
-
-            $("input#age").val(data['age'])
-            $("input#height").val(data['height'])
-            $("select#hair").val(data['hair'])
-            $("select#eyes").val(data['eyes'])
+            selectSpeciesTalent(data['species_tallents']);
         }
     });
 }
@@ -1515,7 +1499,7 @@ function main() {
         jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpFate(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownFate(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
     });
 
-    // $("select#species").on("change", species_change);
+    $("select#species").on("change", selectSpecies);
     $("img#img_character_creaton_next").click(nextStep);
 
     $("img#img_random_species").click(randomSpecies);
