@@ -634,8 +634,10 @@ class CharacterParameters {
         return this.#ch_class_name
     }
     set career_path(career_path) {
-        if(typeof career_path === "string")
+        if(typeof career_path === "string") {
             this.#career_path = career_path;
+            $("input#career_path").val(this.#career_path);
+        }
         else
             throw "career_path[" + career_path + "] is not a String";
     }
@@ -932,6 +934,14 @@ function fill_species_skills_select() {
     $("select#species_skills_3_1 option").remove()
     $("select#species_skills_3_2 option").remove()
     $("select#species_skills_3_3 option").remove()
+
+    $("select#species_skills_5_1").append($('<option>', { value: "-", text: "-" }));
+    $("select#species_skills_5_2").append($('<option>', { value: "-", text: "-" }));
+    $("select#species_skills_5_3").append($('<option>', { value: "-", text: "-" }));
+    $("select#species_skills_3_1").append($('<option>', { value: "-", text: "-" }));
+    $("select#species_skills_3_2").append($('<option>', { value: "-", text: "-" }));
+    $("select#species_skills_3_3").append($('<option>', { value: "-", text: "-" }));
+
     $.each(characterParameters.skills, function (i, item) {
         console.log(item.name+":"+item.is_species_skill);
         if (characterParameters.character_creation_step == 3 && item.is_species_skill == true) {
@@ -1451,34 +1461,57 @@ function getRandomAttributesTable() {
 }
 
 function saveSkillAdv(eventData, points) {
-    new_adv_id = $(eventData.currentTarget).val()
-    skill = characterParameters.getSkill(new_adv_id);
+    new_adv_id = $(eventData.currentTarget).val();
 
     old_skill_adv_db_id = characterParameters.skills_species[eventData.currentTarget.id]
-    skill.adv_species = parseInt(new_adv_id)
-    characterParameters.skills_species[eventData.currentTarget.id] = new_adv_id;
+    if(new_adv_id  === '-') {
+        $.each(characterParameters.skills, function(i, item) {
+            if(item.id == old_skill_adv_db_id) {
+                item.adv_species = 0
+                characer_id = $("input[name='characer_id']").val()
+                $.ajax({
+                    type: "POST",
+                    url: "ajax_saveSkillAdv",
+                    data: {
+                        characer_id: characer_id,
+                        skill_id: 0,
+                        points: points,
+                        old_skill_adv: old_skill_adv_db_id
+                    },
+                    success: function(data) {
+                    }
+                });
+            }
+        });
+    }
+    else {
+        new_adv_id = $(eventData.currentTarget).val()
+        skill = characterParameters.getSkill(new_adv_id);
+        skill.adv_species = parseInt(new_adv_id)
+        characterParameters.skills_species[eventData.currentTarget.id] = new_adv_id;
 
-    $.each(characterParameters.skills, function(i, item) {
-        if(item.id == old_skill_adv_db_id) {
-            item.adv_species = 0
-        }
-        if(item.id == new_adv_id) {
-            item.adv_species = parseInt(points)
-            characer_id = $("input[name='characer_id']").val()
-            $.ajax({
-                type: "POST",
-                url: "ajax_saveSkillAdv",
-                data: {
-                    characer_id: characer_id,
-                    skill_id: new_adv_id,
-                    points: points,
-                    old_skill_adv: old_skill_adv_db_id
-                },
-                success: function(data) {
-                }
-            });
-        }
-    });
+        $.each(characterParameters.skills, function(i, item) {
+            if(item.id == old_skill_adv_db_id) {
+                item.adv_species = 0
+            }
+            if(item.id == new_adv_id) {
+                item.adv_species = parseInt(points)
+                characer_id = $("input[name='characer_id']").val()
+                $.ajax({
+                    type: "POST",
+                    url: "ajax_saveSkillAdv",
+                    data: {
+                        characer_id: characer_id,
+                        skill_id: new_adv_id,
+                        points: points,
+                        old_skill_adv: old_skill_adv_db_id
+                    },
+                    success: function(data) {
+                    }
+                });
+            }
+        });
+    }
 }
 function saveSkillAdv5(eventData) {
     saveSkillAdv(eventData, 5);

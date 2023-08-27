@@ -441,13 +441,15 @@ def ajax_saveSkillAdv(request):
         character_id = request.POST['characer_id']
         logger.info(request.POST)
         # logger.info("character_id={}; skill_id={}; points={}; old_skill_adv={}".format(character_id, request.POST['skill_id'], request.POST['points'], request.POST['old_skill_adv']))
-        ch2skill = Character2Skill.objects.get(characters_id=character_id, skills_id=request.POST['skill_id'])
-        if ch2skill is not None:
-            ch2skill.adv =request.POST['points']
-            ch2skill.save()
-        else:
-            logger.error("ajax_saveSkillAdv not found: character_id={}".format(character_id))
-            return JsonResponse({'status': 'Invalid request'}, status=400)
+        if request.POST['skill_id'] == 0:
+            ch2skill = Character2Skill.objects.get(characters_id=character_id, skills_id=request.POST['skill_id'])
+            if ch2skill is not None:
+                ch2skill.adv =request.POST['points']
+                ch2skill.save()
+            else:
+                logger.error("ajax_saveSkillAdv not found: character_id={}".format(character_id))
+                return JsonResponse({'status': 'Invalid request'}, status=400)
+
         old_skill_adv = request.POST.get('old_skill_adv', None)
         if old_skill_adv is not None:
             ch2skill = Character2Skill.objects.get(characters_id=character_id, skills_id=request.POST['old_skill_adv'])
