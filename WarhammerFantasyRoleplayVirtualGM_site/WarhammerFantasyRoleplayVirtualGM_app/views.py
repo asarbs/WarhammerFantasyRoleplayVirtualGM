@@ -486,17 +486,16 @@ def ajax_saveHeight(request):
 def ajax_saveHair(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
+        hair = request.POST['hair']
         character = Character.objects.get(id = character_id)
         if character is not None:
-            hair, created = Hair.objects.get_or_create(name=request.POST['hair'])
-            if created:
-                character.hair    = hair
-                character.save()
-                ret = {'status': 'ok'  }
-                logger.debug(ret)
-                return JsonResponse(ret)
-            else :
-                logger.error("ajax_saveHair: hair:{}; character_id:{}".format(request.POST['hair'],character_id ))
+            logger.debug("hair:{}".format(hair))
+            hair = Hair.objects.get(id=hair)
+            character.hair    = hair
+            character.save()
+            ret = {'status': 'ok'  }
+            logger.debug(ret)
+            return JsonResponse(ret)
         else:
             logger.error("ajax_saveHair not found: character_id={}".format(character_id))
             return JsonResponse({'status': 'Invalid request'}, status=400)
