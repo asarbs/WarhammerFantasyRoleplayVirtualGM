@@ -175,8 +175,10 @@ class CharacterParameters {
         return this.#RandomEyesTable;
     }
     set name(name) {
-        if(typeof name === "string")
+        if(typeof name === "string") {
             this.#name = name;
+            $("input#character_sheet_name").val(characterParameters.name);
+        }
         else
             throw "" + name + " is not a string";
     }
@@ -184,20 +186,26 @@ class CharacterParameters {
         return this.#name;
     }
     set hair(hair) {
-        if(typeof hair === "number")
+        if(typeof hair === "number") {
             this.#hair = hair;
+            this.#needUpdate = true;
+        }
         else
             throw "hair: " + hair + " is not a number";
     }
     set eyes(eyes) {
-        if(typeof eyes === "number")
+        if(typeof eyes === "number") {
             this.#eyes = eyes;
+            this.#needUpdate = true;
+        }
         else
             throw "eyes: " + eyes + " is not a number";
     }
     set age(age) {
-        if(typeof age === "number")
+        if(typeof age === "number") {
             this.#age = age;
+            $("input#age").val(characterParameters.age);
+        }
         else
             throw "age:" + age + " is not a number";
     }
@@ -205,8 +213,10 @@ class CharacterParameters {
         return this.#age;
     }
     set height(height) {
-        if(typeof height === "number")
+        if(typeof height === "number") {
             this.#height = height;
+            $("input#height").val(characterParameters.height);
+        }
         else
             throw "height" + height + " is not a height";
     }
@@ -214,8 +224,10 @@ class CharacterParameters {
         return this.#height
     }
     set bonus_xp(bonus_xp) {
-        if(typeof bonus_xp === "number")
+        if(typeof bonus_xp === "number") {
             this.#bonus_xp = bonus_xp;
+            $("input#experience_current").val(characterParameters.bonus_xp);
+        }
         else
             throw "bonus_xp[" + bonus_xp + "] is not a string";
     }
@@ -223,8 +235,11 @@ class CharacterParameters {
         return this.#bonus_xp;
     }
     set characteristics_ws_initial(characteristics_ws_initial) {
-        if(typeof characteristics_ws_initial === "number")
+        if(typeof characteristics_ws_initial === "number") {
             this.#characteristics_ws_initial = characteristics_ws_initial;
+            $("input#characteristics_ws_initial"  ).val(characterParameters.characteristics_ws_initial)
+            $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_initial  + characterParameters.characteristics_ws_advances)
+        }
         else
             throw "characteristics_ws_initial[" + characteristics_ws_initial + "] is not a string";
     }
@@ -232,8 +247,11 @@ class CharacterParameters {
         return this.#characteristics_ws_initial;
     }
     set characteristics_bs_initial(characteristics_bs_initial) {
-        if(typeof characteristics_bs_initial === "number")
+        if(typeof characteristics_bs_initial === "number") {
             this.#characteristics_bs_initial = characteristics_bs_initial;
+            $("input#characteristics_bs_initial"  ).val(characterParameters.characteristics_bs_initial)
+            $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_initial  + characterParameters.characteristics_bs_advances)
+        }
         else
             throw "characteristics_bs_initial[" + characteristics_bs_initial + "] is not a string";
     }
@@ -241,8 +259,11 @@ class CharacterParameters {
         return this.#characteristics_bs_initial;
     }
     set characteristics_s_initial(characteristics_s_initial) {
-        if(typeof characteristics_s_initial === "number")
+        if(typeof characteristics_s_initial === "number") {
             this.#characteristics_s_initial = characteristics_s_initial;
+            $("input#characteristics_s_initial"   ).val(characterParameters.characteristics_s_initial)
+            $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_initial   + characterParameters.characteristics_s_advances)
+        }
         else
             throw "characteristics_s_initial[" + characteristics_s_initial + "] is not a string";
     }
@@ -250,8 +271,11 @@ class CharacterParameters {
         return this.#characteristics_s_initial;
     }
     set characteristics_t_initial(characteristics_t_initial) {
-        if(typeof characteristics_t_initial === "number")
+        if(typeof characteristics_t_initial === "number") {
             this.#characteristics_t_initial = characteristics_t_initial;
+            $("input#characteristics_t_initial"   ).val(characterParameters.characteristics_t_initial)
+            $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_initial   + characterParameters.characteristics_t_advances )
+        }
         else
             throw "characteristics_t_initial[" + characteristics_t_initial + "] is not a string";
     }
@@ -259,8 +283,11 @@ class CharacterParameters {
         return this.#characteristics_t_initial;
     }
     set characteristics_i_initial(characteristics_i_initial) {
-        if(typeof characteristics_i_initial === "number")
+        if(typeof characteristics_i_initial === "number") {
             this.#characteristics_i_initial = characteristics_i_initial;
+            $("input#characteristics_i_initial"   ).val(characterParameters.characteristics_i_initial)
+            $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_initial   + characterParameters.characteristics_i_advances)
+        }
         else
             throw "characteristics_i_initial[" + characteristics_i_initial + "] is not a string";
     }
@@ -268,8 +295,11 @@ class CharacterParameters {
         return this.#characteristics_i_initial;
     }
     set characteristics_ag_initial(characteristics_ag_initial) {
-        if(typeof characteristics_ag_initial === "number")
+        if(typeof characteristics_ag_initial === "number") {
             this.#characteristics_ag_initial = characteristics_ag_initial;
+            $("input#characteristics_ag_initial"  ).val(characterParameters.characteristics_ag_initial)
+            $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_initial  + characterParameters.characteristics_ag_advances)
+        }
         else
             throw "characteristics_ag_initial[" + characteristics_ag_initial + "] is not a string";
     }
@@ -277,8 +307,11 @@ class CharacterParameters {
         return this.#characteristics_ag_initial;
     }
     set characteristics_dex_initial(characteristics_dex_initial) {
-        if(typeof characteristics_dex_initial === "number")
+        if(typeof characteristics_dex_initial === "number") {
             this.#characteristics_dex_initial = characteristics_dex_initial;
+            $("input#characteristics_dex_initial" ).val(characterParameters.characteristics_dex_initial)
+            $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_initial + characterParameters.characteristics_dex_advances)
+        }
         else
             throw "characteristics_dex_initial[" + characteristics_dex_initial + "] is not a string";
     }
@@ -286,8 +319,11 @@ class CharacterParameters {
         return this.#characteristics_dex_initial;
     }
     set characteristics_int_initial(characteristics_int_initial) {
-        if(typeof characteristics_int_initial === "number")
+        if(typeof characteristics_int_initial === "number") {
             this.#characteristics_int_initial = characteristics_int_initial;
+            $("input#characteristics_int_initial" ).val(characterParameters.characteristics_int_initial)
+            $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_initial + characterParameters.characteristics_int_advances)
+        }
         else
             throw "characteristics_int_initial[" + characteristics_int_initial + "] is not a string";
     }
@@ -295,8 +331,11 @@ class CharacterParameters {
         return this.#characteristics_int_initial;
     }
     set characteristics_wp_initial(characteristics_wp_initial) {
-        if(typeof characteristics_wp_initial === "number")
+        if(typeof characteristics_wp_initial === "number") {
             this.#characteristics_wp_initial = characteristics_wp_initial;
+            $("input#characteristics_wp_initial"  ).val(characterParameters.characteristics_wp_initial)
+            $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_initial  + characterParameters.characteristics_wp_advances)
+        }
         else
             throw "characteristics_wp_initial[" + characteristics_wp_initial + "] is not a string";
     }
@@ -304,8 +343,11 @@ class CharacterParameters {
         return this.#characteristics_wp_initial;
     }
     set characteristics_fel_initial(characteristics_fel_initial) {
-        if(typeof characteristics_fel_initial === "number")
+        if(typeof characteristics_fel_initial === "number") {
             this.#characteristics_fel_initial = characteristics_fel_initial;
+            $("input#characteristics_fel_initial" ).val(characterParameters.characteristics_fel_initial)
+            $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_initial + characterParameters.characteristics_fel_advances)
+        }
         else
             throw "characteristics_fel_initial[" + characteristics_fel_initial + "] is not a string";
     }
@@ -313,8 +355,11 @@ class CharacterParameters {
         return this.#characteristics_fel_initial;
     }
     set characteristics_ws_advances(characteristics_ws_advances) {
-        if(typeof characteristics_ws_advances === "number")
+        if(typeof characteristics_ws_advances === "number") {
             this.#characteristics_ws_advances = characteristics_ws_advances;
+            $("input#characteristics_ws_advances"  ).val(characterParameters.characteristics_ws_advances)
+            $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_initial  + characterParameters.characteristics_ws_advances)
+        }
         else
             throw "characteristics_ws_advances[" + characteristics_ws_advances + "] is not a string";
     }
@@ -322,8 +367,11 @@ class CharacterParameters {
         return this.#characteristics_ws_advances;
     }
     set characteristics_bs_advances(characteristics_bs_advances) {
-        if(typeof characteristics_bs_advances === "number")
+        if(typeof characteristics_bs_advances === "number") {
             this.#characteristics_bs_advances = characteristics_bs_advances;
+            $("input#characteristics_bs_advances"  ).val(characterParameters.characteristics_bs_advances);
+            $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_initial  + characterParameters.characteristics_bs_advances);
+        }
         else
             throw "characteristics_bs_advances[" + characteristics_bs_advances + "] is not a string";
     }
@@ -331,8 +379,11 @@ class CharacterParameters {
         return this.#characteristics_bs_advances;
     }
     set characteristics_s_advances(characteristics_s_advances) {
-        if(typeof characteristics_s_advances === "number")
+        if(typeof characteristics_s_advances === "number") {
             this.#characteristics_s_advances = characteristics_s_advances;
+            $("input#characteristics_s_advances"   ).val(characterParameters.characteristics_s_advances)
+            $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_initial   + characterParameters.characteristics_s_advances)
+        }
         else
             throw "characteristics_s_advances[" + characteristics_s_advances + "] is not a string";
     }
@@ -340,8 +391,11 @@ class CharacterParameters {
         return this.#characteristics_s_advances;
     }
     set characteristics_t_advances(characteristics_t_advances) {
-        if(typeof characteristics_t_advances === "number")
+        if(typeof characteristics_t_advances === "number") {
             this.#characteristics_t_advances = characteristics_t_advances;
+            $("input#characteristics_t_advances"   ).val(characterParameters.characteristics_t_advances)
+            $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_initial   + characterParameters.characteristics_t_advances )
+        }
         else
             throw "characteristics_t_advances[" + characteristics_t_advances + "] is not a string";
     }
@@ -349,8 +403,11 @@ class CharacterParameters {
         return this.#characteristics_t_advances;
     }
     set characteristics_i_advances(characteristics_i_advances) {
-        if(typeof characteristics_i_advances === "number")
+        if(typeof characteristics_i_advances === "number") {
             this.#characteristics_i_advances = characteristics_i_advances;
+            $("input#characteristics_i_advances"   ).val(characterParameters.characteristics_i_advances)
+            $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_initial   + characterParameters.characteristics_i_advances)
+        }
         else
             throw "characteristics_i_advances[" + characteristics_i_advances + "] is not a string";
     }
@@ -358,8 +415,11 @@ class CharacterParameters {
         return this.#characteristics_i_advances;
     }
     set characteristics_ag_advances(characteristics_ag_advances) {
-        if(typeof characteristics_ag_advances === "number")
+        if(typeof characteristics_ag_advances === "number") {
             this.#characteristics_ag_advances = characteristics_ag_advances;
+            $("input#characteristics_ag_advances"  ).val(characterParameters.characteristics_ag_advances)
+            $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_initial  + characterParameters.characteristics_ag_advances)
+        }
         else
             throw "characteristics_ag_advances[" + characteristics_ag_advances + "] is not a string";
     }
@@ -367,8 +427,11 @@ class CharacterParameters {
         return this.#characteristics_ag_advances;
     }
     set characteristics_dex_advances(characteristics_dex_advances) {
-        if(typeof characteristics_dex_advances === "number")
+        if(typeof characteristics_dex_advances === "number") {
             this.#characteristics_dex_advances = characteristics_dex_advances;
+            $("input#characteristics_dex_advances" ).val(characterParameters.characteristics_dex_advances)
+            $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_initial + characterParameters.characteristics_dex_advances)
+        }
         else
             throw "characteristics_dex_advances[" + characteristics_dex_advances + "] is not a string";
     }
@@ -376,8 +439,11 @@ class CharacterParameters {
         return this.#characteristics_dex_advances;
     }
     set characteristics_int_advances(characteristics_int_advances) {
-        if(typeof characteristics_int_advances === "number")
+        if(typeof characteristics_int_advances === "number") {
             this.#characteristics_int_advances = characteristics_int_advances;
+            $("input#characteristics_int_advances" ).val(characterParameters.characteristics_int_advances)
+            $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_initial + characterParameters.characteristics_int_advances)
+        }
         else
             throw "characteristics_int_advances[" + characteristics_int_advances + "] is not a string";
     }
@@ -385,8 +451,11 @@ class CharacterParameters {
         return this.#characteristics_int_advances;
     }
     set characteristics_wp_advances(characteristics_wp_advances) {
-        if(typeof characteristics_wp_advances === "number")
+        if(typeof characteristics_wp_advances === "number") {
             this.#characteristics_wp_advances = characteristics_wp_advances;
+            $("input#characteristics_wp_advances"  ).val(characterParameters.characteristics_wp_advances)
+            $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_initial  + characterParameters.characteristics_wp_advances)
+        }
         else
             throw "characteristics_wp_advances[" + characteristics_wp_advances + "] is not a string";
     }
@@ -394,8 +463,11 @@ class CharacterParameters {
         return this.#characteristics_wp_advances;
     }
     set characteristics_fel_advances(characteristics_fel_advances) {
-        if(typeof characteristics_fel_advances === "number")
+        if(typeof characteristics_fel_advances === "number") {
             this.#characteristics_fel_advances = characteristics_fel_advances;
+            $("input#characteristics_fel_advances" ).val(characterParameters.characteristics_fel_advances)
+            $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_initial + characterParameters.characteristics_fel_advances)
+        }
         else
             throw "characteristics_fel_advances[" + characteristics_fel_advances + "] is not a string";
     }
@@ -403,8 +475,10 @@ class CharacterParameters {
         return this.#characteristics_fel_advances;
     }
     set fate_fate(fate_fate) {
-        if(typeof fate_fate === "number")
+        if(typeof fate_fate === "number") {
             this.#fate_fate = fate_fate;
+            $("input#fate_fate"                   ).val(characterParameters.fate_fate)
+        }
         else
             throw "fate_fate[" + fate_fate + "] is not a string";
     }
@@ -412,8 +486,10 @@ class CharacterParameters {
         return this.#fate_fate;
     }
     set fate_fortune(fate_fortune) {
-        if(typeof fate_fortune === "number")
+        if(typeof fate_fortune === "number") {
             this.#fate_fortune = fate_fortune;
+            $("input#fate_fortune"                ).val(characterParameters.fate_fortune)
+        }
         else
             throw "fate_fortune[" + fate_fortune + "] is not a string";
     }
@@ -421,8 +497,10 @@ class CharacterParameters {
         return this.#fate_fortune;
     }
     set resilience_resilience(resilience_resilience) {
-        if(typeof resilience_resilience === "number")
+        if(typeof resilience_resilience === "number") {
             this.#resilience_resilience = resilience_resilience;
+            $("input#resilience_resilience"       ).val(characterParameters.resilience_resilience)
+        }
         else
             throw "resilience_resilience[" + resilience_resilience + "] is not a string";
     }
@@ -430,8 +508,10 @@ class CharacterParameters {
         return this.#resilience_resilience;
     }
     set resilience_resolve(resilience_resolve) {
-        if(typeof resilience_resolve === "number")
+        if(typeof resilience_resolve === "number") {
             this.#resilience_resolve = resilience_resolve;
+            $("input#resilience_resolve"          ).val(characterParameters.resilience_resolve)
+        }
         else
             throw "resilience_resolve[" + resilience_resolve + "] is not a string";
     }
@@ -439,8 +519,12 @@ class CharacterParameters {
         return this.#resilience_resolve;
     }
     set movement_movement(movement_movement) {
-        if(typeof movement_movement === "number")
+        if(typeof movement_movement === "number") {
             this.#movement_movement = movement_movement;
+            $("input#movement_movement"           ).val(characterParameters.movement_movement)  
+            $("input#movement_walk"               ).val(characterParameters.movement[characterParameters.movement_movement]['walk'])
+            $("input#movement_run"                ).val(characterParameters.movement[characterParameters.movement_movement]['run'])
+        }
         else
             throw "movement_movement[" + movement_movement + "] is not a string";
     }
@@ -448,8 +532,10 @@ class CharacterParameters {
         return this.#movement_movement;
     }
     set wounds(wounds) {
-        if(typeof wounds === "number")
+        if(typeof wounds === "number") {
             this.#wounds = wounds;
+            $("input#wounds"                      ).val(characterParameters.wounds)
+        }
         else
             throw "wounds[" + wounds + "] is not a string";
     }
@@ -484,8 +570,10 @@ class CharacterParameters {
         return this.#characteristics_selection_random;
     }
     set avalible_attribute_points(avalible_attribute_points) {
-        if(typeof avalible_attribute_points === "number")
+        if(typeof avalible_attribute_points === "number") {
             this.#avalible_attribute_points = avalible_attribute_points;
+            $("span#avalible_attribute_points"    ).text(characterParameters.avalible_attribute_points)
+        }
         else
             throw "avalible_attribute_points[" + avalible_attribute_points + "] is not a string";
     }
@@ -493,8 +581,10 @@ class CharacterParameters {
         return this.#avalible_attribute_points;
     }
     set extra_points(extra_points) {
-        if(typeof extra_points === "number")
+        if(typeof extra_points === "number") {
             this.#extra_points = extra_points;
+            $("span#avalible_extra_points"        ).text(characterParameters.extra_points)
+        }
         else
             throw "extra_points[" + extra_points + "] is not a string";
     }
@@ -511,8 +601,10 @@ class CharacterParameters {
         return this.#needUpdate
     }
     set species_id(species_id) {
-        if(typeof species_id === "number")
+        if(typeof species_id === "number") {
             this.#species_id = species_id;
+            $("select#species").val(this.#species_id);
+        }
         else
             throw "species_id[" + species_id + "] is not a number";
     }
@@ -520,8 +612,10 @@ class CharacterParameters {
         return this.#species_id
     }
     set career_name(career_name) {
-        if(typeof career_name === "string")
+        if(typeof career_name === "string") {
             this.#career_name = career_name;
+            $("input#career").val(this.#career_name);
+        }
         else
             throw "career_name[" + career_name + "] is not a String";
     }
@@ -529,8 +623,10 @@ class CharacterParameters {
         return this.#career_name
     }
     set ch_class_name(ch_class_name) {
-        if(typeof ch_class_name === "string")
+        if(typeof ch_class_name === "string") {
             this.#ch_class_name = ch_class_name;
+            $("input#class").val(this.#ch_class_name);
+        }
         else
             throw "ch_class_name[" + ch_class_name + "] is not a String";
     }
@@ -547,8 +643,10 @@ class CharacterParameters {
         return this.#career_path;
     }
     set status(status) {
-        if(typeof status === "string")
+        if(typeof status === "string") {
             this.#status = status;
+            $("input#status").val(this.#status);
+        }
         else
             throw "status[" + status + "] is not a String";
     }
@@ -556,8 +654,10 @@ class CharacterParameters {
         return this.#status;
     }
     set career_level(career_level) {
-        if(typeof career_level === "number")
+        if(typeof career_level === "number") {
             this.#career_level = career_level;
+            $("input#career_level").val(this.#career_level);
+        }
         else
             throw "career_level[" + career_level + "] is not a number";
     }
@@ -602,6 +702,7 @@ class CharacterParameters {
         $.each(this.#RandomEyesTable[this.#species_id], function(i, item) {
             $("select#eyes").append($('<option>', {value: item.val, text: item.name}))
         });
+        this.#needUpdate = false;
     }
     updateSkillTable() {
         $.each(this.#skills, function(i, item) {
@@ -662,62 +763,6 @@ class CharacterParameters {
     }
     updateCharacterState() {
         this.updateStaticCharacterSheet();
-        $("input#character_sheet_name").val(characterParameters.name);
-        $("input#age").val(characterParameters.age);
-        $("input#height").val(characterParameters.height);
-        $("select#species").val(this.#species_id);
-
-        $("input#career").val(this.#career_name);
-        $("input#class").val(this.#ch_class_name);
-        $("input#career_path").val(this.#career_path);
-        $("input#status").val(this.#status);
-        $("input#career_level").val(this.#career_level);
-
-        $("input#experience_current").val(characterParameters.bonus_xp);
-
-        $("input#characteristics_ws_initial"  ).val(characterParameters.characteristics_ws_initial)
-        $("input#characteristics_bs_initial"  ).val(characterParameters.characteristics_bs_initial)
-        $("input#characteristics_s_initial"   ).val(characterParameters.characteristics_s_initial)
-        $("input#characteristics_t_initial"   ).val(characterParameters.characteristics_t_initial)
-        $("input#characteristics_i_initial"   ).val(characterParameters.characteristics_i_initial)
-        $("input#characteristics_ag_initial"  ).val(characterParameters.characteristics_ag_initial)
-        $("input#characteristics_dex_initial" ).val(characterParameters.characteristics_dex_initial)
-        $("input#characteristics_int_initial" ).val(characterParameters.characteristics_int_initial)
-        $("input#characteristics_wp_initial"  ).val(characterParameters.characteristics_wp_initial)
-        $("input#characteristics_fel_initial" ).val(characterParameters.characteristics_fel_initial)
-
-        $("input#characteristics_ws_advances"  ).val(characterParameters.characteristics_ws_advances)
-        $("input#characteristics_bs_advances"  ).val(characterParameters.characteristics_bs_advances)
-        $("input#characteristics_s_advances"   ).val(characterParameters.characteristics_s_advances)
-        $("input#characteristics_t_advances"   ).val(characterParameters.characteristics_t_advances)
-        $("input#characteristics_i_advances"   ).val(characterParameters.characteristics_i_advances)
-        $("input#characteristics_ag_advances"  ).val(characterParameters.characteristics_ag_advances)
-        $("input#characteristics_dex_advances" ).val(characterParameters.characteristics_dex_advances)
-        $("input#characteristics_int_advances" ).val(characterParameters.characteristics_int_advances)
-        $("input#characteristics_wp_advances"  ).val(characterParameters.characteristics_wp_advances)
-        $("input#characteristics_fel_advances" ).val(characterParameters.characteristics_fel_advances)
-
-        $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_initial  + characterParameters.characteristics_ws_advances)
-        $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_initial  + characterParameters.characteristics_bs_advances)
-        $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_initial   + characterParameters.characteristics_s_advances)
-        $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_initial   + characterParameters.characteristics_t_advances )
-        $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_initial   + characterParameters.characteristics_i_advances)
-        $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_initial  + characterParameters.characteristics_ag_advances)
-        $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_initial + characterParameters.characteristics_dex_advances)
-        $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_initial + characterParameters.characteristics_int_advances)
-        $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_initial  + characterParameters.characteristics_wp_advances)
-        $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_initial + characterParameters.characteristics_fel_advances)
-        $("input#fate_fate"                   ).val(characterParameters.fate_fate)
-        $("input#fate_fortune"                ).val(characterParameters.fate_fortune)
-        $("input#resilience_resilience"       ).val(characterParameters.resilience_resilience)
-        $("input#resilience_resolve"          ).val(characterParameters.resilience_resolve)
-        $("input#movement_movement"           ).val(characterParameters.movement_movement)
-        $("input#movement_walk"               ).val(characterParameters.movement[characterParameters.movement_movement]['walk'])
-        $("input#movement_run"                ).val(characterParameters.movement[characterParameters.movement_movement]['run'])
-        $("input#wounds"                      ).val(characterParameters.wounds)
-        $("span#avalible_attribute_points"    ).text(characterParameters.avalible_attribute_points)
-        $("span#avalible_extra_points"        ).text(characterParameters.extra_points)
-
         this.updateSkillTable()
         this.updateTalentsTable()
     }
@@ -754,7 +799,7 @@ class CharacterParameters {
 
 const characterParameters = new CharacterParameters();
 const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_career_skills']
-const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "career Skills"]
+const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "Career Skills"]
 
 
 
@@ -984,8 +1029,10 @@ function randomClass() {
 }
 
 function saveName(e) {
-    n = $("input#character_sheet_name").val();
 
+    n = $("input#character_sheet_name").val();
+    console.log("saveName="+n);
+    characterParameters.name = n
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
@@ -1458,6 +1505,7 @@ function saveSkillAdv3(eventData) {
 }
 
 function main() {
+
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     });
@@ -1474,12 +1522,12 @@ function main() {
     $("div#"+ character_creation_steps[0]).show();
 
     $("img#img_random_class").click(randomClass);
-    // $("input#character_sheet_name").keyup(saveName);
 
-    // $("input#age").keyup(saveAge);
-    // $("input#height").keyup(saveHeight);
-    // $("select#hair").on("change", saveHair);
-    // $("select#eyes").on("change", saveEyes);
+    $("input#character_sheet_name").keyup(saveName);
+    $("input#age").keyup(saveAge);
+    $("input#height").keyup(saveHeight);
+    $("select#hair").on("change", saveHair);
+    $("select#eyes").on("change", saveEyes);
 
     var eventData5_1
     var eventData5_2
