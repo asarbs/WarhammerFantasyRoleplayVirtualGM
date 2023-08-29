@@ -148,6 +148,39 @@ class StatusAdmin(admin.ModelAdmin):
     list_max_show_all = 1500
     list_per_page = 1000
 
+class ArmourLocationsAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    list_filter = ("name",)
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
+class ArmourAdmin(admin.ModelAdmin):
+    list_display = ("name", "armour_type", "price", "encumbrance", "availability", "penalty", "armour_locations", "armour_points", "qualities_and_flaws")
+    list_filter = ("armour_type", "availability")
+    ordering = ("armour_type", "name")
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
+class MeleeWeaponsAdmin(admin.ModelAdmin):
+    list_display = ("name", "weapon_group", "price", "encumbrance", "availability", "reach", "damage", "qualities_and_flaws")
+    list_filter = ("weapon_group", "availability")
+    ordering = ("weapon_group", "name")
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
+
+
+class RangedWeaponAdmin(admin.ModelAdmin):
+    list_display = ("name", "weapon_group", "price", "encumbrance", "range", "availability", "damage", "qualities_and_flaws")
+    list_filter = ("weapon_group", "availability")
+    ordering = ("weapon_group", "name")
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
@@ -172,3 +205,7 @@ admin.site.register(models.CareersAdvanceScheme, CareersAdvanceSchemeAdmin)
 admin.site.register(models.Trapping, TrappingAdmin)
 admin.site.register(models.RandomTalentsTable, RandomTalentsTableAdmin)
 admin.site.register(models.ClassTrappings, ClassTrappingsAdmin)
+admin.site.register(models.ArmourLocations, ArmourLocationsAdmin)
+admin.site.register(models.Armour, ArmourAdmin)
+admin.site.register(models.MeleeWeapons, MeleeWeaponsAdmin)
+admin.site.register(models.RangedWeapon, RangedWeaponAdmin)

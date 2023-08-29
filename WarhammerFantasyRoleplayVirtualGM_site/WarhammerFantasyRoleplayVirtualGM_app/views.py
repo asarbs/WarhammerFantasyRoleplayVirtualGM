@@ -202,7 +202,7 @@ def ajax_randomClass(request):
             Character2Trappingl.objects.filter(characters=character, is_career_skill = True).delete()
             for classTraping in ClassTrappings.objects.filter(ch_class=career.ch_class).all():
                 try:
-                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=classTraping.trapping, enc=0)
+                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=classTraping.trapping, enc=classTraping.trapping.encumbrance)
                     logger.debug("ClassTrappings.trapping.id={} name={};".format(classTraping.trapping.id, classTraping.trapping.name))
                     ch2STrappingl.is_career_skill = True
                     ch2STrappingl.save()
@@ -211,7 +211,7 @@ def ajax_randomClass(request):
 
             for trapping in ad.trappings.all():
                 try:
-                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=trapping, enc=0)
+                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=trapping, enc=trapping.encumbrance)
                     ch2STrappingl.is_career_skill = True
                     ch2STrappingl.save()
                 except django.db.utils.IntegrityError as e:

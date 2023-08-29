@@ -897,7 +897,7 @@ class CharacterParameters {
             if(!$('#trappings_enc__'+item.id).length) {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="trappings_name__'+item.id+'" class="left">'+item.name+'</td>'
-                new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname"></td>'
+                new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname" value="'+item.enc+'"></td>'
                 new_row += '</tr>'
                 $("#trappings_table").append(new_row)
             }
