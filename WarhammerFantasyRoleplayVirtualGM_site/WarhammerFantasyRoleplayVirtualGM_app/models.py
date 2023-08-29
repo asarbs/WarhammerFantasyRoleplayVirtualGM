@@ -152,12 +152,31 @@ class Career(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+
+class Status(models.Model):
+    class Tier(models.TextChoices):
+        NONE= "NONE", _("NONE")
+        BRASS = "Brass", _("Brass")
+        SILVER = "Silver", _("Silver")
+        GOLD = "Gold", _("Gold")
+    tier = models.CharField(max_length=6, choices=Tier.choices, default=Tier.NONE, verbose_name="Tier")
+    level = models.IntegerField(default="0", verbose_name="Status Level")
+
+    class Meta:
+        unique_together = ('tier', 'level',)
+
+    def __str__(self):
+        return u"{0} {1}".format(self.tier, self.level)
+
+    def __unicode__(self):
+        return u"{0} {1}".format(self.tier, self.level)
+
 class CareerPath(models.Model):
     name = models.CharField(max_length= 50)
     skills = models.ManyToManyField(Skils)
     talents = models.ManyToManyField(Talent)
     trappings = models.ManyToManyField(Trapping)
-    earning_money = models.CharField(max_length= 50, verbose_name="Earning Money", default="default")
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, verbose_name='Status', null=True)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -196,15 +215,6 @@ class CareersAdvanceScheme(models.Model):
 
     def __unicode__(self):
         return u"{0} Advance Scheme".format(self.career.name)
-
-class Status(models.Model):
-    name = models.CharField(max_length= 50)
-
-    def __str__(self):
-        return u"{0}".format(self.name)
-
-    def __unicode__(self):
-        return u"{0}".format(self.name)
 
 class Hair(models.Model):
     name = models.CharField(max_length= 50)
@@ -289,6 +299,9 @@ class Character2Trappingl(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
     enc = models.IntegerField(default="0", verbose_name="enc")
+    is_basic_skill = models.BooleanField(default=False)
+    is_species_skill = models.BooleanField(default=False)
+    is_career_skill = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('characters', 'trapping',)
@@ -308,6 +321,9 @@ class Character2Talent(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     talent = models.ForeignKey(Talent, on_delete=models.CASCADE)
     taken = models.IntegerField(default="0", verbose_name="adv")
+    is_basic_skill = models.BooleanField(default=False)
+    is_species_skill = models.BooleanField(default=False)
+    is_career_skill = models.BooleanField(default=False)
     class Meta:
         unique_together = ('characters', 'talent',)
 

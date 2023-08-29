@@ -124,7 +124,7 @@ def ajax_addTalentToCharacter(request):
         char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=0)
         char2tal.save();
     except django.db.utils.IntegrityError as e:
-        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
+        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.talent.name, created))
     return JsonResponse({'status': 'ok'})
 
 def ajax_replaceTalentToCharacter(request):
@@ -173,7 +173,7 @@ def ajax_randomClass(request):
             character.ch_class = career.ch_class
             character.save()
 
-            Character2Skill.objects.filter(characters=character).delete()
+            Character2Skill.objects.filter(characters=character, is_career_skill = True).delete()
             ad = CareersAdvanceScheme.objects.get(career=career).advances_level_1
             for ss in ad.skills.all():
                 try:
@@ -188,12 +188,23 @@ def ajax_randomClass(request):
                 logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
                 skills[ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
 
+            Character2Talent.objects.filter(characters=character, is_career_skill = True).delete()
+            for talent in ad.talents.all():
+                try:
+                    c2talent, created = Character2Talent.objects.get_or_create(characters=character, talent=talent, taken=0)
+                    c2talent.is_career_skill = True
+                    c2talent.save()
+                except django.db.utils.IntegrityError as e:
+                    logger.debug("UNIQUE constraint failed: characters:{} talent:{} created:{}".format(character.id, talent.name, created))
 
-            Character2Trappingl.objects.filter(characters=character).delete()
+
+
+            Character2Trappingl.objects.filter(characters=character, is_career_skill = True).delete()
             for classTraping in ClassTrappings.objects.filter(ch_class=career.ch_class).all():
                 try:
                     ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=classTraping.trapping, enc=0)
                     logger.debug("ClassTrappings.trapping.id={} name={};".format(classTraping.trapping.id, classTraping.trapping.name))
+                    ch2STrappingl.is_career_skill = True
                     ch2STrappingl.save()
                 except django.db.utils.IntegrityError as e:
                     logger.debug("UNIQUE constraint failed: characters:{} Trappings:{} created:{}".format(character.id, classTraping.trapping.name, created))
@@ -201,7 +212,7 @@ def ajax_randomClass(request):
             for trapping in ad.trappings.all():
                 try:
                     ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=trapping, enc=0)
-                    logger.debug("ad.trapping.id={} name={}".format(ch2STrappingl.id, ch2STrappingl.trapping.name))
+                    ch2STrappingl.is_career_skill = True
                     ch2STrappingl.save()
                 except django.db.utils.IntegrityError as e:
                     logger.debug("UNIQUE constraint failed: characters:{} Trappings:{} created:{}".format(character.id, trapping.name, created))
@@ -221,7 +232,7 @@ def ajax_randomClass(request):
                                  'ch_class_name': character.ch_class.name,
                                  'skills': skills,
                                  'career_path': ad.name,
-                                 'status': ad.earning_money,
+                                 'status': str(ad.status),
                                  'career_level' : 1,
                                  'trappings': trappings
                                  })

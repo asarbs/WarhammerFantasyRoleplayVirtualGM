@@ -43,9 +43,9 @@ class ClassAdmin(admin.ModelAdmin):
 
 class CareerPathAdmin(admin.ModelAdmin):
     form = CareerPathForm
-    list_display = ("careers", "name", "earning_money")
+    list_display = ("careers", "name", "status")
     #list_editable = (,)
-    list_filter = ("earning_money",)
+    list_filter = ("status",)
     ordering = ("name", )
     list_max_show_all = 1500
     list_per_page = 1000
@@ -62,9 +62,6 @@ class CareerAdmin(admin.ModelAdmin):
     list_display = ("ch_class", "name", "random_table_human_start", "random_table_human_end","random_table_dwarf_start","random_table_dwarf_end","random_table_halfling_start","random_table_halfling_end","random_table_high_elf_start","random_table_high_elf_end","random_table_wood_elf_start","random_table_wood_elf_end")
     ordering = ("name", )
     list_filter = ("ch_class",)
-
-class StatusAdmin(admin.ModelAdmin):
-    pass
 
 class HairAdmin(admin.ModelAdmin):
     list_display = ("species", "random_table_start", "random_table_end", "name")
@@ -138,6 +135,15 @@ class ClassTrappingsAdmin(admin.ModelAdmin):
     list_display = ("ch_class", "trapping")
     ordering = ("ch_class",)
     list_filter = ("ch_class",)
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
+class StatusAdmin(admin.ModelAdmin):
+    form = ClassTrappingsForm
+    list_display = ("tier", "level")
+    ordering = ("tier", "level")
+    list_filter = ("tier",)
     save_as = True
     list_max_show_all = 1500
     list_per_page = 1000

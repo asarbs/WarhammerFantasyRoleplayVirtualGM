@@ -285,7 +285,7 @@ class CharacterParameters {
         if(typeof characteristics_ws_initial === "number") {
             this.#characteristics_ws_initial = characteristics_ws_initial;
             $("input#characteristics_ws_initial"  ).val(characterParameters.characteristics_ws_initial)
-            $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_initial  + characterParameters.characteristics_ws_advances)
+            $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_current)
         }
         else
             throw "characteristics_ws_initial[" + characteristics_ws_initial + "] is not a string";
@@ -297,7 +297,7 @@ class CharacterParameters {
         if(typeof characteristics_bs_initial === "number") {
             this.#characteristics_bs_initial = characteristics_bs_initial;
             $("input#characteristics_bs_initial"  ).val(characterParameters.characteristics_bs_initial)
-            $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_initial  + characterParameters.characteristics_bs_advances)
+            $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_current)
         }
         else
             throw "characteristics_bs_initial[" + characteristics_bs_initial + "] is not a string";
@@ -309,7 +309,9 @@ class CharacterParameters {
         if(typeof characteristics_s_initial === "number") {
             this.#characteristics_s_initial = characteristics_s_initial;
             $("input#characteristics_s_initial"   ).val(characterParameters.characteristics_s_initial)
-            $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_initial   + characterParameters.characteristics_s_advances)
+            $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_current)
+            $("input#strength_bonus"              ).val(characterParameters.s_bonus)
+            this.updateWounds();
         }
         else
             throw "characteristics_s_initial[" + characteristics_s_initial + "] is not a string";
@@ -321,7 +323,9 @@ class CharacterParameters {
         if(typeof characteristics_t_initial === "number") {
             this.#characteristics_t_initial = characteristics_t_initial;
             $("input#characteristics_t_initial"   ).val(characterParameters.characteristics_t_initial)
-            $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_initial   + characterParameters.characteristics_t_advances )
+            $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_current )
+            $("input#toughness_bonus"              ).val(this.t_bonus + " * 2")
+            this.updateWounds();
         }
         else
             throw "characteristics_t_initial[" + characteristics_t_initial + "] is not a string";
@@ -333,7 +337,7 @@ class CharacterParameters {
         if(typeof characteristics_i_initial === "number") {
             this.#characteristics_i_initial = characteristics_i_initial;
             $("input#characteristics_i_initial"   ).val(characterParameters.characteristics_i_initial)
-            $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_initial   + characterParameters.characteristics_i_advances)
+            $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_current)
         }
         else
             throw "characteristics_i_initial[" + characteristics_i_initial + "] is not a string";
@@ -345,7 +349,7 @@ class CharacterParameters {
         if(typeof characteristics_ag_initial === "number") {
             this.#characteristics_ag_initial = characteristics_ag_initial;
             $("input#characteristics_ag_initial"  ).val(characterParameters.characteristics_ag_initial)
-            $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_initial  + characterParameters.characteristics_ag_advances)
+            $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_current)
         }
         else
             throw "characteristics_ag_initial[" + characteristics_ag_initial + "] is not a string";
@@ -357,7 +361,7 @@ class CharacterParameters {
         if(typeof characteristics_dex_initial === "number") {
             this.#characteristics_dex_initial = characteristics_dex_initial;
             $("input#characteristics_dex_initial" ).val(characterParameters.characteristics_dex_initial)
-            $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_initial + characterParameters.characteristics_dex_advances)
+            $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_current)
         }
         else
             throw "characteristics_dex_initial[" + characteristics_dex_initial + "] is not a string";
@@ -369,7 +373,7 @@ class CharacterParameters {
         if(typeof characteristics_int_initial === "number") {
             this.#characteristics_int_initial = characteristics_int_initial;
             $("input#characteristics_int_initial" ).val(characterParameters.characteristics_int_initial)
-            $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_initial + characterParameters.characteristics_int_advances)
+            $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_current)
         }
         else
             throw "characteristics_int_initial[" + characteristics_int_initial + "] is not a string";
@@ -381,7 +385,9 @@ class CharacterParameters {
         if(typeof characteristics_wp_initial === "number") {
             this.#characteristics_wp_initial = characteristics_wp_initial;
             $("input#characteristics_wp_initial"  ).val(characterParameters.characteristics_wp_initial)
-            $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_initial  + characterParameters.characteristics_wp_advances)
+            $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_current)
+            $("input#willpower_bonus"              ).val(this.wp_bonus)
+            this.updateWounds();
         }
         else
             throw "characteristics_wp_initial[" + characteristics_wp_initial + "] is not a string";
@@ -393,7 +399,7 @@ class CharacterParameters {
         if(typeof characteristics_fel_initial === "number") {
             this.#characteristics_fel_initial = characteristics_fel_initial;
             $("input#characteristics_fel_initial" ).val(characterParameters.characteristics_fel_initial)
-            $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_initial + characterParameters.characteristics_fel_advances)
+            $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_current)
         }
         else
             throw "characteristics_fel_initial[" + characteristics_fel_initial + "] is not a string";
@@ -405,7 +411,7 @@ class CharacterParameters {
         if(typeof characteristics_ws_advances === "number") {
             this.#characteristics_ws_advances = characteristics_ws_advances;
             $("input#characteristics_ws_advances"  ).val(characterParameters.characteristics_ws_advances)
-            $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_initial  + characterParameters.characteristics_ws_advances)
+            $("input#characteristics_ws_current"  ).val(characterParameters.characteristics_ws_current)
         }
         else
             throw "characteristics_ws_advances[" + characteristics_ws_advances + "] is not a string";
@@ -417,7 +423,7 @@ class CharacterParameters {
         if(typeof characteristics_bs_advances === "number") {
             this.#characteristics_bs_advances = characteristics_bs_advances;
             $("input#characteristics_bs_advances"  ).val(characterParameters.characteristics_bs_advances);
-            $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_initial  + characterParameters.characteristics_bs_advances);
+            $("input#characteristics_bs_current"  ).val(characterParameters.characteristics_bs_current);
         }
         else
             throw "characteristics_bs_advances[" + characteristics_bs_advances + "] is not a string";
@@ -429,7 +435,9 @@ class CharacterParameters {
         if(typeof characteristics_s_advances === "number") {
             this.#characteristics_s_advances = characteristics_s_advances;
             $("input#characteristics_s_advances"   ).val(characterParameters.characteristics_s_advances)
-            $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_initial   + characterParameters.characteristics_s_advances)
+            $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_current)
+            $("input#strength_bonus"              ).val(characterParameters.s_bonus)
+            this.updateWounds();
         }
         else
             throw "characteristics_s_advances[" + characteristics_s_advances + "] is not a string";
@@ -441,7 +449,9 @@ class CharacterParameters {
         if(typeof characteristics_t_advances === "number") {
             this.#characteristics_t_advances = characteristics_t_advances;
             $("input#characteristics_t_advances"   ).val(characterParameters.characteristics_t_advances)
-            $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_initial   + characterParameters.characteristics_t_advances )
+            $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_current)
+            $("input#toughness_bonus"              ).val(this.t_bonus + " * 2")
+            this.updateWounds();
         }
         else
             throw "characteristics_t_advances[" + characteristics_t_advances + "] is not a string";
@@ -453,7 +463,7 @@ class CharacterParameters {
         if(typeof characteristics_i_advances === "number") {
             this.#characteristics_i_advances = characteristics_i_advances;
             $("input#characteristics_i_advances"   ).val(characterParameters.characteristics_i_advances)
-            $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_initial   + characterParameters.characteristics_i_advances)
+            $("input#characteristics_i_current"   ).val(characterParameters.characteristics_i_current)
         }
         else
             throw "characteristics_i_advances[" + characteristics_i_advances + "] is not a string";
@@ -465,7 +475,7 @@ class CharacterParameters {
         if(typeof characteristics_ag_advances === "number") {
             this.#characteristics_ag_advances = characteristics_ag_advances;
             $("input#characteristics_ag_advances"  ).val(characterParameters.characteristics_ag_advances)
-            $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_initial  + characterParameters.characteristics_ag_advances)
+            $("input#characteristics_ag_current"  ).val(characterParameters.characteristics_ag_current)
         }
         else
             throw "characteristics_ag_advances[" + characteristics_ag_advances + "] is not a string";
@@ -477,7 +487,7 @@ class CharacterParameters {
         if(typeof characteristics_dex_advances === "number") {
             this.#characteristics_dex_advances = characteristics_dex_advances;
             $("input#characteristics_dex_advances" ).val(characterParameters.characteristics_dex_advances)
-            $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_initial + characterParameters.characteristics_dex_advances)
+            $("input#characteristics_dex_current" ).val(characterParameters.characteristics_dex_current)
         }
         else
             throw "characteristics_dex_advances[" + characteristics_dex_advances + "] is not a string";
@@ -489,7 +499,7 @@ class CharacterParameters {
         if(typeof characteristics_int_advances === "number") {
             this.#characteristics_int_advances = characteristics_int_advances;
             $("input#characteristics_int_advances" ).val(characterParameters.characteristics_int_advances)
-            $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_initial + characterParameters.characteristics_int_advances)
+            $("input#characteristics_int_current" ).val(characterParameters.characteristics_int_current)
         }
         else
             throw "characteristics_int_advances[" + characteristics_int_advances + "] is not a string";
@@ -501,7 +511,9 @@ class CharacterParameters {
         if(typeof characteristics_wp_advances === "number") {
             this.#characteristics_wp_advances = characteristics_wp_advances;
             $("input#characteristics_wp_advances"  ).val(characterParameters.characteristics_wp_advances)
-            $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_initial  + characterParameters.characteristics_wp_advances)
+            $("input#characteristics_wp_current"  ).val(characterParameters.characteristics_wp_current)
+            $("input#willpower_bonus"              ).val(this.wp_bonus)
+            this.updateWounds();
         }
         else
             throw "characteristics_wp_advances[" + characteristics_wp_advances + "] is not a string";
@@ -513,7 +525,7 @@ class CharacterParameters {
         if(typeof characteristics_fel_advances === "number") {
             this.#characteristics_fel_advances = characteristics_fel_advances;
             $("input#characteristics_fel_advances" ).val(characterParameters.characteristics_fel_advances)
-            $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_initial + characterParameters.characteristics_fel_advances)
+            $("input#characteristics_fel_current" ).val(characterParameters.characteristics_fel_current)
         }
         else
             throw "characteristics_fel_advances[" + characteristics_fel_advances + "] is not a string";
@@ -714,27 +726,89 @@ class CharacterParameters {
         return career_level;
     }
 
+    get characteristics_ws_current() {
+        return this.#characteristics_ws_initial + this.#characteristics_ws_advances
+    }
+    get characteristics_bs_current() {
+        return this.#characteristics_bs_initial + this.#characteristics_bs_advances
+    }
+    get characteristics_s_current() {
+        return this.#characteristics_s_initial + this.#characteristics_s_advances
+    }
+    get characteristics_t_current() {
+        return this.#characteristics_t_initial + this.#characteristics_t_advances
+    }
+    get characteristics_i_current() {
+        return this.#characteristics_i_initial + this.#characteristics_i_advances
+    }
+    get characteristics_ag_current() {
+        return this.#characteristics_ag_initial + this.#characteristics_ag_advances
+    }
+    get characteristics_dex_current() {
+        return this.#characteristics_dex_initial + this.#characteristics_dex_advances
+    }
+    get characteristics_int_current() {
+        return this.#characteristics_int_initial + this.#characteristics_int_advances
+    }
+    get characteristics_wp_current() {
+        return this.#characteristics_wp_initial + this.#characteristics_wp_advances
+    }
+    get characteristics_fel_current() {
+        return this.#characteristics_fel_initial + this.#characteristics_fel_advances
+    }
+
+    get ws_bonus() {
+        return Math.floor(this.characteristics_ws_current /  10)
+    }
+    get bs_bonus() {
+        return Math.floor(this.characteristics_bs_current /  10)
+    }
+    get s_bonus() {
+        return Math.floor(this.characteristics_s_current /  10)
+    }
+    get t_bonus() {
+        return Math.floor(this.characteristics_t_current /  10)
+    }
+    get i_bonus() {
+        return Math.floor(this.characteristics_i_current /  10)
+    }
+    get ag_bonus() {
+        return Math.floor(this.characteristics_ag_current /  10)
+    }
+    get dex_bonus() {
+        return Math.floor(this.characteristics_dex_current /  10)
+    }
+    get int_bonus() {
+        return Math.floor(this.characteristics_int_current /  10)
+    }
+    get wp_bonus() {
+        return Math.floor(this.characteristics_wp_current /  10)
+    }
+    get fel_bonus() {
+        return Math.floor(this.characteristics_fel_current /  10)
+    }
+
     getCharacteristicsCurrent(name) {
         if(name === "WS")
-            return this.#characteristics_ws_initial + this.#characteristics_ws_advances;
+            return this.characteristics_ws_current
         else if (name === "BS")
-            return this.#characteristics_bs_initial + this.#characteristics_bs_advances;
+            return this.characteristics_bs_current
         else if (name === "S")
-            return this.#characteristics_s_initial + this.#characteristics_s_advances;
+            return this.characteristics_s_current
         else if (name === "T")
-            return this.#characteristics_t_initial + this.#characteristics_t_advances;
+            return this.characteristics_t_current
         else if (name === "I")
-            return this.#characteristics_i_initial + this.#characteristics_i_advances;
+            return this.characteristics_i_current
         else if (name === "Ag")
-            return this.#characteristics_ag_initial + this.#characteristics_ag_advances;
+            return this.characteristics_ag_current
         else if (name === "Dex")
-            return this.#characteristics_dex_initial + this.#characteristics_dex_advances;
+            return this.characteristics_dex_current
         else if (name === "Int")
-            return this.#characteristics_int_initial + this.#characteristics_int_advances;
+            return this.characteristics_int_current
         else if (name === "WP")
-            return this.#characteristics_wp_initial + this.#characteristics_wp_advances;
+            return this.characteristics_wp_current
         else if (name === "Fel")
-            return this.#characteristics_fel_initial + this.#characteristics_fel_advances;
+            return this.characteristics_fel_current
         else
             throw "\"" + name + "\" is invalid parameter";
     }
@@ -880,6 +954,10 @@ class CharacterParameters {
         talent_params['test'],
         talent_params['characteristics']);
         this.talentsNeedUpdate = true;
+    }
+
+    updateWounds() {
+        $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
     }
 };
 
