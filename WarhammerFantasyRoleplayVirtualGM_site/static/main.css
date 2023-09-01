@@ -87,6 +87,10 @@ a.button:hover {
     white-space : nowrap;
 }
 
+td.center  {
+    text-align: center;
+}
+
 select,
 input {
     border : #AAA solid 1px;
@@ -723,12 +727,12 @@ div#main div.character_sheet div.sheer2_left table.armour {
     width: 940px;
 }
 
-div#main div.character_sheet div.sheer2_left table.armour tr.title {
-    font-size: 200%;
+div#main div.character_sheet div.sheer2_left table.armour tr.block_name {
+    font-size: 36px;
     text-align: center;
 }
-div#main div.character_sheet div.sheer2_left table.armour tr.header {
-    font-size: 150%;
+div#main div.character_sheet div.sheer2_left table.armour tr.block_header {
+    font-size: 20px;
     text-align: center;
 }
 
@@ -929,7 +933,6 @@ div#main div.character_sheet table.spells tr.header {
     padding-left: 10px;
 }
 
-@media only screen and (min-width:601px) {
     div#menu_button {
         display : none;
     }
@@ -990,57 +993,3 @@ div#main div.character_sheet table.spells tr.header {
         width: auto;
         overflow : hidden;
     }
-}
-
-@media only screen and (max-width:480px) {
-    div#menu_button {
-        position : fixed;
-        top : 5px;
-        left : 5px;
-        width : 24px;
-        height : 24px;
-        background-image : url("img/menu-icon2.png");
-        background-size : 24px 24px;
-    }
-
-    div#menu {
-        background-color : #E6EEF4;
-        color : #FFFFFF;
-        padding : 0;
-        margin : 0 0 10px 0;
-        width : 100%;
-        float : left;
-        display : none;
-    }
-
-    div#menu ol {
-        margin : 0;
-        padding : 0;
-        list-style-type : none;
-    }
-
-    div#menu ol li {
-        margin : 0 0 0 0;
-    }
-
-    div#menu ol li a {
-        display : block;
-        margin : 0 0 0 0;
-        padding : 10px 0 10px 10px;
-        text-decoration : none;
-        white-space : nowrap;
-    }
-
-    div#menu ol li a:hover {
-        background-image : url("img/link_hover.png");
-        background-repeat : no-repeat;
-        margin : 0 0 0 0;
-        padding : 10px 0 10px 10px;
-        text-decoration : none;
-        white-space : nowrap;
-    }
-
-    div#main {
-        padding : 10px 0 0 0;
-    }
-}

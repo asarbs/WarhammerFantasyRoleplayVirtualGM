@@ -241,6 +241,117 @@ class Eyes(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+class Availability(models.TextChoices):
+    COMMON = "Common", _('Common')
+    SCARCE = "Scarce", _('Scarce')
+    RARE = "Rare", _('Rare')
+
+class ArmourLocations(models.Model):
+    name = models.CharField(max_length= 50, verbose_name="Name")
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+class Armour(models.Model):
+    class ArmourType(models.TextChoices):
+        SOFT_LEATHER = 'SOFT LEATHER', _('SOFT LEATHER')
+        BOILED_LEATHER = 'BOILED LEATHER', _('BOILED LEATHER')
+        MAIL = 'MAIL', _('MAIL')
+        PLATE = 'PLATE', _('PLATE')
+    name = models.CharField(max_length= 50, verbose_name="Name")
+    armour_type = models.CharField(max_length=14, choices=ArmourType.choices, default=ArmourType.SOFT_LEATHER, verbose_name="Armour Type")
+    price = models.IntegerField(default=0, verbose_name="Price")
+    encumbrance = models.IntegerField(default=1, verbose_name="Encumbrance")
+    availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
+    penalty = models.CharField(max_length= 250, default="-", verbose_name="Penalty")
+    locations = models.ManyToManyField(ArmourLocations, verbose_name="Locations")
+    armour_points = models.IntegerField(default=1, verbose_name="Armour Points")
+    qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Qualities & Flaws")
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+    def to_dict(self):
+        opts = self._meta
+        data = {}
+        for f in opts.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        loc = []
+        for l in self.locations.all():
+            loc.append(l)
+        data['locations'] = self.armour_locations
+        return data
+
+    @property
+    def armour_locations(self):
+        loc = []
+        for l in self.locations.all():
+            loc.append(str(l))
+        out = ", ".join(loc)
+        return out
+
+class Weapon(models.Model):
+    class WeaponGroup(models.TextChoices):
+        BASIC = 'BASIC', _('BASIC')
+        BLACKPOWDER = 'BLACKPOWDER', _('BLACKPOWDER')
+        BOW = 'BOW', _('BOW')
+        BRAWLING = 'BRAWLING', _('BRAWLING')
+        CAVALRY = 'CAVALRY', _('CAVALRY')
+        CROSSBOW = 'CROSSBOW', _('CROSSBOW')
+        ENGINEERING = 'ENGINEERING', _('ENGINEERING')
+        ENTANGLING = 'ENTANGLING', _('ENTANGLING')
+        EXPLOSIVES = 'EXPLOSIVES', _('EXPLOSIVES')
+        FENCING = 'FENCING', _('FENCING')
+        FLAIL = 'FLAIL', _('FLAIL')
+        PARRY  = 'PARRY', _('PARRY')
+        POLEARM = 'POLEARM', _('POLEARM')
+        SLING = 'SLING', _('SLING')
+        THROWING = 'THROWING', _('THROWING')
+        TWOHANDED = 'TWO-HANDED', _('TWO-HANDED')
+    name = models.CharField(max_length= 50, verbose_name="Name")
+    weapon_group = models.CharField(max_length=14, choices=WeaponGroup.choices, default=WeaponGroup.BASIC, verbose_name="Weapon Group")
+    price = models.IntegerField(default=0, verbose_name="Price")
+    encumbrance = models.IntegerField(default=1, verbose_name="Encumbrance")
+    availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
+    damage = models.IntegerField(default=0, verbose_name="Damage")
+    qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Qualities & Flaws")
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+    @property
+    def reach_range(self):
+        raise NotImplementedError("reach_range not implemented in Weapon class")
+
+class MeleeWeapons(Weapon):
+    class Reach(models.TextChoices):
+        AVERAGE = 'AVERAGE', _('Average')
+        LONG = 'LONG', _('Long')
+        MASSIVE = 'MASSIVE', _('Massive')
+        MEDIUM = 'MEDIUM', _('Medium')
+        PERSONAL = 'PERSONAL', _('Personal')
+        VARIES = 'VARIES', _('Varies')
+        VERY_LONG = 'VERY_LONG', _('Very_Long')
+        VERY_SHORT = 'VERY_SHORT', _('Very Short')
+    reach = models.CharField(max_length=14, choices=Reach.choices, default=Reach.VERY_SHORT, verbose_name="Reach")
+
+    @property
+    def reach_range(self):
+        raise self.reach
+
+class RangedWeapon(Weapon):
+    range = models.IntegerField(default=0, verbose_name="Range")
+
+    @property
+    def reach_range(self):
+        raise self.range
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
@@ -289,6 +400,7 @@ class Character(models.Model):
     movement_run = models.IntegerField(default="0", verbose_name="movement_run")
     ambitions_shortterm = models.TextField(verbose_name="Shortterm", default="")
     ambitions_longterm = models.TextField(verbose_name="Longterm", default="")
+    armour = models.ManyToManyField(Armour, verbose_name="Armour")
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -401,103 +513,14 @@ class ClassTrappings(models.Model):
     def __unicode__(self):
         return u"{0} - {1}".format(self.ch_class.name, self.trapping.name)
 
-class ArmourLocations(models.Model):
-    name = models.CharField(max_length= 50, verbose_name="Name")
+class ImprovementXPCosts(models.Model):
+    advances_interval_start = models.IntegerField(default="0", verbose_name="Advances Interval Start")
+    advances_interval_end = models.IntegerField(default="0", verbose_name="Advances Interval End")
+    characteristics_xp_cost = models.IntegerField(default="0", verbose_name="Characteristics xp cost")
+    skills_xp_cost = models.IntegerField(default="0", verbose_name="Skills Xp Cost")
 
     def __str__(self):
-        return u"{0}".format(self.name)
+        return u"{0} -> {1}; {2}; {3}".format(self.advances_interval_start, self.advances_interval_end, self.characteristics_xp_cost, self.skills_xp_cost)
 
     def __unicode__(self):
-        return u"{0}".format(self.name)
-
-class Availability(models.TextChoices):
-    COMMON = "Common", _('Common')
-    SCARCE = "Scarce", _('Scarce')
-    RARE = "Rare", _('Rare')
-
-class Armour(models.Model):
-    class ArmourType(models.TextChoices):
-        SOFT_LEATHER = 'SOFT LEATHER', _('SOFT LEATHER')
-        BOILED_LEATHER = 'BOILED LEATHER', _('BOILED LEATHER')
-        MAIL = 'MAIL', _('MAIL')
-        PLATE = 'PLATE', _('PLATE')
-    name = models.CharField(max_length= 50, verbose_name="Name")
-    armour_type = models.CharField(max_length=14, choices=ArmourType.choices, default=ArmourType.SOFT_LEATHER, verbose_name="Armour Type")
-    price = models.IntegerField(default=0, verbose_name="Price")
-    encumbrance = models.IntegerField(default=1, verbose_name="Encumbrance")
-    availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
-    penalty = models.CharField(max_length= 250, default="-", verbose_name="Penalty")
-    locations = models.ManyToManyField(ArmourLocations, verbose_name="Locations")
-    armour_points = models.IntegerField(default=1, verbose_name="Armour Points")
-    qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Qualities & Flaws")
-    def __str__(self):
-        return u"{0}".format(self.name)
-
-    def __unicode__(self):
-        return u"{0}".format(self.name)
-
-    @property
-    def armour_locations(self):
-        loc = []
-        for l in self.locations.all():
-            loc.append(str(l))
-        out = ", ".join(loc)
-        return out
-
-class Weapon(models.Model):
-    class WeaponGroup(models.TextChoices):
-        BASIC = 'BASIC', _('BASIC')
-        BLACKPOWDER = 'BLACKPOWDER', _('BLACKPOWDER')
-        BOW = 'BOW', _('BOW')
-        BRAWLING = 'BRAWLING', _('BRAWLING')
-        CAVALRY = 'CAVALRY', _('CAVALRY')
-        CROSSBOW = 'CROSSBOW', _('CROSSBOW')
-        ENGINEERING = 'ENGINEERING', _('ENGINEERING')
-        ENTANGLING = 'ENTANGLING', _('ENTANGLING')
-        EXPLOSIVES = 'EXPLOSIVES', _('EXPLOSIVES')
-        FENCING = 'FENCING', _('FENCING')
-        FLAIL = 'FLAIL', _('FLAIL')
-        PARRY  = 'PARRY', _('PARRY')
-        POLEARM = 'POLEARM', _('POLEARM')
-        SLING = 'SLING', _('SLING')
-        THROWING = 'THROWING', _('THROWING')
-        TWOHANDED = 'TWO-HANDED', _('TWO-HANDED')
-    name = models.CharField(max_length= 50, verbose_name="Name")
-    weapon_group = models.CharField(max_length=14, choices=WeaponGroup.choices, default=WeaponGroup.BASIC, verbose_name="Weapon Group")
-    price = models.IntegerField(default=0, verbose_name="Price")
-    encumbrance = models.IntegerField(default=1, verbose_name="Encumbrance")
-    availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
-    damage = models.IntegerField(default=0, verbose_name="Damage")
-    qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Qualities & Flaws")
-    def __str__(self):
-        return u"{0}".format(self.name)
-
-    def __unicode__(self):
-        return u"{0}".format(self.name)
-
-    @property
-    def reach_range(self):
-        raise NotImplementedError("reach_range not implemented in Weapon class")
-
-class MeleeWeapons(Weapon):
-    class Reach(models.TextChoices):
-        AVERAGE = 'AVERAGE', _('Average')
-        LONG = 'LONG', _('Long')
-        MASSIVE = 'MASSIVE', _('Massive')
-        MEDIUM = 'MEDIUM', _('Medium')
-        PERSONAL = 'PERSONAL', _('Personal')
-        VARIES = 'VARIES', _('Varies')
-        VERY_LONG = 'VERY_LONG', _('Very_Long')
-        VERY_SHORT = 'VERY_SHORT', _('Very Short')
-    reach = models.CharField(max_length=14, choices=Reach.choices, default=Reach.VERY_SHORT, verbose_name="Reach")
-
-    @property
-    def reach_range(self):
-        raise self.reach
-
-class RangedWeapon(Weapon):
-    range = models.IntegerField(default=0, verbose_name="Range")
-
-    @property
-    def reach_range(self):
-        raise self.range
+        return u"{0} -> {1}; {2}; {3}".format(self.advances_interval_start, self.advances_interval_end, self.characteristics_xp_cost, self.skills_xp_cost)

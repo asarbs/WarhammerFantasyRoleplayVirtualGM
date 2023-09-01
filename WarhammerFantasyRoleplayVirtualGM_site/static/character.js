@@ -140,6 +140,167 @@ class Talent {
     }
 }
 
+class Armour{
+    #id
+    #name
+    #armour_type
+    #price
+    #encumbrance
+    #availability
+    #penalty
+    #locations
+    #armour_points
+    #qualities_and_flaws
+    #is_in_inventory
+    constructor(id, name, armour_type, price, encumbrance, availability, penalty, locations, armour_points, qualities_and_flaws, is_in_inventory) {
+        this.#id = id;
+        this.#name = name;
+        this.#armour_type = armour_type;
+        this.#price = price;
+        this.#encumbrance = encumbrance;
+        this.#availability = availability;
+        this.#penalty = penalty;
+        this.#locations = locations;
+        this.#armour_points = armour_points;
+        this.#qualities_and_flaws = qualities_and_flaws;
+        this.#is_in_inventory = is_in_inventory
+        console.log("Create Armour:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory);
+    }
+
+    set name(name) {
+        if(typeof name === "string")
+            this.#name = name;
+        else
+            throw "" + name + " is not a string";
+    }
+    set armour_type(armour_type) {
+        if(typeof armour_type === "string")
+            this.#armour_type = armour_type;
+        else
+            throw "" + armour_type + " is not a string";
+    }
+    set price(price) {
+        if(typeof price === "number")
+            this.#price = price;
+        else
+            throw "" + price + " is not a number";
+    }
+    set encumbrance(encumbrance) {
+        if(typeof encumbrance === "number")
+            this.#encumbrance = encumbrance;
+        else
+            throw "" + encumbrance + " is not a number";
+    }
+    set availability(availability) {
+        if(typeof availability === "string")
+            this.#availability = availability;
+        else
+            throw "" + availability + " is not a string";
+    }
+    set penalty(penalty) {
+        if(typeof penalty === "string")
+            this.#penalty = penalty;
+        else
+            throw "" + penalty + " is not a string";
+    }
+    set locations(locations) {
+        if(typeof locations === "string")
+            this.#locations = locations;
+        else
+            throw "" + locations + " is not a string";
+    }
+    set armour_points(armour_points) {
+        if(typeof armour_points === "number")
+            this.#armour_points = armour_points;
+        else
+            throw "" + armour_points + " is not a number";
+    }
+    set qualities_and_flaws(qualities_and_flaws) {
+        if(typeof qualities_and_flaws === "string") {
+            this.#qualities_and_flaws = qualities_and_flaws;
+            this.save()
+         } else {
+            throw "" + qualities_and_flaws + " is not a string";
+         }
+    }
+
+    set is_in_inventory(is_in_inventory) {
+        if(typeof is_in_inventory === "boolean"){
+            this.#is_in_inventory = is_in_inventory;
+            this.updateUI();
+            this.save();
+        }
+        else {
+            throw "" + is_in_inventory + " boolean";
+        }
+    }
+
+    get id() {
+        return this.#id;
+    }
+
+    get name() {
+        return this.#name;
+    }
+    get armour_type() {
+        return this.#armour_type;
+    }
+    get price() {
+        return this.#price;
+    }
+    get encumbrance() {
+        return this.#encumbrance;
+    }
+    get availability() {
+        return this.#availability;
+    }
+    get penalty() {
+        return this.#penalty;
+    }
+    get locations() {
+        return this.#locations;
+    }
+    get armour_points() {
+        return this.#armour_points;
+    }
+    get qualities_and_flaws() {
+        return this.#qualities_and_flaws;
+    }
+
+    updateUI() {
+        console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+        if(this.#is_in_inventory && !$('td#armour_name__'+this.#id).length) {
+            var new_row = '<tr class="block_body">'
+            new_row += '<td id="armour_name__'+this.#id+'" class="left">'+this.#name+'</td>'
+            new_row += '<td id="armour_location__'+this.#id+'" class="center">'+this.#locations+'</td>'
+            new_row += '<td id="armour_encumbrance__'+this.#id+'" class="center">'+this.#encumbrance+'</td>'
+            new_row += '<td id="armour_armour_points__'+this.#id+'" class="center">'+this.#armour_points+'</td>'
+            new_row += '<td id="armour_qualities__'+this.#id+'" class="center">'+this.#qualities_and_flaws+'</td>'
+            new_row += '</tr>'
+            $("table#armour").append(new_row)
+        } else {
+            console.log("NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+        }
+    }
+
+    save() {
+        var characer_id = $("input[name='characer_id']").val()
+        $.ajax({
+            type: "POST",
+            url: "ajax_addArmourToCharacter",
+            data: {
+                characer_id: characer_id,
+                armour_id: this.id,
+            },
+            success: function(data) {
+
+            }
+        });
+
+    }
+
+}
+
 class CharacterParameters {
     #age                                = 0
     #avalible_attribute_points          = 100;
@@ -191,6 +352,7 @@ class CharacterParameters {
     #status                             = "";
     #talents                            = {};
     #talentsNeedUpdate                  = false;
+    #armour                            = [];
     #wounds                             = 0;
     skills_species                      = {};
     movement = {
@@ -956,6 +1118,33 @@ class CharacterParameters {
         this.talentsNeedUpdate = true;
     }
 
+    appendArmour(armour) {
+        var a = new Armour(armour.id,
+            armour.name,
+            armour.armour_type,
+            armour.price,
+            armour.encumbrance,
+            armour.availability,
+            armour.penalty,
+            armour.locations,
+            armour.armour_points,
+            armour.qualities_and_flaws,
+            false);
+        this.#armour.push(a)
+        a.updateUI();
+        $("select#add_armour").append($('<option>', {value: armour.id, text: armour.name}));
+    }
+
+    armour_add(armour_to_add) {
+        console.log("characeter armour_add: "+ armour_add);
+        $.each(this.#armour, function(i, item) {
+            if(item.id == armour_to_add) {
+                console.log("characeter armour_add: "+ armour_add);
+                item.is_in_inventory = true;
+            }
+        });
+    }
+
     updateWounds() {
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
     }
@@ -1623,6 +1812,9 @@ function getRandomAttributesTable() {
             characterParameters.RandomAttributesTable = data['attributesTable'];
             characterParameters.RandomHairTable = data['hairTable'];
             characterParameters.RandomEyesTable = data['eyesTable'];
+            $.each(data['armour'], function(i, item) {
+                characterParameters.appendArmour(item);
+            });
         }
     });
 }
@@ -1688,6 +1880,12 @@ function saveSkillAdv3(eventData) {
     saveSkillAdv(eventData, 3);
 }
 
+function armour_add() {
+    var armour_to_add = $("select#add_armour").val()
+    console.log("armour_add: "+ armour_to_add);
+    characterParameters.armour_add(armour_to_add);
+}
+
 function main() {
 
     $.ajaxSetup({
@@ -1728,6 +1926,8 @@ function main() {
     $("select#species_skills_3_3").on("change", eventData3_3, saveSkillAdv3);
 
     $("img#img_random_characteristics").click(randomAttributes);
+
+    $("button#armour_add_button").click(armour_add);
 
     setInterval(function() {
         characterParameters.updateCharacterState();

@@ -39,7 +39,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
-from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Trappingl
+from WarhammerFantasyRoleplayVirtualGM_app.models import *
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -260,35 +260,35 @@ def ajax_saveName(request):
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
 def ajax_getRandomAttributesTable(request):
-    if request.method == 'POST':
-        rat = RandomAttributesTable.objects.all()
-        ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}}
-        for r in rat:
-            ret['attributesTable'][r.species.id] = {
-                "characteristics_ws_initial" : r.weapon_skill,
-                "characteristics_bs_initial" : r.ballistic_skill,
-                "characteristics_s_initial" : r.strength,
-                "characteristics_t_initial" : r.toughness,
-                "characteristics_i_initial" : r.initiative,
-                "characteristics_ag_initial" : r.agility,
-                "characteristics_dex_initial" : r.dexterity,
-                "characteristics_int_initial" : r.intelligence,
-                "characteristics_wp_initial" : r.willpower,
-                "characteristics_fel_initial" : r.fellowship,
-            }
-        for r in Eyes.objects.all():
-            if r.species.id not in ret['eyesTable']:
-                ret['eyesTable'][r.species.id] = []
-            ret['eyesTable'][r.species.id].append({'val': r.id, 'name': r.name})
-        for r in Hair.objects.all():
-            if r.species.id not in ret['hairTable']:
-                ret['hairTable'][r.species.id] = []
-            ret['hairTable'][r.species.id].append({'val': r.id, 'name': r.name})
-
-        # logger.debug(ret)
-        return JsonResponse(ret)
-    logger.error("ajax_randomClass is GET")
-    return JsonResponse({'status': 'Invalid request'}, status=400)
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    rat = RandomAttributesTable.objects.all()
+    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': []}
+    for r in rat:
+        ret['attributesTable'][r.species.id] = {
+            "characteristics_ws_initial" : r.weapon_skill,
+            "characteristics_bs_initial" : r.ballistic_skill,
+            "characteristics_s_initial" : r.strength,
+            "characteristics_t_initial" : r.toughness,
+            "characteristics_i_initial" : r.initiative,
+            "characteristics_ag_initial" : r.agility,
+            "characteristics_dex_initial" : r.dexterity,
+            "characteristics_int_initial" : r.intelligence,
+            "characteristics_wp_initial" : r.willpower,
+            "characteristics_fel_initial" : r.fellowship,
+        }
+    for r in Eyes.objects.all():
+        if r.species.id not in ret['eyesTable']:
+            ret['eyesTable'][r.species.id] = []
+        ret['eyesTable'][r.species.id].append({'val': r.id, 'name': r.name})
+    for r in Hair.objects.all():
+        if r.species.id not in ret['hairTable']:
+            ret['hairTable'][r.species.id] = []
+        ret['hairTable'][r.species.id].append({'val': r.id, 'name': r.name})
+    for r in Armour.objects.all():
+        ret['armour'].append(r.to_dict());
+    # logger.debug(ret)
+    return JsonResponse(ret)
 
 def ajax_saveAttributes(request):
     if request.method == 'POST':
@@ -507,6 +507,20 @@ def ajax_saveSkillAdv(request):
         return JsonResponse(ret)
     logger.error("ajax_saveSkillAdv is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_addArmourToCharacter(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['characer_id']
+    character = Character.objects.get(id = character_id)
+    character.armour.add(Armour.objects.get(id=request.POST['armour_id']))
+    character.save()
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)

@@ -121,6 +121,8 @@ class CareersAdvanceSchemeAdmin(admin.ModelAdmin):
 
 class TrappingAdmin(admin.ModelAdmin):
     ordering = ("name",)
+    list_max_show_all = 1500
+    list_per_page = 1000
 
 class RandomTalentsTableAdmin(admin.ModelAdmin):
     list_display = ("talent", "any","random_interal_start", "random_interal_end")
@@ -182,6 +184,13 @@ class RangedWeaponAdmin(admin.ModelAdmin):
     list_per_page = 1000
 
 
+class ImprovementXPCostsAdmin(admin.ModelAdmin):
+    list_display = ("advances_interval_start", "advances_interval_end", "characteristics_xp_cost", "skills_xp_cost")
+    ordering = ("advances_interval_start", "advances_interval_end")
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
@@ -209,3 +218,4 @@ admin.site.register(models.ArmourLocations, ArmourLocationsAdmin)
 admin.site.register(models.Armour, ArmourAdmin)
 admin.site.register(models.MeleeWeapons, MeleeWeaponsAdmin)
 admin.site.register(models.RangedWeapon, RangedWeaponAdmin)
+admin.site.register(models.ImprovementXPCosts, ImprovementXPCostsAdmin)
