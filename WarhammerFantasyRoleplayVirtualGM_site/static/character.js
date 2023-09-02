@@ -139,7 +139,6 @@ class Talent {
         return this.#description;
     }
 }
-
 class Armour{
     #id
     #name
@@ -223,7 +222,6 @@ class Armour{
             throw "" + qualities_and_flaws + " is not a string";
          }
     }
-
     set is_in_inventory(is_in_inventory) {
         if(typeof is_in_inventory === "boolean"){
             this.#is_in_inventory = is_in_inventory;
@@ -238,7 +236,6 @@ class Armour{
     get id() {
         return this.#id;
     }
-
     get name() {
         return this.#name;
     }
@@ -279,7 +276,7 @@ class Armour{
             new_row += '</tr>'
             $("table#armour").append(new_row)
         } else {
-            console.log("NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+            console.log("Armour NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         }
     }
 
@@ -300,7 +297,154 @@ class Armour{
     }
 
 }
+class Weapon{
+    #id
+    #name
+    #weapon_group
+    #price
+    #encumbrance
+    #availability
+    #damage
+    #qualities_and_flaws
+    #reach_range
+    #is_in_inventory
+    constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory) {
+        this.#id = id
+        this.#name = name
+        this.#weapon_group = weapon_group
+        this.#price = price
+        this.#encumbrance = encumbrance
+        this.#availability =  availability
+        this.#damage = damage
+        this.#qualities_and_flaws = qualities_and_flaws
+        this.#reach_range = reach_range
+        this.#is_in_inventory = is_in_inventory
+        console.log("Weaponr:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory);
+    }
 
+    get id() {
+        return this.#id
+    }
+    get name() {
+        return this.#name
+    }
+    get weapon_group() {
+        return this.#weapon_group
+    }
+    get price() {
+        return this.#price
+    }
+    get encumbrance() {
+        return this.#encumbrance
+    }
+    get availability() {
+        return this.#availability
+    }
+    get damage() {
+        return this.#damage
+    }
+    get qualities_and_flaws() {
+        return this.#qualities_and_flaws
+    }
+    get reach_range() {
+        return this.#reach_range
+    }
+    get is_in_inventory() {
+        return this.#is_in_inventory
+    }
+    set name(name) {
+        if(typeof name === "string")
+            this.#name = name;
+        else
+            throw "" + name + " is not a string";
+    }
+    set weapon_group(weapon_group) {
+        if(typeof weapon_group === "string")
+            this.#weapon_group = weapon_group;
+        else
+            throw "" + weapon_group + " is not a string";
+    }
+    set price(price) {
+        if(typeof price === "number")
+            this.#price = price;
+        else
+            throw "" + price + " is not a number";
+    }
+    set encumbrance(encumbrance) {
+        if(typeof encumbrance === "number")
+            this.#encumbrance = encumbrance;
+        else
+            throw "" + encumbrance + " is not a number";
+    }
+    set availability(availability) {
+        if(typeof availability === "string")
+            this.#availability = availability;
+        else
+            throw "" + availability + " is not a string";
+    }
+    set damage(damage) {
+        if(typeof damage === "number")
+            this.#damage = damage;
+        else
+            throw "" + damage + " is not a number";
+    }
+    set qualities_and_flaws(qualities_and_flaws) {
+        if(typeof qualities_and_flaws === "string") {
+            this.#qualities_and_flaws = qualities_and_flaws;
+         } else {
+            throw "" + qualities_and_flaws + " is not a string";
+         }
+    }
+    set reach_range(reach_range) {
+        if(typeof reach_range === "string") {
+            this.#reach_range = reach_range;
+         } else {
+            throw "" + reach_range + " is not a string";
+         }
+    }
+    set is_in_inventory(is_in_inventory) {
+        if(typeof is_in_inventory === "boolean"){
+            this.#is_in_inventory = is_in_inventory;
+            this.updateUI();
+            this.save();
+        }
+        else {
+            throw "" + is_in_inventory + " boolean";
+        }
+    }
+    updateUI() {
+        console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+        if(this.#is_in_inventory && !$('td#weapon_name__'+this.#id).length) {
+            var new_row = '<tr class="block_body">'
+            new_row += '<td id="weapon_name__'+this.#id+'" class="left">'+this.#name+'</td>'
+            new_row += '<td id="weapon_location__'+this.#id+'" class="center">'+this.#weapon_group+'</td>'
+            new_row += '<td id="weapon_encumbrance__'+this.#id+'" class="center">'+this.#encumbrance+'</td>'
+            new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.#reach_range+'</td>'
+            new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.#damage+'</td>'
+            new_row += '<td id="weapon_qualities__'+this.#id+'" class="center">'+this.#qualities_and_flaws+'</td>'
+            new_row += '</tr>'
+            $("table#weapons").append(new_row)
+        } else {
+            console.log("Weapon: NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+        }
+    }
+
+    save() {
+        var characer_id = $("input[name='characer_id']").val()
+        $.ajax({
+            type: "POST",
+            url: "ajax_addWeaponToCharacter",
+            data: {
+                characer_id: characer_id,
+                weapon_id: this.id,
+            },
+            success: function(data) {
+
+            }
+        });
+
+    }
+}
 class CharacterParameters {
     #age                                = 0
     #avalible_attribute_points          = 100;
@@ -353,6 +497,7 @@ class CharacterParameters {
     #talents                            = {};
     #talentsNeedUpdate                  = false;
     #armour                            = [];
+    #weapon                            = [];
     #wounds                             = 0;
     skills_species                      = {};
     movement = {
@@ -1065,8 +1210,6 @@ class CharacterParameters {
             }
         });
     }
-
-
     updateCharacterState() {
         this.updateStaticCharacterSheet();
         this.updateSkillTable()
@@ -1119,6 +1262,7 @@ class CharacterParameters {
     }
 
     appendArmour(armour) {
+
         var a = new Armour(armour.id,
             armour.name,
             armour.armour_type,
@@ -1136,7 +1280,7 @@ class CharacterParameters {
     }
 
     armour_add(armour_to_add) {
-        console.log("characeter armour_add: "+ armour_add);
+        console.log("characeter armour_add: "+ armour_to_add);
         $.each(this.#armour, function(i, item) {
             if(item.id == armour_to_add) {
                 console.log("characeter armour_add: "+ armour_add);
@@ -1144,7 +1288,30 @@ class CharacterParameters {
             }
         });
     }
-
+    appendWeapon(weapon) {
+        var a = new Weapon(weapon.id,
+            weapon.name,
+            weapon.weapon_group,
+            weapon.price,
+            weapon.encumbrance,
+            weapon.availability,
+            weapon.damage,
+            weapon.qualities_and_flaws,
+            weapon.reach_range,
+            false);
+        this.#weapon.push(a)
+        a.updateUI();
+        $("select#add_weapon").append($('<option>', {value: weapon.id, text: weapon.name}));
+    }
+    add_weapon(weapon_to_add) {
+        console.log("characeter weapon_add: "+ weapon_to_add);
+        $.each(this.#weapon, function(i, item) {
+            if(item.id == weapon_to_add) {
+                console.log("characeter weapon_to_add: "+ weapon_to_add);
+                item.is_in_inventory = true;
+            }
+        });
+    }
     updateWounds() {
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
     }
@@ -1153,8 +1320,6 @@ class CharacterParameters {
 const characterParameters = new CharacterParameters();
 const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_career_skills']
 const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "Career Skills"]
-
-
 
 function selectSpecies() {
     $.ajaxSetup({
@@ -1189,7 +1354,6 @@ function selectSpecies() {
         }
     });
 }
-
 function selectSpeciesTalent(talens) {
 
     $.each(talens, function(i, item) {
@@ -1227,7 +1391,6 @@ function selectSpeciesTalent(talens) {
 
     });
 }
-
 function randomSpecies() {
     console.log("randomSpecies");
     characer_id = $("input[name='characer_id']").val()
@@ -1258,10 +1421,6 @@ function randomSpecies() {
         }
     });
 }
-
-
-
-
 function nextStep() {
     console.log("div#"+ character_creation_steps[characterParameters.character_creation_step]);
     $("div#"+ character_creation_steps[characterParameters.character_creation_step]).hide(200);
@@ -1275,7 +1434,6 @@ function nextStep() {
         fill_career_skills_select();
     }
 }
-
 function fill_species_skills_select() {
     console.log("fill_species_skills_select: characterParameters.character_creation_step="+ characterParameters.character_creation_step);
     console.log(characterParameters.skills);
@@ -1305,7 +1463,6 @@ function fill_species_skills_select() {
         }
     });
 }
-
 function fill_career_skills_select() {
     $.each(characterParameters.skills, function(i, item) {
         if(item.is_career_skill == true) {
@@ -1336,7 +1493,6 @@ function fill_career_skills_select() {
 
     });
 }
-
 function randomClass() {
     if(characterParameters.class_selection_random == 0) {
         characterParameters.bonus_xp += 50
@@ -1377,7 +1533,6 @@ function randomClass() {
         }
     });
 }
-
 function saveName(e) {
 
     n = $("input#character_sheet_name").val();
@@ -1455,7 +1610,6 @@ function saveEyes(e) {
         }
     });
 }
-
 function randomAttributes() {
     console.log("randomAttributes")
 
@@ -1584,7 +1738,6 @@ function randomAttributes() {
         }
     });
 }
-
 function btnUp(input_id) {
     if(characterParameters.avalible_attribute_points <= 0) {
         return
@@ -1651,8 +1804,7 @@ function btnUp(input_id) {
         }
     });
 
-  }
-
+}
 function btnDown(input_id) {
     if(characterParameters.avalible_attribute_points >= 60) {
         return
@@ -1714,8 +1866,7 @@ function btnDown(input_id) {
             characterParameters.avalible_attribute_points++
         }
     });
-  }
-
+}
 function btnUpFate(input_id) {
     if(characterParameters.extra_points <= 0) {
         console.error("btnUpFate: " + characterParameters.extra_points + " <= 0" )
@@ -1758,8 +1909,7 @@ function btnUpFate(input_id) {
         }
     });
 
-  }
-
+}
 function btnDownFate(input_id) {
     if(characterParameters.extra_points >= 3) {
         console.error("btnUpFate: " + characterParameters.extra_points + " >= 3" )
@@ -1801,7 +1951,6 @@ function btnDownFate(input_id) {
         }
     });
 }
-
 function getRandomAttributesTable() {
     $.ajax({
         type: "POST",
@@ -1815,10 +1964,12 @@ function getRandomAttributesTable() {
             $.each(data['armour'], function(i, item) {
                 characterParameters.appendArmour(item);
             });
+            $.each(data['weapon'], function(i, item) {
+                characterParameters.appendWeapon(item);
+            });
         }
     });
 }
-
 function saveSkillAdv(eventData, points) {
     new_adv_id = $(eventData.currentTarget).val();
 
@@ -1875,17 +2026,20 @@ function saveSkillAdv(eventData, points) {
 function saveSkillAdv5(eventData) {
     saveSkillAdv(eventData, 5);
 }
-
 function saveSkillAdv3(eventData) {
     saveSkillAdv(eventData, 3);
 }
-
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()
     console.log("armour_add: "+ armour_to_add);
     characterParameters.armour_add(armour_to_add);
 }
 
+function weapon_add() {
+    var weapon_to_add = $("select#add_weapon").val()
+    console.log("add_weapon: "+ weapon_to_add);
+    characterParameters.add_weapon(weapon_to_add);
+}
 function main() {
 
     $.ajaxSetup({
@@ -1928,6 +2082,7 @@ function main() {
     $("img#img_random_characteristics").click(randomAttributes);
 
     $("button#armour_add_button").click(armour_add);
+    $("button#weapon_add_button").click(weapon_add);
 
     setInterval(function() {
         characterParameters.updateCharacterState();

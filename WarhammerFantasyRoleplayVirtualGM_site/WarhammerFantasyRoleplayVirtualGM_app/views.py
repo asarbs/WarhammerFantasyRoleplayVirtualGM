@@ -65,7 +65,6 @@ def createCampaign(request):
         campaign_form = CreateCampaignForm(prefix='user')
     return render(request, 'addCampaign.html', dict(form=campaign_form))
 
-
 def addCharacter(request):
     basic_skills_criterion1 = Q(id__gte = 1)
     basic_skills_criterion2 = Q(id__lte = 26)
@@ -242,7 +241,6 @@ def ajax_randomClass(request):
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
-
 def ajax_saveName(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -263,7 +261,7 @@ def ajax_getRandomAttributesTable(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
     rat = RandomAttributesTable.objects.all()
-    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': []}
+    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': [], 'weapon':[]}
     for r in rat:
         ret['attributesTable'][r.species.id] = {
             "characteristics_ws_initial" : r.weapon_skill,
@@ -286,7 +284,11 @@ def ajax_getRandomAttributesTable(request):
             ret['hairTable'][r.species.id] = []
         ret['hairTable'][r.species.id].append({'val': r.id, 'name': r.name})
     for r in Armour.objects.all():
-        ret['armour'].append(r.to_dict());
+        ret['armour'].append(r.to_dict())
+    for mw in MeleeWeapons.objects.all():
+        ret['weapon'].append(mw.to_dict())
+    for rm in RangedWeapon.objects.all():
+        ret['weapon'].append(rm.to_dict())
     # logger.debug(ret)
     return JsonResponse(ret)
 
@@ -521,12 +523,24 @@ def ajax_addArmourToCharacter(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+def ajax_addWeaponToCharacter(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['characer_id']
+    character = Character.objects.get(id = character_id)
+    character.weapon.add(Weapon.objects.get(id=request.POST['weapon_id']))
+    character.save()
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
     dic ={'camaing': c}
     return render(request, 'detailsCampaign.html', dic)
-
 
 def showCareersAdvanceSchemes(request, casId):
         cas = CareersAdvanceScheme.objects.get(id=casId)
@@ -559,7 +573,6 @@ def changePassword(request):
     else:
         changePasswordForm = ChangePasswordForm(user=request.user)
     return render(request, "changePassword.html", dict(form=changePasswordForm))
-
 
 def addUser(request):
     if request.method == 'POST':
@@ -606,7 +619,6 @@ Tournament Calculator admin (Bartosz Skorupa)
     else:
         remindPasswordForm = RemindPasswordForm()
     return render(request, 'RemindPassword.html', dict(form=remindPasswordForm))
-
 
 class AutocompleteSkills(autocomplete.Select2QuerySetView):
     def get_queryset(self):

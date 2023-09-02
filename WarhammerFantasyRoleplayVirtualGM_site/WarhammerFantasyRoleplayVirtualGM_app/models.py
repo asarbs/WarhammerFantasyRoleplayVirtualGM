@@ -37,7 +37,6 @@ class Campaign(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
-
 class Skils(models.Model):
     name = models.CharField(max_length= 50, unique=True)
     characteristics = models.CharField(max_length= 3, default="")
@@ -153,7 +152,6 @@ class Career(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
-
 class Status(models.Model):
     class Tier(models.TextChoices):
         NONE= "NONE", _("NONE")
@@ -184,7 +182,6 @@ class CareerPath(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
-
 
 class CareersAdvanceScheme(models.Model):
     class Marked(models.TextChoices):
@@ -326,6 +323,14 @@ class Weapon(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+    def to_dict(self):
+        opts = self._meta
+        data = {}
+        for f in opts.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        data['reach_range'] = self.reach_range
+        return data
+
     @property
     def reach_range(self):
         raise NotImplementedError("reach_range not implemented in Weapon class")
@@ -344,14 +349,14 @@ class MeleeWeapons(Weapon):
 
     @property
     def reach_range(self):
-        raise self.reach
+        return self.reach
 
 class RangedWeapon(Weapon):
     range = models.IntegerField(default=0, verbose_name="Range")
 
     @property
     def reach_range(self):
-        raise self.range
+        return self.range
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
@@ -401,6 +406,7 @@ class Character(models.Model):
     ambitions_shortterm = models.TextField(verbose_name="Shortterm", default="")
     ambitions_longterm = models.TextField(verbose_name="Longterm", default="")
     armour = models.ManyToManyField(Armour, verbose_name="Armour")
+    weapon = models.ManyToManyField(Weapon, verbose_name="Weapon")
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -439,7 +445,6 @@ class Character2Talent(models.Model):
     is_career_skill = models.BooleanField(default=False)
     class Meta:
         unique_together = ('characters', 'talent',)
-
 
 class RandomAttributesTable(models.Model):
     species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)

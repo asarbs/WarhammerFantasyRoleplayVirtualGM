@@ -907,14 +907,13 @@ div#main div.character_sheet table.weapons {
     padding-top: 20px;
 }
 
-div#main div.character_sheet table.weapons tr.title {
-    font-size: 200%;
+div#main div.character_sheet table.weapons tr.block_name {
+    font-size: 36px;
     text-align: center;
 }
-div#main div.character_sheet table.weapons tr.header {
-    font-size: 150%;
+div#main div.character_sheet table.weapons tr.block_header {
+    font-size: 20px;
     text-align: center;
-    padding-left: 10px;
 }
 
 div#main div.character_sheet table.spells {
