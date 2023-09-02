@@ -33,4 +33,5 @@ urlpatterns = [
     path('ajax_replaceTalentToCharacter', views.ajax_replaceTalentToCharacter, name="ajax_replaceTalentToCharacter"),
     path('ajax_addArmourToCharacter', views.ajax_addArmourToCharacter, name="ajax_addArmourToCharacter"),
     path('ajax_addWeaponToCharacter', views.ajax_addWeaponToCharacter, name="ajax_addWeaponToCharacter"),
+    path('ajax_addSpellsToCharacter', views.ajax_addSpellsToCharacter, name="ajax_addSpellsToCharacter"),
 ]

@@ -358,6 +358,40 @@ class RangedWeapon(Weapon):
     def reach_range(self):
         return self.range
 
+class Spells(models.Model):
+    class SpellList(models.TextChoices):
+        PETTY_SPELLS            = 'PETTY_SPELLS',               _('Petty Spells')
+        ARCANE_SPELLS           = 'ARCANE_SPELLS',              _('Arcane Spells')
+        THE_LORE_OF_BEASTS      = 'THE_LORE_OF_BEASTS',         _('The Lore of Beasts')
+        THE_LORE_OF_DEATH       = 'THE_LORE_OF_DEATH',          _('The Lore of Death')
+        THE_LORE_OF_FIRE        = 'THE_LORE_OF_FIRE',           _('The Lore of Fire')
+        THE_LORE_OF_HEAVENS     = 'THE_LORE_OF_HEAVENS',        _('The Lore of Heavens')
+        THE_LORE_OF_METAL       = 'THE_LORE_OF_METAL',          _('The Lore of Metal')
+        THE_LORE_OF_LIFE        = 'THE_LORE_OF_LIFE',           _('The Lore of Life')
+        THE_LORE_OF_LIGHT       = 'THE_LORE_OF_LIGHT',          _('The Lore of Light')
+        THE_LORE_OF_SHADOWS     = 'THE_LORE_OF_SHADOWS',        _('The Lore of Shadows')
+        THE_LORE_OF_HEDGECRAFT  = 'THE_LORE_OF_HEDGECRAFT',     _('The Lore of Hedgecraft')
+        THE_LORE_OF_WITCHCRAFT  = 'THE_LORE_OF_WITCHCRAFT',     _('The Lore of Witchcraft')
+        THE_LORE_OF_DAEMONOLOGY = 'THE_LORE_OF_DAEMONOLOGY',    _('The Lore of Daemonology')
+        THE_LORE_OF_NECROMANCY  = 'THE_LORE_OF_NECROMANCY',     _('Lore of Necromancy')
+        THE_LORE_OF_NURGLE      = 'THE_LORE_OF_NURGLE',         _('The Lore of Nurgle')
+        THE_LORE_OF_SLAANESH    = 'THE_LORE_OF_SLAANESH',       _('The Lore of Slaanesh')
+        THE_LORE_OF_TZEENTCH    = 'THE_LORE_OF_TZEENTCH',       _('The Lore of Tzeentch')
+    name = models.CharField(max_length= 50, verbose_name="Name")
+    spellLists = models.CharField(max_length=23, choices=SpellList.choices, default=SpellList.PETTY_SPELLS, verbose_name="Spell List")
+    cn = models.IntegerField(default=0, verbose_name="cn")
+    range = models.CharField(max_length= 50, verbose_name="Range")
+    target  = models.CharField(max_length= 50, verbose_name="Target")
+    duration  = models.CharField(max_length= 50, verbose_name="Duration")
+    effect = models.TextField(verbose_name="Effect", default="")
+
+    def to_dict(self):
+        opts = self._meta
+        data = {}
+        for f in opts.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        return data
+
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
     name = models.CharField(max_length= 50, verbose_name="Character name")
@@ -407,6 +441,7 @@ class Character(models.Model):
     ambitions_longterm = models.TextField(verbose_name="Longterm", default="")
     armour = models.ManyToManyField(Armour, verbose_name="Armour")
     weapon = models.ManyToManyField(Weapon, verbose_name="Weapon")
+    spells = models.ManyToManyField(Spells, verbose_name="Spells")
 
     def __str__(self):
         return u"{0}".format(self.name)

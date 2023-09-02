@@ -445,6 +445,137 @@ class Weapon{
 
     }
 }
+class Spells{
+    #id
+    #name
+    #spellLists
+    #cn
+    #range
+    #target
+    #duration
+    #effect
+    #is_in_inventory
+    constructor(id, name, spellLists, cn, range, target, duration, effect, is_in_inventory) {
+        this.#id = id
+        this.#name = name
+        this.#spellLists = spellLists
+        this.#cn = cn
+        this.#range = range
+        this.#target = target
+        this.#duration =  duration
+        this.#effect = effect
+        this.#is_in_inventory = is_in_inventory
+        console.log("Spells:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory);
+    }
+    get id() {
+        return this.#id
+    }
+    get name() {
+        return this.#name
+    }
+    get spellLists() {
+        return this.#spellLists
+    }
+    get cn() {
+        return this.#cn
+    }
+    get range() {
+        return this.#range
+    }
+    get target() {
+        return this.#target
+    }
+    get duration() {
+        return this.#duration
+    }
+    get effect() {
+        return this.#effect
+    }
+    get is_in_inventory() {
+        return this.#is_in_inventory
+    }
+    set name(name) {
+        if(typeof name === "string")
+            this.#name = name;
+        else
+            throw "" + name + " is not a string";
+    }
+    set spellLists(spellLists) {
+        if(typeof spellLists === "string")
+            this.#spellLists = spellLists;
+        else
+            throw "" + spellLists + " is not a string";
+    }
+    set cn(cn) {
+        return this.#cn
+    }
+    set range(range) {
+        if(typeof range === "string")
+            this.#range = range;
+        else
+            throw "" + range + " is not a string";
+    }
+    set target(target) {
+        if(typeof target === "string")
+            this.#target = target;
+        else
+            throw "" + target + " is not a string";
+    }
+    set duration(duration) {
+        if(typeof duration === "string")
+            this.#duration = duration;
+        else
+            throw "" + duration + " is not a string";
+    }
+    set effect(effect) {
+        if(typeof effect === "string")
+            this.#effect = effect;
+        else
+            throw "" + effect + " is not a string";
+    }
+    set is_in_inventory(is_in_inventory) {
+        if(typeof is_in_inventory === "boolean"){
+            this.#is_in_inventory = is_in_inventory;
+            this.updateUI();
+            this.save();
+        }
+        else {
+            throw "" + is_in_inventory + " boolean";
+        }
+    }
+    updateUI() {
+        //name, cn, range, target, duration, effect
+        console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+        if(this.#is_in_inventory && !$('td#spell_name__'+this.#id).length) {
+            var new_row = '<tr class="block_body">'
+            new_row += '<td id="spell_name__'+this.#id+'" class="left">'+this.#name+'</td>'
+            new_row += '<td id="spell_cn__'+this.#id+'" class="center">'+this.#cn+'</td>'
+            new_row += '<td id="spell_range_'+this.#id+'" class="center">'+this.#range+'</td>'
+            new_row += '<td id="spell_target__'+this.#id+'" class="center">'+this.#target+'</td>'
+            new_row += '<td id="spell_duration__'+this.#id+'" class="center">'+this.#duration+'</td>'
+            new_row += '<td id="spell_effect__'+this.#id+'" class="center">'+this.#effect+'</td>'
+            new_row += '</tr>'
+            $("table#spells").append(new_row)
+        } else {
+            console.log("Spell: NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+        }
+    }
+
+    save() {
+        var characer_id = $("input[name='characer_id']").val()
+        $.ajax({
+            type: "POST",
+            url: "ajax_addSpellsToCharacter",
+            data: {
+                characer_id: characer_id,
+                spell_id: this.id,
+            },
+            success: function(data) {
+
+            }
+        });
+    }
+}
 class CharacterParameters {
     #age                                = 0
     #avalible_attribute_points          = 100;
@@ -498,6 +629,7 @@ class CharacterParameters {
     #talentsNeedUpdate                  = false;
     #armour                            = [];
     #weapon                            = [];
+    #spells                            = [];
     #wounds                             = 0;
     skills_species                      = {};
     movement = {
@@ -1303,11 +1435,37 @@ class CharacterParameters {
         a.updateUI();
         $("select#add_weapon").append($('<option>', {value: weapon.id, text: weapon.name}));
     }
+
     add_weapon(weapon_to_add) {
         console.log("characeter weapon_add: "+ weapon_to_add);
         $.each(this.#weapon, function(i, item) {
             if(item.id == weapon_to_add) {
                 console.log("characeter weapon_to_add: "+ weapon_to_add);
+                item.is_in_inventory = true;
+            }
+        });
+    }
+    appendSpells(spell) {
+        var a = new Spells(
+            spell.id,
+            spell.name,
+            spell.spellLists,
+            spell.cn,
+            spell.range,
+            spell.target,
+            spell.duration,
+            spell.effect,
+            false);
+        this.#spells.push(a)
+        a.updateUI();
+        $("select#add_spell").append($('<option>', {value: spell.id, text: spell.name}));
+    }
+
+    add_spell(spell_to_add) {
+        console.log("characeter spell: "+ spell_to_add);
+        $.each(this.#spells, function(i, item) {
+            if(item.id == spell_to_add) {
+                console.log("characeter spell_to_add: "+ spell_to_add);
                 item.is_in_inventory = true;
             }
         });
@@ -1967,6 +2125,10 @@ function getRandomAttributesTable() {
             $.each(data['weapon'], function(i, item) {
                 characterParameters.appendWeapon(item);
             });
+            $.each(data['spells'], function(i, item) {
+                characterParameters.appendSpells(item);
+            });
+
         }
     });
 }
@@ -2040,6 +2202,12 @@ function weapon_add() {
     console.log("add_weapon: "+ weapon_to_add);
     characterParameters.add_weapon(weapon_to_add);
 }
+
+function spell_add() {
+    var spell_to_add = $("select#add_spell").val()
+    console.log("add_spell: "+ spell_to_add);
+    characterParameters.add_spell(spell_to_add);
+}
 function main() {
 
     $.ajaxSetup({
@@ -2083,6 +2251,7 @@ function main() {
 
     $("button#armour_add_button").click(armour_add);
     $("button#weapon_add_button").click(weapon_add);
+    $("button#spells_add_button").click(spell_add);
 
     setInterval(function() {
         characterParameters.updateCharacterState();

@@ -922,73 +922,62 @@ div#main div.character_sheet table.spells {
     padding-top: 20px;
 }
 
-div#main div.character_sheet table.spells tr.title {
-    font-size: 200%;
+div#main div.character_sheet table.spells tr.block_name {
+    font-size: 36px;
     text-align: center;
 }
-div#main div.character_sheet table.spells tr.header {
-    font-size: 150%;
+div#main div.character_sheet table.spells tr.block_header {
+    font-size: 20px;
     text-align: center;
-    padding-left: 10px;
 }
 
-    div#menu_button {
-        display : none;
-    }
-
-    div#menu {
-        background-color : #E6EEF4;
-        padding : 0;
-        margin : 0 15px 0 15px;
-        width : 200px;
-        float : left;
-    }
-
-    div#menu ol {
-        margin : 0 0 0 0;
-        padding : 0;
-        list-style-type : none;
-    }
-
-    div#menu ol li {
-        margin : 0 0 0 0;
-    }
-
-    div#menu ol li.menuChild {
-        background-color : #E1EDF7;
-    }
-
-    div#menu ol li.menuChild a {
-        padding: 10px 0 10px 20px;
-    }
-
-    div#menu ol li.menuChild a:hover {
-        padding : 10px 0 10px 15px;
-    }
-
-    div#menu ol li.menuChild div {
-        padding: 10px 0 10px 20px;
-    }
-
-    div#menu ol li a {
-        display : block;
-        margin : 0 0 0 0;
-        padding : 10px 0 10px 10px;
-        text-decoration : none;
-        white-space : nowrap;
-    }
-
-    div#menu ol li a:hover {
-        background-image : url("img/link_hover.png");
-        background-repeat : no-repeat;
-        margin : 0 0 0 0;
-        padding : 10px 0 10px 10px;
-        text-decoration : none;
-        white-space : nowrap;
-    }
-
-    div#main {
-        padding : 0 0 0 0;
-        width: auto;
-        overflow : hidden;
-    }
+ div#menu_button {
+     display : none;
+ }
+ div#menu {
+     background-color : #E6EEF4;
+     padding : 0;
+     margin : 0 15px 0 15px;
+     width : 200px;
+     float : left;
+ }
+ div#menu ol {
+     margin : 0 0 0 0;
+     padding : 0;
+     list-style-type : none;
+ }
+ div#menu ol li {
+     margin : 0 0 0 0;
+ }
+ div#menu ol li.menuChild {
+     background-color : #E1EDF7;
+ }
+ div#menu ol li.menuChild a {
+     padding: 10px 0 10px 20px;
+ }
+ div#menu ol li.menuChild a:hover {
+     padding : 10px 0 10px 15px;
+ }
+ div#menu ol li.menuChild div {
+     padding: 10px 0 10px 20px;
+ }
+ div#menu ol li a {
+     display : block;
+     margin : 0 0 0 0;
+     padding : 10px 0 10px 10px;
+     text-decoration : none;
+     white-space : nowrap;
+ }
+ div#menu ol li a:hover {
+     background-image : url("img/link_hover.png");
+     background-repeat : no-repeat;
+     margin : 0 0 0 0;
+     padding : 10px 0 10px 10px;
+     text-decoration : none;
+     white-space : nowrap;
+ }
+ div#main {
+     padding : 0 0 0 0;
+     width: auto;
+     overflow : hidden;
+ }

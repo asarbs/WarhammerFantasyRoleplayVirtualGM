@@ -261,7 +261,7 @@ def ajax_getRandomAttributesTable(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
     rat = RandomAttributesTable.objects.all()
-    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': [], 'weapon':[]}
+    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': [], 'weapon':[], "spells":[]}
     for r in rat:
         ret['attributesTable'][r.species.id] = {
             "characteristics_ws_initial" : r.weapon_skill,
@@ -289,6 +289,8 @@ def ajax_getRandomAttributesTable(request):
         ret['weapon'].append(mw.to_dict())
     for rm in RangedWeapon.objects.all():
         ret['weapon'].append(rm.to_dict())
+    for s in Spells.objects.all():
+        ret['spells'].append(s.to_dict())
     # logger.debug(ret)
     return JsonResponse(ret)
 
@@ -536,6 +538,18 @@ def ajax_addWeaponToCharacter(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+def ajax_addSpellsToCharacter(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['characer_id']
+    character = Character.objects.get(id = character_id)
+    character.spells.add(Spells.objects.get(id=request.POST['spell_id']))
+    character.save()
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
