@@ -623,7 +623,7 @@ class CharacterParameters {
     #age                                = 0
     #avalible_attribute_points          = 100;
     #bonus_xp                           = 0;
-    #career_id                        = 0;
+    #career_id                          = 0;
     #career_level                       = 0;
     #career_name                        = "";
     #career_path                        = "";
@@ -671,11 +671,11 @@ class CharacterParameters {
     #status                             = "";
     #talents                            = {};
     #talentsNeedUpdate                  = false;
-    #armour                            = [];
-    #weapon                            = [];
-    #spells                            = [];
+    #armour                             = [];
+    #weapon                             = [];
+    #spells                             = [];
     #wounds                             = 0;
-    #skills_species                      = {};
+    skills_species                      = {};
     #advanceScheme;
     movement = {
         0: {'walk': 0,"run": 0},
