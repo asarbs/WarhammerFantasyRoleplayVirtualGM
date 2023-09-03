@@ -7,6 +7,8 @@ from django.forms import PasswordInput
 from django.views.generic.edit import UpdateView
 from django.db.models import Q
 
+from pprint import pformat
+
 import random
 import math
 import json
@@ -227,6 +229,7 @@ def ajax_randomClass(request):
                 }
 
             return JsonResponse({'status': 'ok',
+                                 'career_id': career.id,
                                  'career_name': career.name,
                                  'ch_class_name': character.ch_class.name,
                                  'skills': skills,
@@ -261,7 +264,7 @@ def ajax_getRandomAttributesTable(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
     rat = RandomAttributesTable.objects.all()
-    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': [], 'weapon':[], "spells":[]}
+    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': [], 'weapon':[], "spells":[], "careersAdvanceScheme":{}}
     for r in rat:
         ret['attributesTable'][r.species.id] = {
             "characteristics_ws_initial" : r.weapon_skill,
@@ -291,7 +294,7 @@ def ajax_getRandomAttributesTable(request):
         ret['weapon'].append(rm.to_dict())
     for s in Spells.objects.all():
         ret['spells'].append(s.to_dict())
-    # logger.debug(ret)
+    logger.debug(pformat(ret))
     return JsonResponse(ret)
 
 def ajax_saveAttributes(request):
@@ -511,6 +514,15 @@ def ajax_saveSkillAdv(request):
         return JsonResponse(ret)
     logger.error("ajax_saveSkillAdv is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
+
+def ajax_getCareersAdvanceScheme(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.debug(request.POST)
+
+    cas = CareersAdvanceScheme.objects.get(career__id = request.POST['career_id'])
+    ret = {'status': 'ok', 'careersAdvanceScheme': cas.serialize() }
+    return JsonResponse(ret)
 
 def ajax_addArmourToCharacter(request):
     if request.method != 'POST':

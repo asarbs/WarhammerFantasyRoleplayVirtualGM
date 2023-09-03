@@ -576,10 +576,54 @@ class Spells{
         });
     }
 }
+class AdvanceScheme {
+    #characteristics_ws     = 0;
+    #characteristics_bs     = 0;
+    #characteristics_s      = 0;
+    #characteristics_t      = 0;
+    #characteristics_i      = 0;
+    #characteristics_ag     = 0;
+    #characteristics_dex    = 0;
+    #characteristics_int    = 0;
+    #characteristics_wp     = 0;
+    #characteristics_fel    = 0;
+    #skills                 = {1:[], 2:[], 3:[], 4:[]};
+    #talents                = {1:[], 2:[], 3:[], 4:[]};
+    #trappings              = {1:[], 2:[], 3:[], 4:[]};
+    constructor(careersAdvanceScheme) {
+        console.log(careersAdvanceScheme)
+        var sign2Level = {
+            'NO': 0,
+            'CR': 1,
+            'HA': 2,
+            'SK': 3,
+            'SH': 4,
+        }
+
+        this.#characteristics_ws    = sign2Level[careersAdvanceScheme['characteristics_ws_initial']];
+        this.#characteristics_bs    = sign2Level[careersAdvanceScheme['characteristics_bs_initial']];
+        this.#characteristics_s     = sign2Level[careersAdvanceScheme['characteristics_s_initial']];
+        this.#characteristics_t     = sign2Level[careersAdvanceScheme['characteristics_t_initial']];
+        this.#characteristics_i     = sign2Level[careersAdvanceScheme['characteristics_i_initial']];
+        this.#characteristics_ag    = sign2Level[careersAdvanceScheme['characteristics_ag_initial']];
+        this.#characteristics_dex   = sign2Level[careersAdvanceScheme['characteristics_dex_initial']];
+        this.#characteristics_int   = sign2Level[careersAdvanceScheme['characteristics_int_initial']];
+        this.#characteristics_wp    = sign2Level[careersAdvanceScheme['characteristics_wp_initial']];
+        this.#characteristics_fel   = sign2Level[careersAdvanceScheme['characteristics_fel_initial']];
+
+        for(let i = 1 ; i <= 4 ; i++) {
+            this.#skills[i] = careersAdvanceScheme['advances_level'][i].skills
+            this.#talents[i] = careersAdvanceScheme['advances_level'][i].talents
+            this.#trappings[i] = careersAdvanceScheme['advances_level'][i].trappings
+        }
+    }
+
+}
 class CharacterParameters {
     #age                                = 0
     #avalible_attribute_points          = 100;
     #bonus_xp                           = 0;
+    #career_id                        = 0;
     #career_level                       = 0;
     #career_name                        = "";
     #career_path                        = "";
@@ -631,7 +675,8 @@ class CharacterParameters {
     #weapon                            = [];
     #spells                            = [];
     #wounds                             = 0;
-    skills_species                      = {};
+    #skills_species                      = {};
+    #advanceScheme;
     movement = {
         0: {'walk': 0,"run": 0},
         3: {'walk': 6,"run": 12},
@@ -1109,6 +1154,16 @@ class CharacterParameters {
     get species_id() {
         return this.#species_id
     }
+    set career_id(career_id) {
+        if(typeof career_id === "number") {
+            this.#career_id = career_id;
+        }
+        else
+            throw "career_id[" + career_id + "] is not a number";
+    }
+    get career_id() {
+        return this.#career_id
+    }
     set career_name(career_name) {
         if(typeof career_name === "string") {
             this.#career_name = career_name;
@@ -1164,7 +1219,6 @@ class CharacterParameters {
     get career_level() {
         return career_level;
     }
-
     get characteristics_ws_current() {
         return this.#characteristics_ws_initial + this.#characteristics_ws_advances
     }
@@ -1195,7 +1249,6 @@ class CharacterParameters {
     get characteristics_fel_current() {
         return this.#characteristics_fel_initial + this.#characteristics_fel_advances
     }
-
     get ws_bonus() {
         return Math.floor(this.characteristics_ws_current /  10)
     }
@@ -1226,7 +1279,6 @@ class CharacterParameters {
     get fel_bonus() {
         return Math.floor(this.characteristics_fel_current /  10)
     }
-
     getCharacteristicsCurrent(name) {
         if(name === "WS")
             return this.characteristics_ws_current
@@ -1251,7 +1303,6 @@ class CharacterParameters {
         else
             throw "\"" + name + "\" is invalid parameter";
     }
-
     updateStaticCharacterSheet() {
         if(!this.#needUpdate) {
             return
@@ -1392,7 +1443,6 @@ class CharacterParameters {
         talent_params['characteristics']);
         this.talentsNeedUpdate = true;
     }
-
     appendArmour(armour) {
 
         var a = new Armour(armour.id,
@@ -1410,7 +1460,6 @@ class CharacterParameters {
         a.updateUI();
         $("select#add_armour").append($('<option>', {value: armour.id, text: armour.name}));
     }
-
     armour_add(armour_to_add) {
         console.log("characeter armour_add: "+ armour_to_add);
         $.each(this.#armour, function(i, item) {
@@ -1435,7 +1484,6 @@ class CharacterParameters {
         a.updateUI();
         $("select#add_weapon").append($('<option>', {value: weapon.id, text: weapon.name}));
     }
-
     add_weapon(weapon_to_add) {
         console.log("characeter weapon_add: "+ weapon_to_add);
         $.each(this.#weapon, function(i, item) {
@@ -1470,14 +1518,17 @@ class CharacterParameters {
             }
         });
     }
+    add_careersAdvanceScheme(careersAdvanceScheme) {
+        this.#advanceScheme = new AdvanceScheme(careersAdvanceScheme);
+    }
     updateWounds() {
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
     }
 };
 
 const characterParameters = new CharacterParameters();
-const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_career_skills']
-const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "Career Skills"]
+const character_creation_steps = ["step_1_species", "step_2_class", "step_3_characteristics", 'step_4_species_skills', 'step_5_career_skills', 'step_6_spendXP']
+const character_creation_steps_header = ["Species", "Class", "Characteristics", "Species Skills", "Career Skills", "Spend XP"]
 
 function selectSpecies() {
     $.ajaxSetup({
@@ -1591,6 +1642,25 @@ function nextStep() {
     if(characterParameters.character_creation_step == 4) {
         fill_career_skills_select();
     }
+    if(characterParameters.character_creation_step == 5) {
+        console.log("ajax_getCareersAdvanceScheme")
+        var characer_id = $("input[name='characer_id']").val()
+        $.ajax({
+            type: "POST",
+            url: "ajax_getCareersAdvanceScheme",
+            data: {
+                characer_id: characer_id,
+                career_id: characterParameters.career_id,
+            },
+            success: function(data) {
+                characterParameters.add_careersAdvanceScheme(data['careersAdvanceScheme'])
+            }
+        });
+
+        $("div.create_character").animate({width: '+=1200', left: '+=300', top: '50' }, 1000, function () {
+
+        });
+    }
 }
 function fill_species_skills_select() {
     console.log("fill_species_skills_select: characterParameters.character_creation_step="+ characterParameters.character_creation_step);
@@ -1675,6 +1745,7 @@ function randomClass() {
             characer_id: characer_id,
         },
         success: function(data) {
+            characterParameters.career_id     = data['career_id'];
             characterParameters.career_name     = data['career_name'];
             characterParameters.ch_class_name   = data['ch_class_name'];
             characterParameters.career_path     = data['career_path'];
@@ -2196,13 +2267,11 @@ function armour_add() {
     console.log("armour_add: "+ armour_to_add);
     characterParameters.armour_add(armour_to_add);
 }
-
 function weapon_add() {
     var weapon_to_add = $("select#add_weapon").val()
     console.log("add_weapon: "+ weapon_to_add);
     characterParameters.add_weapon(weapon_to_add);
 }
-
 function spell_add() {
     var spell_to_add = $("select#add_spell").val()
     console.log("add_spell: "+ spell_to_add);

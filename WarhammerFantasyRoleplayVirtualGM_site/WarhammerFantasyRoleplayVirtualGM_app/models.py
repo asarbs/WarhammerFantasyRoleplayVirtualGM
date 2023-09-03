@@ -183,6 +183,25 @@ class CareerPath(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+    def serialize(self):
+        out = {
+            'name': self.name,
+            'skills': [],
+            'talents': [],
+            'trappings': [],
+            'status': {
+                'tier': self.status.tier,
+                'level': self.status.level,
+            }
+        }
+        for s in self.skills.all():
+            out['skills'].append(s.id)
+        for s in self.talents.all():
+            out['talents'].append(s.id)
+        for s in self.trappings.all():
+            out['trappings'].append(s.id)
+        return out
+
 class CareersAdvanceScheme(models.Model):
     class Marked(models.TextChoices):
         NONE = "NO", _(' ')
@@ -213,6 +232,26 @@ class CareersAdvanceScheme(models.Model):
 
     def __unicode__(self):
         return u"{0} Advance Scheme".format(self.career.name)
+
+    def serialize(self):
+        out = {
+            'characteristics_ws_initial': self.characteristics_ws_initial,
+            'characteristics_bs_initial': self.characteristics_bs_initial,
+            'characteristics_s_initial': self.characteristics_s_initial,
+            'characteristics_t_initial': self.characteristics_t_initial,
+            'characteristics_i_initial': self.characteristics_i_initial,
+            'characteristics_ag_initial': self.characteristics_ag_initial,
+            'characteristics_dex_initial': self.characteristics_dex_initial,
+            'characteristics_int_initial': self.characteristics_int_initial,
+            'characteristics_wp_initial': self.characteristics_wp_initial,
+            'characteristics_fel_initial': self.characteristics_fel_initial,
+            'advances_level' : { '1': self.advances_level_1.serialize(),
+                                 '2': self.advances_level_2.serialize(),
+                                 '3': self.advances_level_3.serialize(),
+                                 '4': self.advances_level_4.serialize(),
+            }
+        }
+        return out
 
 class Hair(models.Model):
     name = models.CharField(max_length= 50)
