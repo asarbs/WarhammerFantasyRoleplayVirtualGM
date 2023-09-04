@@ -593,7 +593,7 @@ class AdvanceScheme {
     constructor(careersAdvanceScheme) {
         console.log(careersAdvanceScheme)
         var sign2Level = {
-            'NO': 0,
+            'NO': 10,
             'CR': 1,
             'HA': 2,
             'SK': 3,
@@ -618,11 +618,40 @@ class AdvanceScheme {
         }
     }
 
+    canCharacteristicsAdvancement(attribureId, career_level) {
+        console.log("canCharacteristicsAdvancement:"+attribureId+"; career_level:"+career_level)
+        switch(attribureId) {
+            case "characteristics_ws_advances"  :
+                return this.#characteristics_ws <= career_level;
+            case "characteristics_bs_advances"  :
+                return this.#characteristics_bs <= career_level;
+            case "characteristics_s_advances"   :
+                return this.#characteristics_s <= career_level;
+            case "characteristics_t_advances"   :
+                return this.#characteristics_t <= career_level;
+            case "characteristics_i_advances"   :
+                return this.#characteristics_i <= career_level;
+            case "characteristics_ag_advances"  :
+                return this.#characteristics_ag <= career_level;
+            case "characteristics_dex_advances" :
+                return this.#characteristics_dex <= career_level;
+            case "characteristics_int_advances" :
+                return this.#characteristics_int <= career_level;
+            case "characteristics_wp_advances"  :
+                return this.#characteristics_wp <= career_level;
+            case "characteristics_fel_advances" :
+                return this.#characteristics_fel <= career_level;
+            default:
+              throw "AdvanceScheme.canCharacteristicsAdvancement("+attribureId+") unrecognized";
+          }
+    }
+
 }
 class CharacterParameters {
     #age                                = 0
     #avalible_attribute_points          = 100;
     #bonus_xp                           = 0;
+    #experience_spent                   = 0;
     #career_id                          = 0;
     #career_level                       = 0;
     #career_name                        = "";
@@ -676,6 +705,7 @@ class CharacterParameters {
     #spells                             = [];
     #wounds                             = 0;
     skills_species                      = {};
+    #improvementXPCosts                 = [];
     #advanceScheme;
     movement = {
         0: {'walk': 0,"run": 0},
@@ -754,13 +784,26 @@ class CharacterParameters {
     get height() {
         return this.#height
     }
+    set experience_spent(experience_spent) {
+        if(typeof experience_spent === "number") {
+            this.#experience_spent = experience_spent;
+            $("input#experience_spent").val(characterParameters.experience_spent);
+            $("input#experience_total").val(characterParameters.bonus_xp + characterParameters.experience_spent);
+        }
+        else
+            throw "experience_spent[" + experience_spent + "] is not a number";
+    }
+    get experience_spent() {
+        return this.#experience_spent;
+    }
     set bonus_xp(bonus_xp) {
         if(typeof bonus_xp === "number") {
             this.#bonus_xp = bonus_xp;
             $("input#experience_current").val(characterParameters.bonus_xp);
+            $("input#experience_total").val(characterParameters.bonus_xp + characterParameters.experience_spent);
         }
         else
-            throw "bonus_xp[" + bonus_xp + "] is not a string";
+            throw "bonus_xp[" + bonus_xp + "] is not a number";
     }
     get bonus_xp() {
         return this.#bonus_xp;
@@ -1508,7 +1551,6 @@ class CharacterParameters {
         a.updateUI();
         $("select#add_spell").append($('<option>', {value: spell.id, text: spell.name}));
     }
-
     add_spell(spell_to_add) {
         console.log("characeter spell: "+ spell_to_add);
         $.each(this.#spells, function(i, item) {
@@ -1521,6 +1563,60 @@ class CharacterParameters {
     add_careersAdvanceScheme(careersAdvanceScheme) {
         this.#advanceScheme = new AdvanceScheme(careersAdvanceScheme);
     }
+    appendImprovementXPCosts(improvementXPCosts) {
+        this.#improvementXPCosts.push(improvementXPCosts);
+    }
+    calcCharacteristicAdvXPPointCost(adv) {
+        $.each(this.#improvementXPCosts, function(i, item) {
+            if(item['advances_interval_start'] >= adv && item['advances_interval_end'] <= adv) {
+                return item['characteristics_xp_cost'];
+            }
+        })
+        throw "calcCharacteristicAdvXPPointCost: adv=" + adv + "; out of bound"
+    }
+    calcSkillsAdvXPPointCost(adv) {
+        $.each(this.#improvementXPCosts, function(i, item) {
+            if(item['advances_interval_start'] >= adv && item['advances_interval_end'] <= adv) {
+                return item['skills_xp_cost'];
+            }
+        })
+        throw "calcSkillsAdvXPPointCost: adv=" + adv + "; out of bound"
+    }
+    isInCharacteristicAdvancement(attribureId) {
+        return this.#advanceScheme.canCharacteristicsAdvancement(attribureId, this.#career_level)
+    }
+    upCharacteristicsXPSpend(newCharVal) {
+        console.log("upCharacteristicsXPSpend: "+ newCharVal);
+        for(let i = 0 ; i < this.#improvementXPCosts.length; i++ ) {
+            var item = this.#improvementXPCosts[i];
+            console.log("newCharVal["+newCharVal+"] >= item.advances_interval_start["+item.advances_interval_start+"] && newCharVal["+newCharVal+"] <= item.advances_interval_end["+item.advances_interval_end+"]");
+            if(newCharVal >= item.advances_interval_start && newCharVal <= item.advances_interval_end) {
+                if(this.bonus_xp - item.characteristics_xp_cost < 0) {
+                    return false;
+                }
+                this.bonus_xp -= item.characteristics_xp_cost;
+                this.experience_spent += item.characteristics_xp_cost;
+                return true
+            }
+        }
+        throw( "newCharVal:" + newCharVal +" out of scope");
+    }
+    downCharacteristicsXPSpend(newCharVal) {
+        console.log("downCharacteristicsXPSpend: "+ newCharVal);
+        for(let i = 0 ; i < this.#improvementXPCosts.length; i++ ) {
+            var item = this.#improvementXPCosts[i];
+            if(newCharVal >= item.advances_interval_start && newCharVal <= item.advances_interval_end) {
+                if(this.#experience_spent - item.characteristics_xp_cost <= 0) {
+                    return false;
+                }
+                this.bonus_xp += item.characteristics_xp_cost;
+                this.experience_spent -= item.characteristics_xp_cost;
+                return true;
+            }
+        }
+        throw( "newCharVal:" + newCharVal +" out of scope");
+    }
+
     updateWounds() {
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
     }
@@ -1636,7 +1732,14 @@ function nextStep() {
     characterParameters.character_creation_step++
     $("div#"+ character_creation_steps[characterParameters.character_creation_step]).show(200);
     $("div.create_character div.header h1").text(character_creation_steps_header[characterParameters.character_creation_step])
+    if(characterParameters.character_creation_step == 2) {
+        var quantity = jQuery('.quantity_fate input').each( function() {
+            jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpFate(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownFate(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
+        });
+    }
     if(characterParameters.character_creation_step == 3) {
+        $(".quantity_fate div.quantity-nav").remove();
+        $(".quantity div.quantity-nav").remove();
         fill_species_skills_select();
     }
     if(characterParameters.character_creation_step == 4) {
@@ -1654,11 +1757,13 @@ function nextStep() {
             },
             success: function(data) {
                 characterParameters.add_careersAdvanceScheme(data['careersAdvanceScheme'])
+                var quantity = jQuery('.quantity_advances input').each( function() {
+                    if(characterParameters.isInCharacteristicAdvancement(this.id)) {
+                        console.log(this);
+                        jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpCharacteristicsXPSpend(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownCharacteristicsXPSpend(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
+                    }
+                  });
             }
-        });
-
-        $("div.create_character").animate({width: '+=1200', left: '+=300', top: '50' }, 1000, function () {
-
         });
     }
 }
@@ -1942,7 +2047,7 @@ function randomAttributes() {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveAttributes",
+        url: "ajax_randomAttributes",
         data: {
             characer_id: characer_id,
         },
@@ -1978,8 +2083,6 @@ function btnUp(input_id) {
     step = parseInt(inp.attr('step'));
     oldValue = parseInt(inp.val());
 
-
-
     if ((oldValue + step) > max) {
         return
     } else {
@@ -1997,7 +2100,6 @@ function btnUp(input_id) {
         url: "ajax_saveAttribute",
         data: {
             characer_id: characer_id,
-            input_id: input_id,
             'newVal': {
                 'characteristics_ws_initial'    : $('input#characteristics_ws_initial'  ).val(),
                 'characteristics_bs_initial'    : $('input#characteristics_bs_initial'  ).val(),
@@ -2008,31 +2110,52 @@ function btnUp(input_id) {
                 'characteristics_dex_initial'   : $('input#characteristics_dex_initial' ).val(),
                 'characteristics_int_initial'   : $('input#characteristics_int_initial' ).val(),
                 'characteristics_wp_initial'    : $('input#characteristics_wp_initial'  ).val(),
-                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val()
+                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val(),
+                'characteristics_ws_advances'   : $("input#characteristics_ws_advances" ).val(),
+                'characteristics_bs_advances'   : $("input#characteristics_bs_advances" ).val(),
+                'characteristics_s_advances'    : $("input#characteristics_s_advances"  ).val(),
+                'characteristics_t_advances'    : $("input#characteristics_t_advances"  ).val(),
+                'characteristics_i_advances'    : $("input#characteristics_i_advances"  ).val(),
+                'characteristics_ag_advances'   : $("input#characteristics_ag_advances" ).val(),
+                'characteristics_dex_advances'  : $("input#characteristics_dex_advances").val(),
+                'characteristics_int_advances'  : $("input#characteristics_int_advances").val(),
+                'characteristics_wp_advances'   : $("input#characteristics_wp_advances" ).val(),
+                'characteristics_fel_advances'  : $("input#characteristics_fel_advances").val(),
+                'experience_current'            : characterParameters.bonus_xp,
+                'experience_spent'              : characterParameters.experience_spent,
             }
         },
         success: function(data) {
             console.log(data)
-            characterParameters.characteristics_ws_initial  = data['characteristics_ws_initial'];
-            characterParameters.characteristics_bs_initial  = data['characteristics_bs_initial'];
-            characterParameters.characteristics_s_initial   = data['characteristics_s_initial'];
-            characterParameters.characteristics_t_initial   = data['characteristics_t_initial'];
-            characterParameters.characteristics_i_initial   = data['characteristics_i_initial'];
-            characterParameters.characteristics_ag_initial  = data['characteristics_ag_initial'];
-            characterParameters.characteristics_dex_initial = data['characteristics_dex_initial'];
-            characterParameters.characteristics_int_initial = data['characteristics_int_initial'];
-            characterParameters.characteristics_wp_initial  = data['characteristics_wp_initial'];
-            characterParameters.characteristics_fel_initial = data['characteristics_fel_initial'];
-            characterParameters.fate_fate                   = data['fate_fate'];
-            characterParameters.fate_fortune                = data['fate_fortune'];
-            characterParameters.resilience_resilience       = data['resilience_resilience'];
-            characterParameters.resilience_resolve          = data['resilience_resolve'];
-            characterParameters.movement_movement           = data['movement_movement'];
-            characterParameters.wounds                      = data['wounds'];
+            characterParameters.characteristics_ws_initial   = data['characteristics_ws_initial'];
+            characterParameters.characteristics_bs_initial   = data['characteristics_bs_initial'];
+            characterParameters.characteristics_s_initial    = data['characteristics_s_initial'];
+            characterParameters.characteristics_t_initial    = data['characteristics_t_initial'];
+            characterParameters.characteristics_i_initial    = data['characteristics_i_initial'];
+            characterParameters.characteristics_ag_initial   = data['characteristics_ag_initial'];
+            characterParameters.characteristics_dex_initial  = data['characteristics_dex_initial'];
+            characterParameters.characteristics_int_initial  = data['characteristics_int_initial'];
+            characterParameters.characteristics_wp_initial   = data['characteristics_wp_initial'];
+            characterParameters.characteristics_fel_initial  = data['characteristics_fel_initial'];
+            characterParameters.characteristics_ws_advances  = data['characteristics_ws_advances'];
+            characterParameters.characteristics_bs_advances  = data['characteristics_bs_advances'];
+            characterParameters.characteristics_s_advances   = data['characteristics_s_advances'];
+            characterParameters.characteristics_t_advances   = data['characteristics_t_advances'];
+            characterParameters.characteristics_i_advances   = data['characteristics_i_advances'];
+            characterParameters.characteristics_ag_advances  = data['characteristics_ag_advances'];
+            characterParameters.characteristics_dex_advances = data['characteristics_dex_advances'];
+            characterParameters.characteristics_int_advances = data['characteristics_int_advances'];
+            characterParameters.characteristics_wp_advances  = data['characteristics_wp_advances'];
+            characterParameters.characteristics_fel_advances = data['characteristics_fel_advances'];
+            characterParameters.fate_fate                    = data['fate_fate'];
+            characterParameters.fate_fortune                 = data['fate_fortune'];
+            characterParameters.resilience_resilience        = data['resilience_resilience'];
+            characterParameters.resilience_resolve           = data['resilience_resolve'];
+            characterParameters.movement_movement            = data['movement_movement'];
+            characterParameters.wounds                       = data['wounds'];
             characterParameters.avalible_attribute_points--
         }
     });
-
 }
 function btnDown(input_id) {
     if(characterParameters.avalible_attribute_points >= 60) {
@@ -2061,7 +2184,6 @@ function btnDown(input_id) {
         url: "ajax_saveAttribute",
         data: {
             characer_id: characer_id,
-            input_id: input_id,
             'newVal': {
                 'characteristics_ws_initial'    : $('input#characteristics_ws_initial'  ).val(),
                 'characteristics_bs_initial'    : $('input#characteristics_bs_initial'  ).val(),
@@ -2072,27 +2194,226 @@ function btnDown(input_id) {
                 'characteristics_dex_initial'   : $('input#characteristics_dex_initial' ).val(),
                 'characteristics_int_initial'   : $('input#characteristics_int_initial' ).val(),
                 'characteristics_wp_initial'    : $('input#characteristics_wp_initial'  ).val(),
-                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val()
+                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val(),
+                'characteristics_ws_advances'   : $("input#characteristics_ws_advances" ).val(),
+                'characteristics_bs_advances'   : $("input#characteristics_bs_advances" ).val(),
+                'characteristics_s_advances'    : $("input#characteristics_s_advances"  ).val(),
+                'characteristics_t_advances'    : $("input#characteristics_t_advances"  ).val(),
+                'characteristics_i_advances'    : $("input#characteristics_i_advances"  ).val(),
+                'characteristics_ag_advances'   : $("input#characteristics_ag_advances" ).val(),
+                'characteristics_dex_advances'  : $("input#characteristics_dex_advances").val(),
+                'characteristics_int_advances'  : $("input#characteristics_int_advances").val(),
+                'characteristics_wp_advances'   : $("input#characteristics_wp_advances" ).val(),
+                'characteristics_fel_advances'  : $("input#characteristics_fel_advances").val(),
+                'experience_current'            : characterParameters.bonus_xp,
+                'experience_spent'              : characterParameters.experience_spent,
             }
         },
         success: function(data) {
-            characterParameters.characteristics_ws_initial  = data['characteristics_ws_initial'];
-            characterParameters.characteristics_bs_initial  = data['characteristics_bs_initial'];
-            characterParameters.characteristics_s_initial   = data['characteristics_s_initial'];
-            characterParameters.characteristics_t_initial   = data['characteristics_t_initial'];
-            characterParameters.characteristics_i_initial   = data['characteristics_i_initial'];
-            characterParameters.characteristics_ag_initial  = data['characteristics_ag_initial'];
-            characterParameters.characteristics_dex_initial = data['characteristics_dex_initial'];
-            characterParameters.characteristics_int_initial = data['characteristics_int_initial'];
-            characterParameters.characteristics_wp_initial  = data['characteristics_wp_initial'];
-            characterParameters.characteristics_fel_initial = data['characteristics_fel_initial'];
-            characterParameters.fate_fate                   = data['fate_fate'];
-            characterParameters.fate_fortune                = data['fate_fortune'];
-            characterParameters.resilience_resilience       = data['resilience_resilience'];
-            characterParameters.resilience_resolve          = data['resilience_resolve'];
-            characterParameters.movement_movement           = data['movement_movement'];
-            characterParameters.wounds                      = data['wounds'];
+            characterParameters.characteristics_ws_initial      = data['characteristics_ws_initial'];
+            characterParameters.characteristics_bs_initial      = data['characteristics_bs_initial'];
+            characterParameters.characteristics_s_initial       = data['characteristics_s_initial'];
+            characterParameters.characteristics_t_initial       = data['characteristics_t_initial'];
+            characterParameters.characteristics_i_initial       = data['characteristics_i_initial'];
+            characterParameters.characteristics_ag_initial      = data['characteristics_ag_initial'];
+            characterParameters.characteristics_dex_initial     = data['characteristics_dex_initial'];
+            characterParameters.characteristics_int_initial     = data['characteristics_int_initial'];
+            characterParameters.characteristics_wp_initial      = data['characteristics_wp_initial'];
+            characterParameters.characteristics_fel_initial     = data['characteristics_fel_initial'];
+            characterParameters.characteristics_ws_advances     = data['characteristics_ws_advances'];
+            characterParameters.characteristics_bs_advances     = data['characteristics_bs_advances'];
+            characterParameters.characteristics_s_advances      = data['characteristics_s_advances'];
+            characterParameters.characteristics_t_advances      = data['characteristics_t_advances'];
+            characterParameters.characteristics_i_advances      = data['characteristics_i_advances'];
+            characterParameters.characteristics_ag_advances     = data['characteristics_ag_advances'];
+            characterParameters.characteristics_dex_advances    = data['characteristics_dex_advances'];
+            characterParameters.characteristics_int_advances    = data['characteristics_int_advances'];
+            characterParameters.characteristics_wp_advances     = data['characteristics_wp_advances'];
+            characterParameters.characteristics_fel_advances    = data['characteristics_fel_advances'];
+            characterParameters.fate_fate                       = data['fate_fate'];
+            characterParameters.fate_fortune                    = data['fate_fortune'];
+            characterParameters.resilience_resilience           = data['resilience_resilience'];
+            characterParameters.resilience_resolve              = data['resilience_resolve'];
+            characterParameters.movement_movement               = data['movement_movement'];
+            characterParameters.wounds                          = data['wounds'];
             characterParameters.avalible_attribute_points++
+        }
+    });
+}
+function btnUpCharacteristicsXPSpend(input_id) {
+    if(characterParameters.avalible_attribute_points <= 0) {
+        return
+    }
+
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+
+    if ((oldValue + step) > max) {
+        return
+    } else {
+      var newVal = oldValue + step;
+    }
+    if(!characterParameters.upCharacteristicsXPSpend(newVal)) {
+        return;
+    }
+
+    console.log("btnUp: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    characterParameters.input_id  = newVal
+    inp.val(newVal);
+    inp.trigger("change");
+
+
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveAttribute",
+        data: {
+            characer_id: characer_id,
+            'newVal': {
+                'characteristics_ws_initial'    : $('input#characteristics_ws_initial'  ).val(),
+                'characteristics_bs_initial'    : $('input#characteristics_bs_initial'  ).val(),
+                'characteristics_s_initial'     : $('input#characteristics_s_initial'   ).val(),
+                'characteristics_t_initial'     : $('input#characteristics_t_initial'   ).val(),
+                'characteristics_i_initial'     : $('input#characteristics_i_initial'   ).val(),
+                'characteristics_ag_initial'    : $('input#characteristics_ag_initial'  ).val(),
+                'characteristics_dex_initial'   : $('input#characteristics_dex_initial' ).val(),
+                'characteristics_int_initial'   : $('input#characteristics_int_initial' ).val(),
+                'characteristics_wp_initial'    : $('input#characteristics_wp_initial'  ).val(),
+                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val(),
+                'characteristics_ws_advances'   : $("input#characteristics_ws_advances" ).val(),
+                'characteristics_bs_advances'   : $("input#characteristics_bs_advances" ).val(),
+                'characteristics_s_advances'    : $("input#characteristics_s_advances"  ).val(),
+                'characteristics_t_advances'    : $("input#characteristics_t_advances"  ).val(),
+                'characteristics_i_advances'    : $("input#characteristics_i_advances"  ).val(),
+                'characteristics_ag_advances'   : $("input#characteristics_ag_advances" ).val(),
+                'characteristics_dex_advances'  : $("input#characteristics_dex_advances").val(),
+                'characteristics_int_advances'  : $("input#characteristics_int_advances").val(),
+                'characteristics_wp_advances'   : $("input#characteristics_wp_advances" ).val(),
+                'characteristics_fel_advances'  : $("input#characteristics_fel_advances").val(),
+                'experience_current'            : characterParameters.bonus_xp,
+                'experience_spent'              : characterParameters.experience_spent,
+            }
+        },
+        success: function(data) {
+            console.log(data)
+            characterParameters.characteristics_ws_initial   = data['characteristics_ws_initial'];
+            characterParameters.characteristics_bs_initial   = data['characteristics_bs_initial'];
+            characterParameters.characteristics_s_initial    = data['characteristics_s_initial'];
+            characterParameters.characteristics_t_initial    = data['characteristics_t_initial'];
+            characterParameters.characteristics_i_initial    = data['characteristics_i_initial'];
+            characterParameters.characteristics_ag_initial   = data['characteristics_ag_initial'];
+            characterParameters.characteristics_dex_initial  = data['characteristics_dex_initial'];
+            characterParameters.characteristics_int_initial  = data['characteristics_int_initial'];
+            characterParameters.characteristics_wp_initial   = data['characteristics_wp_initial'];
+            characterParameters.characteristics_fel_initial  = data['characteristics_fel_initial'];
+            characterParameters.characteristics_ws_advances  = data['characteristics_ws_advances'];
+            characterParameters.characteristics_bs_advances  = data['characteristics_bs_advances'];
+            characterParameters.characteristics_s_advances   = data['characteristics_s_advances'];
+            characterParameters.characteristics_t_advances   = data['characteristics_t_advances'];
+            characterParameters.characteristics_i_advances   = data['characteristics_i_advances'];
+            characterParameters.characteristics_ag_advances  = data['characteristics_ag_advances'];
+            characterParameters.characteristics_dex_advances = data['characteristics_dex_advances'];
+            characterParameters.characteristics_int_advances = data['characteristics_int_advances'];
+            characterParameters.characteristics_wp_advances  = data['characteristics_wp_advances'];
+            characterParameters.characteristics_fel_advances = data['characteristics_fel_advances'];
+            characterParameters.fate_fate                    = data['fate_fate'];
+            characterParameters.fate_fortune                 = data['fate_fortune'];
+            characterParameters.resilience_resilience        = data['resilience_resilience'];
+            characterParameters.resilience_resolve           = data['resilience_resolve'];
+            characterParameters.movement_movement            = data['movement_movement'];
+            characterParameters.wounds                       = data['wounds'];
+        }
+    });
+}
+function btnDownCharacteristicsXPSpend(input_id) {
+    if(characterParameters.avalible_attribute_points <= 0) {
+        return
+    }
+
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+
+    if ((oldValue - step) < min) {
+        return
+    } else {
+        var newVal = oldValue - step;
+    }
+
+    if(!characterParameters.downCharacteristicsXPSpend(newVal)) {
+        return;
+    }
+
+    console.log("btnUp: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    characterParameters.input_id  = newVal
+    inp.val(newVal);
+    inp.trigger("change");
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveAttribute",
+        data: {
+            characer_id: characer_id,
+            'newVal': {
+                'characteristics_ws_initial'    : $('input#characteristics_ws_initial'  ).val(),
+                'characteristics_bs_initial'    : $('input#characteristics_bs_initial'  ).val(),
+                'characteristics_s_initial'     : $('input#characteristics_s_initial'   ).val(),
+                'characteristics_t_initial'     : $('input#characteristics_t_initial'   ).val(),
+                'characteristics_i_initial'     : $('input#characteristics_i_initial'   ).val(),
+                'characteristics_ag_initial'    : $('input#characteristics_ag_initial'  ).val(),
+                'characteristics_dex_initial'   : $('input#characteristics_dex_initial' ).val(),
+                'characteristics_int_initial'   : $('input#characteristics_int_initial' ).val(),
+                'characteristics_wp_initial'    : $('input#characteristics_wp_initial'  ).val(),
+                'characteristics_fel_initial'   : $('input#characteristics_fel_initial' ).val(),
+                'characteristics_ws_advances'   : $("input#characteristics_ws_advances" ).val(),
+                'characteristics_bs_advances'   : $("input#characteristics_bs_advances" ).val(),
+                'characteristics_s_advances'    : $("input#characteristics_s_advances"  ).val(),
+                'characteristics_t_advances'    : $("input#characteristics_t_advances"  ).val(),
+                'characteristics_i_advances'    : $("input#characteristics_i_advances"  ).val(),
+                'characteristics_ag_advances'   : $("input#characteristics_ag_advances" ).val(),
+                'characteristics_dex_advances'  : $("input#characteristics_dex_advances").val(),
+                'characteristics_int_advances'  : $("input#characteristics_int_advances").val(),
+                'characteristics_wp_advances'   : $("input#characteristics_wp_advances" ).val(),
+                'characteristics_fel_advances'  : $("input#characteristics_fel_advances").val(),
+                'experience_current'            : characterParameters.bonus_xp,
+                'experience_spent'              : characterParameters.experience_spent,
+            }
+        },
+        success: function(data) {
+            console.log(data)
+            characterParameters.characteristics_ws_initial   = data['characteristics_ws_initial'];
+            characterParameters.characteristics_bs_initial   = data['characteristics_bs_initial'];
+            characterParameters.characteristics_s_initial    = data['characteristics_s_initial'];
+            characterParameters.characteristics_t_initial    = data['characteristics_t_initial'];
+            characterParameters.characteristics_i_initial    = data['characteristics_i_initial'];
+            characterParameters.characteristics_ag_initial   = data['characteristics_ag_initial'];
+            characterParameters.characteristics_dex_initial  = data['characteristics_dex_initial'];
+            characterParameters.characteristics_int_initial  = data['characteristics_int_initial'];
+            characterParameters.characteristics_wp_initial   = data['characteristics_wp_initial'];
+            characterParameters.characteristics_fel_initial  = data['characteristics_fel_initial'];
+            characterParameters.characteristics_ws_advances  = data['characteristics_ws_advances'];
+            characterParameters.characteristics_bs_advances  = data['characteristics_bs_advances'];
+            characterParameters.characteristics_s_advances   = data['characteristics_s_advances'];
+            characterParameters.characteristics_t_advances   = data['characteristics_t_advances'];
+            characterParameters.characteristics_i_advances   = data['characteristics_i_advances'];
+            characterParameters.characteristics_ag_advances  = data['characteristics_ag_advances'];
+            characterParameters.characteristics_dex_advances = data['characteristics_dex_advances'];
+            characterParameters.characteristics_int_advances = data['characteristics_int_advances'];
+            characterParameters.characteristics_wp_advances  = data['characteristics_wp_advances'];
+            characterParameters.characteristics_fel_advances = data['characteristics_fel_advances'];
+            characterParameters.fate_fate                    = data['fate_fate'];
+            characterParameters.fate_fortune                 = data['fate_fortune'];
+            characterParameters.resilience_resilience        = data['resilience_resilience'];
+            characterParameters.resilience_resolve           = data['resilience_resolve'];
+            characterParameters.movement_movement            = data['movement_movement'];
+            characterParameters.wounds                       = data['wounds'];
         }
     });
 }
@@ -2199,7 +2520,9 @@ function getRandomAttributesTable() {
             $.each(data['spells'], function(i, item) {
                 characterParameters.appendSpells(item);
             });
-
+            $.each(data['improvementXPCosts'], function(i, item) {
+                characterParameters.appendImprovementXPCosts(item);
+            });
         }
     });
 }
@@ -2284,9 +2607,6 @@ function main() {
     });
 
     getRandomAttributesTable();
-    var quantity = jQuery('.quantity_fate input').each( function() {
-        jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpFate(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownFate(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
-    });
 
     $("select#species").on("change", selectSpecies);
     $("img#img_character_creaton_next").click(nextStep);

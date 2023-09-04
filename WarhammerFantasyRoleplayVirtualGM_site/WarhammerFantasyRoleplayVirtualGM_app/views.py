@@ -264,7 +264,7 @@ def ajax_getRandomAttributesTable(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
     rat = RandomAttributesTable.objects.all()
-    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': [], 'weapon':[], "spells":[], "careersAdvanceScheme":{}}
+    ret = {'attributesTable':{}, 'eyesTable': {}, 'hairTable': {}, 'armour': [], 'weapon':[], "spells":[], "careersAdvanceScheme":{}, "improvementXPCosts": []}
     for r in rat:
         ret['attributesTable'][r.species.id] = {
             "characteristics_ws_initial" : r.weapon_skill,
@@ -294,10 +294,12 @@ def ajax_getRandomAttributesTable(request):
         ret['weapon'].append(rm.to_dict())
     for s in Spells.objects.all():
         ret['spells'].append(s.to_dict())
+    for impv in ImprovementXPCosts.objects.all():
+        ret['improvementXPCosts'].append(impv.to_dict())
     logger.debug(pformat(ret))
     return JsonResponse(ret)
 
-def ajax_saveAttributes(request):
+def ajax_randomAttributes(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
         character = Character.objects.get(id = character_id)
@@ -354,7 +356,9 @@ def ajax_saveAttribute(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
         character = Character.objects.get(id = character_id)
-        print(request.POST)
+        logger.debug(request.POST)
+        if 'newVal[experience_current]' not in request.POST or 'newVal[experience_spent]' not in request.POST:
+            raise ValueError("Missing experience_current or experience_spent")
         if character is not None:
             character.characteristics_ws_initial    = int(request.POST['newVal[characteristics_ws_initial]'])
             character.characteristics_bs_initial    = int(request.POST['newVal[characteristics_bs_initial]'])
@@ -366,6 +370,18 @@ def ajax_saveAttribute(request):
             character.characteristics_int_initial   = int(request.POST['newVal[characteristics_int_initial]'])
             character.characteristics_wp_initial    = int(request.POST['newVal[characteristics_wp_initial]'])
             character.characteristics_fel_initial   = int(request.POST['newVal[characteristics_fel_initial]'])
+            character.characteristics_ws_advances   = int(request.POST['newVal[characteristics_ws_advances]'])
+            character.characteristics_bs_advances   = int(request.POST['newVal[characteristics_bs_advances]'])
+            character.characteristics_s_advances    = int(request.POST['newVal[characteristics_s_advances]'])
+            character.characteristics_t_advances    = int(request.POST['newVal[characteristics_t_advances]'])
+            character.characteristics_i_advances    = int(request.POST['newVal[characteristics_i_advances]'])
+            character.characteristics_ag_advances   = int(request.POST['newVal[characteristics_ag_advances]'])
+            character.characteristics_dex_advances  = int(request.POST['newVal[characteristics_dex_advances]'])
+            character.characteristics_int_advances  = int(request.POST['newVal[characteristics_int_advances]'])
+            character.characteristics_wp_advances   = int(request.POST['newVal[characteristics_wp_advances]'])
+            character.characteristics_fel_advances  = int(request.POST['newVal[characteristics_fel_advances]'])
+            character.experience_current            = int(request.POST['newVal[experience_current]'])
+            character.experience_spent              = int(request.POST['newVal[experience_spent]'])
 
             SB = math.floor(int(character.characteristics_s_initial) / 10.0)
             TB = math.floor(int(character.characteristics_t_initial) / 10.0)
@@ -383,6 +399,16 @@ def ajax_saveAttribute(request):
                    'characteristics_int_initial':   int(character.characteristics_int_initial),
                    'characteristics_wp_initial':    int(character.characteristics_wp_initial),
                    'characteristics_fel_initial':   int(character.characteristics_fel_initial),
+                   'characteristics_ws_advances':   int(character.characteristics_ws_advances),
+                   'characteristics_bs_advances':   int(character.characteristics_bs_advances),
+                   'characteristics_s_advances':    int(character.characteristics_s_advances),
+                   'characteristics_t_advances':    int(character.characteristics_t_advances),
+                   'characteristics_i_advances':    int(character.characteristics_i_advances),
+                   'characteristics_ag_advances':   int(character.characteristics_ag_advances),
+                   'characteristics_dex_advances':  int(character.characteristics_dex_advances),
+                   'characteristics_int_advances':  int(character.characteristics_int_advances),
+                   'characteristics_wp_advances':   int(character.characteristics_wp_advances),
+                   'characteristics_fel_advances':  int(character.characteristics_fel_advances),
                    'fate_fate':                     int(character.fate_fate),
                    'fate_fortune':                  int(character.fate_fortune),
                    'resilience_resilience':         int(character.resilience_resilience),

@@ -472,7 +472,6 @@ class Character(models.Model):
     resilience_motivation = models.CharField(max_length= 50, verbose_name="Character Motivation")
     experience_current = models.IntegerField(default="0", verbose_name="experience_current")
     experience_spent = models.IntegerField(default="0", verbose_name="experience_spent")
-    experience_total = models.IntegerField(default="0", verbose_name="experience_total")
     movement_movement = models.IntegerField(default="0", verbose_name="movement_movement")
     movement_walk = models.IntegerField(default="0", verbose_name="movement_walk")
     movement_run = models.IntegerField(default="0", verbose_name="movement_run")
@@ -603,3 +602,10 @@ class ImprovementXPCosts(models.Model):
 
     def __unicode__(self):
         return u"{0} -> {1}; {2}; {3}".format(self.advances_interval_start, self.advances_interval_end, self.characteristics_xp_cost, self.skills_xp_cost)
+
+    def to_dict(self):
+        opts = self._meta
+        data = {}
+        for f in opts.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        return data
