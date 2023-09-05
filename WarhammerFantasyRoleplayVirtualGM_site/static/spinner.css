@@ -43,7 +43,7 @@
   }
 
   .quantity-nav {
-    float: left;
+    float: right;
     position: relative;
     height: 52px;
   }

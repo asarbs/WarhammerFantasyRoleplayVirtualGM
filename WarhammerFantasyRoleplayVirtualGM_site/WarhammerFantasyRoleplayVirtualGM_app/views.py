@@ -589,6 +589,25 @@ def ajax_addSpellsToCharacter(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+def ajax_saveSkillsXPSpend(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['characer_id']
+    character = Character.objects.get(id = character_id)
+
+    c2s = Character2Skill.objects.get(characters = character, skills__id = request.POST['skill_id'])
+    c2s.adv = request.POST['newVal']
+
+    character.experience_current = request.POST['experience_current']
+    character.experience_spent = request.POST['experience_spent']
+    character.save()
+
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
     dic ={'camaing': c}

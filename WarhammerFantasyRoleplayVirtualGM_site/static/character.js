@@ -42,8 +42,10 @@ class Skill {
         return this.#is_species_skill
     }
     set adv_standard(adv) {
-        if(typeof adv === "number")
+        if(typeof adv === "number") {
             this.#adv_standard = adv;
+            console.log("skill: "+ this.#name + "; new adv_standard="+ this.#adv_standard)
+        }
         else
             throw "" + adv + " is not a number";
     }
@@ -1368,7 +1370,7 @@ class CharacterParameters {
                 new_row += '<td id="skills_name__'+item.id+'" class="left">'+item.name+'</td>'
                 new_row += '<td class="characteristics">'+item.characteristics+'</td>'
                 new_row += '<td class="edit"><input type="text" id="skills_characteristics__'+item.id+'" name="fname"></td>'
-                new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" name="fname"></td>'
+                new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" class="skills_adv" skill_id="'+item.id+'" min="0" max="100" step="1" name="fname"></td>'
                 new_row += '<td class="edit"><input type="text" id="skills__'+item.id+'" name="fname"></td>'
                 new_row += '<td class=""><img id="skills__is_basic_skill__'+item.id+'" src="/static/NO.png"></td>'
                 new_row += '<td class=""><img id="skills__is_career_skill__'+item.id+'" src="/static/NO.png"></td>'
@@ -1606,15 +1608,56 @@ class CharacterParameters {
         for(let i = 0 ; i < this.#improvementXPCosts.length; i++ ) {
             var item = this.#improvementXPCosts[i];
             if(newCharVal >= item.advances_interval_start && newCharVal <= item.advances_interval_end) {
-                if(this.#experience_spent - item.characteristics_xp_cost <= 0) {
+                if(this.#experience_spent - item.characteristics_xp_cost < 0) {
+                    console.log("downCharacteristicsXPSpend false");
                     return false;
                 }
                 this.bonus_xp += item.characteristics_xp_cost;
                 this.experience_spent -= item.characteristics_xp_cost;
+                console.log("downCharacteristicsXPSpend true");
                 return true;
             }
         }
         throw( "newCharVal:" + newCharVal +" out of scope");
+    }
+    upSkillsXPSpend(newCharVal) {
+        console.log("upSkillsXPSpend: "+ newCharVal);
+        for(let i = 0 ; i < this.#improvementXPCosts.length; i++ ) {
+            var item = this.#improvementXPCosts[i];
+            console.log("newCharVal["+newCharVal+"] >= item.advances_interval_start["+item.advances_interval_start+"] && newCharVal["+newCharVal+"] <= item.advances_interval_end["+item.advances_interval_end+"]");
+            if(newCharVal >= item.advances_interval_start && newCharVal <= item.advances_interval_end) {
+                if(this.bonus_xp - item.skills_xp_cost < 0) {
+                    console.log("upSkillsXPSpend false");
+                    return false;
+                }
+                this.bonus_xp -= item.skills_xp_cost;
+                this.experience_spent += item.skills_xp_cost;
+                console.log("upSkillsXPSpend true");
+                return true
+            }
+        }
+        throw( "newSkillVal:" + newCharVal +" out of scope");
+    }
+    downSkillsXPSpend(newCharVal) {
+        console.log("downSkillsXPSpend: "+ newCharVal);
+        for(let i = 0 ; i < this.#improvementXPCosts.length; i++ ) {
+            var item = this.#improvementXPCosts[i];
+            if(newCharVal >= item.advances_interval_start && newCharVal <= item.advances_interval_end) {
+                if(this.#experience_spent - item.skills_xp_cost < 0) {
+                    console.log("downSkillsXPSpend false");
+                    return false;
+                }
+                this.bonus_xp += item.skills_xp_cost;
+                this.experience_spent -= item.skills_xp_cost;
+                console.log("downSkillsXPSpend true");
+                return true;
+            }
+        }
+        throw( "newSkillVal:" + newCharVal +" out of scope");
+    }
+    updateSkillVal(skill_id, newVal) {
+        console.log("updateSkillVal: this.#skills.length="+this.#skills.length);
+        this.#skills[skill_id].adv_standard = newVal;
     }
 
     updateWounds() {
@@ -1763,6 +1806,10 @@ function nextStep() {
                         jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpCharacteristicsXPSpend(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownCharacteristicsXPSpend(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
                     }
                   });
+                var quantity = jQuery("input.skills_adv").each( function () {
+                    console.log(this);
+                    jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpSkillsXPSpend(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownSkillsXPSpend(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
+                });
             }
         });
     }
@@ -2241,10 +2288,6 @@ function btnDown(input_id) {
     });
 }
 function btnUpCharacteristicsXPSpend(input_id) {
-    if(characterParameters.avalible_attribute_points <= 0) {
-        return
-    }
-
     inp = $('input#'+input_id);
     max = parseInt(inp.attr('max'));
     min = parseInt(inp.attr('min'));
@@ -2330,10 +2373,6 @@ function btnUpCharacteristicsXPSpend(input_id) {
     });
 }
 function btnDownCharacteristicsXPSpend(input_id) {
-    if(characterParameters.avalible_attribute_points <= 0) {
-        return
-    }
-
     inp = $('input#'+input_id);
     max = parseInt(inp.attr('max'));
     min = parseInt(inp.attr('min'));
@@ -2350,7 +2389,7 @@ function btnDownCharacteristicsXPSpend(input_id) {
         return;
     }
 
-    console.log("btnUp: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    console.log("btnDownCharacteristicsXPSpend: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
     characterParameters.input_id  = newVal
     inp.val(newVal);
     inp.trigger("change");
@@ -2414,6 +2453,80 @@ function btnDownCharacteristicsXPSpend(input_id) {
             characterParameters.resilience_resolve           = data['resilience_resolve'];
             characterParameters.movement_movement            = data['movement_movement'];
             characterParameters.wounds                       = data['wounds'];
+        }
+    });
+}
+function btnUpSkillsXPSpend(input_id) {
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+    skill_id = parseInt(inp.attr('skill_id'));
+
+    if ((oldValue + step) > max) {
+        return
+    } else {
+      var newVal = oldValue + step;
+    }
+    if(!characterParameters.upSkillsXPSpend(newVal)) {
+        return;
+    }
+
+    console.log("btnUpSkillsXPSpend: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    characterParameters.updateSkillVal(skill_id, newVal);
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveSkillsXPSpend",
+        data: {
+            characer_id: characer_id,
+            'skill_id'           : skill_id,
+            'newVal'             : newVal,
+            'experience_current' : characterParameters.bonus_xp,
+            'experience_spent'   : characterParameters.experience_spent,
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function btnDownSkillsXPSpend(input_id) {
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+    skill_id = parseInt(inp.attr('skill_id'));
+
+
+    if ((oldValue - step) < min) {
+        return
+    } else {
+        var newVal = oldValue - step;
+    }
+
+    if(!characterParameters.downSkillsXPSpend(newVal)) {
+        return;
+    }
+
+    console.log("btnDownSkillsXPSpend: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    characterParameters.updateSkillVal(skill_id, newVal);
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveSkillsXPSpend",
+        data: {
+            characer_id: characer_id,
+            'skill_id'           : skill_id,
+            'newVal'             : newVal,
+            'experience_current' : characterParameters.bonus_xp,
+            'experience_spent'   : characterParameters.experience_spent,
+        },
+        success: function(data) {
+            console.log(data)
         }
     });
 }
