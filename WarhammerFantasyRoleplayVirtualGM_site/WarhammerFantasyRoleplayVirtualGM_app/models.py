@@ -512,7 +512,7 @@ class Character2Skill(models.Model):
 class Character2Talent(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     talent = models.ForeignKey(Talent, on_delete=models.CASCADE)
-    taken = models.IntegerField(default="0", verbose_name="adv")
+    taken = models.IntegerField(default="0", verbose_name="Taken")
     is_basic_skill = models.BooleanField(default=False)
     is_species_skill = models.BooleanField(default=False)
     is_career_skill = models.BooleanField(default=False)

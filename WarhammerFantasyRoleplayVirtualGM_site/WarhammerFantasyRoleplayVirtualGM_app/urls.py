@@ -36,4 +36,5 @@ urlpatterns = [
     path('ajax_addSpellsToCharacter', views.ajax_addSpellsToCharacter, name="ajax_addSpellsToCharacter"),
     path('ajax_getCareersAdvanceScheme', views.ajax_getCareersAdvanceScheme, name="ajax_getCareersAdvanceScheme"),
     path('ajax_saveSkillsXPSpend', views.ajax_saveSkillsXPSpend, name="ajax_saveSkillsXPSpend"),
+    path('ajax_saveTalentXPSpend', views.ajax_saveTalentXPSpend, name="ajax_saveTalentXPSpend"),
 ]

@@ -87,6 +87,7 @@ def get_character_talents(character: Character):
             'max':  st.talent.max,
             'tests': st.talent.tests,
             'description': st.talent.description,
+            'taken': st.taken,
             'ref': str(st.talent.ref)
         }
         talents_list.append(dic_talent)

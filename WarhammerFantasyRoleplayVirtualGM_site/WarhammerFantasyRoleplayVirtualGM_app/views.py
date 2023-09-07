@@ -122,7 +122,7 @@ def ajax_addTalentToCharacter(request):
     character_id = request.POST['characer_id']
     talent_id = request.POST['new_talent_id']
     try:
-        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=0)
+        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=1)
         char2tal.save();
     except django.db.utils.IntegrityError as e:
         logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.talent.name, created))
@@ -140,7 +140,7 @@ def ajax_replaceTalentToCharacter(request):
     except Character2Talent.DoesNotExist as e:
         logger.debug("{}: old_talent_id={};".format(e, old_talent_id))
     try:
-        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=new_talent_id, taken=0)
+        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=new_talent_id, taken=1)
         char2tal.save();
     except django.db.utils.IntegrityError as e:
         logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
@@ -192,7 +192,7 @@ def ajax_randomClass(request):
             Character2Talent.objects.filter(characters=character, is_career_skill = True).delete()
             for talent in ad.talents.all():
                 try:
-                    c2talent, created = Character2Talent.objects.get_or_create(characters=character, talent=talent, taken=0)
+                    c2talent, created = Character2Talent.objects.get_or_create(characters=character, talent=talent, taken=1)
                     c2talent.is_career_skill = True
                     c2talent.save()
                 except django.db.utils.IntegrityError as e:
@@ -600,6 +600,7 @@ def ajax_saveSkillsXPSpend(request):
 
     c2s = Character2Skill.objects.get(characters = character, skills__id = request.POST['skill_id'])
     c2s.adv = request.POST['newVal']
+    c2s.save()
 
     character.experience_current = request.POST['experience_current']
     character.experience_spent = request.POST['experience_spent']
@@ -607,6 +608,27 @@ def ajax_saveSkillsXPSpend(request):
 
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
+
+def ajax_saveTalentXPSpend(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['characer_id']
+    character = Character.objects.get(id = character_id)
+
+    c2t = Character2Talent.objects.get(characters = character, skills__id = request.POST['tallent_id'])
+    c2t.adv = request.POST['newVal']
+    c2t.save()
+
+    character.experience_current = request.POST['experience_current']
+    character.experience_spent = request.POST['experience_spent']
+    character.save()
+
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)

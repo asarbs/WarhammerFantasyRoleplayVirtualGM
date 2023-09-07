@@ -118,12 +118,14 @@ class Talent {
     #max            = ""
     #test           = ""
     #description    = "";
-    constructor(id, name, max, test, description) {
+    #taken          = "";
+    constructor(id, name, max, test, description, taken) {
         this.#id = id;
         this.#name = name;
         this.#max = max;
         this.#test = test;
         this.#description = description;
+        this.#taken = taken;
     }
     get id() {
         return this.#id;
@@ -139,6 +141,15 @@ class Talent {
     }
     get description() {
         return this.#description;
+    }
+    set taken(taken) {
+        if(typeof taken === "number")
+            this.#taken = taken;
+        else
+            throw "" + taken + " is not a number";
+    }
+    get taken() {
+        return this.#taken
     }
 }
 class Armour{
@@ -1412,10 +1423,11 @@ class CharacterParameters {
             if(!$('#talents_adv__'+item.id).length) {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
-                new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" name="fname"></td>'
+                new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" talent_id="'+item.id+'" min="0" max="100" step="1" name="fname"></td>'
                 new_row += '<td class="description">'+item.description+'</td>'
                 new_row += '</tr>'
                 $("#talents_table").append(new_row)
+                $('#talents_adv__'+item.id).val(item.taken)
             }
         });
     }
@@ -1485,7 +1497,8 @@ class CharacterParameters {
         talent_params['name'],
         talent_params['max'],
         talent_params['test'],
-        talent_params['characteristics']);
+        talent_params['characteristics'],
+        talent_params['taken']);
         this.talentsNeedUpdate = true;
     }
     appendArmour(armour) {
@@ -1659,6 +1672,37 @@ class CharacterParameters {
         console.log("updateSkillVal: this.#skills.length="+this.#skills.length);
         this.#skills[skill_id].adv_standard = newVal;
     }
+    upTalentXPSpend(oldValue) {
+
+
+        var xpToSpend = oldValue * 100 + 100;
+        if( xpToSpend <= this.bonus_xp) {
+            this.bonus_xp -= xpToSpend;
+            this.experience_spent += xpToSpend;
+            console.log("upTalentXPSpend: oldValue="+ oldValue + "; ok");
+            return true
+
+        }
+        console.log("upTalentXPSpend: oldValue="+ oldValue + "; not ok");
+        return false;
+    }
+    downTalentXPSpend(oldValue) {
+        console.log("downTalentXPSpend: oldValue="+ oldValue);
+
+        var xpToSpend = oldValue * 100 + 100;
+        if( this.#experience_spent - xpToSpend  >= this.bonus_xp) {
+            this.bonus_xp += xpToSpend;
+            this.experience_spent -= xpToSpend;
+            console.log("downTalentXPSpend: oldValue="+ oldValue + "; ok");
+            return true
+        }
+        console.log("downTalentXPSpend: oldValue="+ oldValue + "; not ok");
+        return false;
+    }
+    updateTalentVal(talent_id, newVal) {
+        console.log("updateTalentVal: this.#talents.length="+this.#talents.length);
+        this.#talents[talent_id].taken = newVal;
+    }
 
     updateWounds() {
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
@@ -1809,6 +1853,11 @@ function nextStep() {
                 var quantity = jQuery("input.skills_adv").each( function () {
                     console.log(this);
                     jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpSkillsXPSpend(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownSkillsXPSpend(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
+                });
+
+                var quantity = jQuery("input.talents_adv").each(function() {
+                    console.log(this);
+                    jQuery('<div class="quantity-nav"><button class="quantity-button quantity-up" onClick="btnUpTalentsXPSpend(\''+this.id+'\')">&#xf106;</button><button class="quantity-button quantity-down" onClick="btnDownTalentsXPSpend(\''+this.id+'\')">&#xf107</button></div>').insertAfter(this)
                 });
             }
         });
@@ -2521,6 +2570,82 @@ function btnDownSkillsXPSpend(input_id) {
         data: {
             characer_id: characer_id,
             'skill_id'           : skill_id,
+            'newVal'             : newVal,
+            'experience_current' : characterParameters.bonus_xp,
+            'experience_spent'   : characterParameters.experience_spent,
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function btnUpTalentsXPSpend(input_id) {
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+    tallent_id = parseInt(inp.attr('tallent_id'));
+
+
+    if ((oldValue + step) > max) {
+        return
+    } else {
+        var newVal = oldValue - step;
+    }
+
+    if(!characterParameters.upTalentXPSpend(oldValue)) {
+        return;
+    }
+
+    console.log("btnUpTalentsXPSpend: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    characterParameters.updateTalentVal(skill_id, newVal);
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveTalentXPSpend",
+        data: {
+            characer_id: characer_id,
+            'tallent_id'         : tallent_id,
+            'newVal'             : newVal,
+            'experience_current' : characterParameters.bonus_xp,
+            'experience_spent'   : characterParameters.experience_spent,
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function btnDownTalentXPSpend(input_id) {
+    inp = $('input#'+input_id);
+    max = parseInt(inp.attr('max'));
+    min = parseInt(inp.attr('min'));
+    step = parseInt(inp.attr('step'));
+    oldValue = parseInt(inp.val());
+    tallent_id = parseInt(inp.attr('tallent_id'));
+
+
+    if ((oldValue - step) < min) {
+        return
+    } else {
+        var newVal = oldValue - step;
+    }
+
+    if(!characterParameters.downTalentXPSpend(oldValue)) {
+        return;
+    }
+
+    console.log("btnDownSkillsXPSpend: input_id="+input_id+"; min="+min + "; max="+max+"; step="+step+"; oldVal="+oldValue+"; newVal="+newVal);
+    characterParameters.updateTalentVal(skill_id, newVal);
+
+    characer_id = $("input[name='characer_id']").val()
+    $.ajax({
+        type: "POST",
+        url: "ajax_saveTalentXPSpend",
+        data: {
+            characer_id: characer_id,
+            'tallent_id'         : tallent_id,
             'newVal'             : newVal,
             'experience_current' : characterParameters.bonus_xp,
             'experience_spent'   : characterParameters.experience_spent,
