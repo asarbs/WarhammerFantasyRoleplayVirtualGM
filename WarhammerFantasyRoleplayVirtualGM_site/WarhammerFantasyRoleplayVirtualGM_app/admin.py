@@ -173,8 +173,6 @@ class MeleeWeaponsAdmin(admin.ModelAdmin):
     list_max_show_all = 1500
     list_per_page = 1000
 
-
-
 class RangedWeaponAdmin(admin.ModelAdmin):
     list_display = ("name", "weapon_group", "price", "encumbrance", "range", "availability", "damage", "qualities_and_flaws")
     list_filter = ("weapon_group", "availability")
@@ -182,7 +180,6 @@ class RangedWeaponAdmin(admin.ModelAdmin):
     save_as = True
     list_max_show_all = 1500
     list_per_page = 1000
-
 
 class ImprovementXPCostsAdmin(admin.ModelAdmin):
     list_display = ("advances_interval_start", "advances_interval_end", "characteristics_xp_cost", "skills_xp_cost")

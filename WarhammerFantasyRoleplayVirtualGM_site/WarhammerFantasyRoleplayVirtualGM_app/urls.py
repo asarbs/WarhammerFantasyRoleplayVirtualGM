@@ -17,6 +17,9 @@ urlpatterns = [
     path("detailsCampaign/<int:CampaignId>", views.detailsCampaign, name="detailsCampaign"),
     path('addCharacter', views.addCharacter, name="addCharacter"),
     path('showCareersAdvanceSchemes/<int:casId>', views.showCareersAdvanceSchemes, name="showCareersAdvanceSchemes"),
+    path('listCareersAdvanceSchemes', views.listCareersAdvanceSchemes, name="listCareersAdvanceSchemes"),
+    path('MeleWeaponListView', views.MeleWeaponListView.as_view(), name="MeleWeaponListView"),
+
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
     path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
     path('ajax_randomClass', views.ajax_randomClass, name="ajax_randomClass"),

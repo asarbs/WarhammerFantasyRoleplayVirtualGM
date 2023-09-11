@@ -1,11 +1,16 @@
 import django
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
-from django.forms import Form
-from django.forms import CharField
-from django.forms import PasswordInput
-from django.views.generic.edit import UpdateView
+from django_tables2 import SingleTableView
+from django_tables2.paginators import LazyPaginator
 from django.db.models import Q
+from django.forms import CharField
+from django.forms import Form
+from django.forms import PasswordInput
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import render
+from django.views.generic import ListView
+from django.views.generic.edit import UpdateView
+
+
 
 from pprint import pformat
 
@@ -42,6 +47,8 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 from WarhammerFantasyRoleplayVirtualGM_app.models import *
+
+from WarhammerFantasyRoleplayVirtualGM_app.tables import MeleeWeaponsTable
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -296,7 +303,7 @@ def ajax_getRandomAttributesTable(request):
         ret['spells'].append(s.to_dict())
     for impv in ImprovementXPCosts.objects.all():
         ret['improvementXPCosts'].append(impv.to_dict())
-    logger.debug(pformat(ret))
+    # logger.debug(pformat(ret))
     return JsonResponse(ret)
 
 def ajax_randomAttributes(request):
@@ -638,6 +645,16 @@ def detailsCampaign(request, CampaignId):
 def showCareersAdvanceSchemes(request, casId):
         cas = CareersAdvanceScheme.objects.get(id=casId)
         return render(request, 'showCareersAdvanceSchemes.html', {'cas':cas} )
+
+def listCareersAdvanceSchemes(request):
+    cas = CareersAdvanceScheme.objects.all()
+    return render(request, 'listCareersAdvanceSchemes.html', {'cas':cas} )
+
+class MeleWeaponListView(SingleTableView):
+    model = MeleeWeapons
+    table_class = MeleeWeaponsTable
+    template_name = 'MeleWeaponList.html'
+    paginator_class = LazyPaginator
 
 class ChangePasswordForm(Form):
     new_password = CharField(widget=PasswordInput(), label="New Password")

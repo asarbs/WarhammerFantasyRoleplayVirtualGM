@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% load player %}
+{% load static %}
+
+{% block main %}
+
+
+    <ol>
+        {% for c in cas %}
+            <li><a href="{% url 'showCareersAdvanceSchemes' casId=c.id %}"> {{ c.career }}</a> </li>
+        {% endfor %}
+    </ol>
+
+{% endblock %}
