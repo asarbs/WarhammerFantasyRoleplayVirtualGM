@@ -126,6 +126,15 @@ ul.errorlist {
     color : #FF0000;
 }
 
+div.table-container {
+    /* background-color: #35fbd6; */
+    width: 100%;
+}
+table.MeleeWeaponsTable {
+    /* background-color: #5335fb; */
+    width: 100%;
+}
+
 div#cookieack div.wrap {
     width : 74.77778%;
     margin-left : 1.5%;
