@@ -1,4 +1,5 @@
 import django
+from django.forms.models import BaseModelForm
 from django_tables2 import SingleTableView
 from django_tables2.paginators import LazyPaginator
 from django.db.models import Q
@@ -8,9 +9,9 @@ from django.forms import PasswordInput
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
-
-
+from django.views.generic.edit import CreateView
 
 from pprint import pformat
 
@@ -27,6 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import MeleWeaponForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
@@ -768,3 +770,7 @@ class AutocompleteTrappings(autocomplete.Select2QuerySetView):
             qs = qs.filter(name__istartswith=self.q).order_by('name')
 
         return qs
+
+class MeleWeaponFormView(CreateView):
+    template_name = "mele_weapon.html"
+    form_class = MeleWeaponForm

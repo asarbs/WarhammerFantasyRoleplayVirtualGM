@@ -1,11 +1,17 @@
-from django.forms import Form
+from django.contrib.auth.models import User
+from django.core import validators
+from django.core.exceptions import ValidationError
 from django.forms import CharField
+from django.forms import Form
 from django.forms import ModelForm
 from django.forms import PasswordInput
-from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 
+
 from dal import autocomplete
+
+import logging
+logger = logging.getLogger(__name__)
 
 from . import models
 
@@ -23,7 +29,6 @@ class UserForm(ModelForm):
             user.save()
         return user
 
-
 class RemindPasswordForm(Form):
     username_mail = CharField(label="User Name / E-mail")
 
@@ -31,7 +36,6 @@ class CreateCampaignForm(ModelForm):
     class Meta:
         model = models.Campaign
         fields = ['name', 'party_name', 'ambitions_shortterm', 'ambitions_longterm']
-
 
 class SpeciesForm(ModelForm):
     class Meta:
@@ -59,3 +63,54 @@ class ClassTrappingsForm(ModelForm):
         widgets = {
             'trapping': autocomplete.ModelSelect2(url='trappings-autocomplete')
         }
+
+
+def validator_price(price):
+    if price.endswith("GC"):
+        return
+    elif price.endswith("/-"):
+        return
+    elif  price.endswith("d"):
+        return
+    elif price.isdigit():
+        return
+    else:
+        raise ValidationError("Price should ends with GC, /-, d");
+
+class MeleWeaponForm(ModelForm):
+    price = CharField(validators=[validator_price], help_text="Price should ends with GC, /-, d")
+
+    class Meta:
+        model = models.MeleeWeapons
+        fields = ["name", "weapon_group", "price", "encumbrance", "availability", "damage", "qualities_and_flaws", "reach", "reference"]
+
+    def calc_price_to_brass(self):
+        logger.debug("price:{}".format(self.data['price']))
+        price = self.data['price']
+        if price.endswith("GC"):
+            price_int = int(price[0:-2])
+            self.data['price'] = price_int * 240
+            return True
+        elif price.endswith("/-"):
+            price_int = int(price[0:-2])
+            self.data['price'] = price_int * 12
+            return True
+        elif  price.endswith("d"):
+            price_int = int(price[0:-1])
+            self.data['price'] = price_int
+            return True
+        logger.error("price: {} [type:{}] is invalid for conversion".format(price, type(price)))
+        return False
+
+    def is_valid(self) -> bool:
+        self.data._mutable = True
+        price_calc = self.calc_price_to_brass()
+        self.data._mutable = False
+        valid = super(MeleWeaponForm,self).is_valid()
+        logger.debug("price:{};valid={}; price_calc={}".format(self.data['price'], valid, price_calc))
+        return valid
+
+    def save(self, commit=True):
+        mwf = super(MeleWeaponForm, self).save(commit=False)
+        mwf.save()
+        return mwf

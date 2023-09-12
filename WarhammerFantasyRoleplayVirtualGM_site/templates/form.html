@@ -3,7 +3,7 @@
 {% for field in form %}
     <tr>
         <td class="left">{{ field.label }}</td>
-        <td class="right">{{ field }}<span class="help-text">{{ field.help_text }}</span></td>
+        <td class="right">{{ field }}<span class="help-text">{{ field.help_text }}</span><span class="help-text">{{ field.errors }}</span> </td>
     </tr>
     {% endfor %}
     <tr>

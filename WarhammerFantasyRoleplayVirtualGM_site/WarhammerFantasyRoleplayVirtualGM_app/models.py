@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from WarhammerFantasyRoleplayVirtualGM_app.validators import validator_sex
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 # Create your models here.
 
@@ -391,6 +392,10 @@ class MeleeWeapons(Weapon):
     @property
     def reach_range(self):
         return self.reach
+
+    def get_absolute_url(self):
+        return reverse("MeleWeaponListView")
+
 
 class RangedWeapon(Weapon):
     range = models.IntegerField(default=0, verbose_name="Range")
