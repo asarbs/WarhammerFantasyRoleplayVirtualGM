@@ -2,6 +2,8 @@ import django_tables2 as tables
 
 from WarhammerFantasyRoleplayVirtualGM_app.models import MeleeWeapons
 
+from .character_creations_helpers import format_currencu
+
 class MeleeWeaponsTable(tables.Table):
     id = tables.Column(visible=False)
     name = tables.Column()
@@ -18,3 +20,6 @@ class MeleeWeaponsTable(tables.Table):
         model = MeleeWeapons
         attrs = {"class": "paleblue"}
         sequence = ('weapon_group', 'name',  'price', 'encumbrance', 'availability', 'damage', 'qualities_and_flaws', 'reach', 'reference')
+
+    def render_price(self, value):
+        return f"{format_currencu(value)}"

@@ -1,4 +1,5 @@
 import random
+import math
 
 import django
 from django.http import JsonResponse
@@ -141,3 +142,23 @@ def set_character_species(species: Species, character_id: int):
                }
 
         return JsonResponse(res)
+
+def format_currencu(p: int):
+    GC = math.floor(p / 240)
+    GC_left = p % 240
+    SC = math.floor(GC_left / 12)
+    SC_left = GC_left % 12
+    BC = SC_left
+
+    out = ""
+    if GC > 0:
+        out += "{}GC ".format(GC)
+    if SC > 0:
+        out += "{}/".format(SC)
+    if GC == 0 and SC > 0 and BC == 0:
+        out += "-"
+    if BC > 0:
+        out += "{} ".format(BC)
+
+    logger.debug("{} -> {}".format(p, out))
+    return out
