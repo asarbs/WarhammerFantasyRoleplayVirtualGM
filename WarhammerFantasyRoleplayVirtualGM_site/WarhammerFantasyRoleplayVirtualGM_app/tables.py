@@ -1,4 +1,5 @@
 import django_tables2 as tables
+from django_tables2.utils import A
 
 from WarhammerFantasyRoleplayVirtualGM_app.models import MeleeWeapons
 
@@ -6,7 +7,7 @@ from .character_creations_helpers import format_currencu
 
 class MeleeWeaponsTable(tables.Table):
     id = tables.Column(visible=False)
-    name = tables.Column()
+    name = tables.LinkColumn("EditMeleWeapon", args=[A('pk')])
     weapon_group = tables.Column()
     price = tables.Column()
     encumbrance = tables.Column()

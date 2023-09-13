@@ -774,3 +774,8 @@ class AutocompleteTrappings(autocomplete.Select2QuerySetView):
 class MeleWeaponFormView(CreateView):
     template_name = "mele_weapon.html"
     form_class = MeleWeaponForm
+
+class MeleWeaponEditView(UpdateView):
+    template_name = "mele_weapon.html"
+    form_class = MeleWeaponForm
+    model = MeleeWeapons
