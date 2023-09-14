@@ -64,7 +64,6 @@ class ClassTrappingsForm(ModelForm):
             'trapping': autocomplete.ModelSelect2(url='trappings-autocomplete')
         }
 
-
 def validator_price(price):
     if price.endswith("GC"):
         return
@@ -112,5 +111,43 @@ class MeleWeaponForm(ModelForm):
 
     def save(self, commit=True):
         mwf = super(MeleWeaponForm, self).save(commit=False)
+        mwf.save()
+        return mwf
+
+class RangedWeaponForm(ModelForm):
+    price = CharField(validators=[validator_price], help_text="Price should ends with GC, /-, d")
+
+    class Meta:
+        model = models.RangedWeapon
+        fields = ["name", "weapon_group", "price", "encumbrance", "availability", "damage", "qualities_and_flaws", "range", "reference"]
+
+    def calc_price_to_brass(self):
+        logger.debug("price:{}".format(self.data['price']))
+        price = self.data['price']
+        if price.endswith("GC"):
+            price_int = int(price[0:-2])
+            self.data['price'] = price_int * 240
+            return True
+        elif price.endswith("/-"):
+            price_int = int(price[0:-2])
+            self.data['price'] = price_int * 12
+            return True
+        elif  price.endswith("d"):
+            price_int = int(price[0:-1])
+            self.data['price'] = price_int
+            return True
+        logger.error("price: {} [type:{}] is invalid for conversion".format(price, type(price)))
+        return False
+
+    def is_valid(self) -> bool:
+        self.data._mutable = True
+        price_calc = self.calc_price_to_brass()
+        self.data._mutable = False
+        valid = super(RangedWeaponForm,self).is_valid()
+        logger.debug("price:{};valid={}; price_calc={}".format(self.data['price'], valid, price_calc))
+        return valid
+
+    def save(self, commit=True):
+        mwf = super(RangedWeaponForm, self).save(commit=False)
         mwf.save()
         return mwf

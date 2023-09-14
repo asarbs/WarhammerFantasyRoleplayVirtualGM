@@ -404,6 +404,9 @@ class RangedWeapon(Weapon):
     def reach_range(self):
         return self.range
 
+    def get_absolute_url(self):
+        return reverse("RangedWeaponListView")
+
 class Spells(models.Model):
     class SpellList(models.TextChoices):
         PETTY_SPELLS            = 'PETTY_SPELLS',               _('Petty Spells')

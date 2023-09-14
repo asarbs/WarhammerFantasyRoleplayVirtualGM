@@ -31,6 +31,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import MeleWeaponForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import RangedWeaponForm
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
 from WarhammerFantasyRoleplayVirtualGM_app.models import Career
@@ -51,6 +52,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 from WarhammerFantasyRoleplayVirtualGM_app.models import *
 
 from WarhammerFantasyRoleplayVirtualGM_app.tables import MeleeWeaponsTable
+from WarhammerFantasyRoleplayVirtualGM_app.tables import RangedWeaponsTable
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -638,7 +640,6 @@ def ajax_saveTalentXPSpend(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
-
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
     dic ={'camaing': c}
@@ -651,12 +652,6 @@ def showCareersAdvanceSchemes(request, casId):
 def listCareersAdvanceSchemes(request):
     cas = CareersAdvanceScheme.objects.all()
     return render(request, 'listCareersAdvanceSchemes.html', {'cas':cas} )
-
-class MeleWeaponListView(SingleTableView):
-    model = MeleeWeapons
-    table_class = MeleeWeaponsTable
-    template_name = 'MeleWeaponList.html'
-    paginator_class = LazyPaginator
 
 class ChangePasswordForm(Form):
     new_password = CharField(widget=PasswordInput(), label="New Password")
@@ -771,11 +766,32 @@ class AutocompleteTrappings(autocomplete.Select2QuerySetView):
 
         return qs
 
+class MeleWeaponListView(SingleTableView):
+    model = MeleeWeapons
+    table_class = MeleeWeaponsTable
+    template_name = 'MeleWeaponList.html'
+    paginator_class = LazyPaginator
+
 class MeleWeaponFormView(CreateView):
-    template_name = "mele_weapon.html"
+    template_name = "create_mele_weapon.html"
     form_class = MeleWeaponForm
 
 class MeleWeaponEditView(UpdateView):
-    template_name = "mele_weapon.html"
+    template_name = "update_mele_weapon.html"
     form_class = MeleWeaponForm
     model = MeleeWeapons
+
+class RangedWeaponListView(SingleTableView):
+    model = RangedWeapon
+    table_class = RangedWeaponsTable
+    template_name = 'RangedWeaponList.html'
+    paginator_class = LazyPaginator
+
+class RangedWeaponFormView(CreateView):
+    template_name = "create_ranged_weapon.html"
+    form_class = RangedWeaponForm
+
+class RangedWeaponEditView(UpdateView):
+    template_name = "update_ranged_weapon.html"
+    form_class = RangedWeaponForm
+    model = RangedWeapon

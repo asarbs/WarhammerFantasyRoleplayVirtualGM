@@ -21,6 +21,9 @@ urlpatterns = [
     path('MeleWeaponListView', views.MeleWeaponListView.as_view(), name="MeleWeaponListView"),
     path('CreateMeleWeapon', views.MeleWeaponFormView.as_view(), name="CreateMeleWeapon"),
     path('EditMeleWeapon/<int:pk>', views.MeleWeaponEditView.as_view(), name="EditMeleWeapon"),
+    path('RangedWeaponListView', views.RangedWeaponListView.as_view(), name="RangedWeaponListView"),
+    path('CreateRangedWeapon', views.RangedWeaponFormView.as_view(), name="CreateRangedWeapon"),
+    path('EditRangedWeapon/<int:pk>', views.RangedWeaponEditView.as_view(), name="EditRangedWeapon"),
 
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
     path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
