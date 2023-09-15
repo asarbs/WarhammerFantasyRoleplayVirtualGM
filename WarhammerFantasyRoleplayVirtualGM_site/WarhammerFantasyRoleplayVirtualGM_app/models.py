@@ -396,7 +396,6 @@ class MeleeWeapons(Weapon):
     def get_absolute_url(self):
         return reverse("MeleWeaponListView")
 
-
 class RangedWeapon(Weapon):
     range = models.IntegerField(default=0, verbose_name="Range")
 
@@ -440,6 +439,9 @@ class Spells(models.Model):
         for f in opts.concrete_fields:
             data[f.name] = f.value_from_object(self)
         return data
+
+    def get_absolute_url(self):
+        return reverse("SpellListView")
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)

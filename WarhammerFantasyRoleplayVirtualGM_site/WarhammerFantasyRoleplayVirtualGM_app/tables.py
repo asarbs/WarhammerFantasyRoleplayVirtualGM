@@ -2,6 +2,7 @@ import django_tables2 as tables
 from django_tables2.utils import A
 
 from WarhammerFantasyRoleplayVirtualGM_app.models import MeleeWeapons
+from WarhammerFantasyRoleplayVirtualGM_app.models import Spells
 
 from .character_creations_helpers import format_currencu
 
@@ -44,3 +45,22 @@ class RangedWeaponsTable(tables.Table):
 
     def render_price(self, value):
         return f"{format_currencu(value)}"
+
+class SpellsTable(tables.Table):
+    id = tables.Column(visible=False)
+    name = tables.LinkColumn("SpellsEditView", args=[A('pk')])
+    spellLists = tables.Column()
+    cn = tables.Column()
+    range = tables.Column()
+    target = tables.Column()
+    duration = tables.Column()
+    effect = tables.Column()
+
+    class Meta:
+        model = Spells
+        attrs = {"class": "paleblue"}
+        sequence = ('spellLists', 'name',  'cn', 'range', 'target', 'duration', 'effect')
+
+    def render_price(self, value):
+        return f"{format_currencu(value)}"
+

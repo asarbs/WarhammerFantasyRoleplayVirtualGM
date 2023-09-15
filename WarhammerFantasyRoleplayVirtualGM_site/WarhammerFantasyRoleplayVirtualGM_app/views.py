@@ -29,9 +29,11 @@ logger = logging.getLogger(__name__)
 
 from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import MeleWeaponForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import RangedWeaponForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import SpellsForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
+from WarhammerFantasyRoleplayVirtualGM_app.models import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
 from WarhammerFantasyRoleplayVirtualGM_app.models import Career
@@ -49,10 +51,9 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
-from WarhammerFantasyRoleplayVirtualGM_app.models import *
-
 from WarhammerFantasyRoleplayVirtualGM_app.tables import MeleeWeaponsTable
 from WarhammerFantasyRoleplayVirtualGM_app.tables import RangedWeaponsTable
+from WarhammerFantasyRoleplayVirtualGM_app.tables import SpellsTable
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -795,3 +796,18 @@ class RangedWeaponEditView(UpdateView):
     template_name = "update_ranged_weapon.html"
     form_class = RangedWeaponForm
     model = RangedWeapon
+
+class SpellListView(SingleTableView):
+    model = Spells
+    table_class = SpellsTable
+    template_name = 'Spellsist.html'
+    paginator_class = LazyPaginator
+
+class SpellsCreateFormView(CreateView):
+    template_name = "create_spells.html"
+    form_class = SpellsForm
+
+class SpellsEditView(UpdateView):
+    template_name = "update_spells.html"
+    form_class = SpellsForm
+    model = Spells

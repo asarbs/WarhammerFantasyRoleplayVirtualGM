@@ -114,6 +114,7 @@ class MenuManager(object):
         self.l.append(MenuElement("Careers Advance Schemes", reverse('listCareersAdvanceSchemes')))
         self.l.append(MenuElement("Mele Weapons", reverse('MeleWeaponListView')))
         self.l.append(MenuElement("Ranged Weapons", reverse('RangedWeaponListView')))
+        self.l.append(MenuElement("Spells", reverse('SpellListView')))
         # if not request.user.is_anonymous:
         #     cas = CareersAdvanceScheme.objects.all().order_by("career__name")
         #     for c in cas:

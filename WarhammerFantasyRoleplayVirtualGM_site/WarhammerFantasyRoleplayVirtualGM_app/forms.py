@@ -151,3 +151,9 @@ class RangedWeaponForm(ModelForm):
         mwf = super(RangedWeaponForm, self).save(commit=False)
         mwf.save()
         return mwf
+
+
+class SpellsForm(ModelForm):
+    class Meta:
+        model = models.Spells
+        fields = ['spellLists', 'name',  'cn', 'range', 'target', 'duration', 'effect']

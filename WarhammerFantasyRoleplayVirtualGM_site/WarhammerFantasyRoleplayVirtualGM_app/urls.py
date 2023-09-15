@@ -24,6 +24,9 @@ urlpatterns = [
     path('RangedWeaponListView', views.RangedWeaponListView.as_view(), name="RangedWeaponListView"),
     path('CreateRangedWeapon', views.RangedWeaponFormView.as_view(), name="CreateRangedWeapon"),
     path('EditRangedWeapon/<int:pk>', views.RangedWeaponEditView.as_view(), name="EditRangedWeapon"),
+    path('SpellListView', views.SpellListView.as_view(), name="SpellListView"),
+    path('SpellsCreateFormView', views.SpellsCreateFormView.as_view(), name="SpellsCreateFormView"),
+    path('SpellsEditView/<int:pk>', views.SpellsEditView.as_view(), name="SpellsEditView"),
 
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
     path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
