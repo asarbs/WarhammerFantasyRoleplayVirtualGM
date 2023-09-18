@@ -42,7 +42,7 @@ class RemindPasswordForm(Form):
 class CreateCampaignForm(ModelForm):
     class Meta:
         model = models.Campaign
-        fields = ['name', 'party_name', 'ambitions_shortterm', 'ambitions_longterm']
+        fields = ['name', 'party_name']
 
 class SpeciesForm(ModelForm):
     class Meta:
@@ -171,7 +171,6 @@ class RangedWeaponForm(ModelForm):
         mwf = super(RangedWeaponForm, self).save(commit=False)
         mwf.save()
         return mwf
-
 
 class SpellsForm(ModelForm):
     class Meta:

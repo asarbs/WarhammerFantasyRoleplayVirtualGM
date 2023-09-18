@@ -199,6 +199,9 @@ class SpellsAdmin(admin.ModelAdmin):
     list_max_show_all = 1500
     list_per_page = 1000
 
+class AmbitionsAdmin(admin.ModelAdmin):
+    pass
+
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
@@ -228,3 +231,4 @@ admin.site.register(models.MeleeWeapons, MeleeWeaponsAdmin)
 admin.site.register(models.RangedWeapon, RangedWeaponAdmin)
 admin.site.register(models.ImprovementXPCosts, ImprovementXPCostsAdmin)
 admin.site.register(models.Spells, SpellsAdmin)
+admin.site.register(models.Ambitions, AmbitionsAdmin)

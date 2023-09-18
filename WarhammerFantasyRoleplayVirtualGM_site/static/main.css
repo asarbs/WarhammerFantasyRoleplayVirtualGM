@@ -87,6 +87,12 @@ a.button:hover {
     white-space : nowrap;
 }
 
+ol {
+    margin : 0 0 0 15px;
+    padding : 0;
+    /* list-style-type : none; */
+}
+
 td.center  {
     text-align: center;
 }

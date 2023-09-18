@@ -26,11 +26,21 @@ class Reference(models.Model):
     def __unicode__(self):
         return u"{0}, {1}".format(self.refBook.name, self.page)
 
+class Ambitions(models.Model):
+    description = models.TextField(verbose_name="Description", default="")
+    achieved = models.BooleanField(verbose_name="Status", default=False)
+
+    def __str__(self):
+        return u"{0}".format(self.description)
+
+    def __unicode__(self):
+        return u"{0}".format(self.description)
+
 class Campaign(models.Model):
     name = models.CharField(max_length= 250)
     party_name = models.CharField(max_length= 250, default="")
-    ambitions_shortterm = models.TextField(verbose_name="Shortterm", default="")
-    ambitions_longterm = models.TextField(verbose_name="Longterm", default="")
+    ambitions_shortterm = models.ManyToManyField(Ambitions, verbose_name="Shortterm Ambitions", related_name="campaign_ambitions_shortterm")
+    ambitions_longterm = models.ManyToManyField(Ambitions, verbose_name="Longterm Ambitions", related_name="campaign_ambitions_longterm")
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -488,8 +498,8 @@ class Character(models.Model):
     movement_movement = models.IntegerField(default="0", verbose_name="movement_movement")
     movement_walk = models.IntegerField(default="0", verbose_name="movement_walk")
     movement_run = models.IntegerField(default="0", verbose_name="movement_run")
-    ambitions_shortterm = models.TextField(verbose_name="Shortterm", default="")
-    ambitions_longterm = models.TextField(verbose_name="Longterm", default="")
+    ambitions_shortterm = models.ManyToManyField(Ambitions, verbose_name="Shortterm Ambitions", related_name="character_ambitions_shortterm")
+    ambitions_longterm = models.ManyToManyField(Ambitions, verbose_name="Longterm Ambitions", related_name="character_ambitions_longterm")
     armour = models.ManyToManyField(Armour, verbose_name="Armour")
     weapon = models.ManyToManyField(Weapon, verbose_name="Weapon")
     spells = models.ManyToManyField(Spells, verbose_name="Spells")

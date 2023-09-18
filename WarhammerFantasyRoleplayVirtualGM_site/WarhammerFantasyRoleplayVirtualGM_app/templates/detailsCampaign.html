@@ -1,10 +1,35 @@
 {% extends "index.html" %}
+{% load static %}
 
 {% block main %}
 <h2>{{ camaing.name }}</h2>
 Party: {{ camaing.party_name }} <br />
-Ambitions Shortterm: {{ camaing.ambitions_shortterm }} <br />
-Ambitions Longterm: {{ camaing.ambitions_longterm }} <br />
+<ol>
+<li>Ambitions Shortterm:
+    <ol>
+        {% for as in camaing.ambitions_shortterm.all %}
+        <li>
+            {{ as.description }}
+            {% if as.achieved %}
+                <img src="{% static "img/tick.png" %}" width="12">
+            {% endif %}
+         </li>
+        {% endfor %}
+    </ol>
+</li>
+<li>Ambitions Longterm:
+    <ol>
+        {% for al in camaing.ambitions_longterm.all %}
+        <li>{{ al.description }}
+            {% if al.achieved %}
+                <img src="{% static "img/tick.png" %}" width="12">
+            {% endif %}
+
+        </li>
+        {% endfor %}
+    </ol>
+</li>
+</ol>
 <br/>
 <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
 <ol>
