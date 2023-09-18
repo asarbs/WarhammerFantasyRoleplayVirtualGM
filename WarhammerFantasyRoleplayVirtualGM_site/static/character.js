@@ -297,7 +297,7 @@ class Armour{
         var characer_id = $("input[name='characer_id']").val()
         $.ajax({
             type: "POST",
-            url: "ajax_addArmourToCharacter",
+            url: "/wfrpg_gm/ajax_addArmourToCharacter",
             data: {
                 characer_id: characer_id,
                 armour_id: this.id,
@@ -446,7 +446,7 @@ class Weapon{
         var characer_id = $("input[name='characer_id']").val()
         $.ajax({
             type: "POST",
-            url: "ajax_addWeaponToCharacter",
+            url: "/wfrpg_gm/ajax_addWeaponToCharacter",
             data: {
                 characer_id: characer_id,
                 weapon_id: this.id,
@@ -578,7 +578,7 @@ class Spells{
         var characer_id = $("input[name='characer_id']").val()
         $.ajax({
             type: "POST",
-            url: "ajax_addSpellsToCharacter",
+            url: "/wfrpg_gm/ajax_addSpellsToCharacter",
             data: {
                 characer_id: characer_id,
                 spell_id: this.id,
@@ -1722,7 +1722,7 @@ function selectSpecies() {
 
     $.ajax({
         type: "POST",
-        url: "ajax_save_character_species",
+        url: "/wfrpg_gm/ajax_save_character_species",
         data: {
             characer_id: characer_id,
             species_id: val
@@ -1768,7 +1768,7 @@ function selectSpeciesTalent(talens) {
         })
         $.ajax({
             type: "POST",
-            url: "ajax_replaceTalentToCharacter",
+            url: "/wfrpg_gm/ajax_replaceTalentToCharacter",
             data: {
                 characer_id: characer_id,
                 new_talent_id: newValue,
@@ -1789,7 +1789,7 @@ function randomSpecies() {
 
     $.ajax({
         type: "POST",
-        url: "ajax_randomSpecies",
+        url: "/wfrpg_gm/ajax_randomSpecies",
         data: {
             characer_id: characer_id,
 
@@ -1837,7 +1837,7 @@ function nextStep() {
         var characer_id = $("input[name='characer_id']").val()
         $.ajax({
             type: "POST",
-            url: "ajax_getCareersAdvanceScheme",
+            url: "/wfrpg_gm/ajax_getCareersAdvanceScheme",
             data: {
                 characer_id: characer_id,
                 career_id: characterParameters.career_id,
@@ -1941,7 +1941,7 @@ function randomClass() {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_randomClass",
+        url: "/wfrpg_gm/ajax_randomClass",
         data: {
             characer_id: characer_id,
         },
@@ -1971,7 +1971,7 @@ function saveName(e) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveName",
+        url: "/wfrpg_gm/ajax_saveName",
         data: {
             characer_id: characer_id,
             name: n,
@@ -1986,7 +1986,7 @@ function saveAge(e) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveAge",
+        url: "/wfrpg_gm/ajax_saveAge",
         data: {
             characer_id: characer_id,
             age: n,
@@ -2001,7 +2001,7 @@ function saveHeight(e) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveHeight",
+        url: "/wfrpg_gm/ajax_saveHeight",
         data: {
             characer_id: characer_id,
             height: n,
@@ -2016,7 +2016,7 @@ function saveHair(e) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveHair",
+        url: "/wfrpg_gm/ajax_saveHair",
         data: {
             characer_id: characer_id,
             hair: n,
@@ -2031,7 +2031,7 @@ function saveEyes(e) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveEyes",
+        url: "/wfrpg_gm/ajax_saveEyes",
         data: {
             characer_id: characer_id,
             eyes: n,
@@ -2143,7 +2143,7 @@ function randomAttributes() {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_randomAttributes",
+        url: "/wfrpg_gm/ajax_randomAttributes",
         data: {
             characer_id: characer_id,
         },
@@ -2193,7 +2193,7 @@ function btnUp(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveAttribute",
+        url: "/wfrpg_gm/ajax_saveAttribute",
         data: {
             characer_id: characer_id,
             'newVal': {
@@ -2277,7 +2277,7 @@ function btnDown(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveAttribute",
+        url: "/wfrpg_gm/ajax_saveAttribute",
         data: {
             characer_id: characer_id,
             'newVal': {
@@ -2362,7 +2362,7 @@ function btnUpCharacteristicsXPSpend(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveAttribute",
+        url: "/wfrpg_gm/ajax_saveAttribute",
         data: {
             characer_id: characer_id,
             'newVal': {
@@ -2446,7 +2446,7 @@ function btnDownCharacteristicsXPSpend(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveAttribute",
+        url: "/wfrpg_gm/ajax_saveAttribute",
         data: {
             characer_id: characer_id,
             'newVal': {
@@ -2528,7 +2528,7 @@ function btnUpSkillsXPSpend(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveSkillsXPSpend",
+        url: "/wfrpg_gm/ajax_saveSkillsXPSpend",
         data: {
             characer_id: characer_id,
             'skill_id'           : skill_id,
@@ -2566,7 +2566,7 @@ function btnDownSkillsXPSpend(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveSkillsXPSpend",
+        url: "/wfrpg_gm/ajax_saveSkillsXPSpend",
         data: {
             characer_id: characer_id,
             'skill_id'           : skill_id,
@@ -2604,7 +2604,7 @@ function btnUpTalentsXPSpend(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveTalentXPSpend",
+        url: "/wfrpg_gm/ajax_saveTalentXPSpend",
         data: {
             characer_id: characer_id,
             'tallent_id'         : tallent_id,
@@ -2642,7 +2642,7 @@ function btnDownTalentXPSpend(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveTalentXPSpend",
+        url: "/wfrpg_gm/ajax_saveTalentXPSpend",
         data: {
             characer_id: characer_id,
             'tallent_id'         : tallent_id,
@@ -2681,7 +2681,7 @@ function btnUpFate(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveFate_and_fortune",
+        url: "/wfrpg_gm/ajax_saveFate_and_fortune",
         data: {
             characer_id: characer_id,
             input_id: input_id,
@@ -2723,7 +2723,7 @@ function btnDownFate(input_id) {
     characer_id = $("input[name='characer_id']").val()
     $.ajax({
         type: "POST",
-        url: "ajax_saveFate_and_fortune",
+        url: "/wfrpg_gm/ajax_saveFate_and_fortune",
         data: {
             characer_id: characer_id,
             input_id: input_id,
@@ -2742,7 +2742,7 @@ function btnDownFate(input_id) {
 function getRandomAttributesTable() {
     $.ajax({
         type: "POST",
-        url: "ajax_getRandomAttributesTable",
+        url: "/wfrpg_gm/ajax_getRandomAttributesTable",
         data: {
         },
         success: function(data) {
@@ -2775,7 +2775,7 @@ function saveSkillAdv(eventData, points) {
                 characer_id = $("input[name='characer_id']").val()
                 $.ajax({
                     type: "POST",
-                    url: "ajax_saveSkillAdv",
+                    url: "/wfrpg_gm/ajax_saveSkillAdv",
                     data: {
                         characer_id: characer_id,
                         skill_id: 0,
@@ -2803,7 +2803,7 @@ function saveSkillAdv(eventData, points) {
                 characer_id = $("input[name='characer_id']").val()
                 $.ajax({
                     type: "POST",
-                    url: "ajax_saveSkillAdv",
+                    url: "/wfrpg_gm/ajax_saveSkillAdv",
                     data: {
                         characer_id: characer_id,
                         skill_id: new_adv_id,

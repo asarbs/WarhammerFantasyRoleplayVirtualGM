@@ -445,6 +445,7 @@ class Spells(models.Model):
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, verbose_name="Campaign", on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length= 50, verbose_name="Character name")
     species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
     ch_class = models.ForeignKey(Class, verbose_name="Class", on_delete=models.CASCADE, null=True)

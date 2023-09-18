@@ -23,7 +23,7 @@ class CampaignAdmin(admin.ModelAdmin):
     pass
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ("player", "name",)
+    list_display = ("name", "player", "campaign",)
 
 
 class SpeciesAdmin(admin.ModelAdmin):

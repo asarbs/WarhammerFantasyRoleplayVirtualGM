@@ -1,11 +1,18 @@
 from django.contrib.auth.models import User
 from django.core import validators
 from django.core.exceptions import ValidationError
+from django.forms import BaseInlineFormSet
 from django.forms import CharField
 from django.forms import Form
+from django.forms import inlineformset_factory
 from django.forms import ModelForm
 from django.forms import PasswordInput
 from django.forms.utils import ErrorList
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
+from django.contrib.admin import site as admin_site
+
+
+
 
 
 from dal import autocomplete
@@ -79,6 +86,13 @@ def validator_price(price):
 class MeleWeaponForm(ModelForm):
     price = CharField(validators=[validator_price], help_text="Price should ends with GC, /-, d")
 
+    def __init__(self, *args, **kwargs):
+        super(MeleWeaponForm, self).__init__(*args, **kwargs)
+        self.fields['reference'].widget = (
+            RelatedFieldWidgetWrapper(self.fields['reference'].widget, self.instance._meta.get_field('reference').remote_field, admin_site)
+        )
+
+
     class Meta:
         model = models.MeleeWeapons
         fields = ["name", "weapon_group", "price", "encumbrance", "availability", "damage", "qualities_and_flaws", "reach", "reference"]
@@ -116,6 +130,12 @@ class MeleWeaponForm(ModelForm):
 
 class RangedWeaponForm(ModelForm):
     price = CharField(validators=[validator_price], help_text="Price should ends with GC, /-, d")
+
+    def __init__(self, *args, **kwargs):
+        super(RangedWeaponForm, self).__init__(*args, **kwargs)
+        self.fields['reference'].widget = (
+            RelatedFieldWidgetWrapper(self.fields['reference'].widget, self.instance._meta.get_field('reference').remote_field, admin_site)
+        )
 
     class Meta:
         model = models.RangedWeapon

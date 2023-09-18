@@ -79,12 +79,12 @@ def createCampaign(request):
         campaign_form = CreateCampaignForm(prefix='user')
     return render(request, 'addCampaign.html', dict(form=campaign_form))
 
-def addCharacter(request):
+def addCharacter(request, CampaignId):
     basic_skills_criterion1 = Q(id__gte = 1)
     basic_skills_criterion2 = Q(id__lte = 26)
     basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").values()
     player = Player.objects.get(user=request.user)
-    character = Character(player=player)
+    character = Character(player=player, campaign_id = CampaignId)
     character.save()
 
     for skill in basic_skills:
@@ -643,7 +643,12 @@ def ajax_saveTalentXPSpend(request):
 
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
-    dic ={'camaing': c}
+    players = []
+    for c2p in Campaign2Player.objects.filter(campaign=c):
+        players.append(c2p.player)
+    characters = Character.objects.filter(campaign=c, player__in=players)
+    dic ={'camaing': c, "players":players, "characters": characters}
+    logging.debug(dic)
     return render(request, 'detailsCampaign.html', dic)
 
 def showCareersAdvanceSchemes(request, casId):
