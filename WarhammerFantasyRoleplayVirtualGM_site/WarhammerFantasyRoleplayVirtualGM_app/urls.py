@@ -27,7 +27,6 @@ urlpatterns = [
     path('SpellListView', views.SpellListView.as_view(), name="SpellListView"),
     path('SpellsCreateFormView', views.SpellsCreateFormView.as_view(), name="SpellsCreateFormView"),
     path('SpellsEditView/<int:pk>', views.SpellsEditView.as_view(), name="SpellsEditView"),
-
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
     path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
     path('ajax_randomClass', views.ajax_randomClass, name="ajax_randomClass"),
@@ -48,4 +47,10 @@ urlpatterns = [
     path('ajax_getCareersAdvanceScheme', views.ajax_getCareersAdvanceScheme, name="ajax_getCareersAdvanceScheme"),
     path('ajax_saveSkillsXPSpend', views.ajax_saveSkillsXPSpend, name="ajax_saveSkillsXPSpend"),
     path('ajax_saveTalentXPSpend', views.ajax_saveTalentXPSpend, name="ajax_saveTalentXPSpend"),
+
+
+    path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),
+    path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData")
+
+
 ]

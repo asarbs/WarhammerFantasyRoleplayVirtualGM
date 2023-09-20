@@ -184,7 +184,7 @@ def ajax_randomClass(request):
         if career is not None:
             character.career = career
             character.ch_class = career.ch_class
-            character.save()
+
 
             Character2Skill.objects.filter(characters=character, is_career_skill = True).delete()
             ad = CareersAdvanceScheme.objects.get(career=career).advances_level_1
@@ -196,6 +196,9 @@ def ajax_randomClass(request):
                 except django.db.utils.IntegrityError as e:
                     logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
 
+            character.career_path = ad
+            character.status = ad.status
+            character.save()
             skills = {}
             for ss in Character2Skill.objects.filter(characters=character).all():
                 logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
@@ -816,3 +819,77 @@ class SpellsEditView(UpdateView):
     template_name = "update_spells.html"
     form_class = SpellsForm
     model = Spells
+
+def viewCharacter(request, pk):
+    character=Character.objects.get(pk=pk)
+    return render(request, 'viewCharacter.html', dict(character=character))
+
+def ajax_view_getCharacterData(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    ret = {'status': 'ok', 'skills': {}, 'trappings': {}  }
+
+    character_id = request.POST['characer_id']
+    character = Character.objects.get(id = character_id)
+    ret['character'] = {
+            "name"                         : "{} ({})".format(character.name, character.player) ,
+            "species"                      : str(character.species),
+            "ch_class"                     : str(character.ch_class),
+            "career"                       : str(character.career),
+            "career_level"                 : int(character.career_level),
+            "age"                          : character.age,
+            "height"                       : character.height,
+            "career_path"                  : str(character.career_path),
+            "status"                       : str(character.status),
+            "hair"                         : str(character.hair),
+            "eyes"                         : str(character.eyes),
+            "characteristics_ws_initial"   : character.characteristics_ws_initial,
+            "characteristics_bs_initial"   : character.characteristics_bs_initial,
+            "characteristics_s_initial"    : character.characteristics_s_initial,
+            "characteristics_t_initial"    : character.characteristics_t_initial,
+            "characteristics_i_initial"    : character.characteristics_i_initial,
+            "characteristics_ag_initial"   : character.characteristics_ag_initial,
+            "characteristics_dex_initial"  : character.characteristics_dex_initial,
+            "characteristics_int_initial"  : character.characteristics_int_initial,
+            "characteristics_wp_initial"   : character.characteristics_wp_initial,
+            "characteristics_fel_initial"  : character.characteristics_fel_initial,
+            "characteristics_ws_advances"  : character.characteristics_ws_advances,
+            "characteristics_bs_advances"  : character.characteristics_bs_advances,
+            "characteristics_s_advances"   : character.characteristics_s_advances,
+            "characteristics_t_advances"   : character.characteristics_t_advances,
+            "characteristics_i_advances"   : character.characteristics_i_advances,
+            "characteristics_ag_advances"  : character.characteristics_ag_advances,
+            "characteristics_dex_advances" : character.characteristics_dex_advances,
+            "characteristics_int_advances" : character.characteristics_int_advances,
+            "characteristics_wp_advances"  : character.characteristics_wp_advances,
+            "characteristics_fel_advances" : character.characteristics_fel_advances,
+            "wounds"                       : character.wounds,
+            "fate_fate"                    : character.fate_fate,
+            "fate_fortune"                 : character.fate_fortune,
+            "resilience_resilience"        : character.resilience_resilience,
+            "resilience_resolve"           : character.resilience_resolve,
+            "resilience_motivation"        : character.resilience_motivation,
+            "experience_current"           : character.experience_current,
+            "experience_spent"             : character.experience_spent,
+            "movement_movement"            : character.movement_movement,
+            "movement_walk"                : character.movement_walk,
+            "movement_run"                 : character.movement_run,
+        }
+
+
+    for ss in Character2Skill.objects.filter(characters=character).all():
+        logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
+        ret['skills'][ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
+
+    for ch2STrappingl in Character2Trappingl.objects.filter(characters=character).all():
+        logger.debug("'id': {}, 'name': {}, 'description': {}, 'enc': {}".format(ch2STrappingl.id, ch2STrappingl.trapping.name, ch2STrappingl.trapping.description, ch2STrappingl.enc))
+        ret['trappings'][ch2STrappingl.id] = {
+            'id': ch2STrappingl.id,
+            'name': ch2STrappingl.trapping.name,
+            'description': ch2STrappingl.trapping.description,
+            'enc': ch2STrappingl.enc
+        }
+
+        ret['talents'] = get_character_talents(character)
+
+    return JsonResponse(ret)

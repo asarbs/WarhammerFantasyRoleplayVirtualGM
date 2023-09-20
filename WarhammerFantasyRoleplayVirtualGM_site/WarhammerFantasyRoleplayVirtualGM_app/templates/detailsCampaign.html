@@ -34,7 +34,7 @@ Party: {{ camaing.party_name }} <br />
 <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
 <ol>
     {% for character in characters %}
-    <li>{{ character.player }} - {{ character }}</li>
+    <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
     {% endfor %}
 </ol>
 

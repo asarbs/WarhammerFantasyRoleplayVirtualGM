@@ -65,14 +65,14 @@ class AuthenticationStateMenuElement(MenuElement):
 class LogedInMenuElement(MenuElement):
     def __init__(self, request, name, url="", visible=False):
         MenuElement.__init__(self, name, url, visible)
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             self.visible = True
 
 
 class NotLogedInMenuElement(MenuElement):
     def __init__(self, request, name, url="", visible=False):
         MenuElement.__init__(self, name, url, visible)
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             self.visible = True
 
 
@@ -97,10 +97,11 @@ class MenuElementWithPrivileges(MenuElement):
 class MenuManager(object):
     def __init__(self, request):
         self.request = request
+        print(request)
         module = self.request.get_full_path().split("/")[1]
         self.l = [
             MenuElement("Main", "/"),
-            MenuElement("Create Campaign",  reverse("createCampaign")),
+            LogedInMenuElement(request=request, name="Create Campaign",  url=reverse("createCampaign")),
         ]
 
         if not request.user.is_anonymous:
@@ -111,10 +112,10 @@ class MenuManager(object):
                     for campaign in player_campaign:
                         self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
 
-        self.l.append(MenuElement("Careers Advance Schemes", reverse('listCareersAdvanceSchemes')))
-        self.l.append(MenuElement("Mele Weapons", reverse('MeleWeaponListView')))
-        self.l.append(MenuElement("Ranged Weapons", reverse('RangedWeaponListView')))
-        self.l.append(MenuElement("Spells", reverse('SpellListView')))
+        self.l.append(LogedInMenuElement(request=request, name="Careers Advance Schemes", url=reverse('listCareersAdvanceSchemes')))
+        self.l.append(LogedInMenuElement(request=request, name="Mele Weapons", url=reverse('MeleWeaponListView')))
+        self.l.append(LogedInMenuElement(request=request, name="Ranged Weapons", url=reverse('RangedWeaponListView')))
+        self.l.append(LogedInMenuElement(request=request, name="Spells", url=reverse('SpellListView')))
         # if not request.user.is_anonymous:
         #     cas = CareersAdvanceScheme.objects.all().order_by("career__name")
         #     for c in cas:

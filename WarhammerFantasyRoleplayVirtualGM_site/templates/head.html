@@ -10,7 +10,12 @@
 <link rel="stylesheet" href="{% static "django_tables2/themes/paleblue/css/screen.css" %}" />
 
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-<script src="{% static "character.js" %}"></script>
+{% if "addCharacter" in  request.path %}
+<script src="{% static "create_character.js" %}"></script>
+{% endif %}
+{% if "viewCharacter" in  request.path %}
+<script src="{% static "view_character.js" %}"></script>
+{% endif %}
 <script src="/admin/jsi18n/"></script>
 <script src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
 <script src="{% static "admin/js/jquery.init.js" %}"></script>

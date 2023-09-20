@@ -1,0 +1,714 @@
+{% extends "index.html" %}
+{% load static %}
+{% block main %}
+
+
+{% comment %} <form action="/wfrpg_gm/createCampaign" method="POST">
+    {% with submit_value="Register" %}
+    {% include "form.html" %}
+    {% endwith %}
+</form> {% endcomment %}
+
+<input type="text" id="characer_id" name="characer_id" value="{{ character.id }}">
+
+<div class="top"> </div>
+<div class="character_sheet">
+    <div class="head">
+        <table border="0">
+            <tr>
+                <td class="head">
+                    Name
+                </td>
+                <td colspan="3">
+                    <input type="text" id="character_sheet_name" name="character_sheet_name">
+                </td>
+                <td class="head">
+                    Species
+                </td>
+                <td>
+                    <input type="text" id="species" name="species">
+                </td>
+                <td class="head">
+                    Class
+                </td>
+                <td>
+                    <input type="text" id="class" name="fname">
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Career
+                </td>
+                <td colspan="3">
+                    <input type="text" id="career" name="fname">
+                </td>
+                <td class="head">
+                    Career Level
+                </td>
+                <td colspan="3">
+                    <input type="text" id="career_level" name="fname">
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Career Path
+                </td>
+                <td colspan="5">
+                    <input type="text" id="career_path" name="fname">
+                </td>
+                <td class="head">
+                    Status
+                </td>
+                <td>
+                    <input type="text" id="status" name="fname">
+                </td>
+            </tr>
+            <tr>
+                <td class="head">
+                    Age
+                </td>
+                <td>
+                    <input type="text" id="age" name="fname">
+                </td>
+                <td class="head">
+                    Height
+                </td>
+                <td>
+                    <input type="text" id="height" name="fname">
+                </td>
+                <td class="head">
+                    Hair
+                </td>
+                <td>
+                    <input type="text" id="hair" name="hair">
+                </td>
+                <td class="head">
+                    Eyes
+                </td>
+                <td>
+                    <input type="text" id="eyes" name="eyes">
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="character_sheet">
+    <div class="characteristics">
+        <table border="0">
+            <tr>
+                <td colspan="11" class="title">
+                    CHARACTERISTICS
+                </td>
+            </tr>
+            <tr>
+                <td class="head">&nbsp;</td>
+                <td class="head">WS</td>
+                <td class="head">BS</td>
+                <td class="head">S</td>
+                <td class="head">T</td>
+                <td class="head">I</td>
+                <td class="head">Ag</td>
+                <td class="head">Dex</td>
+                <td class="head">Int</td>
+                <td class="head">WP</td>
+                <td class="head">Fel</td>
+            </tr>
+            <tr class="">
+                <td class="head">Inital</td>
+                <td><input type="number" id="characteristics_ws_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_bs_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_s_initial"   name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_t_initial"   name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_i_initial"   name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_ag_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_dex_initial" name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_int_initial" name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_wp_initial"  name="fname" min="4" max="18" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_fel_initial" name="fname" min="4" max="18" step="1" value="0"></td>
+            </tr>
+            <tr class="quantity quantity_advances">
+                <td class="head">Advaces</td>
+                <td><input type="number" id="characteristics_ws_advances"  name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_bs_advances"  name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_s_advances"   name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_t_advances"   name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_i_advances"   name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_ag_advances"  name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_dex_advances" name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_int_advances" name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_wp_advances"  name="fname" min="0" max="100" step="1" value="0"></td>
+                <td><input type="number" id="characteristics_fel_advances" name="fname" min="0" max="100" step="1" value="0"></td>
+            </tr>
+            <tr>
+                <td class="head">Current</td>
+                <td><input type="number" id="characteristics_ws_current"  name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_bs_current"  name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_s_current"   name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_t_current"   name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_i_current"   name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_ag_current"  name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_dex_current" name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_int_current" name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_wp_current"  name="fname" value="0"></td>
+                <td><input type="number" id="characteristics_fel_current" name="fname" value="0"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="right">
+        <div class="fate_resistance_exp">
+            <div class="fate">
+                <table border="0">
+                    <tr>
+                        <td colspan="2" class="title">
+                            FATE
+                        </td>
+                    </tr>
+                    <tr class="quantity_fate">
+                        <td class="head">Fate</td>
+                        <td><input type="text" id="fate_fate" name="fname" min="2" max="5" step="1" value="0"></td>
+                    </tr>
+                    <tr class="quantity_fate">
+                        <td class="head">Fortune</td>
+                        <td><input type="text" id="fate_fortune" name="fname" min="2" max="5" step="1" value="0"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="resilience">
+                <table>
+                    <tr>
+                        <td colspan="3" class="title">
+                            RESILIENCE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head">
+                            Resilience
+                        </td>
+                        <td class="head">
+                            Resolve
+                        </td>
+                        <td class="head">
+                            Motivation
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="resilience_resilience" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="resilience_resolve" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="resilience_motivation" name="fname">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="experience">
+                <table>
+                    <tr>
+                        <td colspan="3" class="title">
+                            EXPERIENCE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head">
+                            Current
+                        </td>
+                        <td class="head">
+                            Spent
+                        </td>
+                        <td class="head">
+                            Total
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="experience_current" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="experience_spent" name="fname">
+                        </td>
+                        <td>
+                            <input type="text" id="experience_total" name="fname">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="movement">
+            <table border="0">
+                <tr>
+                    <td colspan="6" class="title">
+                        MOVEMENT
+                    </td>
+                </tr>
+                <tr>
+                    <td class="head">
+                        Movement
+                    </td>
+                    <td>
+                        <input type="text" id="movement_movement" name="fname">
+                    </td>
+                    <td class="head">
+                        Walk
+                    </td>
+                    <td>
+                        <input type="text" id="movement_walk" name="fname">
+                    </td>
+                    <td class="head">
+                        Run
+                    </td>
+                    <td>
+                        <input type="text" id="movement_run" name="fname">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="character_sheet">
+    <div class="basic_skills">
+        <table id='skills_table' border="0">
+            <thead>
+            <tr>
+                <th colspan="8" class="block_name">
+                    SKILLS
+                </th>
+            </tr>
+            <tr class="block_header">
+                <th>
+                    Name
+                </th>
+                <th colspan=2>
+                    Characteristic
+                </th>
+                <th>
+                    Adv
+                </th>
+                <th>
+                    Skill
+                </th>
+                <th>
+                    BS
+                </th>
+                <th>
+                    CS
+                </th>
+                <th>
+                    SS
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% comment %} {% for basic_skill in basic_skills %}
+            <tr class="block_body">
+                <td id="skills_name__{{ basic_skill.id }}" class="left">
+                {{ basic_skill.name }}
+                </td>
+                <td class="characteristics">
+                {{ basic_skill.characteristics }}
+                </td>
+                <td class="edit">
+                    <input type="text" id="skills_characteristics__{{ basic_skill.id }}" name="fname">
+                </td>
+                <td class="edit">
+                    <input type="text" id="skills_adv__{{ basic_skill.id }}" name="fname">
+                </td>
+                <td class="edit">
+                    <input type="text" id="skills__{{ basic_skill.id }}" name="fname">
+                </td>
+                <td class="">
+                    <img  id="skills__is_basic_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
+                </td>
+                <td class="">
+                    <img id="skills__is_career_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
+                </td>
+                <td class="">
+                    <img id="skills__is_species_skill__{{ basic_skill.id }}" src="{% static "NO.png" %}">
+                </td>
+            </tr>
+        {% endfor %} {% endcomment %}
+        </tbody>
+        </table>
+    </div>
+
+    <div class="talents_ambitions_party">
+        <div class="talents">
+            <table id="talents_table" border="0">
+                <tr>
+                    <th colspan="3" class="block_name">
+                        TALENTS
+                    </th>
+                </tr>
+                <tr class="block_header">
+                    <th>
+                        Talent Name
+                    </th>
+                    <th>
+                        Times Taken
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                </tr>
+
+            </table>
+        </div>
+        <div class="ambitiosn">
+            <table border="0">
+                <tr>
+                    <td class="title" colspan="2">
+                        AMBITIOSN
+                    </td>
+                </tr>
+                <tr>
+                    <td class="head">
+                        Short-term
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td  class="head">
+                        Long-term
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="party">
+            <table border="0">
+                <tr>
+                    <td class="title" colspan="2">
+                        PARTY
+                    </td>
+                </tr>
+                <tr>
+                    <td class="head">
+                        Party Name
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="head">
+                        Short-term
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="head">
+                        Long-term
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="head">
+                        Members
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+</div>
+<div class="character_sheet">
+    <div class="sheer2_left">
+        <table id="armour" class="armour" border="0">
+            <tr class="block_name">
+                <th colspan="5" class="">
+                    ARMOUR
+                </th>
+            </tr>
+            <tr class="block_header">
+                <td colspan="5">
+                    <select name="armour" id="add_armour" value="1">
+                    </select><button type="button" id="armour_add_button" >Add!</button>
+                </td>
+            </tr>
+            <tr class="block_header">
+                <th>
+                    Name
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Enc
+                </th>
+                <th>
+                    AP
+                </th>
+                <th>
+                    Qualities
+                </th>
+            </tr>
+        </table>
+        <div class="sheer2_left_bottom">
+            <div class="trappings">
+                <table id="trappings_table" class="block_name" border="0">
+                    <tr class="block_name">
+                        <th colspan="2">
+                            <h2>TRAPPINGS</h2>
+                        </th>
+                    </tr>
+                    <tr class="block_header"">
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Enc
+                        </th>
+                    </tr>
+                </table>
+            </div>
+            <div class="sheer2_left_bottom_right">
+                <div class="psychology">
+                    <h2>PSYCHOLOGY</h2>
+                </div>
+                <div class="coruption_mutation">
+                    <h2>CORUPTION & MUTATION</h2>
+                </div>
+                <div class="sheer2_left_bottom_right_bottom">
+                    <div class="sheer2_left_bottom_right_bottom_left">
+                        <table border="0">
+                            <tr>
+                                <td  class="title" colspan="2">
+                                    WEALTH
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    D
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    SS
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    GC
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div class="sheer2_left_bottom_right_bottom_right">
+                        <table border="0">
+                            <tr>
+                                <td  class="title" colspan="2">
+                                    ENCUMBRANCE
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    Weapons
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    Armour
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    Trappings
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    Max Enc,
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  class="header">
+                                    Total
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div class="sheer2_right">
+        <div class="sheet2_ap">
+            <input type="text" id="head" name="fname">
+            <input type="text" id="left_arm" name="fname">
+            <input type="text" id="right_arm" name="fname">
+            <input type="text" id="body" name="fname">
+            <input type="text" id="left_leg" name="fname">
+            <input type="text" id="right_leg" name="fname">
+            <input type="text" id="shield" name="fname">
+        </div>
+        <div class="sheet2_wounds">
+            <table border="0">
+                <tr>
+                    <td class="title" colspan="3">
+                        WOUNDS
+                    </td>
+                </tr>
+                <tr>
+                    <td class="header">
+                        SB
+                    </td>
+                    <td>
+                        <input type="text" id="strength_bonus" value="0">
+                    </td>
+                    <td rowspan="5">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="header">
+                        TB * 2
+                    </td>
+                    <td>
+                        <input type="text" id="toughness_bonus" value="0">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="header">
+                        WPB
+                    </td>
+                    <td>
+                        <input type="text" id="willpower_bonus" value="0">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="header">
+                        Hardy
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="header">
+                        Wounds
+                    </td>
+                    <td>
+                        <input type="text" id="wounds" value="0">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="character_sheet">
+    <table class="weapons" id="weapons" border='0'>
+        <tr class="block_name">
+            <th colspan="6">
+                WEAPONS
+            </th>
+        </tr>
+        <tr class="block_header">
+            <td colspan="6">
+                <select name="weapon" id="add_weapon" value="1">
+                </select><button type="button" id="weapon_add_button" >Add!</button>
+            </td>
+        </tr>
+        <tr class="block_header">
+            <th>
+                Name
+            </th>
+            <th>
+                Group
+            </th>
+            <th>
+                Enc
+            </th>
+            <th>
+                Range/Reach
+            </th>
+            <th>
+                Damage
+            </th>
+            <th>
+                Qualities
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="character_sheet">
+    <table class="spells" id="spells" border='0'>
+        <tr class="block_name">
+            <th colspan="6">
+                SPELLS AND PRAYERS
+            </th>
+        </tr>
+        <tr class="block_header">
+            <td colspan="6">
+                <select name="spells" id="add_spell" value="1">
+                </select><button type="button" id="spells_add_button" >Add!</button>
+            </td>
+        </tr>
+        <tr class="block_header">
+            <th>
+                Name
+            </th>
+            <th>
+                CN
+            </th>
+            <th>
+                Range
+            </th>
+            <th>
+                Target
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                Effect
+            </th>
+        </tr>
+
+    </table>
+</div>
+
+<div class="bottom"></div>
+
+{% endblock %}
