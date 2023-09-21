@@ -827,7 +827,7 @@ def viewCharacter(request, pk):
 def ajax_view_getCharacterData(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    ret = {'status': 'ok', 'skills': {}, 'trappings': {}  }
+    ret = {'status': 'ok', 'skills': {}, 'trappings': {}, 'armour':[], 'spells':[], "weapon":[]  }
 
     character_id = request.POST['characer_id']
     character = Character.objects.get(id = character_id)
@@ -890,6 +890,20 @@ def ajax_view_getCharacterData(request):
             'enc': ch2STrappingl.enc
         }
 
-        ret['talents'] = get_character_talents(character)
+    for r in character.armour.all():
+        ret['armour'].append(r.to_dict())
+    for we in character.weapon.all():
+        print(we.name, we.id, type(we))
+        m_weapon = MeleeWeapons.objects.filter(id=we.id).first()
+        if m_weapon is not None:
+            ret['weapon'].append(m_weapon.to_dict())
+        r_weapon = RangedWeapon.objects.filter(id=we.id).first()
+        if r_weapon is not None:
+            ret['weapon'].append(r_weapon.to_dict())
+
+    for s in character.spells.all():
+        ret['spells'].append(s.to_dict())
+
+    ret['talents'] = get_character_talents(character)
 
     return JsonResponse(ret)

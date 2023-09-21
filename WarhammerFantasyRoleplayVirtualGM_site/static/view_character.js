@@ -242,7 +242,7 @@ class Armour{
             this.save();
         }
         else {
-            throw "" + is_in_inventory + " boolean";
+            throw "Armour ["+this.#name+"].is_in_inventory = " + is_in_inventory + " is not boolean";
         }
     }
 
@@ -1488,7 +1488,6 @@ class CharacterParameters {
         this.talentsNeedUpdate = true;
     }
     appendArmour(armour) {
-
         var a = new Armour(armour.id,
             armour.name,
             armour.armour_type,
@@ -1499,10 +1498,9 @@ class CharacterParameters {
             armour.locations,
             armour.armour_points,
             armour.qualities_and_flaws,
-            false);
+            armour.is_in_inventory);
         this.#armour.push(a)
         a.updateUI();
-        $("select#add_armour").append($('<option>', {value: armour.id, text: armour.name}));
     }
     armour_add(armour_to_add) {
         console.log("characeter armour_add: "+ armour_to_add);
@@ -1523,7 +1521,7 @@ class CharacterParameters {
             weapon.damage,
             weapon.qualities_and_flaws,
             weapon.reach_range,
-            false);
+            weapon.is_in_inventory);
         this.#weapon.push(a)
         a.updateUI();
         $("select#add_weapon").append($('<option>', {value: weapon.id, text: weapon.name}));
@@ -1547,7 +1545,7 @@ class CharacterParameters {
             spell.target,
             spell.duration,
             spell.effect,
-            false);
+            spell.is_in_inventory);
         this.#spells.push(a)
         a.updateUI();
         $("select#add_spell").append($('<option>', {value: spell.id, text: spell.name}));
@@ -1748,6 +1746,33 @@ function get_characterData(){
             characterParameters.movement_movement            = data['character']["movement_movement"            ]
             characterParameters.movement_walk                = data['character']["movement_walk"                ]
             characterParameters.movement_run                 = data['character']["movement_run"                 ]
+
+            for(let k in data['skills'] ) {
+                characterParameters.appendSkill(data['skills'][k])
+            };
+            characterParameters.updateSkillTable();
+
+            for(let k in data['trappings'] ) {
+                characterParameters.appendTrappings(data['trappings'][k])
+            };
+            characterParameters.updateTrappingsTable()
+
+            for(let k in data['talents'] ) {
+                characterParameters.appendTalent(data['talents'][k])
+            };
+            characterParameters.updateTalentsTable()
+            data['armour'].forEach(element => {
+                element.is_in_inventory = true
+                characterParameters.appendArmour(element)
+            });
+            data['spells'].forEach(element => {
+                element.is_in_inventory = true
+                characterParameters.appendSpells(element)
+            });
+            data['weapon'].forEach(element => {
+                element.is_in_inventory = true
+                characterParameters.appendWeapon(element)
+            });
 
         }
     });
