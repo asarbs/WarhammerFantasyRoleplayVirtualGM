@@ -36,5 +36,5 @@ urlpatterns = [
     path('talent-autocomplete/', AutocompleteTalent.as_view(), name='talent-autocomplete'),
     path('trappings-autocomplete/', AutocompleteTrappings.as_view(), name='trappings-autocomplete'),
     path('player-autocomplete/', AutocompletePlayer.as_view(), name='player-autocomplete'),
-    url(r'^ajax_select/', include(ajax_select_urls)),
+    path('ajax_select/', include(ajax_select_urls)),
 ]
