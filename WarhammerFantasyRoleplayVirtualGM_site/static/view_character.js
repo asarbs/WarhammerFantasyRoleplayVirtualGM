@@ -1488,6 +1488,7 @@ class CharacterParameters {
         this.talentsNeedUpdate = true;
     }
     appendArmour(armour) {
+        console.log("appendArmour: +"+armour)
         var a = new Armour(armour.id,
             armour.name,
             armour.armour_type,
@@ -1501,6 +1502,7 @@ class CharacterParameters {
             armour.is_in_inventory);
         this.#armour.push(a)
         a.updateUI();
+        $("select#add_armour").append($('<option>', {value: armour.id, text: armour.name}));
     }
     armour_add(armour_to_add) {
         console.log("characeter armour_add: "+ armour_to_add);
@@ -1696,6 +1698,9 @@ class CharacterParameters {
 const characterParameters = new CharacterParameters();
 var characer_id = 0
 function get_characterData(){
+
+    console.log("get_characterData")
+
     $.ajax({
         type: "POST",
         url: "/wfrpg_gm/ajax_view_getCharacterData",
@@ -1762,17 +1767,17 @@ function get_characterData(){
             };
             characterParameters.updateTalentsTable()
             data['armour'].forEach(element => {
-                element.is_in_inventory = true
                 characterParameters.appendArmour(element)
             });
             data['spells'].forEach(element => {
-                element.is_in_inventory = true
                 characterParameters.appendSpells(element)
             });
             data['weapon'].forEach(element => {
-                element.is_in_inventory = true
                 characterParameters.appendWeapon(element)
             });
+
+            $("input").prop("readonly", true);
+            $("select").prop("readonly", true);
 
         }
     });
@@ -1784,9 +1789,10 @@ function main() {
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     });
 
-    $("input").prop("readonly", true);
-    $("select").prop("readonly", true);
+
     characer_id = $("input[name='characer_id']").val()
     get_characterData();
+    $("input").prop("readonly", true);
+    $("select").prop("readonly", true);
 
 }

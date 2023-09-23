@@ -323,7 +323,7 @@ class Armour(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
-    def to_dict(self):
+    def to_dict(self, is_in_inventory=False):
         opts = self._meta
         data = {}
         for f in opts.concrete_fields:
@@ -332,6 +332,7 @@ class Armour(models.Model):
         for l in self.locations.all():
             loc.append(l)
         data['locations'] = self.armour_locations
+        data['is_in_inventory'] = is_in_inventory
         return data
 
     @property
@@ -375,9 +376,9 @@ class Weapon(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
-    def to_dict(self):
+    def to_dict(self, is_in_inventory=False):
         opts = self._meta
-        data = {}
+        data = {'is_in_inventory': is_in_inventory}
         for f in opts.concrete_fields:
             data[f.name] = f.value_from_object(self)
         data['reach_range'] = self.reach_range
@@ -443,9 +444,15 @@ class Spells(models.Model):
     duration  = models.CharField(max_length= 50, verbose_name="Duration")
     effect = models.TextField(verbose_name="Effect", default="")
 
-    def to_dict(self):
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+    def to_dict(self, is_in_inventory=False):
         opts = self._meta
-        data = {}
+        data = {'is_in_inventory': is_in_inventory}
         for f in opts.concrete_fields:
             data[f.name] = f.value_from_object(self)
         return data

@@ -946,19 +946,21 @@ def ajax_view_getCharacterData(request):
             'enc': ch2STrappingl.enc
         }
 
-    for r in character.armour.all():
-        ret['armour'].append(r.to_dict())
-    for we in character.weapon.all():
-        print(we.name, we.id, type(we))
-        m_weapon = MeleeWeapons.objects.filter(id=we.id).first()
-        if m_weapon is not None:
-            ret['weapon'].append(m_weapon.to_dict())
-        r_weapon = RangedWeapon.objects.filter(id=we.id).first()
-        if r_weapon is not None:
-            ret['weapon'].append(r_weapon.to_dict())
+    for r in Armour.objects.all():
+        is_in_inventory = character.armour.filter(id=r.id).exists()
+        ret['armour'].append(r.to_dict(is_in_inventory))
 
-    for s in character.spells.all():
-        ret['spells'].append(s.to_dict())
+    for hw in MeleeWeapons.objects.all():
+        is_in_inventory = character.weapon.filter(id=hw.id).exists()
+        ret['weapon'].append(hw.to_dict(is_in_inventory))
+
+    for rw in RangedWeapon.objects.all():
+        is_in_inventory = character.weapon.filter(id=rw.id).exists()
+        ret['weapon'].append(rw.to_dict(is_in_inventory))
+
+    for s in Spells.objects.all():
+        is_in_inventory = character.spells.filter(id=s.id).exists()
+        ret['spells'].append(s.to_dict(is_in_inventory))
 
     ret['talents'] = get_character_talents(character)
 
