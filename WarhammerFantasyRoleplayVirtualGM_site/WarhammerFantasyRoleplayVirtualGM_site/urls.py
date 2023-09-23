@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
+
+from ajax_select import urls as ajax_select_urls
 
 from django.contrib.auth import views as auth_views
 from WarhammerFantasyRoleplayVirtualGM_app import views as MainView
@@ -32,4 +35,6 @@ urlpatterns = [
     path('skills-autocomplete/', AutocompleteSkills.as_view(), name='skills-autocomplete'),
     path('talent-autocomplete/', AutocompleteTalent.as_view(), name='talent-autocomplete'),
     path('trappings-autocomplete/', AutocompleteTrappings.as_view(), name='trappings-autocomplete'),
+    path('player-autocomplete/', AutocompletePlayer.as_view(), name='player-autocomplete'),
+    url(r'^ajax_select/', include(ajax_select_urls)),
 ]

@@ -12,9 +12,21 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 {% if "addCharacter" in  request.path %}
 <script src="{% static "create_character.js" %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        main();
+    });
+</script>
+
 {% endif %}
 {% if "viewCharacter" in  request.path %}
 <script src="{% static "view_character.js" %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        main();
+    });
+</script>
+
 {% endif %}
 <script src="/admin/jsi18n/"></script>
 <script src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
@@ -27,6 +39,7 @@
 <script src="{% static "admin/js/vendor/xregexp/xregexp.js" %}"></script>
 
 <script type="text/javascript">
+
     $(document).ready(function() {
         main();
     });

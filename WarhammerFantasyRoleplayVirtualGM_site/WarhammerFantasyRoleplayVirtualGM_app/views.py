@@ -1,17 +1,20 @@
 import django
-from django.forms.models import BaseModelForm
 from django_tables2 import SingleTableView
 from django_tables2.paginators import LazyPaginator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.forms import CharField
 from django.forms import Form
 from django.forms import PasswordInput
+from django.forms.models import BaseModelForm
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.views.generic.edit import CreateView
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
-from django.views.generic.edit import CreateView
 
 from pprint import pformat
 
@@ -33,6 +36,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.forms import RangedWeaponForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import SpellsForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import Campaign2PlayerForm
 from WarhammerFantasyRoleplayVirtualGM_app.models import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
@@ -66,6 +70,7 @@ def index(request):
     data = {}
     return render(request, 'main/main.html', data)
 
+@login_required
 def createCampaign(request):
     if request.method == 'POST':
         campaign_form = CreateCampaignForm(request.POST, prefix='user')
@@ -79,6 +84,7 @@ def createCampaign(request):
         campaign_form = CreateCampaignForm(prefix='user')
     return render(request, 'addCampaign.html', dict(form=campaign_form))
 
+@login_required
 def addCharacter(request, CampaignId):
     basic_skills_criterion1 = Q(id__gte = 1)
     basic_skills_criterion2 = Q(id__lte = 26)
@@ -106,6 +112,7 @@ def addCharacter(request, CampaignId):
         }
     return render(request, 'addCharacter.html',context)
 
+@login_required
 def ajax_save_character_species(request):
     if request.method == 'POST':
         species_id = request.POST['species_id']
@@ -114,6 +121,7 @@ def ajax_save_character_species(request):
     logger.error("ajax_save_character_species is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_randomSpecies(request):
     if request.method == 'POST':
         species_list = Species.objects.all()
@@ -128,6 +136,7 @@ def ajax_randomSpecies(request):
     logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_addTalentToCharacter(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -140,6 +149,7 @@ def ajax_addTalentToCharacter(request):
         logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.talent.name, created))
     return JsonResponse({'status': 'ok'})
 
+@login_required
 def ajax_replaceTalentToCharacter(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -159,6 +169,7 @@ def ajax_replaceTalentToCharacter(request):
     talents = get_character_talents(Character.objects.get(id = character_id))
     return JsonResponse({'status': 'ok', 'talents': talents})
 
+@login_required
 def ajax_randomClass(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -259,6 +270,7 @@ def ajax_randomClass(request):
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveName(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -275,6 +287,7 @@ def ajax_saveName(request):
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_getRandomAttributesTable(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -314,6 +327,7 @@ def ajax_getRandomAttributesTable(request):
     # logger.debug(pformat(ret))
     return JsonResponse(ret)
 
+@login_required
 def ajax_randomAttributes(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -367,6 +381,7 @@ def ajax_randomAttributes(request):
     logger.error("ajax_randomClass is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveAttribute(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -438,6 +453,7 @@ def ajax_saveAttribute(request):
     logger.error("ajax_saveAttribute is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveFate_and_fortune(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -459,6 +475,7 @@ def ajax_saveFate_and_fortune(request):
     logger.error("ajax_saveFate_and_fortune is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveAge(request):
     if request.method == 'POST':
         logger.debug(request.POST)
@@ -476,6 +493,7 @@ def ajax_saveAge(request):
     logger.error("ajax_saveAge is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveHeight(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -492,6 +510,7 @@ def ajax_saveHeight(request):
     logger.error("ajax_saveHeight is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveHair(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -510,6 +529,7 @@ def ajax_saveHair(request):
     logger.error("ajax_saveHair is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveEyes(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -527,6 +547,7 @@ def ajax_saveEyes(request):
     logger.error("ajax_saveEyes is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_saveSkillAdv(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
@@ -556,6 +577,7 @@ def ajax_saveSkillAdv(request):
     logger.error("ajax_saveSkillAdv is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
+@login_required
 def ajax_getCareersAdvanceScheme(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -565,6 +587,7 @@ def ajax_getCareersAdvanceScheme(request):
     ret = {'status': 'ok', 'careersAdvanceScheme': cas.serialize() }
     return JsonResponse(ret)
 
+@login_required
 def ajax_addArmourToCharacter(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -578,6 +601,7 @@ def ajax_addArmourToCharacter(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+@login_required
 def ajax_addWeaponToCharacter(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -591,6 +615,7 @@ def ajax_addWeaponToCharacter(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+@login_required
 def ajax_addSpellsToCharacter(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -604,6 +629,7 @@ def ajax_addSpellsToCharacter(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+@login_required
 def ajax_saveSkillsXPSpend(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -624,6 +650,7 @@ def ajax_saveSkillsXPSpend(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+@login_required
 def ajax_saveTalentXPSpend(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -644,25 +671,34 @@ def ajax_saveTalentXPSpend(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
+@login_required
 def detailsCampaign(request, CampaignId):
     c = Campaign.objects.get(id=CampaignId)
     players = []
+    createNewCharacter = False
+    logged_player = Player.objects.get(user=request.user)
     for c2p in Campaign2Player.objects.filter(campaign=c):
         players.append(c2p.player)
     characters = Character.objects.filter(campaign=c, player__in=players)
-    dic ={'camaing': c, "players":players, "characters": characters}
+    for character in characters:
+        if logged_player == character.player:
+            createNewCharacter = True
+    campaign_2_player_form = Campaign2PlayerForm()
+    dic ={'camaing': c, "players":players, "characters": characters, "createNewCharacter": createNewCharacter, "campaign_2_player_form":campaign_2_player_form}
     logging.debug(dic)
     return render(request, 'detailsCampaign.html', dic)
 
+@login_required
 def showCareersAdvanceSchemes(request, casId):
         cas = CareersAdvanceScheme.objects.get(id=casId)
         return render(request, 'showCareersAdvanceSchemes.html', {'cas':cas} )
 
+@login_required
 def listCareersAdvanceSchemes(request):
     cas = CareersAdvanceScheme.objects.all()
     return render(request, 'listCareersAdvanceSchemes.html', {'cas':cas} )
 
-class ChangePasswordForm(Form):
+class ChangePasswordForm(LoginRequiredMixin, Form):
     new_password = CharField(widget=PasswordInput(), label="New Password")
     new_password_confirm = CharField(widget=PasswordInput(), label="Confirm")
 
@@ -680,6 +716,7 @@ class ChangePasswordForm(Form):
             self.user.save()
         return self.user
 
+@login_required
 def changePassword(request):
     if request.method == 'POST':
         changePasswordForm = ChangePasswordForm(data=request.POST, user=request.user)
@@ -690,6 +727,7 @@ def changePassword(request):
         changePasswordForm = ChangePasswordForm(user=request.user)
     return render(request, "changePassword.html", dict(form=changePasswordForm))
 
+@login_required
 def addUser(request):
     if request.method == 'POST':
         uf = UserForm(request.POST, prefix='user')
@@ -702,12 +740,14 @@ def addUser(request):
         uf = UserForm(prefix='user')
     return render(request, 'addUser.html', dict(form=uf))
 
+@login_required
 def addUserConfirm(request):
     return render(request, "confirm.html", {})
 
-class UpdatePlayer(UpdateView):
+class UpdatePlayer(LoginRequiredMixin, UpdateView):
     model = Player
 
+@login_required
 def RemindPassword(request):
     if request.method == 'POST':
         remindPasswordForm = RemindPasswordForm(request.POST)
@@ -775,55 +815,71 @@ class AutocompleteTrappings(autocomplete.Select2QuerySetView):
 
         return qs
 
-class MeleWeaponListView(SingleTableView):
+class AutocompletePlayer(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Trapping.objects.none()
+
+        qs = User.objects.all()
+
+        if self.q:
+            qs = qs.filter(Q(username__startswith=self.q) | Q(first_name__startswith=self.q) | Q(last_name__startswith=self.q)).order_by('last_name')
+
+        players = Player.objects.filter(user__in=qs)
+        return players
+
+class MeleWeaponListView(LoginRequiredMixin, SingleTableView):
     model = MeleeWeapons
     table_class = MeleeWeaponsTable
     template_name = 'MeleWeaponList.html'
     paginator_class = LazyPaginator
 
-class MeleWeaponFormView(CreateView):
+class MeleWeaponFormView(LoginRequiredMixin, CreateView):
     template_name = "create_mele_weapon.html"
     form_class = MeleWeaponForm
 
-class MeleWeaponEditView(UpdateView):
+class MeleWeaponEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_mele_weapon.html"
     form_class = MeleWeaponForm
     model = MeleeWeapons
 
-class RangedWeaponListView(SingleTableView):
+class RangedWeaponListView(LoginRequiredMixin, SingleTableView):
     model = RangedWeapon
     table_class = RangedWeaponsTable
     template_name = 'RangedWeaponList.html'
     paginator_class = LazyPaginator
 
-class RangedWeaponFormView(CreateView):
+class RangedWeaponFormView(LoginRequiredMixin, CreateView):
     template_name = "create_ranged_weapon.html"
     form_class = RangedWeaponForm
 
-class RangedWeaponEditView(UpdateView):
+class RangedWeaponEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_ranged_weapon.html"
     form_class = RangedWeaponForm
     model = RangedWeapon
 
-class SpellListView(SingleTableView):
+class SpellListView(LoginRequiredMixin, SingleTableView):
     model = Spells
     table_class = SpellsTable
     template_name = 'Spellsist.html'
     paginator_class = LazyPaginator
 
-class SpellsCreateFormView(CreateView):
+class SpellsCreateFormView(LoginRequiredMixin, CreateView):
     template_name = "create_spells.html"
     form_class = SpellsForm
 
-class SpellsEditView(UpdateView):
+class SpellsEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_spells.html"
     form_class = SpellsForm
     model = Spells
 
+@login_required
 def viewCharacter(request, pk):
     character=Character.objects.get(pk=pk)
     return render(request, 'viewCharacter.html', dict(character=character))
 
+@login_required
 def ajax_view_getCharacterData(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -907,3 +963,12 @@ def ajax_view_getCharacterData(request):
     ret['talents'] = get_character_talents(character)
 
     return JsonResponse(ret)
+
+@login_required
+def addPlayer2Campaign(request):
+    c2p, created = Campaign2Player.objects.get_or_create(campaign_id = request.POST['campaign_id'], player_id=request.POST['campaign_2_player_lookup_channel'])
+    c2p.save()
+
+    logger.debug(str(request.POST))
+    logger.debug(c2p)
+    return redirect(reverse('detailsCampaign', args=(request.POST['campaign_id'],)))

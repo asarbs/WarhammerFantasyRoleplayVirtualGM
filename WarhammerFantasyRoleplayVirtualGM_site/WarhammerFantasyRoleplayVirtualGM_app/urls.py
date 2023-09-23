@@ -50,7 +50,8 @@ urlpatterns = [
 
 
     path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),
-    path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData")
+    path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData"),
+    path("AddPlayer2Campaign", views.addPlayer2Campaign, name="AddPlayer2Campaign")
 
 
 ]

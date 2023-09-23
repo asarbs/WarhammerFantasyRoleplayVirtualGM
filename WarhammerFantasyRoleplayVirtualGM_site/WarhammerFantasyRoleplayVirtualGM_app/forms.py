@@ -1,17 +1,19 @@
+from ajax_select import register, LookupChannel
+from ajax_select.fields import AutoCompleteSelectField
+from django.contrib.admin import site as admin_site
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 from django.contrib.auth.models import User
 from django.core import validators
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.forms import BaseInlineFormSet
 from django.forms import CharField
 from django.forms import Form
+from django.forms import HiddenInput
 from django.forms import inlineformset_factory
 from django.forms import ModelForm
 from django.forms import PasswordInput
 from django.forms.utils import ErrorList
-from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
-from django.contrib.admin import site as admin_site
-
-
 
 
 
@@ -70,6 +72,27 @@ class ClassTrappingsForm(ModelForm):
         widgets = {
             'trapping': autocomplete.ModelSelect2(url='trappings-autocomplete')
         }
+
+
+@register('campaign_2_player_lookup_channel')
+class Campaign2PlayerFormLookupChannel(LookupChannel):
+    def get_query(self, q, request):
+        qs = User.objects.all()
+        if q:
+            qs = qs.filter(Q(username__startswith=q) | Q(first_name__startswith=q) | Q(last_name__startswith=q)).order_by('last_name')
+        players = models.Player.objects.filter(user__in=qs)
+        return players
+
+    def format_item_display(self, item):
+        return "<span class='campaign_2_player'>{}</span>".format(str(item))
+
+
+class Campaign2PlayerForm(ModelForm):
+    class Meta:
+        model = models.Campaign2Player
+        fields = ()
+    campaign_2_player_lookup_channel = AutoCompleteSelectField('campaign_2_player_lookup_channel', label="Add Player to Campain")
+
 
 def validator_price(price):
     if price.endswith("GC"):

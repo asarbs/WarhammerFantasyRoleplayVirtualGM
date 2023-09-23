@@ -30,8 +30,28 @@ Party: {{ camaing.party_name }} <br />
     </ol>
 </li>
 </ol>
-<br/>
+<h3>Players:</h3>
+
+
+<form action="/wfrpg_gm/AddPlayer2Campaign" method="POST">
+    {% csrf_token %}
+    <input type="hidden" id="campaign_id" name="campaign_id" value="{{ camaing.id }}">
+    {{ campaign_2_player_form.media }}
+    {{ campaign_2_player_form }}
+    <input type="submit" class="button" value="Add">
+</form>
+
+<ol>
+    {% for players in players %}
+    <li> {{ players }}  </li>
+    {% endfor %}
+</ol>
+<h3>Characters:</h3>
+
+{% if createNewCharacter == False %}
 <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
+{% endif %}
+
 <ol>
     {% for character in characters %}
     <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
