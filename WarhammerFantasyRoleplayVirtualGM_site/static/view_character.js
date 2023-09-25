@@ -1827,6 +1827,23 @@ function get_characterData(){
     });
 }
 
+function turon_on_edit() {
+    $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
+
+    $("input#characteristics_ws_advances ").addClass( "editable", 1000);
+    $("input#characteristics_bs_advances ").addClass( "editable", 1000);
+    $("input#characteristics_s_advances").addClass( "editable", 1000);
+    $("input#characteristics_t_advances").addClass( "editable", 1000);
+    $("input#characteristics_i_advances").addClass( "editable", 1000);
+    $("input#characteristics_ag_advances ").addClass( "editable", 1000);
+    $("input#characteristics_dex_advances").addClass( "editable", 1000);
+    $("input#characteristics_int_advances").addClass( "editable", 1000);
+    $("input#characteristics_wp_advances ").addClass( "editable", 1000);
+    $("input#characteristics_fel_advances").addClass( "editable", 1000);
+    $("input.skills_adv").addClass( "editable", 1000);
+    $("input.talents_adv").addClass( "editable", 1000);
+}
+
 function main() {
 
     $.ajaxSetup({
@@ -1838,5 +1855,8 @@ function main() {
     get_characterData();
     $("input").prop("readonly", true);
     $("select").prop("readonly", true);
+
+    $("span.dot_not_editable").click(turon_on_edit);
+
 
 }

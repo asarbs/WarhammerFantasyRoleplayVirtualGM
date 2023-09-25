@@ -40,6 +40,22 @@
     margin-bottom: 10px;
 }
 
+.dot_editable {
+    height: 25px;
+    width: 25px;
+    background-color: #15f947;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot_not_editable {
+    height: 25px;
+    width: 25px;
+    background-color: #ec0e0e;
+    border-radius: 50%;
+    display: inline-block;
+}
+
 body {
     background-color : #FFFFFF;
     font-family: AntykwaTorunska-Regular;
@@ -107,12 +123,6 @@ input {
     text-align: center;
 }
 
-input[type="text"]#tournament_p,
-input[type="text"]#big_p,
-input[type="text"]#small_p {
-    width : 50px;
-    text-align : center;
-}
 
 select.small,
 input.small {
@@ -198,33 +208,36 @@ div#main h3.main {
 div#main div#blog {
     width : 80%;
 }
-
 div#main div#blog div.blog_content {
     margin-bottom: 25px;
 }
-
 div#main div#blog div.blog_content .news-link {
     color : #97D7F4;
 }
-
 div#main div#blog div.blog_content_info {
     margin-bottom: 5px;
 }
-
 div#main div#blog div.blog_content_info p {
     display: inline;
 }
-
 div#main div#blog div.blog_content .news-text {
     font-size: 13px;
 }
-
 div#main div.top {
     background-image: url("img/WFRP_-_Character_Sheet-1_head.png");
     background-color: #c4a314;
     border: 0px solid #35fbd6;
     width: 1693px;
     height: 259px;
+}
+div#main div.top div.control {
+    /* border: 1px solid #FF0000; */
+    margin-top: 150px;
+    margin-left: 250px;
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    font-size: 220%;
 }
 div#main div.bottom {
     background-image: url("img/WFRP_-_Character_Sheet-1_bottom.png");
@@ -234,7 +247,6 @@ div#main div.bottom {
     height: 118px;
     bottom: 0;
 }
-
 div#main div.create_character {
     background-image: url("img/create_character_background.jpeg");
     border-radius: 15px;
@@ -247,16 +259,13 @@ div#main div.create_character {
     position:fixed;
     z-index: 1000;
 }
-
 div#main div.create_character img.img_random {
     /* background-color: #c4a314; */
     height: 15px;
 }
-
 div#main div.create_character img.img_random:hover {
     cursor: pointer;
 }
-
 div#main div.create_character img#img_character_creaton_next {
     height: 32px;
     bottom: 0;
@@ -264,7 +273,6 @@ div#main div.create_character img#img_character_creaton_next {
 div#main div.create_character img#img_character_creaton_next:hover {
     cursor: pointer;
 }
-
 div#main div.create_character div.create_character_steps {
     display: none;
 }
@@ -298,14 +306,21 @@ div#main div.character_sheet {
 
 div#main div.character_sheet input {
     background-color: rgba(21, 121, 112, 0.1);
-    border: 1px solid #FF0000;
+    border: 1px solid #22282e9f;
+    height: 32px;
+    /* position: absolute; */
+}
+
+div#main div.character_sheet input.editable {
+    background-color: rgba(21, 121, 112, 0.1);
+    border: 1px solid #15f947;
     height: 32px;
     /* position: absolute; */
 }
 
 div#main div.character_sheet select {
     background-color: rgba(21, 121, 112, 0.1);
-    border: 1px solid #FF0000;
+    border: 1px solid #ee0e0e9f;
     height: 32px;
     width: 300px;
 }
@@ -629,15 +644,15 @@ div#main div.character_sheet div.basic_skills table tr td.characteristics  {
     height: 32px;
 }
 div#main div.character_sheet div.basic_skills table tr td.edit {
-    height: 52px;
-    width: 53px;
+    height: 33px;
+    width: 33px;
     text-align: center;
 }
 div#main div.character_sheet div.basic_skills table tr td.edit input  {
     padding: 0px;
     margin: 0px;
-    height: 52px;
-    width: 52px;
+    height: 32px;
+    width: 32px;
     position: relative;
 }
 
