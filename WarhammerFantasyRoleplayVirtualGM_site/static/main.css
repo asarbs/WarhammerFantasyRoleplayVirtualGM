@@ -844,6 +844,10 @@ div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_l
     width: 15%;
 }
 
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right table tbody tr td input.encumbrance_values {
+    width: 35px;
+}
+
 div#main div.character_sheet div.sheer2_right {
     /* background-color: #d02e2e; */
     width: 480px;

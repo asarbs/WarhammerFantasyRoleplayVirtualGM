@@ -66,15 +66,17 @@ class Skill {
     }
 };
 class Trapping {
-    #id             = 0
-    #name           = ""
-    #enc            = 0
-    #description    = "";
-    constructor(id, name, enc, description) {
+    #id              = 0
+    #name            = ""
+    #enc             = 0
+    #description     = ""
+    #is_in_inventory = false
+    constructor(id, name, enc, description, is_in_inventory) {
         this.#id = id;
         this.#name = name;
         this.#enc = enc;
         this.#description = description;
+        this.#is_in_inventory = is_in_inventory;
     }
     get id() {
         return this.#id;
@@ -108,8 +110,11 @@ class Trapping {
         else
             throw "Trapping description=" + enc + " is not a string";
     }
-    get enc() {
+    get description() {
         return this.#description;
+    }
+    get is_in_inventory() {
+        return this.#is_in_inventory;
     }
 }
 class Talent {
@@ -275,6 +280,9 @@ class Armour{
     }
     get qualities_and_flaws() {
         return this.#qualities_and_flaws;
+    }
+    get is_in_inventory() {
+        return this.#is_in_inventory
     }
 
     updateUI() {
@@ -851,6 +859,7 @@ class CharacterParameters {
             $("input#characteristics_s_initial"   ).val(characterParameters.characteristics_s_initial)
             $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_current)
             $("input#strength_bonus"              ).val(characterParameters.s_bonus)
+            $("input#encumbrance_max"          ).val(characterParameters.s_bonus + characterParameters.t_bonus)
             this.updateWounds();
         }
         else
@@ -865,6 +874,7 @@ class CharacterParameters {
             $("input#characteristics_t_initial"   ).val(characterParameters.characteristics_t_initial)
             $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_current )
             $("input#toughness_bonus"              ).val(this.t_bonus + " * 2")
+            $("input#encumbrance_max"          ).val(characterParameters.s_bonus + characterParameters.t_bonus)
             this.updateWounds();
         }
         else
@@ -1424,6 +1434,7 @@ class CharacterParameters {
         console.log("updateTrappingsTable");
         this.trappingsNeedUpdate = false;
         $("table#trappings_table tr.block_body").remove();
+
         $.each(this.#trappings, function(i, item) {
             console.log("updateTrappingsTable: "+item.id);
             var new_row = ""
@@ -1433,6 +1444,7 @@ class CharacterParameters {
                 new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname" value="'+item.enc+'"></td>'
                 new_row += '</tr>'
                 $("#trappings_table").append(new_row)
+
             }
         });
     }
@@ -1467,10 +1479,12 @@ class CharacterParameters {
     }
     appendTrappings(trapping) {
         console.log("appendTrappings:"+ trapping['id']+"; "+trapping['name']+"; "+trapping['description']+"; "+trapping['enc']);
+        // id, name, enc, description, is_in_inventory
         this.#trappings[trapping['id']] = new Trapping(trapping['id'],
                                                     trapping['name'],
+                                                    trapping['enc'],
                                                     trapping['description'],
-                                                    trapping['enc']);
+                                                    true);
         this.trappingsNeedUpdate = true;
     }
     deleteTrappings() {
@@ -1693,6 +1707,36 @@ class CharacterParameters {
     updateWounds() {
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
     }
+
+    updateEncumbrance() {
+        console.log("updateEncumbrance")
+        var trapping_enc_sum = 0
+        var armour_enc_sum = 0
+        var weapons_enc_sum = 0
+        $.each(this.#trappings, function(i, item) {
+            console.log("updateEncumbrance trappings :"+item.is_in_inventory)
+            if(item.is_in_inventory) {
+                trapping_enc_sum += item.enc
+            }
+        });
+        $.each(this.#armour, function(i ,item) {
+            console.log("updateEncumbrance armour :"+item.is_in_inventory)
+            if(item.is_in_inventory) {
+                armour_enc_sum += item.encumbrance
+            }
+        });
+        $.each(this.#weapon, function(i ,item) {
+            console.log("updateEncumbrance weapon :"+item.is_in_inventory)
+            if(item.is_in_inventory) {
+                weapons_enc_sum += item.encumbrance
+            }
+        });
+        $("input#encumbrance_trappings").val(trapping_enc_sum)
+        $("input#encumbrance_armour").val(armour_enc_sum)
+        $("input#encumbrance_weapons").val(weapons_enc_sum)
+        $("input#encumbrance_total").val(trapping_enc_sum + armour_enc_sum + weapons_enc_sum)
+
+    }
 };
 
 const characterParameters = new CharacterParameters();
@@ -1778,7 +1822,7 @@ function get_characterData(){
 
             $("input").prop("readonly", true);
             $("select").prop("readonly", true);
-
+            characterParameters.updateEncumbrance();
         }
     });
 }
