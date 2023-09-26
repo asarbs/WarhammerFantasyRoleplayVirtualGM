@@ -591,6 +591,31 @@ def ajax_saveFreeHandSkillAdv(request):
     return JsonResponse(ret)
 
 @login_required
+def ajax_saveFreeHandCharacteristicAdv(request):
+    if not request.method == 'POST':
+        logger.error("ajax_saveFreeHandSkillAdv is {}".format(request.method))
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.debug(request.POST)
+    ch = Character.objects.get(id=request.POST['characer_id'])
+
+    ch.characteristics_ws_advances  = request.POST['characteristics_ws_advances']
+    ch.characteristics_bs_advances  = request.POST['characteristics_bs_advances']
+    ch.characteristics_s_advances   = request.POST['characteristics_s_advances']
+    ch.characteristics_t_advances   = request.POST['characteristics_t_advances']
+    ch.characteristics_i_advances   = request.POST['characteristics_i_advances']
+    ch.characteristics_ag_advances  = request.POST['characteristics_ag_advances']
+    ch.characteristics_dex_advances = request.POST['characteristics_dex_advances']
+    ch.characteristics_int_advances = request.POST['characteristics_int_advances']
+    ch.characteristics_wp_advances  = request.POST['characteristics_wp_advances']
+    ch.characteristics_fel_advances = request.POST['characteristics_fel_advances']
+
+    ch.save()
+
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
+
+@login_required
 def ajax_getCareersAdvanceScheme(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)

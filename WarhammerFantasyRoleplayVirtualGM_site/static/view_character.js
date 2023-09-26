@@ -1687,6 +1687,61 @@ class CharacterParameters {
         this.#skills[skill_id].adv_standard = newVal;
         this.#skills[skill_id].save();
     }
+    updateCharacterAdvVal(characteristics_id, characteristics_adv_val) {
+        switch(characteristics_id) {
+            case "characteristics_ws_advances" :
+                this.characteristics_ws_advances = characteristics_adv_val;
+                break;
+            case "characteristics_bs_advances" :
+                this.characteristics_bs_advances = characteristics_adv_val;
+                break;
+            case "characteristics_s_advances"  :
+                this.characteristics_s_advances = characteristics_adv_val;
+                break;
+            case "characteristics_t_advances"  :
+                this.characteristics_t_advances = characteristics_adv_val;
+                break;
+            case "characteristics_i_advances"  :
+                this.characteristics_i_advances = characteristics_adv_val;
+                break;
+            case "characteristics_ag_advances" :
+                this.characteristics_ag_advances = characteristics_adv_val;
+                break;
+            case "characteristics_dex_advances":
+                this.characteristics_dex_advances = characteristics_adv_val;
+                break;
+            case "characteristics_int_advances":
+                this.characteristics_int_advances = characteristics_adv_val;
+                break;
+            case "characteristics_wp_advances" :
+                this.characteristics_wp_advances = characteristics_adv_val;
+                break;
+            case "characteristics_fel_advances":
+                this.characteristics_fel_advances = characteristics_adv_val;
+                break;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveFreeHandCharacteristicAdv",
+            data: {
+                characer_id: $("input[name='characer_id']").val(),
+                characteristics_ws_advances  : this.characteristics_ws_advances,
+                characteristics_bs_advances  : this.characteristics_bs_advances,
+                characteristics_s_advances   : this.characteristics_s_advances,
+                characteristics_t_advances   : this.characteristics_t_advances,
+                characteristics_i_advances   : this.characteristics_i_advances,
+                characteristics_ag_advances  : this.characteristics_ag_advances,
+                characteristics_dex_advances : this.characteristics_dex_advances,
+                characteristics_int_advances : this.characteristics_int_advances,
+                characteristics_wp_advances  : this.characteristics_wp_advances,
+                characteristics_fel_advances : this.characteristics_fel_advances,
+            },
+            success: function(data) {
+                console.log("skill save: " + data['status'])
+            }
+        });
+    }
     upTalentXPSpend(oldValue) {
 
 
@@ -1844,6 +1899,7 @@ function updateCharacteristics() {
     var characteristics_id = $(this).attr('id');
     var characteristics_adv_val = parseInt($(this).val());
     console.log("updateCharacteristics: " + characteristics_id + ":"+ characteristics_adv_val)
+    characterParameters.updateCharacterAdvVal(characteristics_id, characteristics_adv_val);
 }
 
 function updateSkill() {
