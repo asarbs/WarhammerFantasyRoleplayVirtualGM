@@ -552,7 +552,7 @@ def ajax_saveSkillAdv(request):
     if request.method == 'POST':
         character_id = request.POST['characer_id']
         logger.info(request.POST)
-        # logger.info("character_id={}; skill_id={}; points={}; old_skill_adv={}".format(character_id, request.POST['skill_id'], request.POST['points'], request.POST['old_skill_adv']))
+        logger.info("character_id={}; skill_id={}; points={}; old_skill_adv={}".format(character_id, request.POST['skill_id'], request.POST['points'], request.POST['old_skill_adv']))
         if request.POST['skill_id'] == 0:
             ch2skill = Character2Skill.objects.get(characters_id=character_id, skills_id=request.POST['skill_id'])
             if ch2skill is not None:
@@ -576,6 +576,19 @@ def ajax_saveSkillAdv(request):
         return JsonResponse(ret)
     logger.error("ajax_saveSkillAdv is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
+
+@login_required
+def ajax_saveFreeHandSkillAdv(request):
+    if not request.method == 'POST':
+        logger.error("ajax_saveFreeHandSkillAdv is {}".format(request.method))
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.debug(request.POST)
+    ch2skill = Character2Skill.objects.get(characters_id=request.POST['characer_id'], skills_id=request.POST['skill_id'])
+    ch2skill.adv = request.POST['skill_adv_val']
+    ch2skill.save()
+
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
 
 @login_required
 def ajax_getCareersAdvanceScheme(request):

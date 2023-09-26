@@ -20,8 +20,8 @@ class Skill {
         this.#is_career_skill = is_career_skill;
         this.#is_species_skill = is_species_skill
         this.#adv_standard = adv_standard
-        this.#adv_career = adv_career
-        this.#adv_species = adv_species
+        this.#adv_career = 0
+        this.#adv_species = 0
     }
     get id() {
         return this.#id
@@ -63,6 +63,20 @@ class Skill {
     }
     get adv() {
         return this.#adv_standard + this.#adv_career + this.#adv_species;
+    }
+    save() {
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveFreeHandSkillAdv",
+            data: {
+                characer_id: $("input[name='characer_id']").val(),
+                skill_id: this.id,
+                skill_adv_val: this.#adv_standard
+            },
+            success: function(data) {
+                console.log("skill save: " + data['status'])
+            }
+        });
     }
 };
 class Trapping {
@@ -1376,9 +1390,9 @@ class CharacterParameters {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="skills_name__'+item.id+'" class="left">'+item.name+'</td>'
                 new_row += '<td class="characteristics">'+item.characteristics+'</td>'
-                new_row += '<td class="edit"><input type="text" id="skills_characteristics__'+item.id+'" name="fname"></td>'
-                new_row += '<td class="edit"><input type="text" id="skills_adv__'+item.id+'" class="skills_adv" skill_id="'+item.id+'" min="0" max="100" step="1" name="fname"></td>'
-                new_row += '<td class="edit"><input type="text" id="skills__'+item.id+'" name="fname"></td>'
+                new_row += '<td class="edit"><input type="number" id="skills_characteristics__'+item.id+'" name="fname"></td>'
+                new_row += '<td class="edit"><input type="number" id="skills_adv__'+item.id+'" class="skills_adv" skill_id="'+item.id+'" min="0" max="100" step="1" name="fname"></td>'
+                new_row += '<td class="edit"><input type="number" id="skills__'+item.id+'" name="fname"></td>'
                 new_row += '<td class=""><img id="skills__is_basic_skill__'+item.id+'" src="/static/NO.png"></td>'
                 new_row += '<td class=""><img id="skills__is_career_skill__'+item.id+'" src="/static/NO.png"></td>'
                 new_row += '<td class=""><img id="skills__is_species_skill__'+item.id+'" src="/static/NO.png"></td>'
@@ -1671,6 +1685,7 @@ class CharacterParameters {
     updateSkillVal(skill_id, newVal) {
         console.log("updateSkillVal: this.#skills.length="+this.#skills.length);
         this.#skills[skill_id].adv_standard = newVal;
+        this.#skills[skill_id].save();
     }
     upTalentXPSpend(oldValue) {
 
@@ -1703,11 +1718,9 @@ class CharacterParameters {
         console.log("updateTalentVal: this.#talents.length="+this.#talents.length);
         this.#talents[talent_id].taken = newVal;
     }
-
     updateWounds() {
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
     }
-
     updateEncumbrance() {
         console.log("updateEncumbrance")
         var trapping_enc_sum = 0
@@ -1827,6 +1840,19 @@ function get_characterData(){
     });
 }
 
+function updateCharacteristics() {
+    var characteristics_id = $(this).attr('id');
+    var characteristics_adv_val = parseInt($(this).val());
+    console.log("updateCharacteristics: " + characteristics_id + ":"+ characteristics_adv_val)
+}
+
+function updateSkill() {
+    var skill_id = $(this).attr('skill_id');
+    var skill_adv_val = parseInt($(this).val());
+    // console.log("updateSkill: " + skill_id +":"+ skill_adv_val)
+    characterParameters.updateSkillVal(skill_id, skill_adv_val)
+}
+
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -1842,6 +1868,32 @@ function turon_on_edit() {
     $("input#characteristics_fel_advances").addClass( "editable", 1000);
     $("input.skills_adv").addClass( "editable", 1000);
     $("input.talents_adv").addClass( "editable", 1000);
+
+    $("input#characteristics_ws_advances ").prop("readonly", false);
+    $("input#characteristics_bs_advances ").prop("readonly", false);
+    $("input#characteristics_s_advances").prop("readonly", false);
+    $("input#characteristics_t_advances").prop("readonly", false);
+    $("input#characteristics_i_advances").prop("readonly", false);
+    $("input#characteristics_ag_advances ").prop("readonly", false);
+    $("input#characteristics_dex_advances").prop("readonly", false);
+    $("input#characteristics_int_advances").prop("readonly", false);
+    $("input#characteristics_wp_advances ").prop("readonly", false);
+    $("input#characteristics_fel_advances").prop("readonly", false);
+    $("input.skills_adv").prop("readonly", false);
+    $("input.talents_adv").prop("readonly", false);
+
+    $("input#characteristics_ws_advances ").on("change",  updateCharacteristics);
+    $("input#characteristics_bs_advances ").on("change", updateCharacteristics);
+    $("input#characteristics_s_advances").on("change", updateCharacteristics);
+    $("input#characteristics_t_advances").on("change", updateCharacteristics);
+    $("input#characteristics_i_advances").on("change", updateCharacteristics);
+    $("input#characteristics_ag_advances ").on("change", updateCharacteristics);
+    $("input#characteristics_dex_advances").on("change", updateCharacteristics);
+    $("input#characteristics_int_advances").on("change", updateCharacteristics);
+    $("input#characteristics_wp_advances ").on("change", updateCharacteristics);
+    $("input#characteristics_fel_advances").on("change", updateCharacteristics);
+    $("input.skills_adv").on("change", updateSkill);
+    $("input.talents_adv").on("change", updateSkill);
 }
 
 function main() {
