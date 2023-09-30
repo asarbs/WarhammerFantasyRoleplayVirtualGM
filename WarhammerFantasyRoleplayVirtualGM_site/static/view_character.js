@@ -183,6 +183,7 @@ class Armour{
     #armour_points
     #qualities_and_flaws
     #is_in_inventory
+    #put_on
     constructor(id, name, armour_type, price, encumbrance, availability, penalty, locations, armour_points, qualities_and_flaws, is_in_inventory) {
         this.#id = id;
         this.#name = name;
@@ -195,9 +196,9 @@ class Armour{
         this.#armour_points = armour_points;
         this.#qualities_and_flaws = qualities_and_flaws;
         this.#is_in_inventory = is_in_inventory
+        this.#put_on = false;
         console.log("Create Armour:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory);
     }
-
     set name(name) {
         if(typeof name === "string")
             this.#name = name;
@@ -264,6 +265,23 @@ class Armour{
             throw "Armour ["+this.#name+"].is_in_inventory = " + is_in_inventory + " is not boolean";
         }
     }
+    set put_on(put_on) {
+        if(typeof put_on === "boolean" ){
+            if(this.#put_on != put_on){
+                this.#put_on = put_on;
+                console.log("Armour.put_on: name="+this.name+"; put_on="+this.#put_on)
+                this.put_on_update_ui();
+            } else {
+                console.log("Armour.put_on: name="+this.name+"; #put_on="+this.#put_on+"; put_on="+put_on)
+            }
+        }
+        else {
+            throw "Armour ["+this.#name+"].put_on = " + put_on + " is not boolean";
+        }
+    }
+    get put_on() {
+        return this.#put_on;
+    }
 
     get id() {
         return this.#id;
@@ -299,6 +317,66 @@ class Armour{
         return this.#is_in_inventory
     }
 
+    try_put_off(locations) {
+        var arr_locations = locations.split(", ")
+        var item_locations = this.locations.split(", ")
+        for(var i = 0; i < arr_locations.length; i++) {
+            if(item_locations.includes(arr_locations[i])){
+                this.put_on = false
+            }
+        }
+
+    }
+
+    put_on_update_ui() {
+        if(this.is_in_inventory == false) {
+            return
+        }
+        console.log("Armour.put_on_update_ui: name="+this.name+"; put_on="+this.put_on + "; #locations="+this.#locations)
+        if(this.put_on == true) {
+            $("input#armour_put_on_checkbox__"+this.#id).prop( "checked", true );
+
+            if(this.#locations == "Head") {
+                $("input#armour_put_on_head").val(this.armour_points)
+            } else if(this.#locations == "Arms") {
+                $("input#armour_put_on_left_arm").val(this.armour_points)
+                $("input#armour_put_on_right_arm").val(this.armour_points)
+            } else if(this.#locations == "Arms, Body") {
+                $("input#armour_put_on_left_arm").val(this.armour_points)
+                $("input#armour_put_on_right_arm").val(this.armour_points)
+                $("input#armour_put_on_body").val(this.armour_points)
+            } else if(this.#locations == "Body") {
+                $("input#armour_put_on_body").val(this.armour_points)
+            } else if(this.#locations == "Legs") {
+                $("input#armour_put_on_left_leg").val(this.armour_points)
+                $("input#armour_put_on_right_leg").val(this.armour_points)
+            } else if(this.#locations == "Shield") {
+                $("input#armour_put_on_shield").val(this.armour_points)
+            }
+        } else if(this.put_on == false) {
+            $("input#armour_put_on_checkbox__"+this.#id).prop( "checked", false );
+
+            if(this.#locations == "Head") {
+                $("input#armour_put_on_head").val (" ")
+            } else if(this.#locations == "Arms") {
+                $("input#armour_put_on_left_arm").val (" ")
+                $("input#armour_put_on_right_arm").val (" ")
+            } else if(this.#locations == "Arms, Body") {
+                $("input#armour_put_on_left_arm").val (" ")
+                $("input#armour_put_on_right_arm").val (" ")
+                $("input#armour_put_on_body").val (" ")
+            } else if(this.#locations == "Body") {
+                $("input#armour_put_on_body").val (" ")
+            } else if(this.#locations == "Legs") {
+                $("input#armour_put_on_left_leg").val (" ")
+                $("input#armour_put_on_right_leg").val (" ")
+            } else if(this.#locations == "Shield") {
+                $("input#armour_put_on_shield").val (" ")
+            }
+        }
+
+    }
+
     updateUI() {
         console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         if(this.#is_in_inventory && !$('td#armour_name__'+this.#id).length) {
@@ -308,8 +386,10 @@ class Armour{
             new_row += '<td id="armour_encumbrance__'+this.#id+'" class="center">'+this.#encumbrance+'</td>'
             new_row += '<td id="armour_armour_points__'+this.#id+'" class="center">'+this.#armour_points+'</td>'
             new_row += '<td id="armour_qualities__'+this.#id+'" class="center">'+this.#qualities_and_flaws+'</td>'
+            new_row += '<td id="armour_put_on__'+this.#id+'" class="center"><input type="checkbox" id="armour_put_on_checkbox__'+this.#id+'" name="armour_put_on__'+this.#id+'" class="armour_put_on" armour_id="'+this.#id+'"></td>'
             new_row += '</tr>'
             $("table#armour").append(new_row)
+            $("input[type='checkbox']#armour_put_on_checkbox__"+this.#id).on("change", put_on_armour);
         } else {
             console.log("Armour NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         }
@@ -1822,6 +1902,21 @@ class CharacterParameters {
         $("input#encumbrance_total").val(trapping_enc_sum + armour_enc_sum + weapons_enc_sum)
 
     }
+    put_on_armour(armour_id, checked) {
+        var a
+        $.each(this.#armour, function(i, item) {
+            if(item.id == armour_id) {
+                a = item
+            }
+        });
+
+        $.each(this.#armour, function(i, item) {
+            item.try_put_off(a.locations)
+        });
+
+        a.put_on = checked;
+        a.put_on_update_ui();
+    }
 };
 
 const characterParameters = new CharacterParameters();
@@ -1910,6 +2005,7 @@ function get_characterData(){
             $("select").prop("readonly", true);
             characterParameters.updateEncumbrance();
             turon_on_edit();
+            $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
         }
     });
 }
@@ -1960,6 +2056,7 @@ function turon_on_edit() {
     $("input#characteristics_fel_advances").prop("readonly", false);
     $("input.skills_adv").prop("readonly", false);
     $("input.talents_adv").prop("readonly", false);
+    $("input.armour_put_on").prop("readonly", false);
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristics);
     $("input#characteristics_bs_advances ").on("change", updateCharacteristics);
@@ -1974,21 +2071,28 @@ function turon_on_edit() {
     $("input.skills_adv").on("change", updateSkill);
     $("input.talents_adv").on("change", updateSkill);
 }
-
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()
     console.log("armour_add: "+ armour_to_add);
     characterParameters.armour_add(armour_to_add);
+    characterParameters.updateEncumbrance();
 }
 function weapon_add() {
     var weapon_to_add = $("select#add_weapon").val()
     console.log("add_weapon: "+ weapon_to_add);
     characterParameters.add_weapon(weapon_to_add);
+    characterParameters.updateEncumbrance();
 }
 function spell_add() {
     var spell_to_add = $("select#add_spell").val()
     console.log("add_spell: "+ spell_to_add);
     characterParameters.add_spell(spell_to_add);
+    characterParameters.updateEncumbrance();
+}
+
+function put_on_armour() {
+    console.log("put_on_armour: id:"+$(this).attr('armour_id') + " checked="+$(this).prop('checked'))
+    characterParameters.put_on_armour($(this).attr('armour_id'), $(this).prop('checked'));
 }
 
 function main() {
@@ -2009,5 +2113,6 @@ function main() {
     $("button#armour_add_button").click(armour_add);
     $("button#weapon_add_button").click(weapon_add);
     $("button#spells_add_button").click(spell_add);
+    $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
 
 }

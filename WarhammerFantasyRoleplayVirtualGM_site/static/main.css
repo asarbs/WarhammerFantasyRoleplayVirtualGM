@@ -425,26 +425,22 @@ div#main div.character_sheet div.characteristics table tr td.head {
     font-size: 150%;
     text-align: center;
 }
-
 div#main div.character_sheet div.characteristics input {
     height: 52px;
     width: 53px;
     position: relative;
     text-align: center;
 }
-
 div#main div.character_sheet div.right {
     /* background-color: #469933; */
     width: 700px;
     margin-left: 840px;
 }
-
 div#main div.character_sheet div.right div.fate_resistance_exp {
     /* background-color: #d9c721; */
     width: 700px;
     position:relative
 }
-
 div#main div.character_sheet div.right div.fate_resistance_exp div.fate {
     /* background-color: #10d010; */
     width: 150px;
@@ -473,13 +469,11 @@ div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr
     width: 43px;
     position: relative;
 }
-
 div#main div.character_sheet div.right div.fate_resistance_exp div.resilience {
     /* background-color: #9c23ba; */
     width: 320px;
     float: left;
 }
-
 div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table {
     width: 140px;
     margin-left: 10px;
@@ -504,7 +498,6 @@ div#main div.character_sheet div.right div.fate_resistance_exp div.resilience ta
     width: 43px;
     position: relative;
 }
-
 div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_resilience {
     height: 37px;
     width: 105px;
@@ -517,13 +510,11 @@ div#main div.character_sheet div.right div.fate_resistance_exp div.resilience ta
     height: 37px;
     width: 110px;
 }
-
 div#main div.character_sheet div.right div.fate_resistance_exp div.experience {
     /* background-color: #993333; */
     width: 230px;
     float: left;
 }
-
 div#main div.character_sheet div.right div.fate_resistance_exp div.experience table {
     width: 140px;
     margin-left: 12px;
@@ -588,7 +579,6 @@ div#main div.character_sheet div.right div.movement table tr td.head {
 div#main div.character_sheet div.right div.movement table tr td input {
     position: relative;
 }
-
 div#main div.character_sheet div.right div.movement table tr td input#movement_movement {
     height: 37px;
     width: 90px;
@@ -602,7 +592,6 @@ div#main div.character_sheet div.right div.movement table tr td input#movement_r
     height: 37px;
     width: 90px;
 }
-
 div#main div.character_sheet div.basic_skills {
     /* background-color: #993333; */
     width: 700px;
@@ -654,11 +643,9 @@ div#main div.character_sheet div.basic_skills table tr td.edit input  {
     width: 32px;
     position: relative;
 }
-
 div#main div.character_sheet div.talents_ambitions_party {
     margin-left: 840px;
 }
-
 div#main div.character_sheet div.talents {
     /* background-color: #993333; */
     width: 700px;
@@ -756,7 +743,6 @@ div#main div.character_sheet div.sheer2_left table.armour {
     /* background-color: #ddd91f; */
     width: 940px;
 }
-
 div#main div.character_sheet div.sheer2_left table.armour tr.block_name {
     font-size: 36px;
     text-align: center;
@@ -764,6 +750,12 @@ div#main div.character_sheet div.sheer2_left table.armour tr.block_name {
 div#main div.character_sheet div.sheer2_left table.armour tr.block_header {
     font-size: 20px;
     text-align: center;
+}
+div#main div.character_sheet div.sheer2_left table.armour tr.block_body td input.armour_put_on {
+    width: 18px;
+    height: 18px;
+    background: #22282e9f;
+    color: #004363;
 }
 
 div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom {
@@ -882,42 +874,41 @@ div#main div.character_sheet div.sheer2_right div.sheet2_ap input {
     height: 50px;
 }
 
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#head {
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_head {
     margin-left: 46px;
     margin-top: 120px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#left_arm {
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_left_arm {
     margin-left: 355px;
     margin-top: 190px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#right_arm {
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_right_arm {
     margin-left: 45px;
     margin-top: 280px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#body {
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_body {
     margin-left: 358px;
     margin-top: 358px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#left_leg {
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_left_leg {
     margin-left: 358px;
     margin-top: 552px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#right_leg {
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_right_leg {
     margin-left: 45px;
     margin-top: 455px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#shield {
+div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_shield {
     margin-left: 45px;
     margin-top: 590px;
     position: absolute;
 }
-
 div#main div.character_sheet div.sheer2_right div.sheet2_wounds {
 
 }
