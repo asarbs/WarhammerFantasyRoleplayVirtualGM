@@ -1952,6 +1952,22 @@ function turon_on_edit() {
     $("input.talents_adv").on("change", updateSkill);
 }
 
+function armour_add() {
+    var armour_to_add = $("select#add_armour").val()
+    console.log("armour_add: "+ armour_to_add);
+    characterParameters.armour_add(armour_to_add);
+}
+function weapon_add() {
+    var weapon_to_add = $("select#add_weapon").val()
+    console.log("add_weapon: "+ weapon_to_add);
+    characterParameters.add_weapon(weapon_to_add);
+}
+function spell_add() {
+    var spell_to_add = $("select#add_spell").val()
+    console.log("add_spell: "+ spell_to_add);
+    characterParameters.add_spell(spell_to_add);
+}
+
 function main() {
 
     $.ajaxSetup({
@@ -1966,5 +1982,8 @@ function main() {
 
     $("span.dot_not_editable").click(turon_on_edit);
 
+    $("button#armour_add_button").click(armour_add);
+    $("button#weapon_add_button").click(weapon_add);
+    $("button#spells_add_button").click(spell_add);
 
 }
