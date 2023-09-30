@@ -741,6 +741,7 @@ class CharacterParameters {
     #wounds                             = 0;
     skills_species                      = {};
     #improvementXPCosts                 = [];
+    #wealth                             = 0;
     #advanceScheme;
     movement = {
         0: {'walk': 0,"run": 0},
@@ -1164,6 +1165,22 @@ class CharacterParameters {
     }
     get wounds() {
         return this.#wounds;
+    }
+    set wealth(wealth) {
+        if(typeof wealth === "number") {
+            this.#wealth = wealth;
+            $("input#wealth"                      ).val(characterParameters.wealth)
+        }
+        else
+            throw "wealth[" + wealth + "] is not a string";
+    }
+    get wealth() {
+        var GC = Math.floor(this.#wealth / 240)
+        var GC_left = this.#wealth % 240
+        var SC = Math.floor(GC_left / 12)
+        var SC_left = GC_left % 12
+        var BC = SC_left
+        return GC+" GC " + SC + "/" + BC
     }
     set character_creation_step(character_creation_step) {
         if(typeof character_creation_step === "number")
@@ -1863,6 +1880,7 @@ function get_characterData(){
             characterParameters.movement_movement            = data['character']["movement_movement"            ]
             characterParameters.movement_walk                = data['character']["movement_walk"                ]
             characterParameters.movement_run                 = data['character']["movement_run"                 ]
+            characterParameters.wealth                       = data['character']["wealth"                 ]
 
             for(let k in data['skills'] ) {
                 characterParameters.appendSkill(data['skills'][k])
@@ -1891,6 +1909,7 @@ function get_characterData(){
             $("input").prop("readonly", true);
             $("select").prop("readonly", true);
             characterParameters.updateEncumbrance();
+            turon_on_edit();
         }
     });
 }
@@ -1924,6 +1943,10 @@ function turon_on_edit() {
     $("input#characteristics_fel_advances").addClass( "editable", 1000);
     $("input.skills_adv").addClass( "editable", 1000);
     $("input.talents_adv").addClass( "editable", 1000);
+    $("select#add_armour").addClass( "editable", 1000);
+    $("select#add_weapon").addClass( "editable", 1000);
+    $("select#add_spell").addClass( "editable", 1000);
+
 
     $("input#characteristics_ws_advances ").prop("readonly", false);
     $("input#characteristics_bs_advances ").prop("readonly", false);
@@ -1977,6 +2000,7 @@ function main() {
 
     characer_id = $("input[name='characer_id']").val()
     get_characterData();
+
     $("input").prop("readonly", true);
     $("select").prop("readonly", true);
 

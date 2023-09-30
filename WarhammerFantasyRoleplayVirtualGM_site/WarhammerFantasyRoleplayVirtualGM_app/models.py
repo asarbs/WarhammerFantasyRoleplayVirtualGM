@@ -510,6 +510,7 @@ class Character(models.Model):
     armour = models.ManyToManyField(Armour, verbose_name="Armour")
     weapon = models.ManyToManyField(Weapon, verbose_name="Weapon")
     spells = models.ManyToManyField(Spells, verbose_name="Spells")
+    wealth = models.IntegerField(default=0, verbose_name="Wealth")
 
     def __str__(self):
         return u"{0}".format(self.name)

@@ -968,6 +968,7 @@ def ajax_view_getCharacterData(request):
             "movement_movement"            : character.movement_movement,
             "movement_walk"                : character.movement_walk,
             "movement_run"                 : character.movement_run,
+            "wealth"                       : character.wealth,
         }
 
 

@@ -146,6 +146,7 @@ div.table-container {
     /* background-color: #35fbd6; */
     width: 100%;
 }
+
 table.MeleeWeaponsTable {
     /* background-color: #5335fb; */
     width: 100%;
@@ -317,21 +318,24 @@ div#main div.character_sheet input.editable {
     height: 32px;
     /* position: absolute; */
 }
-
 div#main div.character_sheet select {
     background-color: rgba(21, 121, 112, 0.1);
     border: 1px solid #ee0e0e9f;
     height: 32px;
     width: 300px;
 }
-
+div#main div.character_sheet select.editable {
+    background-color: rgba(21, 121, 112, 0.1);
+    border: 1px solid #15f947;
+    height: 32px;
+    width: 300px;
+}
 div#main div.character_sheet div.head {
     /* background-color: #c4a314; */
     width: 1455px;
     height: 180px;
     margin-left: 117px;
 }
-
 div#main div.character_sheet div.head table {
     width: 1420px;
     height: 170px;
@@ -353,23 +357,18 @@ div#main div.character_sheet div.head table tr td input {
     height: 32px;
     position: relative;
 }
-
 div#main div.character_sheet div.head table tr td input#character_sheet_name {
     width: 625px;
 }
-
 div#main div.character_sheet div.head table tr td select#species {
     width: 270px;
 }
-
 div#main div.character_sheet div.head table tr td  input#class {
     width: 270px;
 }
-
 div#main div.character_sheet div.head table tr td  input#career {
     width: 620px;
 }
-
 div#main div.character_sheet div.head table tr td  input#career_level {
     width: 620px;
 }
