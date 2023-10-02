@@ -3,6 +3,7 @@ from django_tables2.utils import A
 
 from WarhammerFantasyRoleplayVirtualGM_app.models import MeleeWeapons
 from WarhammerFantasyRoleplayVirtualGM_app.models import Spells
+from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 
 from .character_creations_helpers import format_currencu
 
@@ -64,3 +65,21 @@ class SpellsTable(tables.Table):
     def render_price(self, value):
         return f"{format_currencu(value)}"
 
+
+class TrappingTable(tables.Table):
+    id = tables.Column(visible=False)
+    name = tables.LinkColumn("TrappingssEditView", args=[A('pk')])
+    description = tables.Column()
+    encumbrance = tables.Column()
+
+
+    class Meta:
+        model = Trapping
+        attrs = {"class": "paleblue"}
+        sequence = ('name',  'description', 'encumbrance')
+        order_by = ('name')
+        data = Trapping.objects.all()
+        per_page = 50
+
+    def render_price(self, value):
+        return f"{format_currencu(value)}"

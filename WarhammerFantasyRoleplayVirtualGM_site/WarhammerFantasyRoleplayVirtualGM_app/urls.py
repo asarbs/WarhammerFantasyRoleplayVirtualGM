@@ -27,6 +27,11 @@ urlpatterns = [
     path('SpellListView', views.SpellListView.as_view(), name="SpellListView"),
     path('SpellsCreateFormView', views.SpellsCreateFormView.as_view(), name="SpellsCreateFormView"),
     path('SpellsEditView/<int:pk>', views.SpellsEditView.as_view(), name="SpellsEditView"),
+
+    path('TrappingsListView', views.TrappingsListView.as_view(), name="TrappingsListView"),
+    path('TrappingssCreateFormView', views.TrappingssCreateFormView.as_view(), name="TrappingssCreateFormView"),
+    path('TrappingssEditView/<int:pk>', views.TrappingssEditView.as_view(), name="TrappingssEditView"),
+
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
     path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
     path('ajax_randomClass', views.ajax_randomClass, name="ajax_randomClass"),

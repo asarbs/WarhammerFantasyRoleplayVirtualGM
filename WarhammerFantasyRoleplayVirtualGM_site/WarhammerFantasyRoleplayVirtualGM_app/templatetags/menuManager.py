@@ -116,6 +116,7 @@ class MenuManager(object):
         self.l.append(LogedInMenuElement(request=request, name="Mele Weapons", url=reverse('MeleWeaponListView')))
         self.l.append(LogedInMenuElement(request=request, name="Ranged Weapons", url=reverse('RangedWeaponListView')))
         self.l.append(LogedInMenuElement(request=request, name="Spells", url=reverse('SpellListView')))
+        self.l.append(LogedInMenuElement(request=request, name="Trappings", url=reverse('TrappingsListView')))
         # if not request.user.is_anonymous:
         #     cas = CareersAdvanceScheme.objects.all().order_by("career__name")
         #     for c in cas:
