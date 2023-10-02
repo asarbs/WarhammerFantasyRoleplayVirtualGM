@@ -90,6 +90,9 @@ class Trapping(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+    def get_absolute_url(self):
+        return reverse("TrappingsListView")
+
 class Player(models.Model):
     user = models.OneToOneField(User, verbose_name='Player', on_delete=models.CASCADE)
 
