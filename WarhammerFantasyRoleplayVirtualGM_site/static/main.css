@@ -703,6 +703,22 @@ div#main div.character_sheet div.ambitiosn table tr td.head {
     font-size: 150%;
     text-align: left;
     padding-left: 10px;
+    width: 150px;
+}
+div#main div.character_sheet div.ambitiosn table tr td.list {
+    text-align: left;
+}
+
+div#main div.character_sheet div.ambitiosn table tr td.list li.achieved {
+    text-decoration: line-through;
+}
+
+div#main div.character_sheet div.ambitiosn table tr td.list li.to_achieved {
+    text-decoration: none;
+}
+
+div#main div.character_sheet div.ambitiosn table tr td.list li.to_achieved img {
+    cursor: pointer;
 }
 
 div#main div.character_sheet div.party {

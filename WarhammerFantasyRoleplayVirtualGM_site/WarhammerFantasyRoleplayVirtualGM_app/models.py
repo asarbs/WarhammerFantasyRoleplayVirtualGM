@@ -36,6 +36,13 @@ class Ambitions(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.description)
 
+    def to_dict(self):
+        opts = self._meta
+        data = {}
+        for f in opts.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        return data
+
 class Campaign(models.Model):
     name = models.CharField(max_length= 250)
     party_name = models.CharField(max_length= 250, default="")

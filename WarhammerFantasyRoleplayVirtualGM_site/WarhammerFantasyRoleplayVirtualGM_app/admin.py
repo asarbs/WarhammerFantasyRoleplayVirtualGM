@@ -200,7 +200,8 @@ class SpellsAdmin(admin.ModelAdmin):
     list_per_page = 1000
 
 class AmbitionsAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("description", "achieved",)
+    list_editable = ("achieved",)
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)

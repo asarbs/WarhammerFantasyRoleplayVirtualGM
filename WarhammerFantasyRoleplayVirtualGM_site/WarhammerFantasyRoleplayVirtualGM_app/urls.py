@@ -54,6 +54,9 @@ urlpatterns = [
     path('ajax_saveTalentXPSpend', views.ajax_saveTalentXPSpend, name="ajax_saveTalentXPSpend"),
     path('ajax_saveFreeHandSkillAdv', views.ajax_saveFreeHandSkillAdv, name="ajax_saveFreeHandSkillAdv"),
     path('ajax_saveFreeHandCharacteristicAdv', views.ajax_saveFreeHandCharacteristicAdv, name="ajax_saveFreeHandCharacteristicAdv"),
+    path('ajax_saveAmbitions', views.ajax_saveAmbitions, name="ajax_saveAmbitions"),
+    path('ajax_saveCurrentEp', views.ajax_saveCurrentEp, name="ajax_saveCurrentEp"),
+
 
     path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),
     path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData"),

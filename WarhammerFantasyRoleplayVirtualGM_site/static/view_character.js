@@ -762,6 +762,87 @@ class AdvanceScheme {
     }
 
 }
+class Ambitions {
+    #id          = 0;
+    #description  = "";
+    #achieved     = false;
+    #shortterm = false
+    constructor(id, description, achieved, shortterm) {
+        this.#id            = id
+        this.#description   = description
+        this.#achieved      = achieved
+        this.#shortterm     = shortterm
+        console.log("Ambitions: id="+this.#id+"; description="+this.#description+"; achieved="+this.#achieved)
+    }
+
+    set description(description) {
+        if(typeof description === "string")
+            this.#description = description;
+        else
+            throw "Ambitions: description=" + description + " is not a string";
+    }
+    set achieved(achieved) {
+        if(typeof achieved === "boolean"){
+            this.#achieved = achieved;
+        }
+        else {
+            throw "Ambitions: achieved=" + achieved + " boolean";
+        }
+    }
+    get achieved() {
+        return this.#achieved;
+    }
+    get description() {
+        return this.#description
+    }
+    set id(id) {
+        if(typeof id === "number" && this.#id == 0) {
+            this.#id = id;
+        }
+        else if(this.#id != id) {
+            throw "Ambitions: #id" + this.#id + "; id="+id+" is not a number";
+        }
+    }
+    get id() {
+        return this.#id;
+    }
+
+    updateUI() {
+        var cl = this.#shortterm == true ? "ambitions_shortterm" : "ambitions_longterm"
+        var new_row = ""
+        if($("li.to_achieved[ambitions_id="+this.id+"]").length > 0) {
+            console.log("Ambitions.updateUI() toggleClass")
+            $("li.to_achieved[ambitions_id="+this.id+"]").removeClass("to_achieved").addClass("achieved")
+            $("img[ambitions_id="+this.id+"]").remove()
+        } else {
+
+            if(this.#achieved == true) {
+                new_row = "<li class=\"achieved\">"+this.#description+"</li>";
+            } else {
+                new_row = "<li class=\"to_achieved\" ambitions_id='"+this.id+"'>"+this.#description+"   <img src=\"/static/img/tick.png\" width=\"15\" ambitions_id='"+this.id+"'></li>";
+            }
+            console.log("Ambitions.updateUI() cl="+cl+"; new_row="+new_row)
+            $("ol."+cl).append(new_row)
+        }
+    }
+
+    save() {
+        var ambition = this;
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveAmbitions",
+            data: {
+                ambitions_id: this.id,
+                description: this.description,
+                achieved: this.achieved
+            },
+            success: function(data) {
+                ambition.id = data['id']
+            }
+        });
+    }
+
+}
 class CharacterParameters {
     #age                                = 0
     #avalible_attribute_points          = 100;
@@ -822,6 +903,8 @@ class CharacterParameters {
     skills_species                      = {};
     #improvementXPCosts                 = [];
     #wealth                             = 0;
+    #ambitions_shortterm                = {};
+    #ambitions_longterm                 = {};
     #advanceScheme;
     movement = {
         0: {'walk': 0,"run": 0},
@@ -1902,6 +1985,43 @@ class CharacterParameters {
         $("input#encumbrance_total").val(trapping_enc_sum + armour_enc_sum + weapons_enc_sum)
 
     }
+    append_ambitions_shortterm(ambitions_to_append) {
+        this.#ambitions_shortterm[ambitions_to_append['id']] = new Ambitions(ambitions_to_append['id'], ambitions_to_append['description'],
+        ambitions_to_append['achieved'], true)
+        this.#ambitions_shortterm[ambitions_to_append['id']].updateUI();
+    }
+    append_ambitions_longterm(ambitions_to_append) {
+        this.#ambitions_longterm[ambitions_to_append['id']] = new Ambitions(ambitions_to_append['id'], ambitions_to_append['description'], ambitions_to_append['achieved'], false)
+        this.#ambitions_longterm[ambitions_to_append['id']].updateUI();
+    }
+
+    updateAmbition(ambition_id, achieved) {
+        if(ambition_id in this.#ambitions_shortterm) {
+            this.#ambitions_shortterm[ambition_id].achieved = achieved
+            this.#ambitions_shortterm[ambition_id].updateUI();
+            this.#ambitions_shortterm[ambition_id].save()
+            this.experience_current += 50
+        } else if (ambition_id in this.#ambitions_longterm) {
+            this.#ambitions_longterm[ambition_id].achieved = achieved
+            this.#ambitions_longterm[ambition_id].updateUI();
+            this.#ambitions_longterm[ambition_id].save()
+            this.experience_current += 500
+        }
+    }
+    save_currentXP() {
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveCurrentEp",
+            data: {
+                character_id: characer_id,
+                experience_current : this.experience_current,
+            },
+            success: function(data) {
+
+            }
+        });
+    }
+
     put_on_armour(armour_id, checked) {
         var a
         $.each(this.#armour, function(i, item) {
@@ -1975,7 +2095,14 @@ function get_characterData(){
             characterParameters.movement_movement            = data['character']["movement_movement"            ]
             characterParameters.movement_walk                = data['character']["movement_walk"                ]
             characterParameters.movement_run                 = data['character']["movement_run"                 ]
-            characterParameters.wealth                       = data['character']["wealth"                 ]
+            characterParameters.wealth                       = data['character']["wealth"                       ]
+
+            for(let a in data['character']['ambitions_shortterm'] ) {
+                characterParameters.append_ambitions_shortterm(data['character']['ambitions_shortterm'][a]);
+            }
+            for(let a in data['character']['ambitions_longterm'] ) {
+                characterParameters.append_ambitions_longterm(data['character']['ambitions_longterm'][a]);
+            }
 
             for(let k in data['skills'] ) {
                 characterParameters.appendSkill(data['skills'][k])
@@ -2006,6 +2133,7 @@ function get_characterData(){
             characterParameters.updateEncumbrance();
             turon_on_edit();
             $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
+            $("li.to_achieved img").click(close_ambition)
         }
     });
 }
@@ -2093,6 +2221,13 @@ function spell_add() {
 function put_on_armour() {
     console.log("put_on_armour: id:"+$(this).attr('armour_id') + " checked="+$(this).prop('checked'))
     characterParameters.put_on_armour($(this).attr('armour_id'), $(this).prop('checked'));
+}
+
+function close_ambition() {
+    var ambition_id = $(this).attr("ambitions_id")
+    console.log("close_ambition:"+ ambition_id)
+    characterParameters.updateAmbition(ambition_id, true)
+    characterParameters.save_currentXP()
 }
 
 function main() {

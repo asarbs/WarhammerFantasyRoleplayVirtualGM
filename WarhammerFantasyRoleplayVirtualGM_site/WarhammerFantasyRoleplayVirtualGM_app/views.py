@@ -616,7 +616,6 @@ def ajax_saveFreeHandCharacteristicAdv(request):
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
-
 @login_required
 def ajax_getCareersAdvanceScheme(request):
     if request.method != 'POST':
@@ -709,6 +708,34 @@ def ajax_saveTalentXPSpend(request):
     character.save()
 
     ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveAmbitions(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.debug(request.POST)
+
+    ami, created = Ambitions.objects.get_or_create(id=request.POST['ambitions_id'])
+    ami.description = request.POST['description']
+    ami.achieved = True if request.POST['achieved'] == 'true' else False
+    ami.save()
+
+    ret = {'status': 'ok' , 'id':ami.id}
+    return JsonResponse(ret)
+
+
+@login_required
+def ajax_saveCurrentEp(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.debug(request.POST)
+
+    ch, created = Character.objects.get_or_create(id=request.POST['character_id'])
+    ch.experience_current = request.POST['experience_current']
+    ch.save()
+
+    ret = {'status': 'ok'}
     return JsonResponse(ret)
 
 @login_required
@@ -988,6 +1015,13 @@ def ajax_view_getCharacterData(request):
             "wealth"                       : character.wealth,
         }
 
+    ret['character']["ambitions_shortterm"] = []
+    for ambitions_shortterm in character.ambitions_shortterm.all():
+        ret['character']["ambitions_shortterm"].append(ambitions_shortterm.to_dict())
+
+    ret['character']["ambitions_longterm"] = []
+    for ambitions_longterm in character.ambitions_longterm.all():
+        ret['character']["ambitions_longterm"].append(ambitions_longterm.to_dict())
 
     for ss in Character2Skill.objects.filter(characters=character).all():
         logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
