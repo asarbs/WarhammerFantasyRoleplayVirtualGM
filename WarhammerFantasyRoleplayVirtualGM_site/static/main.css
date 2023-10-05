@@ -689,12 +689,13 @@ div#main div.character_sheet div.ambitiosn table {
     width: 700px;
 }
 div#main div.character_sheet div.ambitiosn table tr {
-    min-height: 52px;
 }
 div#main div.character_sheet div.ambitiosn table tr td {
-    min-height: 35px;
-    min-width: 42px;
     text-align: center;
+}
+div#main div.character_sheet div.ambitiosn table tr td.add {
+    height: 10px;
+    display: none;
 }
 div#main div.character_sheet div.ambitiosn table tr td.title {
     font-size: 200%;
@@ -709,6 +710,11 @@ div#main div.character_sheet div.ambitiosn table tr td.list {
     text-align: left;
 }
 
+div#main div.character_sheet div.ambitiosn table tr td img.ambitiosn_add {
+    cursor: pointer;
+    width: 15px;
+}
+
 div#main div.character_sheet div.ambitiosn table tr td.list li.achieved {
     text-decoration: line-through;
 }
@@ -719,6 +725,7 @@ div#main div.character_sheet div.ambitiosn table tr td.list li.to_achieved {
 
 div#main div.character_sheet div.ambitiosn table tr td.list li.to_achieved img {
     cursor: pointer;
+    width: 15px;
 }
 
 div#main div.character_sheet div.party {

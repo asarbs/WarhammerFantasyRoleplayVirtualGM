@@ -714,14 +714,25 @@ def ajax_saveTalentXPSpend(request):
 def ajax_saveAmbitions(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    logger.debug(request.POST)
 
-    ami, created = Ambitions.objects.get_or_create(id=request.POST['ambitions_id'])
-    ami.description = request.POST['description']
+    logger.debug("ambitions_id={}; description={}; achieved={}; character_id={}; is_shortterm={}".format(request.POST['ambitions_id'], request.POST['description'], request.POST['achieved'], request.POST['character_id'], request.POST['is_shortterm']))
+
+    ami, created  = (Ambitions.objects.create(description=request.POST['description']), True) if int(request.POST['ambitions_id']) == 0 else (Ambitions.objects.get(id=request.POST['ambitions_id']), False)
     ami.achieved = True if request.POST['achieved'] == 'true' else False
     ami.save()
 
+    logger.debug("created={}".format(created))
+
+    if created:
+        character = Character.objects.get(id=request.POST['character_id'])
+        if request.POST['is_shortterm'] == "true":
+            character.ambitions_shortterm.add(ami)
+        else:
+            character.ambitions_longterm.add(ami)
+        character.save()
+
     ret = {'status': 'ok' , 'id':ami.id}
+    logger.debug(ret)
     return JsonResponse(ret)
 
 
@@ -970,6 +981,7 @@ def ajax_view_getCharacterData(request):
     character_id = request.POST['characer_id']
     character = Character.objects.get(id = character_id)
     ret['character'] = {
+            "id"                           : character.id,
             "name"                         : "{} ({})".format(character.name, character.player) ,
             "species"                      : str(character.species),
             "ch_class"                     : str(character.ch_class),

@@ -371,10 +371,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="32">
-                        <img src={% static "img/quill.png" %}>
+                    <td width="15">
+                        <img src={% static "img/quill.png" %} class="ambitiosn_add" id="ambitions_shortterm_add">
                     </td>
-                    <td class="head" width="150">
+                    <td class="head" width="80">
                         Short-term
                     </td>
                     <td class="list">
@@ -385,7 +385,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <img src={% static "img/quill.png" %}>
+                        <img src={% static "img/quill.png" %} class="ambitiosn_add"  id="ambitions_longterm_add">
                     </td>
                     <td  class="head">
                         Long-term
@@ -394,6 +394,12 @@
                         <ol class="ambitions_longterm">
 
                         </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="add" colspan="3">
+                        <textarea id="ambitions" name="ambitions" rows="4" cols="50"></textarea>
+                        <input type="submit" value="Submit">
                     </td>
                 </tr>
             </table>

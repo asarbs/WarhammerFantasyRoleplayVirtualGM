@@ -810,19 +810,27 @@ class Ambitions {
     updateUI() {
         var cl = this.#shortterm == true ? "ambitions_shortterm" : "ambitions_longterm"
         var new_row = ""
-        if($("li.to_achieved[ambitions_id="+this.id+"]").length > 0) {
-            console.log("Ambitions.updateUI() toggleClass")
-            $("li.to_achieved[ambitions_id="+this.id+"]").removeClass("to_achieved").addClass("achieved")
-            $("img[ambitions_id="+this.id+"]").remove()
-        } else {
+        console.log("Ambitions.updateUI(): this.id="+this.id)
+        if($("li[ambitions_id="+this.id+"]").length > 0) {
 
             if(this.#achieved == true) {
+                $("img[ambitions_id="+this.id+"]").remove()
+                $("li.to_achieved[ambitions_id="+this.id+"]").addClass("achieved")
+                $("li.to_achieved[ambitions_id="+this.id+"]").removeClass("to_achieved")
+            } else {
+                $("li.to_achieved[ambitions_id="+this.id+"]").removeClass("achieved")
+                $("li.to_achieved[ambitions_id="+this.id+"]").addClass("to_achieved")
+            }
+        } else if( this.#id > 0) {
+            if(this.#achieved == true) {
                 new_row = "<li class=\"achieved\">"+this.#description+"</li>";
+                $("ol."+cl).append(new_row)
             } else {
                 new_row = "<li class=\"to_achieved\" ambitions_id='"+this.id+"'>"+this.#description+"   <img src=\"/static/img/tick.png\" width=\"15\" ambitions_id='"+this.id+"'></li>";
+                $("ol."+cl).append(new_row)
+                $("li.to_achieved img[ambitions_id="+this.id+"]").click(close_ambition)
             }
             console.log("Ambitions.updateUI() cl="+cl+"; new_row="+new_row)
-            $("ol."+cl).append(new_row)
         }
     }
 
@@ -831,20 +839,31 @@ class Ambitions {
         $.ajax({
             type: "POST",
             url: "/wfrpg_gm/ajax_saveAmbitions",
+            async: false,
+            cache: false,
+            timeout: 30000,
+            fail: function(){
+                return true;
+            },
             data: {
-                ambitions_id: this.id,
-                description: this.description,
-                achieved: this.achieved
+                ambitions_id   : this.id,
+                description    : this.description,
+                achieved       : this.achieved,
+                character_id   : characterParameters.id,
+                is_shortterm   : this.#shortterm
             },
             success: function(data) {
                 ambition.id = data['id']
+                console.log("Ambitions.save: ambition.id="+ambition.id)
+                return true;
             }
         });
     }
 
 }
 class CharacterParameters {
-    #age                                = 0
+    #id                                 = 0;
+    #age                                = 0;
     #avalible_attribute_points          = 100;
     #experience_current                           = 0;
     #experience_spent                   = 0;
@@ -903,8 +922,8 @@ class CharacterParameters {
     skills_species                      = {};
     #improvementXPCosts                 = [];
     #wealth                             = 0;
-    #ambitions_shortterm                = {};
-    #ambitions_longterm                 = {};
+    #ambitions_shortterm                = [];
+    #ambitions_longterm                 = [];
     #advanceScheme;
     movement = {
         0: {'walk': 0,"run": 0},
@@ -915,6 +934,16 @@ class CharacterParameters {
 
     constructor() {
         console.log("CharacterParameters::constructor");
+    }
+    set id(id) {
+        if(typeof id === "number") {
+            this.#id = id;
+        }
+        else
+            throw "character id:" + id + " is not a number";
+    }
+    get id() {
+        return this.#id;
     }
     set RandomAttributesTable(table) {
         this.#RandomAttributesTable = table;
@@ -1923,8 +1952,6 @@ class CharacterParameters {
         });
     }
     upTalentXPSpend(oldValue) {
-
-
         var xpToSpend = oldValue * 100 + 100;
         if( xpToSpend <= this.experience_current) {
             this.experience_current -= xpToSpend;
@@ -1986,26 +2013,38 @@ class CharacterParameters {
 
     }
     append_ambitions_shortterm(ambitions_to_append) {
-        this.#ambitions_shortterm[ambitions_to_append['id']] = new Ambitions(ambitions_to_append['id'], ambitions_to_append['description'],
+        let ambition = new Ambitions(ambitions_to_append['id'], ambitions_to_append['description'],
         ambitions_to_append['achieved'], true)
-        this.#ambitions_shortterm[ambitions_to_append['id']].updateUI();
+        this.#ambitions_shortterm.push(ambition);
+        ambition.updateUI();
+        return ambition
     }
     append_ambitions_longterm(ambitions_to_append) {
-        this.#ambitions_longterm[ambitions_to_append['id']] = new Ambitions(ambitions_to_append['id'], ambitions_to_append['description'], ambitions_to_append['achieved'], false)
-        this.#ambitions_longterm[ambitions_to_append['id']].updateUI();
+        let ambition = new Ambitions(ambitions_to_append['id'], ambitions_to_append['description'], ambitions_to_append['achieved'], false)
+        this.#ambitions_longterm.push(ambition);
+        ambition.updateUI();
+        return ambition
     }
 
     updateAmbition(ambition_id, achieved) {
-        if(ambition_id in this.#ambitions_shortterm) {
-            this.#ambitions_shortterm[ambition_id].achieved = achieved
-            this.#ambitions_shortterm[ambition_id].updateUI();
-            this.#ambitions_shortterm[ambition_id].save()
-            this.experience_current += 50
-        } else if (ambition_id in this.#ambitions_longterm) {
-            this.#ambitions_longterm[ambition_id].achieved = achieved
-            this.#ambitions_longterm[ambition_id].updateUI();
-            this.#ambitions_longterm[ambition_id].save()
-            this.experience_current += 500
+        console.log("updateAmbition: ambition_id="+ambition_id+"; achieved="+achieved )
+        for(let a in this.#ambitions_shortterm) {
+            if(ambition_id == this.#ambitions_shortterm[a].id) {
+                this.#ambitions_shortterm[a].achieved = achieved
+                this.#ambitions_shortterm[a].updateUI();
+                this.#ambitions_shortterm[a].save()
+                this.experience_current += 50
+                return
+            }
+        }
+        for(let a in this.#ambitions_longterm) {
+            if(ambition_id == this.#ambitions_longterm[a].id) {
+                this.#ambitions_longterm[a].achieved = achieved
+                this.#ambitions_longterm[a].updateUI();
+                this.#ambitions_longterm[a].save()
+                this.experience_current += 500
+                return
+            }
         }
     }
     save_currentXP() {
@@ -2053,6 +2092,7 @@ function get_characterData(){
         },
         success: function(data) {
             console.log(data);
+            characterParameters.id                           = data['character']["id"                           ]
             characterParameters.name                         = data['character']["name"                         ]
             characterParameters.species                      = data['character']["species"                      ]
             characterParameters.ch_class_name                = data['character']["ch_class"                     ]
@@ -2137,21 +2177,18 @@ function get_characterData(){
         }
     });
 }
-
 function updateCharacteristics() {
     var characteristics_id = $(this).attr('id');
     var characteristics_adv_val = parseInt($(this).val());
     console.log("updateCharacteristics: " + characteristics_id + ":"+ characteristics_adv_val)
     characterParameters.updateCharacterAdvVal(characteristics_id, characteristics_adv_val);
 }
-
 function updateSkill() {
     var skill_id = $(this).attr('skill_id');
     var skill_adv_val = parseInt($(this).val());
     // console.log("updateSkill: " + skill_id +":"+ skill_adv_val)
     characterParameters.updateSkillVal(skill_id, skill_adv_val)
 }
-
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -2217,19 +2254,46 @@ function spell_add() {
     characterParameters.add_spell(spell_to_add);
     characterParameters.updateEncumbrance();
 }
-
 function put_on_armour() {
     console.log("put_on_armour: id:"+$(this).attr('armour_id') + " checked="+$(this).prop('checked'))
     characterParameters.put_on_armour($(this).attr('armour_id'), $(this).prop('checked'));
 }
-
 function close_ambition() {
     var ambition_id = $(this).attr("ambitions_id")
     console.log("close_ambition:"+ ambition_id)
     characterParameters.updateAmbition(ambition_id, true)
     characterParameters.save_currentXP()
 }
-
+function ambitions_add() {
+    $("div#main div.character_sheet div.ambitiosn table tr td.add").show()
+    $("div#main div.character_sheet div.ambitiosn table tr td.add input").prop("readonly", false)
+    $("div#main div.character_sheet div.ambitiosn table tr td.add input").off("click").click(function() {
+        let ambitions_description = $("div#main div.character_sheet div.ambitiosn table tr td.add textarea#ambitions").val();
+        let target = $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target")
+        console.log(ambitions_description)
+        let ambitions_to_append =  {
+            'id': 0,
+            'description': ambitions_description,
+            'achieved': false
+        }
+        let ambition
+        if(target == "shortterm") {
+            ambition = characterParameters.append_ambitions_shortterm(ambitions_to_append)
+        } else if(target == "longterm") {
+            ambition = characterParameters.append_ambitions_longterm(ambitions_to_append)
+        }
+        ambition.save()
+        ambition.updateUI()
+    });
+}
+function ambitions_shortterm_add() {
+    ambitions_add()
+    $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target", "shortterm")
+}
+function ambitions_longterm_add() {
+    ambitions_add()
+    $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target", "longterm")
+}
 function main() {
 
     $.ajaxSetup({
@@ -2249,5 +2313,7 @@ function main() {
     $("button#weapon_add_button").click(weapon_add);
     $("button#spells_add_button").click(spell_add);
     $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
+    $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
+    $("img#ambitions_longterm_add").click(ambitions_longterm_add);
 
 }
