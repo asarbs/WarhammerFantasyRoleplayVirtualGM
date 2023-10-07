@@ -207,12 +207,14 @@ class AmbitionsAdmin(admin.ModelAdmin):
 class Character2TalentAdmin(admin.ModelAdmin):
     list_display = ("characters", "talent", "taken", "is_basic_skill", "is_species_skill", "is_career_skill")
     list_filter = ("characters",)
+    ordering = ("characters", "talent")
     save_as = True
 
 
 class Character2TrappinglAdmin(admin.ModelAdmin):
     list_display = ("characters", "trapping", "enc", "is_basic_skill", "is_species_skill", "is_career_skill")
     list_filter = ("characters",)
+    ordering = ("characters", "trapping")
     save_as = True
 
 
