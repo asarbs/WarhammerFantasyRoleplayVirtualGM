@@ -1594,7 +1594,19 @@ class CharacterParameters {
             throw "\"" + name + "\" is invalid parameter";
     }
     updateSkillTable() {
-        $.each(this.#skills, function(i, item) {
+        var sorted_skills = []
+        for(let skill_key in this.#skills) {
+            sorted_skills[this.#skills[skill_key].name] = this.#skills[skill_key]
+        }
+        console.log(sorted_skills)
+
+        var keys_sorted_skills = Object.keys(sorted_skills);
+        keys_sorted_skills.sort()
+
+        for (var k = 0; k < keys_sorted_skills.length; k++) {
+            var key = keys_sorted_skills[k]
+            var item = sorted_skills[key]
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:" +k+ ";"+ item.name)
             var new_row = ""
             if(!$('#skills_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
                 new_row = '<tr class="block_body">'
@@ -1629,7 +1641,7 @@ class CharacterParameters {
                 $('img#skills__is_species_skill__'+item.id).attr("src", "/static/NO.png")
             }
 
-        });
+        };
     }
     updateTalentsTable() {
         if(!this.talentsNeedUpdate) {
