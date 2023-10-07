@@ -519,7 +519,7 @@ class Character(models.Model):
     ambitions_longterm = models.ManyToManyField(Ambitions, verbose_name="Longterm Ambitions", related_name="character_ambitions_longterm")
     armour = models.ManyToManyField(Armour, verbose_name="Armour")
     weapon = models.ManyToManyField(Weapon, verbose_name="Weapon")
-    spells = models.ManyToManyField(Spells, verbose_name="Spells")
+    spells = models.ManyToManyField(Spells, verbose_name="Spells", blank=True, null=True)
     wealth = models.IntegerField(default=0, verbose_name="Wealth")
 
     def __str__(self):
