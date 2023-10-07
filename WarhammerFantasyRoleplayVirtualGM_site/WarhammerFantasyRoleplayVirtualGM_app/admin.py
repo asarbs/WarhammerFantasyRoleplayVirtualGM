@@ -202,15 +202,18 @@ class SpellsAdmin(admin.ModelAdmin):
 class AmbitionsAdmin(admin.ModelAdmin):
     list_display = ("description", "achieved",)
     list_editable = ("achieved",)
+    save_as = True
 
 class Character2TalentAdmin(admin.ModelAdmin):
     list_display = ("characters", "talent", "taken", "is_basic_skill", "is_species_skill", "is_career_skill")
     list_filter = ("characters",)
+    save_as = True
 
 
 class Character2TrappinglAdmin(admin.ModelAdmin):
     list_display = ("characters", "trapping", "enc", "is_basic_skill", "is_species_skill", "is_career_skill")
     list_filter = ("characters",)
+    save_as = True
 
 
 from . import models
