@@ -203,6 +203,16 @@ class AmbitionsAdmin(admin.ModelAdmin):
     list_display = ("description", "achieved",)
     list_editable = ("achieved",)
 
+class Character2TalentAdmin(admin.ModelAdmin):
+    list_display = ("characters", "talent", "taken", "is_basic_skill", "is_species_skill", "is_career_skill")
+    list_filter = ("characters",)
+
+
+class Character2TrappinglAdmin(admin.ModelAdmin):
+    list_display = ("characters", "trapping", "enc", "is_basic_skill", "is_species_skill", "is_career_skill")
+    list_filter = ("characters",)
+
+
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
@@ -233,3 +243,5 @@ admin.site.register(models.RangedWeapon, RangedWeaponAdmin)
 admin.site.register(models.ImprovementXPCosts, ImprovementXPCostsAdmin)
 admin.site.register(models.Spells, SpellsAdmin)
 admin.site.register(models.Ambitions, AmbitionsAdmin)
+admin.site.register(models.Character2Talent, Character2TalentAdmin)
+admin.site.register(models.Character2Trappingl, Character2TrappinglAdmin)
