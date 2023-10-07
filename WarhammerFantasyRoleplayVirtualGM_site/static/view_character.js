@@ -45,6 +45,7 @@ class Skill {
         if(typeof adv === "number") {
             this.#adv_standard = adv;
             console.log("skill: "+ this.#name + "; new adv_standard="+ this.#adv_standard)
+            $('#skills__'+this.id).val(characterParameters.getCharacteristicsCurrent(this.characteristics) + this.adv)
         }
         else
             throw "" + adv + " is not a number";
@@ -2265,10 +2266,15 @@ function close_ambition() {
     characterParameters.save_currentXP()
 }
 function ambitions_add() {
-    $("div#main div.character_sheet div.ambitiosn table tr td.add").show()
+    $("div#main div.character_sheet div.ambitiosn table tr td.add").show(500)
     $("div#main div.character_sheet div.ambitiosn table tr td.add input").prop("readonly", false)
     $("div#main div.character_sheet div.ambitiosn table tr td.add input").off("click").click(function() {
         let ambitions_description = $("div#main div.character_sheet div.ambitiosn table tr td.add textarea#ambitions").val();
+        if(ambitions_description.length == 0) {
+            alert("no ambition")
+            return
+        }
+
         let target = $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target")
         console.log(ambitions_description)
         let ambitions_to_append =  {
@@ -2284,6 +2290,7 @@ function ambitions_add() {
         }
         ambition.save()
         ambition.updateUI()
+        $("div#main div.character_sheet div.ambitiosn table tr td.add").hide(500)
     });
 }
 function ambitions_shortterm_add() {
