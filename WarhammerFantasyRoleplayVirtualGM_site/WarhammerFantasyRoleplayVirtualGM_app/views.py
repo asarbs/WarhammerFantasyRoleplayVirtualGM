@@ -119,7 +119,7 @@ def ajax_save_character_species(request):
     if request.method == 'POST':
         species_id = request.POST['species_id']
         species = Species.objects.get(id=species_id)
-        return set_character_species(species=species, character_id=request.POST['characer_id'])
+        return set_character_species(species=species, character_id=request.POST['character_id'])
     logger.error("ajax_save_character_species is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
@@ -133,7 +133,7 @@ def ajax_randomSpecies(request):
             if r >= s.random_interal_start and r <= s.random_interal_end:
                 species = s
                 break
-        return set_character_species(species=species, character_id=request.POST['characer_id'])
+        return set_character_species(species=species, character_id=request.POST['character_id'])
 
     logger.error("ajax_randomSpecies is GET")
     return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -142,7 +142,7 @@ def ajax_randomSpecies(request):
 def ajax_addTalentToCharacter(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     talent_id = request.POST['new_talent_id']
     try:
         char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=1)
@@ -155,7 +155,7 @@ def ajax_addTalentToCharacter(request):
 def ajax_replaceTalentToCharacter(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     new_talent_id = request.POST['new_talent_id']
     old_talent_id = request.POST['old_talent_id']
     logger.debug("character_id={}; new_talent_id={}; old_talent_id={}".format(character_id, new_talent_id, old_talent_id))
@@ -174,7 +174,7 @@ def ajax_replaceTalentToCharacter(request):
 @login_required
 def ajax_randomClass(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
 
         r = random.randrange(1, 100)
@@ -275,7 +275,7 @@ def ajax_randomClass(request):
 @login_required
 def ajax_saveName(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
 
         if character is not None:
@@ -332,7 +332,7 @@ def ajax_getRandomAttributesTable(request):
 @login_required
 def ajax_randomAttributes(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
         logger.info("ajax_saveAttributes: character={}; species={}".format(character, character.species))
         rat = RandomAttributesTable.objects.get(species=character.species)
@@ -386,7 +386,7 @@ def ajax_randomAttributes(request):
 @login_required
 def ajax_saveAttribute(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
         logger.debug(request.POST)
         if 'newVal[experience_current]' not in request.POST or 'newVal[experience_spent]' not in request.POST:
@@ -458,7 +458,7 @@ def ajax_saveAttribute(request):
 @login_required
 def ajax_saveFate_and_fortune(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
         print(request.POST)
         if character is not None:
@@ -481,7 +481,7 @@ def ajax_saveFate_and_fortune(request):
 def ajax_saveAge(request):
     if request.method == 'POST':
         logger.debug(request.POST)
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
         if character is not None:
             character.age    = int(request.POST['age'])
@@ -498,7 +498,7 @@ def ajax_saveAge(request):
 @login_required
 def ajax_saveHeight(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
         if character is not None:
             character.height    = int(request.POST['height'])
@@ -515,7 +515,7 @@ def ajax_saveHeight(request):
 @login_required
 def ajax_saveHair(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         hair = request.POST['hair']
         character = Character.objects.get(id = character_id)
         if character is not None:
@@ -534,7 +534,7 @@ def ajax_saveHair(request):
 @login_required
 def ajax_saveEyes(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
         if character is not None:
             eye_color = Eyes.objects.get(name=request.POST['eyes'])
@@ -552,7 +552,7 @@ def ajax_saveEyes(request):
 @login_required
 def ajax_saveSkillAdv(request):
     if request.method == 'POST':
-        character_id = request.POST['characer_id']
+        character_id = request.POST['character_id']
         logger.info(request.POST)
         logger.info("character_id={}; skill_id={}; points={}; old_skill_adv={}".format(character_id, request.POST['skill_id'], request.POST['points'], request.POST['old_skill_adv']))
         if request.POST['skill_id'] == 0:
@@ -585,7 +585,7 @@ def ajax_saveFreeHandSkillAdv(request):
         logger.error("ajax_saveFreeHandSkillAdv is {}".format(request.method))
         return JsonResponse({'status': 'Invalid request'}, status=400)
     logger.debug(request.POST)
-    ch2skill = Character2Skill.objects.get(characters_id=request.POST['characer_id'], skills_id=request.POST['skill_id'])
+    ch2skill = Character2Skill.objects.get(characters_id=request.POST['character_id'], skills_id=request.POST['skill_id'])
     ch2skill.adv = request.POST['skill_adv_val']
     ch2skill.save()
 
@@ -598,7 +598,7 @@ def ajax_saveFreeHandCharacteristicAdv(request):
         logger.error("ajax_saveFreeHandSkillAdv is {}".format(request.method))
         return JsonResponse({'status': 'Invalid request'}, status=400)
     logger.debug(request.POST)
-    ch = Character.objects.get(id=request.POST['characer_id'])
+    ch = Character.objects.get(id=request.POST['character_id'])
 
     ch.characteristics_ws_advances  = request.POST['characteristics_ws_advances']
     ch.characteristics_bs_advances  = request.POST['characteristics_bs_advances']
@@ -633,7 +633,7 @@ def ajax_addArmourToCharacter(request):
 
     logger.debug(request.POST)
 
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
     character.armour.add(Armour.objects.get(id=request.POST['armour_id']))
     character.save()
@@ -647,7 +647,7 @@ def ajax_addWeaponToCharacter(request):
 
     logger.debug(request.POST)
 
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
     character.weapon.add(Weapon.objects.get(id=request.POST['weapon_id']))
     character.save()
@@ -661,7 +661,7 @@ def ajax_addSpellsToCharacter(request):
 
     logger.debug(request.POST)
 
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
     character.spells.add(Spells.objects.get(id=request.POST['spell_id']))
     character.save()
@@ -675,7 +675,7 @@ def ajax_saveSkillsXPSpend(request):
 
     logger.debug(request.POST)
 
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
 
     c2s = Character2Skill.objects.get(characters = character, skills__id = request.POST['skill_id'])
@@ -696,7 +696,7 @@ def ajax_saveTalentXPSpend(request):
 
     logger.debug(request.POST)
 
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
 
     c2t = Character2Talent.objects.get(characters = character, skills__id = request.POST['tallent_id'])
@@ -979,7 +979,7 @@ def ajax_view_getCharacterData(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
     ret = {'status': 'ok', 'skills': {}, 'trappings': {}, 'armour':[], 'spells':[], "weapon":[], "notes":[] }
 
-    character_id = request.POST['characer_id']
+    character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
     ret['character'] = {
             "id"                           : character.id,

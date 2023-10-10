@@ -70,7 +70,7 @@ class Skill {
             type: "POST",
             url: "/wfrpg_gm/ajax_saveFreeHandSkillAdv",
             data: {
-                characer_id: $("input[name='characer_id']").val(),
+                character_id: $("input[name='character_id']").val(),
                 skill_id: this.id,
                 skill_adv_val: this.#adv_standard
             },
@@ -397,12 +397,12 @@ class Armour{
     }
 
     save() {
-        var characer_id = $("input[name='characer_id']").val()
+        var character_id = $("input[name='character_id']").val()
         $.ajax({
             type: "POST",
             url: "/wfrpg_gm/ajax_addArmourToCharacter",
             data: {
-                characer_id: characer_id,
+                character_id: character_id,
                 armour_id: this.id,
             },
             success: function(data) {
@@ -546,12 +546,12 @@ class Weapon{
     }
 
     save() {
-        var characer_id = $("input[name='characer_id']").val()
+        var character_id = $("input[name='character_id']").val()
         $.ajax({
             type: "POST",
             url: "/wfrpg_gm/ajax_addWeaponToCharacter",
             data: {
-                characer_id: characer_id,
+                character_id: character_id,
                 weapon_id: this.id,
             },
             success: function(data) {
@@ -678,12 +678,12 @@ class Spells{
     }
 
     save() {
-        var characer_id = $("input[name='characer_id']").val()
+        var character_id = $("input[name='character_id']").val()
         $.ajax({
             type: "POST",
             url: "/wfrpg_gm/ajax_addSpellsToCharacter",
             data: {
-                characer_id: characer_id,
+                character_id: character_id,
                 spell_id: this.id,
             },
             success: function(data) {
@@ -1948,7 +1948,7 @@ class CharacterParameters {
             type: "POST",
             url: "/wfrpg_gm/ajax_saveFreeHandCharacteristicAdv",
             data: {
-                characer_id: $("input[name='characer_id']").val(),
+                character_id: $("input[name='character_id']").val(),
                 characteristics_ws_advances  : this.characteristics_ws_advances,
                 characteristics_bs_advances  : this.characteristics_bs_advances,
                 characteristics_s_advances   : this.characteristics_s_advances,
@@ -2076,7 +2076,7 @@ class CharacterParameters {
             type: "POST",
             url: "/wfrpg_gm/ajax_saveCurrentEp",
             data: {
-                character_id: characer_id,
+                character_id: character_id,
                 experience_current : this.experience_current,
             },
             success: function(data) {
@@ -2188,7 +2188,7 @@ class Note{
     }
 }
 const characterParameters = new CharacterParameters();
-var characer_id = 0
+var character_id = 0
 function get_characterData(){
 
     console.log("get_characterData")
@@ -2197,7 +2197,7 @@ function get_characterData(){
         type: "POST",
         url: "/wfrpg_gm/ajax_view_getCharacterData",
         data: {
-            characer_id: characer_id,
+            character_id: character_id,
         },
         success: function(data) {
             console.log(data);
@@ -2430,7 +2430,7 @@ function main() {
     });
 
 
-    characer_id = $("input[name='characer_id']").val()
+    character_id = $("input[name='character_id']").val()
     get_characterData();
 
     $("input").prop("readonly", true);
