@@ -3,14 +3,17 @@
 <title>Warhammer Fantasy Roleplay - Virtual GM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="{% static "main.css" %}" />
-<link rel="stylesheet" href="{% static "table.css" %}" />
-<link rel="stylesheet" href="{% static "spinner.css" %}" />
-<link rel="stylesheet" href="{% static "django_tables2/bootstrap.css" %}" />
-<link rel="stylesheet" href="{% static "django_tables2/themes/paleblue/css/screen.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "main.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "table.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "spinner.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "django_tables2/bootstrap.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "django_tables2/themes/paleblue/css/screen.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "tinymce/skins/ui/oxide/skin.min.css" %}">
 
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="http://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="{% static "tinymce/tinymce.min.js" %}"></script>
+
 {% if "addCharacter" in  request.path %}
 <script src="{% static "create_character.js" %}"></script>
 <script type="text/javascript">
@@ -27,8 +30,17 @@
         main();
     });
 </script>
-
 {% endif %}
+<script type="text/javascript">
+    tinyMCE.init({
+        mode: "textareas",
+        theme: "silver",
+        toolbar: 'bold italic underline | h1 h2 h3 h4 h5 h6 | alignleft aligncenter alignright alignjustify | outdent indent | forecolor backcolor | removeformat',
+        menubar:false,
+        statusbar: false,
+    });
+</script>
+
 <script src="/admin/jsi18n/"></script>
 <script src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
 <script src="{% static "admin/js/jquery.init.js" %}"></script>

@@ -979,7 +979,37 @@ div#main div.character_sheet table.spells tr.block_header {
     text-align: center;
 }
 
- div#menu_button {
+div#main div.character_sheet table.player_notes {
+    width: 1420px;
+    margin-left: 135px;
+    padding-top: 20px;
+    border-collapse: collapse;
+}
+
+div#main div.character_sheet table.player_notes tr.block_name {
+    font-size: 36px;
+    text-align: center;
+}
+div#main div.character_sheet table.player_notes tr.block_header {
+    font-size: 20px;
+    text-align: center;
+}
+div#main div.character_sheet table.player_notes tr.block_editor button#player_notes_add_button {
+    width: 100%;
+}
+
+div#main div.character_sheet table.player_notes tr.note_line {
+    border-bottom: 1px solid #000000;
+}
+div#main div.character_sheet table.player_notes tr td {
+    padding: 10px;
+}
+div#main div.character_sheet table.player_notes tr td.date {
+    width: 150px;
+}
+
+
+div#menu_button {
      display : none;
  }
  div#menu {

@@ -925,6 +925,7 @@ class CharacterParameters {
     #wealth                             = 0;
     #ambitions_shortterm                = [];
     #ambitions_longterm                 = [];
+    #notes                              = [];
     #advanceScheme;
     movement = {
         0: {'walk': 0,"run": 0},
@@ -2038,6 +2039,16 @@ class CharacterParameters {
         ambition.updateUI();
         return ambition
     }
+    appendNote(note) {
+        let new_note = new Note(note['id'], note['datetime_create'], note['timestamp'], note['note_text']);
+        this.#notes.push(new_note);
+        new_note.updateUI();
+    }
+    saveNote(note) {
+        let new_note = new Note(note['id'], note['datetime_create'], note['timestamp'], note['note_text']);
+        this.#notes.push(new_note);
+        new_note.save();
+    }
 
     updateAmbition(ambition_id, achieved) {
         console.log("updateAmbition: ambition_id="+ambition_id+"; achieved="+achieved )
@@ -2090,7 +2101,92 @@ class CharacterParameters {
         a.put_on_update_ui();
     }
 };
-
+class Note{
+    #id              = 0;
+    #datetime_create = "";
+    #timestamp       = 0;
+    #note_text       = "";
+    constructor(id, datetime_create, timestamp, note_text) {
+        this.#id              = id;
+        this.#datetime_create = datetime_create;
+        this.#timestamp       = parseInt(timestamp);
+        this.#note_text       = note_text;
+    }
+    get id() {
+        return this.#id;
+    }
+    get datetime_create() {
+        return this.#datetime_create;
+    }
+    get timestamp() {
+        return this.#timestamp
+    }
+    get note_text() {
+        return this.#note_text
+    }
+    set id(id) {
+        if(typeof id === "number")
+            this.#id = id;
+        else
+            throw "Note.id: \"" + id + "\" is not a number";
+    }
+    set datetime_create(datetime_create) {
+        if(typeof datetime_create === "string")
+            this.#datetime_create = datetime_create;
+        else
+            throw "Note.datetime_create: \"" + datetime_create + "\" is not a string";
+    }
+    set timestamp(timestamp) {
+        if(typeof timestamp === "number")
+            this.#timestamp = timestamp;
+        else
+            throw "Note.timestamp: \"" + timestamp + "\" is not a number";
+    }
+    set note_text(note_text) {
+        if(typeof note_text === "string")
+            this.#note_text = note_text;
+        else
+            throw "Note.note_text: \"" + note_text + "\" is not a string";
+    }
+    updateUI() {
+        console.log("Note.updateUI: "+ this.datetime_create);
+        if(!$('td#player_notes_timestamp__'+this.#timestamp).length) {
+            var new_row = '<tr class="note_line">'
+            new_row += '<td id="player_notes_timestamp__'+this.#timestamp+'" class="date">'+this.#datetime_create+'</td>'
+            new_row += '<td>'+this.#note_text+'</td>'
+            new_row += '</tr>'
+            $("table#player_notes tr.block_header").after(new_row)
+        } else {
+            console.log("NOT Note.updateUI: "+ this.datetime_create);
+        }
+    }
+    save() {
+        var note = this;
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_savePlayerNote",
+            async: false,
+            cache: false,
+            timeout: 30000,
+            fail: function(){
+                return true;
+            },
+            data: {
+                character_id   : characterParameters.id,
+                note_text   : this.#note_text
+            },
+            success: function(data) {
+                console.log(data)
+                note.id = data['id']
+                note.datetime_create = data['datetime_create']
+                note.timestamp = parseInt(data['timestamp'])
+                console.log("Note.save: id="+note.id+"; datetime_create="+note.datetime_create+"; timestamp="+note.timestamp);
+                note.updateUI();
+                return true;
+            }
+        });
+    }
+}
 const characterParameters = new CharacterParameters();
 var characer_id = 0
 function get_characterData(){
@@ -2179,6 +2275,10 @@ function get_characterData(){
             });
             data['weapon'].forEach(element => {
                 characterParameters.appendWeapon(element)
+            });
+
+            data['notes'].forEach(element => {
+                characterParameters.appendNote(element)
             });
 
             $("input").prop("readonly", true);
@@ -2313,6 +2413,16 @@ function ambitions_longterm_add() {
     ambitions_add()
     $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target", "longterm")
 }
+function note_add() {
+    let n = tinyMCE.get('player_notes_textarea').getContent();
+    let note = {
+        "id": 0,
+        "datetime_create": "",
+        "timestamp": 0,
+        "note_text": n
+    }
+    new_note = characterParameters.saveNote(note);
+}
 function main() {
 
     $.ajaxSetup({
@@ -2331,6 +2441,7 @@ function main() {
     $("button#armour_add_button").click(armour_add);
     $("button#weapon_add_button").click(weapon_add);
     $("button#spells_add_button").click(spell_add);
+    $("button#player_notes_add_button").click(note_add);
     $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
     $("img#ambitions_longterm_add").click(ambitions_longterm_add);

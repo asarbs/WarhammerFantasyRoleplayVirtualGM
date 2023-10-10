@@ -56,6 +56,7 @@ urlpatterns = [
     path('ajax_saveFreeHandCharacteristicAdv', views.ajax_saveFreeHandCharacteristicAdv, name="ajax_saveFreeHandCharacteristicAdv"),
     path('ajax_saveAmbitions', views.ajax_saveAmbitions, name="ajax_saveAmbitions"),
     path('ajax_saveCurrentEp', views.ajax_saveCurrentEp, name="ajax_saveCurrentEp"),
+    path('ajax_savePlayerNote', views.ajax_savePlayerNote, name="ajax_savePlayerNote"),
 
 
     path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),

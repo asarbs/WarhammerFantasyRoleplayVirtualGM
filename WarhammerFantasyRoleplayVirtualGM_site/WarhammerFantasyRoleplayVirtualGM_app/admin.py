@@ -219,6 +219,13 @@ class Character2TrappinglAdmin(admin.ModelAdmin):
     ordering = ("characters", "trapping")
     save_as = True
 
+class NoteAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+          models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
+    }
+    list_display = ("datetime_create", "datetime_update", "note_text")
+    ordering = ("datetime_update", "datetime_create")
+    save_as = True
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
@@ -252,3 +259,4 @@ admin.site.register(models.Spells, SpellsAdmin)
 admin.site.register(models.Ambitions, AmbitionsAdmin)
 admin.site.register(models.Character2Talent, Character2TalentAdmin)
 admin.site.register(models.Character2Trappingl, Character2TrappinglAdmin)
+admin.site.register(models.Note, NoteAdmin)

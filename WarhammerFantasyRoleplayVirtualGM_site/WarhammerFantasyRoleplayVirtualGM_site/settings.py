@@ -169,6 +169,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
+
 
 LOGGING = {
     "version": 1,

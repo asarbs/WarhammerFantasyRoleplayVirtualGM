@@ -766,6 +766,7 @@ def detailsCampaign(request, CampaignId):
     logging.debug(dic)
     return render(request, 'detailsCampaign.html', dic)
 
+
 @login_required
 def showCareersAdvanceSchemes(request, casId):
         cas = CareersAdvanceScheme.objects.get(id=casId)
@@ -976,7 +977,7 @@ def viewCharacter(request, pk):
 def ajax_view_getCharacterData(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    ret = {'status': 'ok', 'skills': {}, 'trappings': {}, 'armour':[], 'spells':[], "weapon":[]  }
+    ret = {'status': 'ok', 'skills': {}, 'trappings': {}, 'armour':[], 'spells':[], "weapon":[], "notes":[] }
 
     character_id = request.POST['characer_id']
     character = Character.objects.get(id = character_id)
@@ -1024,7 +1025,7 @@ def ajax_view_getCharacterData(request):
             "movement_movement"            : character.movement_movement,
             "movement_walk"                : character.movement_walk,
             "movement_run"                 : character.movement_run,
-            "wealth"                       : character.wealth,
+            "wealth"                       : character.wealth
         }
 
     ret['character']["ambitions_shortterm"] = []
@@ -1066,6 +1067,9 @@ def ajax_view_getCharacterData(request):
 
     ret['talents'] = get_character_talents(character)
 
+    for n in character.notes.order_by('datetime_create'):
+        ret['notes'].append(n.to_dict())
+
     return JsonResponse(ret)
 
 @login_required
@@ -1076,3 +1080,22 @@ def addPlayer2Campaign(request):
     logger.debug(str(request.POST))
     logger.debug(c2p)
     return redirect(reverse('detailsCampaign', args=(request.POST['campaign_id'],)))
+
+@login_required
+def ajax_savePlayerNote(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    note = Note.objects.create(note_text=request.POST['note_text'])
+    note.save()
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['character_id']
+    character = Character.objects.get(id = character_id)
+    character.notes.add(note)
+    character.save()
+
+    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp}
+
+    return JsonResponse(ret)
