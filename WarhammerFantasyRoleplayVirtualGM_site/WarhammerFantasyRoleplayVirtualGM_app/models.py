@@ -42,12 +42,35 @@ class Ambitions(models.Model):
         for f in opts.concrete_fields:
             data[f.name] = f.value_from_object(self)
         return data
+    
+class Note(models.Model):
+    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name="Create TIme")
+    datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update TIme")
+    note_text = models.TextField(verbose_name="Note Text", default="", blank=False, null=False)
+
+    def __str__(self):
+        return u"{0}".format(self.datetime_create)
+
+    def __unicode__(self):
+        return u"{0}".format(self.datetime_create)
+
+    @property
+    def timestamp(self):
+        return self.datetime_create.strftime('%Y%m%d%H%M%S')
+
+    @property
+    def formated_datatime(self):
+        return self.datetime_create.strftime('%Y-%m-%d %H:%M')
+
+    def to_dict(self):
+        return {"id": self.id, "datetime_create": self.formated_datatime , "timestamp": self.timestamp, "note_text":self.note_text}
 
 class Campaign(models.Model):
     name = models.CharField(max_length= 250)
     party_name = models.CharField(max_length= 250, default="")
     ambitions_shortterm = models.ManyToManyField(Ambitions, verbose_name="Shortterm Ambitions", related_name="campaign_ambitions_shortterm")
     ambitions_longterm = models.ManyToManyField(Ambitions, verbose_name="Longterm Ambitions", related_name="campaign_ambitions_longterm")
+    notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True, null=True)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -469,28 +492,6 @@ class Spells(models.Model):
 
     def get_absolute_url(self):
         return reverse("SpellListView")
-
-class Note(models.Model):
-    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name="Create TIme")
-    datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update TIme")
-    note_text = models.TextField(verbose_name="Note Text", default="", blank=False, null=False)
-
-    def __str__(self):
-        return u"{0}".format(self.datetime_create)
-
-    def __unicode__(self):
-        return u"{0}".format(self.datetime_create)
-
-    @property
-    def timestamp(self):
-        return self.datetime_create.strftime('%Y%m%d%H%M%S')
-
-    @property
-    def formated_datatime(self):
-        return self.datetime_create.strftime('%Y-%m-%d %H:%M')
-
-    def to_dict(self):
-        return {"id": self.id, "datetime_create": self.formated_datatime , "timestamp": self.timestamp, "note_text":self.note_text}
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)

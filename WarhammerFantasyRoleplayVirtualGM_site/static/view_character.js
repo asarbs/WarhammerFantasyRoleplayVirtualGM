@@ -1729,7 +1729,6 @@ class CharacterParameters {
         this.#trappings = {};
     }
     appendTalent(talent_params) {
-        this.#talents = {};
         this.#talents[talent_params['id']] = new Talent(talent_params['id'],
         talent_params['name'],
         talent_params['max'],
@@ -1994,8 +1993,19 @@ class CharacterParameters {
         console.log("updateTalentVal: this.#talents.length="+this.#talents.length);
         this.#talents[talent_id].taken = newVal;
     }
+    get hardy() {
+        console.log("hardy: "+ this.#talents)
+        if( 417 in this.#talents) {
+            let talent = this.#talents[417]
+            console.log("hardy: "+ talent)
+            return talent.taken
+        }
+        return 0
+    }
+
     updateWounds() {
-        $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.wp_bonus);
+        $("input#hardy"              ).val(this.hardy + " * " + this.t_bonus);
+        $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.hardy * this.t_bonus + this.wp_bonus);
     }
     updateEncumbrance() {
         console.log("updateEncumbrance")
@@ -2267,6 +2277,7 @@ function get_characterData(){
                 characterParameters.appendTalent(data['talents'][k])
             };
             characterParameters.updateTalentsTable()
+            characterParameters.updateWounds();
             data['armour'].forEach(element => {
                 characterParameters.appendArmour(element)
             });
