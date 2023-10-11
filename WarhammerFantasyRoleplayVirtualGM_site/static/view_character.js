@@ -1656,7 +1656,7 @@ class CharacterParameters {
             if(!$('#talents_adv__'+item.id).length) {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
-                new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" talent_id="'+item.id+'" min="0" max="100" step="1" name="fname"></td>'
+                new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" talent_id="'+item.id+'" min="0" max="100" step="1" name="fname" talent_id="'+item.id+'"></td>'
                 new_row += '<td class="description">'+item.description+'</td>'
                 new_row += '</tr>'
                 $("#talents_table").append(new_row)
@@ -2313,6 +2313,12 @@ function updateSkill() {
     // console.log("updateSkill: " + skill_id +":"+ skill_adv_val)
     characterParameters.updateSkillVal(skill_id, skill_adv_val)
 }
+function updateTalents() {
+    var id = $(this).attr('talent_id');
+    var adv_val = parseInt($(this).val());
+    // console.log("updateSkill: " + skill_id +":"+ skill_adv_val)
+    characterParameters.updateTalentVal(id, adv_val)
+}
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -2358,7 +2364,7 @@ function turon_on_edit() {
     $("input#characteristics_wp_advances ").on("change", updateCharacteristics);
     $("input#characteristics_fel_advances").on("change", updateCharacteristics);
     $("input.skills_adv").on("change", updateSkill);
-    $("input.talents_adv").on("change", updateSkill);
+    $("input.talents_adv").on("change", updateTalents);
 }
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()
