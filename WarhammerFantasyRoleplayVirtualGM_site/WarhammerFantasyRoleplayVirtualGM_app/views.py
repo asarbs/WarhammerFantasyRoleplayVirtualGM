@@ -478,6 +478,45 @@ def ajax_saveFate_and_fortune(request):
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
 @login_required
+def ajax_saveFate(request):
+    if request.method == 'POST':
+        character_id = request.POST['character_id']
+        character = Character.objects.get(id = character_id)
+        if character is not None:
+            character.fate_fate    = int(request.POST['fate_fate'])
+            character.save()
+            ret = {'status': 'ok',
+                   'fate_fate':    int(character.fate_fate),
+            }
+            logger.debug(ret)
+            return JsonResponse(ret)
+        else:
+            logger.error("ajax_save_fate not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_save_fate is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+@login_required
+def ajax_saveFortune(request):
+    if request.method == 'POST':
+        character_id = request.POST['character_id']
+        character = Character.objects.get(id = character_id)
+        print(request.POST)
+        if character is not None:
+            character.fate_fortune    = int(request.POST['fate_fortune'])
+            character.save()
+            ret = {'status': 'ok',
+                   'fate_fortune':     int(character.fate_fortune),
+            }
+            logger.debug(ret)
+            return JsonResponse(ret)
+        else:
+            logger.error("ajax_save_fortune not found: character_id={}".format(character_id))
+            return JsonResponse({'status': 'Invalid request'}, status=400)
+    logger.error("ajax_save_fortune is GET")
+    return JsonResponse({'status': 'Invalid request'}, status=400)
+
+@login_required
 def ajax_saveAge(request):
     if request.method == 'POST':
         logger.debug(request.POST)

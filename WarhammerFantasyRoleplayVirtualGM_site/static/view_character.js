@@ -1298,7 +1298,7 @@ class CharacterParameters {
             $("input#fate_fate"                   ).val(characterParameters.fate_fate)
         }
         else
-            throw "fate_fate[" + fate_fate + "] is not a string";
+            throw "fate_fate[" + fate_fate + "] is not a number";
     }
     get fate_fate() {
         return this.#fate_fate;
@@ -1309,7 +1309,7 @@ class CharacterParameters {
             $("input#fate_fortune"                ).val(characterParameters.fate_fortune)
         }
         else
-            throw "fate_fortune[" + fate_fortune + "] is not a string";
+            throw "fate_fortune[" + fate_fortune + "] is not a number";
     }
     get fate_fortune() {
         return this.#fate_fortune;
@@ -1607,7 +1607,7 @@ class CharacterParameters {
         for (var k = 0; k < keys_sorted_skills.length; k++) {
             var key = keys_sorted_skills[k]
             var item = sorted_skills[key]
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:" +k+ ";"+ item.name)
+            console.log("updateSkillTable:" +k+ ";"+ item.name)
             var new_row = ""
             if(!$('#skills_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
                 new_row = '<tr class="block_body">'
@@ -2319,6 +2319,50 @@ function updateTalents() {
     // console.log("updateSkill: " + skill_id +":"+ skill_adv_val)
     characterParameters.updateTalentVal(id, adv_val)
 }
+function updateFate_fate() {
+    var val = parseInt($(this).val());
+    console.log("updateFate_fate: val="+val)
+    characterParameters.fate_fate = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveFate",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            fate_fate    : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function updateFate_fortune() {
+    var val = parseInt($(this).val());
+    console.log("updateFate_fortune: val="+val)
+    characterParameters.fate_fortune = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveFortune",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            fate_fortune : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -2337,7 +2381,8 @@ function turon_on_edit() {
     $("select#add_armour").addClass( "editable", 1000);
     $("select#add_weapon").addClass( "editable", 1000);
     $("select#add_spell").addClass( "editable", 1000);
-
+    $("input#fate_fate").addClass( "editable", 1000);
+    $("input#fate_fortune").addClass( "editable", 1000);
 
     $("input#characteristics_ws_advances ").prop("readonly", false);
     $("input#characteristics_bs_advances ").prop("readonly", false);
@@ -2352,6 +2397,8 @@ function turon_on_edit() {
     $("input.skills_adv").prop("readonly", false);
     $("input.talents_adv").prop("readonly", false);
     $("input.armour_put_on").prop("readonly", false);
+    $("input#fate_fate").prop("readonly", false);
+    $("input#fate_fortune").prop("readonly", false);
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristics);
     $("input#characteristics_bs_advances ").on("change", updateCharacteristics);
@@ -2365,6 +2412,8 @@ function turon_on_edit() {
     $("input#characteristics_fel_advances").on("change", updateCharacteristics);
     $("input.skills_adv").on("change", updateSkill);
     $("input.talents_adv").on("change", updateTalents);
+    $("input#fate_fate").change(updateFate_fate)
+    $("input#fate_fortune").change(updateFate_fortune)
 }
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()
@@ -2462,5 +2511,4 @@ function main() {
     $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
     $("img#ambitions_longterm_add").click(ambitions_longterm_add);
-
 }
