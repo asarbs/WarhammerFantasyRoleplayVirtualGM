@@ -866,7 +866,7 @@ class CharacterParameters {
     #id                                 = 0;
     #age                                = 0;
     #avalible_attribute_points          = 100;
-    #experience_current                           = 0;
+    #experience_current                 = 0;
     #experience_spent                   = 0;
     #career_id                          = 0;
     #career_level                       = 0;
@@ -1964,6 +1964,61 @@ class CharacterParameters {
             }
         });
     }
+    updateCharacterInitialVal(characteristics_id, characteristics_adv_val) {
+        switch(characteristics_id) {
+            case "characteristics_ws_initial" :
+                this.characteristics_ws_initial = characteristics_adv_val;
+                break;
+            case "characteristics_bs_initial" :
+                this.characteristics_bs_initial = characteristics_adv_val;
+                break;
+            case "characteristics_s_initial"  :
+                this.characteristics_s_initial = characteristics_adv_val;
+                break;
+            case "characteristics_t_initial"  :
+                this.characteristics_t_initial = characteristics_adv_val;
+                break;
+            case "characteristics_i_initial"  :
+                this.characteristics_i_initial = characteristics_adv_val;
+                break;
+            case "characteristics_ag_initial" :
+                this.characteristics_ag_initial = characteristics_adv_val;
+                break;
+            case "characteristics_dex_initial":
+                this.characteristics_dex_initial = characteristics_adv_val;
+                break;
+            case "characteristics_int_initial":
+                this.characteristics_int_initial = characteristics_adv_val;
+                break;
+            case "characteristics_wp_initial" :
+                this.characteristics_wp_initial = characteristics_adv_val;
+                break;
+            case "characteristics_fel_initial":
+                this.characteristics_fel_initial = characteristics_adv_val;
+                break;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveFreeHandCharacteristicInit",
+            data: {
+                character_id: this.#id,
+                characteristics_ws_initial  : this.characteristics_ws_initial,
+                characteristics_bs_initial  : this.characteristics_bs_initial,
+                characteristics_s_initial   : this.characteristics_s_initial,
+                characteristics_t_initial   : this.characteristics_t_initial,
+                characteristics_i_initial   : this.characteristics_i_initial,
+                characteristics_ag_initial  : this.characteristics_ag_initial,
+                characteristics_dex_initial : this.characteristics_dex_initial,
+                characteristics_int_initial : this.characteristics_int_initial,
+                characteristics_wp_initial  : this.characteristics_wp_initial,
+                characteristics_fel_initial : this.characteristics_fel_initial,
+            },
+            success: function(data) {
+                console.log("skill save: " + data['status'])
+            }
+        });
+    }
     upTalentXPSpend(oldValue) {
         var xpToSpend = oldValue * 100 + 100;
         if( xpToSpend <= this.experience_current) {
@@ -2301,11 +2356,17 @@ function get_characterData(){
         }
     });
 }
-function updateCharacteristics() {
+function updateCharacteristicsAdv() {
     var characteristics_id = $(this).attr('id');
     var characteristics_adv_val = parseInt($(this).val());
-    console.log("updateCharacteristics: " + characteristics_id + ":"+ characteristics_adv_val)
+    console.log("updateCharacteristicsAdv: " + characteristics_id + ":"+ characteristics_adv_val)
     characterParameters.updateCharacterAdvVal(characteristics_id, characteristics_adv_val);
+}
+function updateCharacteristicsInitial() {
+    var characteristics_id = $(this).attr('id');
+    var characteristics_initial_val = parseInt($(this).val());
+    console.log("updateCharacteristicsInitial: " + characteristics_id + ":"+ characteristics_initial_val)
+    characterParameters.updateCharacterInitialVal(characteristics_id, characteristics_initial_val);
 }
 function updateSkill() {
     var skill_id = $(this).attr('skill_id');
@@ -2366,6 +2427,16 @@ function updateFate_fortune() {
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
+    $("input#characteristics_ws_initial ").addClass( "editable", 1000);
+    $("input#characteristics_bs_initial ").addClass( "editable", 1000);
+    $("input#characteristics_s_initial").addClass( "editable", 1000);
+    $("input#characteristics_t_initial").addClass( "editable", 1000);
+    $("input#characteristics_i_initial").addClass( "editable", 1000);
+    $("input#characteristics_ag_initial ").addClass( "editable", 1000);
+    $("input#characteristics_dex_initial").addClass( "editable", 1000);
+    $("input#characteristics_int_initial").addClass( "editable", 1000);
+    $("input#characteristics_wp_initial ").addClass( "editable", 1000);
+    $("input#characteristics_fel_initial").addClass( "editable", 1000);
     $("input#characteristics_ws_advances ").addClass( "editable", 1000);
     $("input#characteristics_bs_advances ").addClass( "editable", 1000);
     $("input#characteristics_s_advances").addClass( "editable", 1000);
@@ -2384,6 +2455,16 @@ function turon_on_edit() {
     $("input#fate_fate").addClass( "editable", 1000);
     $("input#fate_fortune").addClass( "editable", 1000);
 
+    $("input#characteristics_ws_initial ").prop("readonly", false);
+    $("input#characteristics_bs_initial ").prop("readonly", false);
+    $("input#characteristics_s_initial").prop("readonly", false);
+    $("input#characteristics_t_initial").prop("readonly", false);
+    $("input#characteristics_i_initial").prop("readonly", false);
+    $("input#characteristics_ag_initial ").prop("readonly", false);
+    $("input#characteristics_dex_initial").prop("readonly", false);
+    $("input#characteristics_int_initial").prop("readonly", false);
+    $("input#characteristics_wp_initial ").prop("readonly", false);
+    $("input#characteristics_fel_initial").prop("readonly", false);
     $("input#characteristics_ws_advances ").prop("readonly", false);
     $("input#characteristics_bs_advances ").prop("readonly", false);
     $("input#characteristics_s_advances").prop("readonly", false);
@@ -2400,16 +2481,26 @@ function turon_on_edit() {
     $("input#fate_fate").prop("readonly", false);
     $("input#fate_fortune").prop("readonly", false);
 
-    $("input#characteristics_ws_advances ").on("change",  updateCharacteristics);
-    $("input#characteristics_bs_advances ").on("change", updateCharacteristics);
-    $("input#characteristics_s_advances").on("change", updateCharacteristics);
-    $("input#characteristics_t_advances").on("change", updateCharacteristics);
-    $("input#characteristics_i_advances").on("change", updateCharacteristics);
-    $("input#characteristics_ag_advances ").on("change", updateCharacteristics);
-    $("input#characteristics_dex_advances").on("change", updateCharacteristics);
-    $("input#characteristics_int_advances").on("change", updateCharacteristics);
-    $("input#characteristics_wp_advances ").on("change", updateCharacteristics);
-    $("input#characteristics_fel_advances").on("change", updateCharacteristics);
+    $("input#characteristics_ws_advances ").on("change",  updateCharacteristicsAdv);
+    $("input#characteristics_bs_advances ").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_s_advances").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_t_advances").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_i_advances").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_ag_advances ").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_dex_advances").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_int_advances").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_wp_advances ").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_fel_advances").on("change", updateCharacteristicsAdv);
+    $("input#characteristics_ws_initial ").on("change",  updateCharacteristicsInitial);
+    $("input#characteristics_bs_initial ").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_s_initial").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_t_initial").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_i_initial").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_ag_initial ").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_dex_initial").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_int_initial").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_wp_initial ").on("change", updateCharacteristicsInitial);
+    $("input#characteristics_fel_initial").on("change", updateCharacteristicsInitial);
     $("input.skills_adv").on("change", updateSkill);
     $("input.talents_adv").on("change", updateTalents);
     $("input#fate_fate").change(updateFate_fate)

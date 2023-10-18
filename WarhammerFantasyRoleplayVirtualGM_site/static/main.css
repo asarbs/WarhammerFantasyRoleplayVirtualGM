@@ -374,7 +374,7 @@ div#main div.character_sheet div.head table tr td  input#career_level {
 }
 
 div#main div.character_sheet div.head table tr td  input#career_path {
-    width: 1005;
+    width: 1005px;
 }
 
 div#main div.character_sheet div.head table tr td  input#status {
@@ -675,8 +675,8 @@ div#main div.character_sheet div.talents table tr td.edit {
 div#main div.character_sheet div.talents table tr td.edit input  {
     padding: 0px;
     margin: 0px;
-    height: 53px;
-    width: 52px;
+    height: 32px;
+    width: 32px;
     position: relative;
 }
 
