@@ -260,6 +260,40 @@ div#main div.create_character {
     position:fixed;
     z-index: 1000;
 }
+
+div#main div#campaign {
+
+}
+div#main div#campaign div.row {
+    min-height: 200px; /* Should be removed. Only for demonstration */
+}
+div#main div#campaign div.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+div#main div#campaign div.row div.column {
+    float: left;
+    width: 45%;
+    padding: 10px;
+}
+div#main div#campaign div.row div.column textarea {
+    margin: 0px;
+    width: 650px;
+}
+
+div#main div#campaign div.row div.column input.submit {
+    margin: 0px;
+    width: 650px;
+}
+div#main div#campaign div.row div.column ol li.cross_out {
+    text-decoration: line-through;
+}
+div#main div#campaign div.row div.column ol li img {
+    cursor: pointer;
+    width: 15px;
+}
+
 div#main div.create_character img.img_random {
     /* background-color: #c4a314; */
     height: 15px;

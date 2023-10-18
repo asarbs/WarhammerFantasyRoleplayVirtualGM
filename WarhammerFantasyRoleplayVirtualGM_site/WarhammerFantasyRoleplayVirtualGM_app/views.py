@@ -1187,3 +1187,32 @@ def ajax_savePlayerNote(request):
     ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp}
 
     return JsonResponse(ret)
+
+@login_required
+def ajax_saveCampaignAmbitions(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug("ambitions_id={}; description={}; achieved={}; camaing_id={}; is_shortterm={}".format(request.POST['ambitions_id'], request.POST['description'], request.POST['achieved'], request.POST['camaing_id'], request.POST['is_shortterm']))
+
+    ami, created  = (Ambitions.objects.create(description=request.POST['description']), True) if int(request.POST['ambitions_id']) == 0 else (Ambitions.objects.get(id=request.POST['ambitions_id']), False)
+    achieved_was = ami.achieved
+    ami.achieved = True if request.POST['achieved'] == 'true' else False
+    ami.save()
+
+    logger.debug("achieved_was={} and ami.achieved={}".format(achieved_was, ami.achieved))
+    if achieved_was == False and ami.achieved == True:
+        for c in Character.objects.filter(campaign__id = request.POST['camaing_id']):
+            logger.debug("{}".format(str(c)))
+            if request.POST['is_shortterm'] == "true":
+                logger.debug("{} get 50 xp".format(str(c)))
+                c.experience_current += 50
+            else:
+                logger.debug("{} get 500 xp".format(str(c)))
+                c.experience_current += 500
+            c.save()
+
+
+    ret = {'status': 'ok' , 'id':ami.id, 'description':ami.description}
+    logger.debug(ret)
+    return JsonResponse(ret)

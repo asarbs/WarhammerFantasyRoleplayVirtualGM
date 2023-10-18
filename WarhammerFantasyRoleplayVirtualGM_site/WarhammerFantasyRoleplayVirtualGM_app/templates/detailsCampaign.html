@@ -2,60 +2,90 @@
 {% load static %}
 
 {% block main %}
-<h2>{{ camaing.name }}</h2>
-Party: {{ camaing.party_name }} <br />
-<ol>
-<li>Ambitions Shortterm:
-    <ol>
-        {% for as in camaing.ambitions_shortterm.all %}
-        <li>
-            {{ as.description }}
-            {% if as.achieved %}
-                <img src="{% static "img/tick.png" %}" width="12">
-            {% endif %}
-         </li>
-        {% endfor %}
-    </ol>
-</li>
-<li>Ambitions Longterm:
-    <ol>
-        {% for al in camaing.ambitions_longterm.all %}
-        <li>{{ al.description }}
-            {% if al.achieved %}
-                <img src="{% static "img/tick.png" %}" width="12">
-            {% endif %}
+<input type="hidden" id="camaing_id" name="camaing_id" value="{{ camaing.id }}">
+<div id="campaign">
+    <h2>{{ camaing.name }} - {{ camaing.id }}</h2>
+    <h3>Party: {{ camaing.party_name }} </h3>
 
-        </li>
-        {% endfor %}
-    </ol>
-</li>
-</ol>
-<h3>Players:</h3>
+    <div class="row">
+        <div class="column">
+            <h3>Ambitions Shortterm:</h3>
+            <ol id="list_ambitions_shortterm">
+                {% for as in camaing.ambitions_shortterm.all %}
+                {% if as.achieved %}
+                <li class="cross_out">
+                {% else %}
+                <li ambition_id="{{ as.id }}">
+                {% endif %}
+                    {{ as.description }}
+                    {% if not as.achieved %}
+                        <img src="{% static "img/tick.png" %}" width="12" ambition_id="{{ as.id }}">
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="column">
+            <textarea id="ambitions_shortterm" name="ambitions" rows="4" cols="50"></textarea>
+            <input id="submit_ambitions_shortterm" type="submit" class="submit" value="Submit">
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <h3>Ambitions Longterm:</h3>
+            <ol id="list_ambitions_longterm">
+                {% for al in camaing.ambitions_longterm.all %}
+                {% if al.achieved %}
+                <li class="cross_out">
+                {% else %}
+                <li ambition_id="{{ al.id }}">
+                {% endif %}
+                    {{ al.description }}
+                    {% if not al.achieved %}
+                        <img src="{% static "img/tick.png" %}" width="12"  ambition_id="{{ al.id }}">
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="column">
+            <textarea id="ambitions_longterm" name="ambitions" rows="4" cols="50"></textarea>
+            <input id="submit_ambitions_longterm" type="submit" class="submit" value="Submit">
+        </div>
+    </div>
 
 
-<form action="/wfrpg_gm/AddPlayer2Campaign" method="POST">
-    {% csrf_token %}
-    <input type="hidden" id="campaign_id" name="campaign_id" value="{{ camaing.id }}">
-    {{ campaign_2_player_form.media }}
-    {{ campaign_2_player_form }}
-    <input type="submit" class="button" value="Add">
-</form>
+    <div class="row">
+        <h3>Players:</h3>
 
-<ol>
-    {% for players in players %}
-    <li> {{ players }}  </li>
-    {% endfor %}
-</ol>
-<h3>Characters:</h3>
+        <form action="/wfrpg_gm/AddPlayer2Campaign" method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="campaign_id" name="campaign_id" value="{{ camaing.id }}">
+            {{ campaign_2_player_form.media }}
+            {{ campaign_2_player_form }}
+            <input type="submit" class="button" value="Add">
+        </form>
 
-{% if createNewCharacter == False %}
-<a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
-{% endif %}
+        <ol>
+            {% for players in players %}
+            <li> {{ players }}  </li>
+            {% endfor %}
+        </ol>
 
-<ol>
-    {% for character in characters %}
-    <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
-    {% endfor %}
-</ol>
+    </div>
+    <div class="row">
+        <h3>Characters:</h3>
 
+        {% if createNewCharacter == False %}
+        <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
+        {% endif %}
+
+        <ol>
+            {% for character in characters %}
+            <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
+            {% endfor %}
+        </ol>
+
+    </div>
+</div>
 {% endblock %}

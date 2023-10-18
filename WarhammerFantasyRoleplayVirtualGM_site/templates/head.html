@@ -21,7 +21,6 @@
         main();
     });
 </script>
-
 {% endif %}
 {% if "viewCharacter" in  request.path %}
 <script src="{% static "view_character.js" %}"></script>
@@ -31,8 +30,17 @@
     });
 </script>
 {% endif %}
+{% if "detailsCampaign" in  request.path %}
+<script src="{% static "details_campaign.js" %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        main();
+    });
+</script>
+{% endif %}
 <script type="text/javascript">
     tinyMCE.init({
+        selector: 'textarea#player_notes_textarea',
         mode: "textareas",
         theme: "silver",
         toolbar: 'bold italic underline | h1 h2 h3 h4 h5 h6 | alignleft aligncenter alignright alignjustify | outdent indent | forecolor backcolor | removeformat',

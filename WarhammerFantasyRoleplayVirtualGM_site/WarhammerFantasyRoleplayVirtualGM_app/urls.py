@@ -61,6 +61,8 @@ urlpatterns = [
     path('ajax_saveCurrentEp', views.ajax_saveCurrentEp, name="ajax_saveCurrentEp"),
     path('ajax_savePlayerNote', views.ajax_savePlayerNote, name="ajax_savePlayerNote"),
 
+    path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
+
 
     path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),
     path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData"),
