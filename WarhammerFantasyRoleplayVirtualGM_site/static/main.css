@@ -751,7 +751,20 @@ div#main div.character_sheet div.party table tr td.title {
 div#main div.character_sheet div.party table tr td.head {
     font-size: 150%;
     text-align: left;
+    vertical-align: top;
     padding-left: 10px;
+    width: 120px;
+}
+
+div#main div.character_sheet div.party table tr td.data {
+    text-align: left;
+    padding-left: 10px;
+}
+div#main div.character_sheet div.party table tr td.data ul {
+    margin-left: 10px;
+}
+div#main div.character_sheet div.party table tr td.data ul li.cross_out {
+    text-decoration: line-through;
 }
 
 div#main div.character_sheet div.sheer2_left {

@@ -1040,7 +1040,22 @@ def viewCharacter(request, pk):
 def ajax_view_getCharacterData(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    ret = {'status': 'ok', 'skills': {}, 'trappings': {}, 'armour':[], 'spells':[], "weapon":[], "notes":[] }
+    ret = {'status': 'ok',
+           'skills': {},
+           'trappings': {},
+           'armour':[],
+           'spells':[],
+           "weapon":[],
+           "notes":[],
+           'party': {
+                'name': "",
+                'members': [],
+                'ambitions' : {
+                    'short_term':[],
+                    'long_term': []
+                }
+            }
+        }
 
     character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
@@ -1132,6 +1147,16 @@ def ajax_view_getCharacterData(request):
 
     for n in character.notes.order_by('datetime_create'):
         ret['notes'].append(n.to_dict())
+
+    ret['party']['name'] = character.campaign.party_name
+    for a in character.campaign.ambitions_shortterm.all():
+        ret['party']['ambitions']['short_term'].append(a.to_dict())
+    for a in character.campaign.ambitions_longterm.all():
+        ret['party']['ambitions']['long_term'].append(a.to_dict())
+
+    campaign2Player = Campaign2Player.objects.filter(campaign=character.campaign)
+    for c2p in campaign2Player:
+        ret['party']['members'].append(str(c2p.player))
 
     return JsonResponse(ret)
 

@@ -2311,6 +2311,26 @@ function get_characterData(){
             characterParameters.movement_run                 = data['character']["movement_run"                 ]
             characterParameters.wealth                       = data['character']["wealth"                       ]
 
+            $("td#party_name").text(data['party']['name'])
+            for(m in data['party']['members']) {
+                $("td#party_members ul").append("<li>"+data['party']['members'][m]+"</li>")
+            }
+            for(a in data['party']['ambitions']['short_term']) {
+                ambition = data['party']['ambitions']['short_term'][a]
+                if(ambition.achieved)
+                    $("td#party_ambitions_short_term ul").append("<li class='cross_out'>"+ambition.description+"</li>")
+                else
+                    $("td#party_ambitions_short_term ul").append("<li>"+ambition.description+"</li>")
+            }
+            for(a in data['party']['ambitions']['long_term']) {
+                ambition = data['party']['ambitions']['long_term'][a]
+                if(ambition.achieved)
+                    $("td#party_ambitions_long_term ul").append("<li class='cross_out'>"+ambition.description+"</li>")
+                else
+                    $("td#party_ambitions_long_term ul").append("<li>"+ambition.description+"</li>")
+            }
+
+
             for(let a in data['character']['ambitions_shortterm'] ) {
                 characterParameters.append_ambitions_shortterm(data['character']['ambitions_shortterm'][a]);
             }
