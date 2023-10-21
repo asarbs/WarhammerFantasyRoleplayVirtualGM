@@ -60,6 +60,9 @@ urlpatterns = [
     path('ajax_saveAmbitions', views.ajax_saveAmbitions, name="ajax_saveAmbitions"),
     path('ajax_saveCurrentEp', views.ajax_saveCurrentEp, name="ajax_saveCurrentEp"),
     path('ajax_savePlayerNote', views.ajax_savePlayerNote, name="ajax_savePlayerNote"),
+    path('ajax_saveMotivation', views.ajax_saveMotivation, name="ajax_saveMotivation"),
+    path('ajax_saveResolve', views.ajax_saveResolve, name="ajax_saveResolve"),
+    path('ajax_saveResilience', views.ajax_saveResilience, name="ajax_saveResilience"),
 
     path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
 

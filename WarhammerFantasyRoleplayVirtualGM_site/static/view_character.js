@@ -910,6 +910,7 @@ class CharacterParameters {
     #RandomHairTable                    = [];
     #resilience_resilience              = 0;
     #resilience_resolve                 = 0;
+    #resilience_motivation              = "";
     #skills                             = {};
     #trappings                          = {};
     #species                            = 0;
@@ -1320,7 +1321,7 @@ class CharacterParameters {
             $("input#resilience_resilience"       ).val(characterParameters.resilience_resilience)
         }
         else
-            throw "resilience_resilience[" + resilience_resilience + "] is not a string";
+            throw "resilience_resilience[" + resilience_resilience + "] is not a number";
     }
     get resilience_resilience() {
         return this.#resilience_resilience;
@@ -1331,10 +1332,21 @@ class CharacterParameters {
             $("input#resilience_resolve"          ).val(characterParameters.resilience_resolve)
         }
         else
-            throw "resilience_resolve[" + resilience_resolve + "] is not a string";
+            throw "resilience_resolve[" + resilience_resolve + "] is not a number";
     }
     get resilience_resolve() {
         return this.#resilience_resolve;
+    }
+    set resilience_motivation(resilience_motivation) {
+        if(typeof resilience_motivation === "string") {
+            this.#resilience_motivation = resilience_motivation;
+            $("input#resilience_motivation"       ).val(characterParameters.resilience_motivation)
+        }
+        else
+            throw "resilience_resolve[" + resilience_resolve + "] is not a number";
+    }
+    get resilience_motivation() {
+        return this.#resilience_motivation
     }
     set movement_movement(movement_movement) {
         if(typeof movement_movement === "number") {
@@ -2444,6 +2456,73 @@ function updateFate_fortune() {
         }
     });
 }
+function updateResilience_resilience() {
+    var val = parseInt($(this).val());
+    console.log("updateResilience_resilience: val="+val)
+    characterParameters.resilience_resilience = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveResilience",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            resilience_resilience : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function updateResilience_resolve() {
+    var val = parseInt($(this).val());
+    console.log("updateResilience_resolve: val="+val)
+    characterParameters.resilience_resolve = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveResolve",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            resilience_resolve : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function updateResilience_motivation () {
+    var val = $(this).val();
+    console.log("updateResilience_motivation: val="+val)
+    characterParameters.resilience_motivation = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveMotivation",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            resilience_motivation : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -2474,6 +2553,11 @@ function turon_on_edit() {
     $("select#add_spell").addClass( "editable", 1000);
     $("input#fate_fate").addClass( "editable", 1000);
     $("input#fate_fortune").addClass( "editable", 1000);
+    $("input#resilience_resilience").addClass( "editable", 1000);
+    $("input#resilience_resolve").addClass( "editable", 1000);
+    $("input#resilience_motivation").addClass( "editable", 1000);
+
+
 
     $("input#characteristics_ws_initial ").prop("readonly", false);
     $("input#characteristics_bs_initial ").prop("readonly", false);
@@ -2500,6 +2584,10 @@ function turon_on_edit() {
     $("input.armour_put_on").prop("readonly", false);
     $("input#fate_fate").prop("readonly", false);
     $("input#fate_fortune").prop("readonly", false);
+    $("input#resilience_resilience").prop("readonly", false);
+    $("input#resilience_resolve").prop("readonly", false);
+    $("input#resilience_motivation").prop("readonly", false);
+
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristicsAdv);
     $("input#characteristics_bs_advances ").on("change", updateCharacteristicsAdv);
@@ -2525,6 +2613,9 @@ function turon_on_edit() {
     $("input.talents_adv").on("change", updateTalents);
     $("input#fate_fate").change(updateFate_fate)
     $("input#fate_fortune").change(updateFate_fortune)
+    $("input#resilience_resilience").change(updateResilience_resilience)
+    $("input#resilience_resolve").change(updateResilience_resolve)
+    $("input#resilience_motivation").change(updateResilience_motivation)
 }
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()

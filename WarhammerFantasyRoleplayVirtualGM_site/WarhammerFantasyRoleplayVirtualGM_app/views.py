@@ -1216,3 +1216,42 @@ def ajax_saveCampaignAmbitions(request):
     ret = {'status': 'ok' , 'id':ami.id, 'description':ami.description}
     logger.debug(ret)
     return JsonResponse(ret)
+
+@login_required
+def ajax_saveMotivation(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+    character_id = request.POST['character_id']
+    character = Character.objects.get(id = character_id)
+
+    character.resilience_motivation = request.POST['resilience_motivation']
+    character.save()
+    ret = {'status': 'ok'}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveResolve(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    character_id = request.POST['character_id']
+    character = Character.objects.get(id = character_id)
+
+    character.resilience_resolve = request.POST['resilience_resolve']
+    character.save()
+    ret = {'status': 'ok'}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveResilience(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+    character_id = request.POST['character_id']
+    character = Character.objects.get(id = character_id)
+
+    character.resilience_resilience = request.POST['resilience_resilience']
+    character.save()
+    ret = {'status': 'ok'}
+    return JsonResponse(ret)
