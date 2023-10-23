@@ -42,7 +42,7 @@ class Ambitions(models.Model):
         for f in opts.concrete_fields:
             data[f.name] = f.value_from_object(self)
         return data
-    
+
 class Note(models.Model):
     datetime_create = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name="Create TIme")
     datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update TIme")
@@ -108,6 +108,13 @@ class Talent(models.Model):
     @property
     def my_talent_id(self):
         return self.id
+
+    def to_dict(self):
+        opts = self._meta
+        data = {}
+        for f in opts.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        return data
 
 class Trapping(models.Model):
     name = models.CharField(max_length= 50, unique=True)

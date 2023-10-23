@@ -171,6 +171,20 @@ class Talent {
     get taken() {
         return this.#taken
     }
+    save_to_character() {
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveTalentToCharacter",
+            data: {
+                character_id: characterParameters.id,
+                talent_id: this.id,
+                talent_taken: this.#taken
+            },
+            success: function(data) {
+                console.log("Talent save_to_character: " + data['status'])
+            }
+        });
+    }
 }
 class Armour{
     #id
@@ -916,7 +930,6 @@ class CharacterParameters {
     #species                            = 0;
     #status                             = "";
     #talents                            = {};
-    #talentsNeedUpdate                  = false;
     #armour                             = [];
     #weapon                             = [];
     #spells                             = [];
@@ -1657,15 +1670,11 @@ class CharacterParameters {
         };
     }
     updateTalentsTable() {
-        if(!this.talentsNeedUpdate) {
-            return;
-        }
         console.log("updateTalentsTable");
-        this.talentsNeedUpdate = false;
         $("table#talents_table tr.block_body").remove();
         $.each(this.#talents, function(i, item) {
             var new_row = ""
-            if(!$('#talents_adv__'+item.id).length) {
+            if(!$('#talents_adv__'+item.id).length && item.taken > 0) {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
                 new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" talent_id="'+item.id+'" min="0" max="100" step="1" name="fname" talent_id="'+item.id+'"></td>'
@@ -1741,13 +1750,25 @@ class CharacterParameters {
         this.#trappings = {};
     }
     appendTalent(talent_params) {
-        this.#talents[talent_params['id']] = new Talent(talent_params['id'],
+        let talent = new Talent(talent_params['id'],
         talent_params['name'],
         talent_params['max'],
         talent_params['test'],
         talent_params['characteristics'],
         talent_params['taken']);
-        this.talentsNeedUpdate = true;
+
+        this.#talents[talent_params['id']] = talent;
+        $("select#add_talents").append($('<option>', {value: talent.id, text: talent.name }));
+    }
+    add_talent(talent_to_add) {
+        console.log("characeter add_talent: "+ talent_to_add);
+        $.each(this.#talents, function(i, item) {
+            if(item.id == talent_to_add) {
+                console.log("characeter add_talent: "+ talent_to_add);
+                item.taken++;
+                item.save_to_character();
+            }
+        });
     }
     appendArmour(armour) {
         console.log("appendArmour: +"+armour)
@@ -1760,7 +1781,6 @@ class CharacterParameters {
             armour.penalty,
             armour.locations,
             armour.armour_points,
-            armour.qualities_and_flaws,
             armour.is_in_inventory);
         this.#armour.push(a)
         a.updateUI();
@@ -2342,7 +2362,6 @@ function get_characterData(){
                     $("td#party_ambitions_long_term ul").append("<li>"+ambition.description+"</li>")
             }
 
-
             for(let a in data['character']['ambitions_shortterm'] ) {
                 characterParameters.append_ambitions_shortterm(data['character']['ambitions_shortterm'][a]);
             }
@@ -2551,6 +2570,7 @@ function turon_on_edit() {
     $("select#add_armour").addClass( "editable", 1000);
     $("select#add_weapon").addClass( "editable", 1000);
     $("select#add_spell").addClass( "editable", 1000);
+    $("select#add_talents").addClass( "editable", 1000);
     $("input#fate_fate").addClass( "editable", 1000);
     $("input#fate_fortune").addClass( "editable", 1000);
     $("input#resilience_resilience").addClass( "editable", 1000);
@@ -2635,6 +2655,12 @@ function spell_add() {
     characterParameters.add_spell(spell_to_add);
     characterParameters.updateEncumbrance();
 }
+function talent_add() {
+    var talent_to_add = $("select#add_talents").val()
+    console.log("add_talent: "+ talent_to_add);
+    characterParameters.add_talent(talent_to_add);
+    characterParameters.updateTalentsTable();
+}
 function put_on_armour() {
     console.log("put_on_armour: id:"+$(this).attr('armour_id') + " checked="+$(this).prop('checked'))
     characterParameters.put_on_armour($(this).attr('armour_id'), $(this).prop('checked'));
@@ -2709,6 +2735,7 @@ function main() {
     $("button#armour_add_button").click(armour_add);
     $("button#weapon_add_button").click(weapon_add);
     $("button#spells_add_button").click(spell_add);
+    $("button#talents_add_button").click(talent_add);
     $("button#player_notes_add_button").click(note_add);
     $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);

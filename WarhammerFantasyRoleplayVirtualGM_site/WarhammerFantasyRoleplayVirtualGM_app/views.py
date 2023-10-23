@@ -167,9 +167,23 @@ def ajax_replaceTalentToCharacter(request):
         char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=new_talent_id, taken=1)
         char2tal.save();
     except django.db.utils.IntegrityError as e:
-        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character.id, ss.name, created))
+        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.taken.name, created))
     talents = get_character_talents(Character.objects.get(id = character_id))
     return JsonResponse({'status': 'ok', 'talents': talents})
+
+@login_required
+def ajax_saveTalentToCharacter(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    character_id = request.POST['character_id']
+    talent_id = request.POST['talent_id']
+    talent_taken = request.POST['talent_taken']
+    try:
+        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=talent_taken)
+        char2tal.save();
+    except django.db.utils.IntegrityError as e:
+        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.taken.name, created))
+    return JsonResponse({'status': 'ok'})
 
 @login_required
 def ajax_randomClass(request):
@@ -1054,7 +1068,8 @@ def ajax_view_getCharacterData(request):
                     'short_term':[],
                     'long_term': []
                 }
-            }
+            },
+            'talents_all': [],
         }
 
     character_id = request.POST['character_id']
@@ -1221,7 +1236,7 @@ def ajax_saveCampaignAmbitions(request):
 def ajax_saveMotivation(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    
+
     character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
 
@@ -1247,7 +1262,7 @@ def ajax_saveResolve(request):
 def ajax_saveResilience(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    
+
     character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
 

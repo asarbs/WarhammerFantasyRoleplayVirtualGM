@@ -79,16 +79,19 @@ def get_species_tallens(speceies: Species):
     return species_talents_list
 
 def get_character_talents(character: Character):
-    characterTalents = Character2Talent.objects.filter(characters=character)
+    character_talents = {}
+    for st in Character2Talent.objects.filter(characters=character):
+        character_talents[st.talent.my_talent_id] = st.taken
+
     talents_list = []
-    for st in characterTalents:
+    for t in Talent.objects.all():
         dic_talent = {
-            'id': st.talent.my_talent_id,
-            'name': st.talent.name,
-            'max':  st.talent.max,
-            'tests': st.talent.tests,
-            'description': st.talent.description,
-            'taken': st.taken,
+            'id': t.my_talent_id,
+            'name': t.name,
+            'max':  t.max,
+            'tests': t.tests,
+            'description': t.description,
+            'taken': (character_talents[t.my_talent_id] if t.my_talent_id in character_talents else 0),
             'ref': str(st.talent.ref)
         }
         talents_list.append(dic_talent)
