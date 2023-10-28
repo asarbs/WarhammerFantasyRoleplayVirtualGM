@@ -460,6 +460,7 @@ class Weapon{
     #qualities_and_flaws
     #reach_range
     #is_in_inventory
+    #not_sb_group= ['BLACKPOWDER', "CROSSBOW", "ENGINEERING", "EXPLOSIVES", "SLING"]
     constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory) {
         this.#id = id
         this.#name = name
@@ -493,7 +494,14 @@ class Weapon{
         return this.#availability
     }
     get damage() {
-        return this.#damage
+        if(this.#not_sb_group.includes(this.#weapon_group) ) {
+            return "+"+this.#damage
+        } else if(this.#name === "Lasso") {
+            return "-"
+        } else if(this.#name === "Incendiary") {
+            return "An Incendiary gives every affected target 1+SL Ablaze Conditions";
+        }
+        return "+SB+"+this.#damage
     }
     get qualities_and_flaws() {
         return this.#qualities_and_flaws
@@ -568,12 +576,12 @@ class Weapon{
         console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         if(this.#is_in_inventory && !$('td#weapon_name__'+this.#id).length) {
             var new_row = '<tr class="block_body">'
-            new_row += '<td id="weapon_name__'+this.#id+'" class="left">'+this.#name+'</td>'
-            new_row += '<td id="weapon_location__'+this.#id+'" class="center">'+this.#weapon_group+'</td>'
-            new_row += '<td id="weapon_encumbrance__'+this.#id+'" class="center">'+this.#encumbrance+'</td>'
-            new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.#reach_range+'</td>'
-            new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.#damage+'</td>'
-            new_row += '<td id="weapon_qualities__'+this.#id+'" class="center">'+this.#qualities_and_flaws+'</td>'
+            new_row += '<td id="weapon_name__'+this.#id+'" class="left">'+this.name+'</td>'
+            new_row += '<td id="weapon_location__'+this.#id+'" class="center">'+this.weapon_group+'</td>'
+            new_row += '<td id="weapon_encumbrance__'+this.#id+'" class="center">'+this.encumbrance+'</td>'
+            new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.reach_range+'</td>'
+            new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.damage+'</td>'
+            new_row += '<td id="weapon_qualities__'+this.#id+'" class="center">'+this.qualities_and_flaws+'</td>'
             new_row += '</tr>'
             $("table#weapons").append(new_row)
         } else {
