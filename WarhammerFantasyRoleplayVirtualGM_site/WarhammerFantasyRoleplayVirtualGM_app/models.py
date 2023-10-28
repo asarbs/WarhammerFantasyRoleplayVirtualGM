@@ -438,8 +438,9 @@ class MeleeWeapons(Weapon):
         MASSIVE = 'MASSIVE', _('Massive')
         MEDIUM = 'MEDIUM', _('Medium')
         PERSONAL = 'PERSONAL', _('Personal')
+        SHORT = 'SHORT', _('Short')
         VARIES = 'VARIES', _('Varies')
-        VERY_LONG = 'VERY_LONG', _('Very_Long')
+        VERY_LONG = 'VERY_LONG', _('Very Long')
         VERY_SHORT = 'VERY_SHORT', _('Very Short')
     reach = models.CharField(max_length=14, choices=Reach.choices, default=Reach.VERY_SHORT, verbose_name="Reach")
 
