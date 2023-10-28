@@ -21,6 +21,9 @@ class MeleeWeaponsTable(tables.Table):
     weapon_ptr = tables.Column(visible=False)
 
     class Meta:
+        order_by = ('weapon_group', 'name')
+
+    class Meta:
         model = MeleeWeapons
         attrs = {"class": "paleblue"}
         sequence = ('weapon_group', 'name',  'price', 'encumbrance', 'availability', 'damage', 'qualities_and_flaws', 'reach', 'reference')
@@ -39,6 +42,9 @@ class RangedWeaponsTable(tables.Table):
     qualities_and_flaws = tables.Column()
     reference = tables.Column(visible=False)
     weapon_ptr = tables.Column(visible=False)
+
+    class Meta:
+        order_by = ('weapon_group', 'name')
 
     class Meta:
         model = MeleeWeapons
