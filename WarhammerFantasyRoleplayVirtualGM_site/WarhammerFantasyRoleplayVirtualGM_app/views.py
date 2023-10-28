@@ -182,9 +182,22 @@ def ajax_saveTalentToCharacter(request):
     talent_taken = request.POST['talent_taken']
     try:
         char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=talent_taken)
-        char2tal.save();
+        char2tal.save()
     except django.db.utils.IntegrityError as e:
         logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.taken.name, created))
+    return JsonResponse({'status': 'ok'})
+
+@login_required
+def ajax_saveTrappingToCharacter(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    character_id = request.POST['character_id']
+    trapping_id = request.POST['trapping_id']
+    try:
+        char2tal, created = Character2Trappingl.objects.get_or_create(characters_id=character_id, trapping_id=trapping_id)
+        char2tal.save()
+    except django.db.utils.IntegrityError as e:
+        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.trapping.name, created))
     return JsonResponse({'status': 'ok'})
 
 @login_required
@@ -1150,13 +1163,16 @@ def ajax_view_getCharacterData(request):
         logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
         ret['skills'][ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
 
-    for ch2STrappingl in Character2Trappingl.objects.filter(characters=character).all():
-        logger.debug("'id': {}, 'name': {}, 'description': {}, 'enc': {}".format(ch2STrappingl.id, ch2STrappingl.trapping.name, ch2STrappingl.trapping.description, ch2STrappingl.enc))
-        ret['trappings'][ch2STrappingl.id] = {
-            'id': ch2STrappingl.id,
-            'name': ch2STrappingl.trapping.name,
-            'description': ch2STrappingl.trapping.description,
-            'enc': ch2STrappingl.enc
+    ch2STrappingl = list(Character2Trappingl.objects.filter(characters=character).values_list("trapping", flat=-True))
+    logger.debug(ch2STrappingl)
+    for trapping in Trapping.objects.all():
+        # logger.debug("'id': {}, 'name': {}, 'description': {}, 'enc': {}".format(trapping.id, trapping.name, trapping.description, trapping.encumbrance))
+        ret['trappings'][trapping.id] = {
+            'id': trapping.id,
+            'name': trapping.name,
+            'description': trapping.description,
+            'enc': trapping.encumbrance,
+            'is_in_inventory': True if trapping.id in ch2STrappingl else False
         }
 
     for r in Armour.objects.all():

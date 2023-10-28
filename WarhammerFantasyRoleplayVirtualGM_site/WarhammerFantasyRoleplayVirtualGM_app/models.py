@@ -565,7 +565,6 @@ class Character(models.Model):
 class Character2Trappingl(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
-    enc = models.IntegerField(default="0", verbose_name="enc")
     is_basic_skill = models.BooleanField(default=False)
     is_species_skill = models.BooleanField(default=False)
     is_career_skill = models.BooleanField(default=False)

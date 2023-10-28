@@ -214,7 +214,7 @@ class Character2TalentAdmin(admin.ModelAdmin):
 
 
 class Character2TrappinglAdmin(admin.ModelAdmin):
-    list_display = ("characters", "trapping", "enc", "is_basic_skill", "is_species_skill", "is_career_skill")
+    list_display = ("characters", "trapping", "is_basic_skill", "is_species_skill", "is_career_skill")
     list_filter = ("characters",)
     ordering = ("characters", "trapping")
     save_as = True

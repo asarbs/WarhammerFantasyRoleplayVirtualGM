@@ -131,6 +131,28 @@ class Trapping {
     get is_in_inventory() {
         return this.#is_in_inventory;
     }
+    set is_in_inventory(is_in_inventory) {
+        if(typeof is_in_inventory === "boolean"){
+            this.#is_in_inventory = is_in_inventory;
+            console.log("Trapping:"+this.name+" is_in_inventory="+is_in_inventory)
+        }
+        else {
+            throw "Trapping ["+this.#name+"].is_in_inventory = " + is_in_inventory + " is not boolean";
+        }
+    }
+    save_to_character() {
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveTrappingToCharacter",
+            data: {
+                character_id: characterParameters.id,
+                trapping_id: this.id,
+            },
+            success: function(data) {
+                console.log("Trapping save_to_character: " + data['status'])
+            }
+        });
+    }
 }
 class Talent {
     #id             = 0
@@ -1687,6 +1709,7 @@ class CharacterParameters {
     }
     updateTrappingsTable() {
         if(!this.trappingsNeedUpdate) {
+            console.log("updateTrappingsTable return");
             return;
         }
         console.log("updateTrappingsTable");
@@ -1694,9 +1717,9 @@ class CharacterParameters {
         $("table#trappings_table tr.block_body").remove();
 
         $.each(this.#trappings, function(i, item) {
-            console.log("updateTrappingsTable: "+item.id);
             var new_row = ""
-            if(!$('#trappings_enc__'+item.id).length) {
+            if(!$('#trappings_enc__'+item.id).length && item.is_in_inventory) {
+                console.log("updateTrappingsTable: "+item.id +"; "+item.name);
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="trappings_name__'+item.id+'" class="left">'+item.name+'</td>'
                 new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname" value="'+item.enc+'"></td>'
@@ -1736,14 +1759,12 @@ class CharacterParameters {
         this.#skills = {};
     }
     appendTrappings(trapping) {
-        console.log("appendTrappings:"+ trapping['id']+"; "+trapping['name']+"; "+trapping['description']+"; "+trapping['enc']);
+        // console.log("appendTrappings:"+ trapping['id']+"; "+trapping['name']+"; "+trapping['description']+"; "+trapping['enc']);
         // id, name, enc, description, is_in_inventory
-        this.#trappings[trapping['id']] = new Trapping(trapping['id'],
-                                                    trapping['name'],
-                                                    trapping['enc'],
-                                                    trapping['description'],
-                                                    true);
+        let traping = new Trapping(trapping['id'], trapping['name'],trapping['enc'],trapping['description'],trapping['is_in_inventory']);
+        this.#trappings[trapping['id']] = traping
         this.trappingsNeedUpdate = true;
+        $("select#add_trappings").append($('<option>', {value: traping.id, text: traping.name}));
     }
     deleteTrappings() {
         console.log("deleteTrappings");
@@ -1766,6 +1787,17 @@ class CharacterParameters {
             if(item.id == talent_to_add) {
                 console.log("characeter add_talent: "+ talent_to_add);
                 item.taken++;
+                item.save_to_character();
+            }
+        });
+    }
+    add_trappings(trappings_to_add) {
+        $.each(this.#trappings, function(i, item) {
+            if(item.id == trappings_to_add) {
+                console.log("characeter add_trappings: "+ trappings_to_add);
+                item.is_in_inventory = true;
+                characterParameters.trappingsNeedUpdate = true;
+                characterParameters.updateTrappingsTable();
                 item.save_to_character();
             }
         });
@@ -2661,6 +2693,11 @@ function talent_add() {
     characterParameters.add_talent(talent_to_add);
     characterParameters.updateTalentsTable();
 }
+function trappings_add() {
+    var trappings_to_add = $("select#add_trappings").val()
+    console.log("trappings_add: "+ trappings_to_add);
+    characterParameters.add_trappings(trappings_to_add);
+}
 function put_on_armour() {
     console.log("put_on_armour: id:"+$(this).attr('armour_id') + " checked="+$(this).prop('checked'))
     characterParameters.put_on_armour($(this).attr('armour_id'), $(this).prop('checked'));
@@ -2736,6 +2773,7 @@ function main() {
     $("button#weapon_add_button").click(weapon_add);
     $("button#spells_add_button").click(spell_add);
     $("button#talents_add_button").click(talent_add);
+    $("button#trappings_add_button").click(trappings_add);
     $("button#player_notes_add_button").click(note_add);
     $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
