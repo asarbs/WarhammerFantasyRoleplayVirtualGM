@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% load render_table from django_tables2 %}
+
+{% load player %}
+{% load static %}
+
+{% block main %}
+
+<h1>Talent List</h1>
+
+<a href="{% url 'TalentsCreateFormView' %}">Add</a>
+
+{% render_table table %}
+
+
+{% endblock %}

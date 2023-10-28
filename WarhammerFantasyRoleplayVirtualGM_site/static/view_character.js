@@ -1678,7 +1678,7 @@ class CharacterParameters {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
                 new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" talent_id="'+item.id+'" min="0" max="100" step="1" name="fname" talent_id="'+item.id+'"></td>'
-                new_row += '<td class="description">'+item.description+'</td>'
+                new_row += '<td class="description">'+item.description+'</br><b>Max:'+item.max+'</b></td>'
                 new_row += '</tr>'
                 $("#talents_table").append(new_row)
                 $('#talents_adv__'+item.id).val(item.taken)
@@ -1754,7 +1754,7 @@ class CharacterParameters {
         talent_params['name'],
         talent_params['max'],
         talent_params['test'],
-        talent_params['characteristics'],
+        talent_params['description'],
         talent_params['taken']);
 
         this.#talents[talent_params['id']] = talent;

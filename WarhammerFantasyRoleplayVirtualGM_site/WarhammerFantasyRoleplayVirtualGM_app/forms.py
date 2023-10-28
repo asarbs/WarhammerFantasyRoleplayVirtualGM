@@ -204,3 +204,14 @@ class TrappingForm(ModelForm):
     class Meta:
         model = models.Trapping
         fields = ['name',  'description', 'encumbrance']
+
+class TalentForm(ModelForm):
+    class Meta:
+        model = models.Talent
+        fields = ['name',  'description', "max", 'ref']
+
+    def __init__(self, *args, **kwargs):
+        super(TalentForm, self).__init__(*args, **kwargs)
+        self.fields['ref'].widget = (
+            RelatedFieldWidgetWrapper(self.fields['ref'].widget, self.instance._meta.get_field('ref').remote_field, admin_site)
+        )

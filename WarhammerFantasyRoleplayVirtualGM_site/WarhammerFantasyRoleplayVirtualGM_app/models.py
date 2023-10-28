@@ -116,6 +116,9 @@ class Talent(models.Model):
             data[f.name] = f.value_from_object(self)
         return data
 
+    def get_absolute_url(self):
+        return reverse("TalentsListView")
+
 class Trapping(models.Model):
     name = models.CharField(max_length= 50, unique=True)
     description = models.TextField(verbose_name="Description", default="")

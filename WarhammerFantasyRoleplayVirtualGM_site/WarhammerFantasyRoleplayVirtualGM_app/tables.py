@@ -4,6 +4,7 @@ from django_tables2.utils import A
 from WarhammerFantasyRoleplayVirtualGM_app.models import MeleeWeapons
 from WarhammerFantasyRoleplayVirtualGM_app.models import Spells
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
+from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 
 from .character_creations_helpers import format_currencu
 
@@ -65,13 +66,11 @@ class SpellsTable(tables.Table):
     def render_price(self, value):
         return f"{format_currencu(value)}"
 
-
 class TrappingTable(tables.Table):
     id = tables.Column(visible=False)
     name = tables.LinkColumn("TrappingssEditView", args=[A('pk')])
     description = tables.Column()
     encumbrance = tables.Column()
-
 
     class Meta:
         model = Trapping
@@ -83,3 +82,21 @@ class TrappingTable(tables.Table):
 
     def render_price(self, value):
         return f"{format_currencu(value)}"
+
+
+class TalentTable(tables.Table):
+    id = tables.Column(visible=False)
+    name = tables.LinkColumn("TalentsEditView", args=[A('pk')])
+    description = tables.Column()
+    ref = tables.Column()
+    max = tables.Column()
+    tests = tables.Column(visible=False)
+    talent_parent = tables.Column(visible=False)
+
+    class Meta:
+        model = Talent
+        attrs = {"class": "paleblue"}
+        sequence = ('name',  'description','max', 'ref')
+        order_by = ('name')
+        data = Talent.objects.all()
+        per_page = 500

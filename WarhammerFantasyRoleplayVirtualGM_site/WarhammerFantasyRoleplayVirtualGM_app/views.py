@@ -30,14 +30,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+from WarhammerFantasyRoleplayVirtualGM_app.forms import Campaign2PlayerForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import MeleWeaponForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import RangedWeaponForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import SpellsForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import TalentForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import TrappingForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import Campaign2PlayerForm
 from WarhammerFantasyRoleplayVirtualGM_app.models import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
@@ -59,6 +60,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 from WarhammerFantasyRoleplayVirtualGM_app.tables import MeleeWeaponsTable
 from WarhammerFantasyRoleplayVirtualGM_app.tables import RangedWeaponsTable
 from WarhammerFantasyRoleplayVirtualGM_app.tables import SpellsTable
+from WarhammerFantasyRoleplayVirtualGM_app.tables import TalentTable
 from WarhammerFantasyRoleplayVirtualGM_app.tables import TrappingTable
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
@@ -1044,6 +1046,21 @@ class TrappingssEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_Trapping.html"
     form_class = TrappingForm
     model = Trapping
+
+class TalentsListView(SingleTableView):
+    model = Talent
+    table_class = TalentTable
+    template_name = 'list_Talent.html'
+    paginator_class = LazyPaginator
+
+class TalentsCreateFormView(LoginRequiredMixin, CreateView):
+    template_name = "create_Talent.html"
+    form_class = TalentForm
+
+class TalentsEditView(LoginRequiredMixin, UpdateView):
+    template_name = "update_Talent.html"
+    form_class = TalentForm
+    model = Talent
 
 @login_required
 def viewCharacter(request, pk):
