@@ -335,6 +335,7 @@ class Availability(models.TextChoices):
     COMMON = "Common", _('Common')
     SCARCE = "Scarce", _('Scarce')
     RARE = "Rare", _('Rare')
+    EXOTIC = "Exotic", _('Exotic')
 
 class ArmourLocations(models.Model):
     name = models.CharField(max_length= 50, verbose_name="Name")
