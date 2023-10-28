@@ -2573,7 +2573,6 @@ function updateResilience_motivation () {
         }
     });
 }
-
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -2603,6 +2602,7 @@ function turon_on_edit() {
     $("select#add_weapon").addClass( "editable", 1000);
     $("select#add_spell").addClass( "editable", 1000);
     $("select#add_talents").addClass( "editable", 1000);
+    $("select#add_trappings").addClass( "editable", 1000);
     $("input#fate_fate").addClass( "editable", 1000);
     $("input#fate_fortune").addClass( "editable", 1000);
     $("input#resilience_resilience").addClass( "editable", 1000);
