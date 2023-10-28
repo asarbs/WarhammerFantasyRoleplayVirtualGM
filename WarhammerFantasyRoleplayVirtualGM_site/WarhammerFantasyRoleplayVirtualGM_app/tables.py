@@ -2,6 +2,7 @@ import django_tables2 as tables
 from django_tables2.utils import A
 
 from WarhammerFantasyRoleplayVirtualGM_app.models import MeleeWeapons
+from WarhammerFantasyRoleplayVirtualGM_app.models import RangedWeapon
 from WarhammerFantasyRoleplayVirtualGM_app.models import Spells
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
@@ -11,12 +12,6 @@ from .character_creations_helpers import format_currencu
 class MeleeWeaponsTable(tables.Table):
     id = tables.Column(visible=False)
     name = tables.LinkColumn("EditMeleWeapon", args=[A('pk')])
-    weapon_group = tables.Column()
-    price = tables.Column()
-    encumbrance = tables.Column()
-    availability = tables.Column()
-    damage = tables.Column()
-    qualities_and_flaws = tables.Column()
     reference = tables.Column(visible=False)
     weapon_ptr = tables.Column(visible=False)
 
@@ -32,19 +27,13 @@ class MeleeWeaponsTable(tables.Table):
 class RangedWeaponsTable(tables.Table):
     id = tables.Column(visible=False)
     name = tables.LinkColumn("EditRangedWeapon", args=[A('pk')])
-    weapon_group = tables.Column()
-    price = tables.Column()
-    encumbrance = tables.Column()
-    availability = tables.Column()
-    damage = tables.Column()
-    qualities_and_flaws = tables.Column()
     reference = tables.Column(visible=False)
     weapon_ptr = tables.Column(visible=False)
 
     class Meta:
-        model = MeleeWeapons
+        model = RangedWeapon
         attrs = {"class": "paleblue"}
-        sequence = ('weapon_group', 'name',  'price', 'encumbrance', 'availability', 'damage', 'qualities_and_flaws', 'reach', 'reference')
+        sequence = ('weapon_group', 'name',  'price', 'encumbrance', 'availability', 'damage', 'qualities_and_flaws', 'range', 'reference')
         order_by = ('weapon_group', 'name')
 
     def render_price(self, value):

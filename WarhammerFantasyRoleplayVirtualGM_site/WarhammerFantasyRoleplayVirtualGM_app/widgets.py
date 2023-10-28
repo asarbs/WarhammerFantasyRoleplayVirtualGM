@@ -19,4 +19,4 @@ class PriceCharFiled(CharField):
         SC = math.floor(GC_left / 12)
         SC_left = GC_left % 12
         BC = SC_left
-        return "{} GC {}/{}".format(GC, SC, BC)
+        return "{}GC {}/{}".format(GC, SC, BC)
