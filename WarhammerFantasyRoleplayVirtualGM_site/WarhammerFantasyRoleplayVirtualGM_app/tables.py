@@ -21,12 +21,10 @@ class MeleeWeaponsTable(tables.Table):
     weapon_ptr = tables.Column(visible=False)
 
     class Meta:
-        order_by = ('weapon_group', 'name')
-
-    class Meta:
         model = MeleeWeapons
         attrs = {"class": "paleblue"}
         sequence = ('weapon_group', 'name',  'price', 'encumbrance', 'availability', 'damage', 'qualities_and_flaws', 'reach', 'reference')
+        order_by = ('weapon_group', 'name')
 
     def render_price(self, value):
         return f"{format_currencu(value)}"
@@ -44,12 +42,10 @@ class RangedWeaponsTable(tables.Table):
     weapon_ptr = tables.Column(visible=False)
 
     class Meta:
-        order_by = ('weapon_group', 'name')
-
-    class Meta:
         model = MeleeWeapons
         attrs = {"class": "paleblue"}
         sequence = ('weapon_group', 'name',  'price', 'encumbrance', 'availability', 'damage', 'qualities_and_flaws', 'reach', 'reference')
+        order_by = ('weapon_group', 'name')
 
     def render_price(self, value):
         return f"{format_currencu(value)}"
