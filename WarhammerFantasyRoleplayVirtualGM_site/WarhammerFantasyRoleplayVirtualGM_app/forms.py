@@ -1,3 +1,5 @@
+import re
+
 from ajax_select import register, LookupChannel
 from ajax_select.fields import AutoCompleteSelectField
 from django.contrib.admin import site as admin_site
@@ -14,8 +16,9 @@ from django.forms import inlineformset_factory
 from django.forms import ModelForm
 from django.forms import PasswordInput
 from django.forms.utils import ErrorList
+from django.forms.widgets import Widget
 
-
+from WarhammerFantasyRoleplayVirtualGM_app.widgets import PriceCharFiled
 
 from dal import autocomplete
 
@@ -94,20 +97,11 @@ class Campaign2PlayerForm(ModelForm):
     campaign_2_player_lookup_channel = AutoCompleteSelectField('campaign_2_player_lookup_channel', label="Add Player to Campain")
 
 
-def validator_price(price):
-    if price.endswith("GC"):
-        return
-    elif price.endswith("/-"):
-        return
-    elif  price.endswith("d"):
-        return
-    elif price.isdigit():
-        return
-    else:
-        raise ValidationError("Price should ends with GC, /-, d");
+
+
 
 class MeleWeaponForm(ModelForm):
-    price = CharField(validators=[validator_price], help_text="Price should ends with GC, /-, d")
+    price = PriceCharFiled( help_text="Price should ends with GC or */*")
 
     def __init__(self, *args, **kwargs):
         super(MeleWeaponForm, self).__init__(*args, **kwargs)
@@ -127,13 +121,12 @@ class MeleWeaponForm(ModelForm):
             price_int = int(price[0:-2])
             self.data['price'] = price_int * 240
             return True
-        elif price.endswith("/-"):
-            price_int = int(price[0:-2])
-            self.data['price'] = price_int * 12
-            return True
-        elif  price.endswith("d"):
-            price_int = int(price[0:-1])
-            self.data['price'] = price_int
+        elif re.fullmatch("\d+/\d+", price) != None:
+            price_split = price.split("/")
+            price_s = int(price_split[0])
+            price_b = int(price_split[1])
+            logger.debug("price_s={}; price_b={}".format(price_s, price_b))
+            self.data['price'] = price_s * 12 + price_b
             return True
         logger.error("price: {} [type:{}] is invalid for conversion".format(price, type(price)))
         return False
@@ -152,7 +145,7 @@ class MeleWeaponForm(ModelForm):
         return mwf
 
 class RangedWeaponForm(ModelForm):
-    price = CharField(validators=[validator_price], help_text="Price should ends with GC, /-, d")
+    price = PriceCharFiled(help_text="Price should ends with GC, /-, d")
 
     def __init__(self, *args, **kwargs):
         super(RangedWeaponForm, self).__init__(*args, **kwargs)
@@ -171,13 +164,11 @@ class RangedWeaponForm(ModelForm):
             price_int = int(price[0:-2])
             self.data['price'] = price_int * 240
             return True
-        elif price.endswith("/-"):
-            price_int = int(price[0:-2])
-            self.data['price'] = price_int * 12
-            return True
-        elif  price.endswith("d"):
-            price_int = int(price[0:-1])
-            self.data['price'] = price_int
+        elif re.fullmatch("\d+/\d+", price) != None:
+            price_split = price.split("/")
+            price_s = int(price_split[0])
+            price_b = int(price_split[1])
+            self.data['price'] = price_s * 12 + price_b
             return True
         logger.error("price: {} [type:{}] is invalid for conversion".format(price, type(price)))
         return False
