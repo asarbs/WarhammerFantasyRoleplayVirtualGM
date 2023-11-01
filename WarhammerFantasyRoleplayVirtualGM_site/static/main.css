@@ -196,8 +196,8 @@ div#main_top_bar div.user {
 div#main {
     padding: 0 0 0 0;
     width: auto;
-    overflow: hidden;
     position: relative;
+    margin-left: 230px;
 }
 
 div#main h3.main {
@@ -1101,8 +1101,4 @@ div#menu_button {
      text-decoration : none;
      white-space : nowrap;
  }
- div#main {
-     padding : 0 0 0 0;
-     width: auto;
-     overflow : hidden;
- }
+
