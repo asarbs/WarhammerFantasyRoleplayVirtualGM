@@ -460,8 +460,8 @@ div#main div.character_sheet div.characteristics table tr td.head {
     text-align: center;
 }
 div#main div.character_sheet div.characteristics input {
-    height: 52px;
-    width: 53px;
+    height: 32px;
+    width: 32px;
     position: relative;
     text-align: center;
 }

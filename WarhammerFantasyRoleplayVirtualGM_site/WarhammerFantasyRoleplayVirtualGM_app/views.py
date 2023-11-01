@@ -1100,6 +1100,7 @@ def ajax_view_getCharacterData(request):
                 }
             },
             'talents_all': [],
+            'careers_advance_scheme': {},
         }
 
     character_id = request.POST['character_id']
@@ -1151,6 +1152,8 @@ def ajax_view_getCharacterData(request):
             "wealth"                       : character.wealth
         }
 
+    cas = CareersAdvanceScheme.objects.get(career = character.career)
+    ret['careers_advance_scheme'] = cas.serialize()
     ret['character']["ambitions_shortterm"] = []
     for ambitions_shortterm in character.ambitions_shortterm.all():
         ret['character']["ambitions_shortterm"].append(ambitions_shortterm.to_dict())

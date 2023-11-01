@@ -940,6 +940,16 @@ class CharacterParameters {
     #characteristics_ws_advances        = 0;
     #characteristics_ws_initial         = 0;
     #class_selection_random             = 0;
+    #careers_advance_scheme_ws_initial  =  "";
+    #careers_advance_scheme_bs_initial  =  "";
+    #careers_advance_scheme_s_initial   =  "";
+    #careers_advance_scheme_t_initial   =  "";
+    #careers_advance_scheme_i_initial   =  "";
+    #careers_advance_scheme_ag_initial  =  "";
+    #careers_advance_scheme_dex_initial =  "";
+    #careers_advance_scheme_int_initial =  "";
+    #careers_advance_scheme_wp_initial  =  "";
+    #careers_advance_scheme_fel_initial =  "";
     #extra_points                       = 0;
     #eyes                               = ""
     #fate_fate                          = 0;
@@ -1333,6 +1343,120 @@ class CharacterParameters {
         else
             throw "characteristics_fel_advances[" + characteristics_fel_advances + "] is not a string";
     }
+
+    set careers_advance_scheme_ws_initial (x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_ws_initial = x;
+            $("td#careers_advance_scheme_ws_initial").html('<img src="/static/' + this.#careers_advance_scheme_ws_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_ws_initial["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_bs_initial (x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_bs_initial = x;
+            $("td#careers_advance_scheme_bs_initial").html('<img src="/static/' + this.#careers_advance_scheme_bs_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_bs_initial["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_s_initial  (x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_s_initial  = x;
+            $("td#careers_advance_scheme_s_initial").html('<img src="/static/' + this.#careers_advance_scheme_s_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_s_initial ["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_t_initial  (x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_t_initial  = x;
+            $("td#careers_advance_scheme_t_initial").html('<img src="/static/' + this.#careers_advance_scheme_t_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_t_initial ["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_i_initial  (x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_i_initial  = x;
+            $("td#careers_advance_scheme_i_initial").html('<img src="/static/' + this.#careers_advance_scheme_i_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_i_initial ["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_ag_initial (x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_ag_initial = x;
+            $("td#careers_advance_scheme_ag_initial").html('<img src="/static/' + this.#careers_advance_scheme_ag_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_ag_initial["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_dex_initial(x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_dex_initial= x;
+            $("td#careers_advance_scheme_dex_initial").html('<img src="/static/' + this.#careers_advance_scheme_dex_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_dex_initia["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_int_initial(x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_int_initial = x;
+            $("td#careers_advance_scheme_int_initial").html('<img src="/static/' + this.#careers_advance_scheme_int_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_int_initia["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_wp_initial (x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_wp_initial = x;
+            $("td#careers_advance_scheme_wp_initial").html('<img src="/static/' + this.#careers_advance_scheme_wp_initial + '.png">')
+        } else {
+            throw "careers_advance_scheme_wp_initial["+ x +"] is not a string";
+        }
+    }
+    set careers_advance_scheme_fel_initial(x) {
+        if(typeof x === "string") {
+            this.#careers_advance_scheme_fel_initial= x;
+            $("td#careers_advance_scheme_fel_initial").html('<img src="/static/' + this.#careers_advance_scheme_fel_initial + '.png">')
+            
+        } else {
+            throw "careers_advance_scheme_fel_initia["+ x +"] is not a string";
+        }
+    }
+
+    get careers_advance_scheme_ws_initial () {
+        return this.#careers_advance_scheme_ws_initial ;
+    }
+    get careers_advance_scheme_bs_initial () {
+        return this.#careers_advance_scheme_bs_initial ;
+    }
+    get careers_advance_scheme_s_initial  () {
+        return this.#careers_advance_scheme_s_initial  ;
+    }
+    get careers_advance_scheme_t_initial  () {
+        return this.#careers_advance_scheme_t_initial  ;
+    }
+    get careers_advance_scheme_i_initial  () {
+        return this.#careers_advance_scheme_i_initial  ;
+    }
+    get careers_advance_scheme_ag_initial () {
+        return this.#careers_advance_scheme_ag_initial ;
+    }
+    get careers_advance_scheme_dex_initial() {
+        return this.#careers_advance_scheme_dex_initial;
+    }
+    get careers_advance_scheme_int_initial() {
+        return this.#careers_advance_scheme_int_initial;
+    }
+    get careers_advance_scheme_wp_initial () {
+        return this.#careers_advance_scheme_wp_initial ;
+    }
+    get careers_advance_scheme_fel_initial() {
+        return this.#careers_advance_scheme_fel_initial;
+    }
+
     get characteristics_fel_advances() {
         return this.#characteristics_fel_advances;
     }
@@ -2360,6 +2484,16 @@ function get_characterData(){
             characterParameters.characteristics_int_initial  = data['character']["characteristics_int_initial"  ]
             characterParameters.characteristics_wp_initial   = data['character']["characteristics_wp_initial"   ]
             characterParameters.characteristics_fel_initial  = data['character']["characteristics_fel_initial"  ]
+            characterParameters.careers_advance_scheme_ws_initial   = data['careers_advance_scheme']["characteristics_ws_initial"   ]
+            characterParameters.careers_advance_scheme_bs_initial   = data['careers_advance_scheme']["characteristics_bs_initial"   ]
+            characterParameters.careers_advance_scheme_s_initial    = data['careers_advance_scheme']["characteristics_s_initial"    ]
+            characterParameters.careers_advance_scheme_t_initial    = data['careers_advance_scheme']["characteristics_t_initial"    ]
+            characterParameters.careers_advance_scheme_i_initial    = data['careers_advance_scheme']["characteristics_i_initial"    ]
+            characterParameters.careers_advance_scheme_ag_initial   = data['careers_advance_scheme']["characteristics_ag_initial"   ]
+            characterParameters.careers_advance_scheme_dex_initial  = data['careers_advance_scheme']["characteristics_dex_initial"  ]
+            characterParameters.careers_advance_scheme_int_initial  = data['careers_advance_scheme']["characteristics_int_initial"  ]
+            characterParameters.careers_advance_scheme_wp_initial   = data['careers_advance_scheme']["characteristics_wp_initial"   ]
+            characterParameters.careers_advance_scheme_fel_initial  = data['careers_advance_scheme']["characteristics_fel_initial"  ]
             characterParameters.characteristics_ws_advances  = data['character']["characteristics_ws_advances"  ]
             characterParameters.characteristics_bs_advances  = data['character']["characteristics_bs_advances"  ]
             characterParameters.characteristics_s_advances   = data['character']["characteristics_s_advances"   ]

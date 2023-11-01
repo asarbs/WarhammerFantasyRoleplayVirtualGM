@@ -244,8 +244,8 @@ class CareerPath(models.Model):
             'talents': [],
             'trappings': [],
             'status': {
-                'tier': self.status.tier,
-                'level': self.status.level,
+                'tier': self.status.tier if self.status is not None else "-",
+                'level': self.status.level if self.status is not None else "-",
             }
         }
         for s in self.skills.all():
