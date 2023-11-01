@@ -1545,7 +1545,7 @@ class CharacterParameters {
             $("input#wealth"                      ).val(characterParameters.wealth)
         }
         else
-            throw "wealth[" + wealth + "] is not a string";
+            throw "wealth[" + wealth + "] is not a number";
     }
     get wealth() {
         var GC = Math.floor(this.#wealth / 240)
@@ -2345,7 +2345,20 @@ class CharacterParameters {
             }
         });
     }
-
+    save_wealth(wealth) {
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_saveWealth",
+            data: {
+                character_id: character_id,
+                wealth : wealth,
+            },
+            success: function(data) {
+                console.log(data)
+                characterParameters.wealth = data['wealth']
+            }
+        });
+    }
     put_on_armour(armour_id, checked) {
         var a
         $.each(this.#armour, function(i, item) {
@@ -2750,6 +2763,7 @@ function turon_on_edit() {
     $("input#resilience_resilience").addClass( "editable", 1000);
     $("input#resilience_resolve").addClass( "editable", 1000);
     $("input#resilience_motivation").addClass( "editable", 1000);
+    $("input#wealth").addClass( "editable", 1000);
 
 
 
@@ -2781,6 +2795,7 @@ function turon_on_edit() {
     $("input#resilience_resilience").prop("readonly", false);
     $("input#resilience_resolve").prop("readonly", false);
     $("input#resilience_motivation").prop("readonly", false);
+    $("input#wealth").prop("readonly", false);
 
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristicsAdv);
@@ -2810,6 +2825,7 @@ function turon_on_edit() {
     $("input#resilience_resilience").change(updateResilience_resilience)
     $("input#resilience_resolve").change(updateResilience_resolve)
     $("input#resilience_motivation").change(updateResilience_motivation)
+    $("input#wealth").on("change", change_wealth);
 }
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()
@@ -2896,6 +2912,11 @@ function note_add() {
     }
     new_note = characterParameters.saveNote(note);
 }
+function change_wealth() {
+    var wealth = $("input#wealth").val()
+    characterParameters.save_wealth(wealth)
+}
+
 function main() {
 
     $.ajaxSetup({

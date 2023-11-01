@@ -1167,7 +1167,7 @@ def ajax_view_getCharacterData(request):
         ret['skills'][ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
 
     ch2STrappingl = list(Character2Trappingl.objects.filter(characters=character).values_list("trapping", flat=-True))
-    logger.debug(ch2STrappingl)
+
     for trapping in Trapping.objects.all():
         # logger.debug("'id': {}, 'name': {}, 'description': {}, 'enc': {}".format(trapping.id, trapping.name, trapping.description, trapping.encumbrance))
         ret['trappings'][trapping.id] = {
@@ -1305,4 +1305,18 @@ def ajax_saveResilience(request):
     character.resilience_resilience = request.POST['resilience_resilience']
     character.save()
     ret = {'status': 'ok'}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveWealth(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    character_id = request.POST['character_id']
+    character = Character.objects.get(id = character_id)
+
+    character.wealth = calc_price_to_brass(request.POST['wealth'])
+    character.save()
+    ret = {'status': 'ok', 'wealth': character.wealth}
+    logger.debug(ret)
     return JsonResponse(ret)
