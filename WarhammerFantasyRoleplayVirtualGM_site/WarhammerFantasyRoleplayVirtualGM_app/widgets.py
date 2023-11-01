@@ -5,6 +5,9 @@ from django.forms.widgets import Widget
 
 import math
 
+from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import format_currency
+from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import calc_price_to_brass
+
 
 
 class PriceCharFiled(CharField):
@@ -13,10 +16,9 @@ class PriceCharFiled(CharField):
 
     def prepare_value(self, wealth):
         if wealth is None:
-            return "{} GC {}/{}".format(0, 0, 0)
-        GC = math.floor(wealth / 240)
-        GC_left = wealth % 240
-        SC = math.floor(GC_left / 12)
-        SC_left = GC_left % 12
-        BC = SC_left
-        return "{}GC {}/{}".format(GC, SC, BC)
+            return "{} GC{}/{}".format(0, 0, 0)
+        if isinstance(wealth, str):
+            return calc_price_to_brass(wealth)
+        elif isinstance(wealth, int):
+            return format_currency(wealth)
+        raise ValueError("wealth: \"{}\" is type {} expected int or str".format(wealth, type(wealth)))

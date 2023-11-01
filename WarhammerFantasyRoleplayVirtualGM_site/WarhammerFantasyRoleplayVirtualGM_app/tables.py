@@ -7,7 +7,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Spells
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 
-from .character_creations_helpers import format_currencu
+from .character_creations_helpers import format_currency
 
 class MeleeWeaponsTable(tables.Table):
     id = tables.Column(visible=False)
@@ -22,7 +22,7 @@ class MeleeWeaponsTable(tables.Table):
         order_by = ('weapon_group', 'name')
 
     def render_price(self, value):
-        return f"{format_currencu(value)}"
+        return f"{format_currency(value)}"
 
 class RangedWeaponsTable(tables.Table):
     id = tables.Column(visible=False)
@@ -37,7 +37,7 @@ class RangedWeaponsTable(tables.Table):
         order_by = ('weapon_group', 'name')
 
     def render_price(self, value):
-        return f"{format_currencu(value)}"
+        return f"{format_currency(value)}"
 
 class SpellsTable(tables.Table):
     id = tables.Column(visible=False)
@@ -55,7 +55,7 @@ class SpellsTable(tables.Table):
         sequence = ('spellLists', 'name',  'cn', 'range', 'target', 'duration', 'effect')
 
     def render_price(self, value):
-        return f"{format_currencu(value)}"
+        return f"{format_currency(value)}"
 
 class TrappingTable(tables.Table):
     id = tables.Column(visible=False)
@@ -72,7 +72,7 @@ class TrappingTable(tables.Table):
         per_page = 50
 
     def render_price(self, value):
-        return f"{format_currencu(value)}"
+        return f"{format_currency(value)}"
 
 
 class TalentTable(tables.Table):

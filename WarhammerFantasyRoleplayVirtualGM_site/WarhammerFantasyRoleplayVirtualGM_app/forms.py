@@ -19,6 +19,7 @@ from django.forms.utils import ErrorList
 from django.forms.widgets import Widget
 
 from WarhammerFantasyRoleplayVirtualGM_app.widgets import PriceCharFiled
+from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import calc_price_to_brass
 
 from dal import autocomplete
 
@@ -116,22 +117,11 @@ class MeleWeaponForm(ModelForm):
 
     def calc_price_to_brass(self):
         logger.debug("price:{}".format(self.data['price']))
-        price = self.data['price']
-        if price.endswith("GC"):
-            price_int = int(price[0:-2])
-            self.data['price'] = price_int * 240
-            return True
-        elif re.fullmatch("\d+/\d+", price) != None:
-            price_split = price.split("/")
-            price_s = int(price_split[0])
-            price_b = int(price_split[1])
-            logger.debug("price_s={}; price_b={}".format(price_s, price_b))
-            self.data['price'] = price_s * 12 + price_b
-            return True
-        logger.error("price: {} [type:{}] is invalid for conversion".format(price, type(price)))
-        return False
+        self.data['price'] = calc_price_to_brass(self.data['price'])
+        return True
 
     def is_valid(self) -> bool:
+        logger
         self.data._mutable = True
         price_calc = self.calc_price_to_brass()
         self.data._mutable = False
@@ -159,19 +149,8 @@ class RangedWeaponForm(ModelForm):
 
     def calc_price_to_brass(self):
         logger.debug("price:{}".format(self.data['price']))
-        price = self.data['price']
-        if price.endswith("GC"):
-            price_int = int(price[0:-2])
-            self.data['price'] = price_int * 240
-            return True
-        elif re.fullmatch("\d+/\d+", price) != None:
-            price_split = price.split("/")
-            price_s = int(price_split[0])
-            price_b = int(price_split[1])
-            self.data['price'] = price_s * 12 + price_b
-            return True
-        logger.error("price: {} [type:{}] is invalid for conversion".format(price, type(price)))
-        return False
+        self.data['price'] = calc_price_to_brass(self.data['price'])
+        return True
 
     def is_valid(self) -> bool:
         self.data._mutable = True

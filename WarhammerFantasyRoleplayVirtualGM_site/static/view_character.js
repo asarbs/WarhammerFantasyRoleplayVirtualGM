@@ -1420,7 +1420,7 @@ class CharacterParameters {
         if(typeof x === "string") {
             this.#careers_advance_scheme_fel_initial= x;
             $("td#careers_advance_scheme_fel_initial").html('<img src="/static/' + this.#careers_advance_scheme_fel_initial + '.png">')
-            
+
         } else {
             throw "careers_advance_scheme_fel_initia["+ x +"] is not a string";
         }
@@ -1553,7 +1553,7 @@ class CharacterParameters {
         var SC = Math.floor(GC_left / 12)
         var SC_left = GC_left % 12
         var BC = SC_left
-        return GC+" GC " + SC + "/" + BC
+        return GC+"GC " + SC + "/" + BC
     }
     set character_creation_step(character_creation_step) {
         if(typeof character_creation_step === "number")

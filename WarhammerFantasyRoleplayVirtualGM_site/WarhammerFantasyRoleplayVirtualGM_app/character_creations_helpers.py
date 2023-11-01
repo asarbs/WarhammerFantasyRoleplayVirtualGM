@@ -5,26 +5,15 @@ import django
 from django.http import JsonResponse
 from django.db.models import Q
 
-from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
-from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
-from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
-from WarhammerFantasyRoleplayVirtualGM_app.models import Career
-from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Skill
 from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import ExampleName
 from WarhammerFantasyRoleplayVirtualGM_app.models import Eyes
 from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
-from WarhammerFantasyRoleplayVirtualGM_app.models import Player
-from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
 from WarhammerFantasyRoleplayVirtualGM_app.models import RandomTalentsTable
-from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
-from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 
 import logging
 logger = logging.getLogger(__name__)
@@ -146,7 +135,7 @@ def set_character_species(species: Species, character_id: int):
 
         return JsonResponse(res)
 
-def format_currencu(p: int):
+def format_currency(p: int):
     GC = math.floor(p / 240)
     GC_left = p % 240
     SC = math.floor(GC_left / 12)
@@ -159,9 +148,22 @@ def format_currencu(p: int):
     if SC > 0:
         out += "{}/".format(SC)
     if GC == 0 and SC > 0 and BC == 0:
-        out += "-"
+        out += "0"
     if BC > 0:
         out += "{} ".format(BC)
 
     logger.debug("{} -> {}".format(p, out))
     return out
+
+def calc_price_to_brass(price_str):
+    price_str = price_str.replace(' ', '')
+    if 'GC' not in price_str:
+        price_str = "0GC" + price_str
+    if "/" not in price_str:
+        price_str = price_str + "0/0"
+    split = [p.strip() for p in price_str.split("GC")]
+    split = [p.split("/") for p in split]
+    split = sum(split, [])
+    split = [ int(p) for p in split]
+    return split[0] * 240 + split[1] * 12 + split[2]
+
