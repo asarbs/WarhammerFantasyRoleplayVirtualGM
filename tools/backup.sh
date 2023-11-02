@@ -1,9 +1,9 @@
 #/bin/bash
 
+set -o xtrace
+
 PWD=/workspaces/WarhammerFantasyRoleplayVirtualGM/WarhammerFantasyRoleplayVirtualGM_site
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
-find  ${PWD}/backup -type f -mtime 7 | xargs rm -rf
-cp ${PWD}/db.sqlite3 ${PWD}/backup/${TIMESTAMP}_db.sqlite3
+find  ${PWD}/backup -type f -ctime +7 | xargs rm -rf
 /workspaces/WarhammerFantasyRoleplayVirtualGM/WarhammerFantasyRoleplayVirtualGM_site/manage.py dumpdata > ${PWD}/backup/${TIMESTAMP}_wfrpg.json
-sqlite3 ${PWD}/db.sqlite3 ".dump" > ${PWD}/backup/${TIMESTAMP}_wfrpg.sql
