@@ -1269,6 +1269,24 @@ def ajax_saveCampaignAmbitions(request):
     return JsonResponse(ret)
 
 @login_required
+def ajax_saveCampaignNotes(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug("camaing_id={}; note={};".format(request.POST['camaing_id'], request.POST['note_text']))
+
+    note = Note.objects.create(note_text=request.POST['note_text'])
+    note.save()
+
+    campaign = Campaign.objects.get(id=request.POST['camaing_id'])
+    campaign.notes.add(note)
+    campaign.save()
+
+    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp}
+    logger.debug(ret)
+    return JsonResponse(ret)
+
+@login_required
 def ajax_saveMotivation(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)

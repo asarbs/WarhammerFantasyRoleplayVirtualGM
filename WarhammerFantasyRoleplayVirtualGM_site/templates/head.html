@@ -29,15 +29,6 @@
         main();
     });
 </script>
-{% endif %}
-{% if "detailsCampaign" in  request.path %}
-<script src="{% static "details_campaign.js" %}"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        main();
-    });
-</script>
-{% endif %}
 <script type="text/javascript">
     tinyMCE.init({
         selector: 'textarea#player_notes_textarea',
@@ -48,6 +39,26 @@
         statusbar: false,
     });
 </script>
+{% endif %}
+{% if "detailsCampaign" in  request.path %}
+    <script src="{% static "details_campaign.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            main();
+        });
+    </script>
+
+    <script type="text/javascript">
+        tinyMCE.init({
+            selector: 'textarea#campaign_notes_textarea',
+            mode: "textareas",
+            theme: "silver",
+            toolbar: 'bold italic underline | h1 h2 h3 h4 h5 h6 | alignleft aligncenter alignright alignjustify | outdent indent | forecolor backcolor | removeformat',
+            menubar:false,
+            statusbar: false,
+        });
+    </script>
+{% endif %}
 
 <script src="/admin/jsi18n/"></script>
 <script src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>

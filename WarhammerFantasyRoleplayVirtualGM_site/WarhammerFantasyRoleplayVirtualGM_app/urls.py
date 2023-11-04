@@ -72,6 +72,7 @@ urlpatterns = [
     path("ajax_saveWealth", views.ajax_saveWealth, name="ajax_saveWealth"),
 
     path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
+    path('ajax_saveCampaignNotes', views.ajax_saveCampaignNotes, name="ajax_saveCampaignNotes"),
 
     path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),
     path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData"),

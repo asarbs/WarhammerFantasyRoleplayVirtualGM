@@ -290,6 +290,34 @@ div#main div#campaign div.row div.column ol li img {
     width: 15px;
 }
 
+div#main div#campaign div.row table.campaign_notes {
+    width: 1420px;
+    margin-left: 135px;
+    padding-top: 20px;
+    border-collapse: collapse;
+}
+div#main div#campaign div.row table.campaign_notes tr.block_name {
+    font-size: 36px;
+    text-align: center;
+}
+div#main div#campaign div.row table.campaign_notes tr.block_header {
+    font-size: 20px;
+    text-align: center;
+}
+div#main div#campaign div.row table.campaign_notes tr.block_editor button#campaign_notes_add_button {
+    width: 100%;
+}
+div#main div#campaign div.row table.campaign_notes tr.note_line {
+    border-bottom: 1px solid #000000;
+}
+div#main div#campaign div.row table.campaign_notes tr td {
+    padding: 10px;
+}
+div#main div#campaign div.row table.campaign_notes tr td.date {
+    width: 150px;
+}
+
+
 div#main div.create_character img.img_random {
     /* background-color: #c4a314; */
     height: 15px;

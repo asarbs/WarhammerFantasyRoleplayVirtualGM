@@ -87,5 +87,36 @@
         </ol>
 
     </div>
+
+    <div class="row">
+        <table class="campaign_notes" id="campaign_notes" border='0'>
+            <tr class="block_name">
+                <th colspan="2">
+                    Campaign Notes
+                </th>
+            </tr>
+            <tr class="block_editor">
+                <td colspan="2">
+                    <textarea id="campaign_notes_textarea">
+                    </textarea>
+                    <button type="button" id="campaign_notes_add_button" >Save</button>
+                </td>
+            </tr>
+            <tr class="block_header">
+                <th>
+                    Date
+                </th>
+                <th>
+                    Note
+                </th>
+            </tr>
+            {% for n in camaing.notes.all %}
+                <tr class="note_line">
+                    <td id="camaing_notes_timestamp__{{ n.timestamp }}" class="date">{{ n.formated_datatime }}</td>
+                    <td>{{ n.note_text|safe }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 {% endblock %}

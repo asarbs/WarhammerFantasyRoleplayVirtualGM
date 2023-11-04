@@ -78,6 +78,30 @@ function update_ambitions_longterm() {
     });
 }
 
+function note_add() {
+    let n = tinyMCE.get('campaign_notes_textarea').getContent();
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveCampaignNotes",
+        data: {
+            camaing_id : camaing_id,
+            note_text : n,
+        },
+        success: function(data) {
+            console.log("note_add data="+data)
+            if(!$('td#camaing_notes_timestamp__'+data['timestamp']).length) {
+                var new_row = '<tr class="note_line">'
+                new_row += '<td id="camaing_notes_timestamp__'+data['timestamp']+'" class="date">'+data['datetime_create']+'</td>'
+                new_row += '<td>'+n+'</td>'
+                new_row += '</tr>'
+                $("table#campaign_notes tr.block_header").after(new_row)
+            } else {
+                console.log("NOT Note.updateUI: "+ this.datetime_create);
+            }
+        }
+    });
+}
+
 var camaing_id = 0
 
 function main() {
@@ -89,4 +113,5 @@ function main() {
     $("input#submit_ambitions_longterm").click(submit_ambitions_longterm);
     $("ol#list_ambitions_shortterm li img").click(update_ambitions_shortterm);
     $("ol#list_ambitions_longterm li img").click(update_ambitions_longterm);
+    $("button#campaign_notes_add_button").click(note_add);
 }
