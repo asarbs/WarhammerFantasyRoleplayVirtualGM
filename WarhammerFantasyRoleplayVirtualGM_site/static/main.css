@@ -265,12 +265,8 @@ div#main div#campaign {
 
 }
 div#main div#campaign div.row {
-    min-height: 200px; /* Should be removed. Only for demonstration */
-}
-div#main div#campaign div.row:after {
-    content: "";
-    display: table;
-    clear: both;
+    min-height: 100px; /* Should be removed. Only for demonstration */
+    display: flex;
 }
 div#main div#campaign div.row div.column {
     float: left;
