@@ -1830,7 +1830,7 @@ class CharacterParameters {
             var new_row = ""
             if(!$('#talents_adv__'+item.id).length && item.taken > 0) {
                 new_row = '<tr class="block_body">'
-                new_row += '<td id="talents_name__'+item.id+'" class="left">'+item.name+'</td>'
+                new_row += '<td id="talents_name__'+item.id+'" class="left"><a href="/wfrpg_gm/TalentsEditView/'+item.id+'">'+item.name+'</a></td>'
                 new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" talent_id="'+item.id+'" min="0" max="100" step="1" name="fname" talent_id="'+item.id+'"></td>'
                 new_row += '<td class="description">'+item.description+'</br><b>Max:'+item.max+'</b></td>'
                 new_row += '</tr>'
