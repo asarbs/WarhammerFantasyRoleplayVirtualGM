@@ -176,7 +176,7 @@ div#main_top_bar {
     margin-bottom: 15px;
     padding-left: 15px;
     background-color: #452304;
-    border-top: 2px solid #35fbd6;
+    /* border-top: 2px solid #35fbd6; */
 }
 
 div#main_top_bar img {
@@ -191,6 +191,19 @@ div#main_top_bar div.user {
     margin-right: 15px;
     color: white;
     line-height: 35px;
+}
+
+div#main_bottom_bar {
+    height: 158px;
+    margin-bottom: 15px;
+    padding-left: 15px;
+    background-color: #452304;
+    color: #C2C2C2;
+    /* border-top: 2px solid #35fbd6; */
+}
+
+div#main_bottom_bar a {
+    color: #E1EDF7;
 }
 
 div#main {
