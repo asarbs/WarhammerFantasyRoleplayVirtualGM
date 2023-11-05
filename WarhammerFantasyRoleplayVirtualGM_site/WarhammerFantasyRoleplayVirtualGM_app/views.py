@@ -898,7 +898,6 @@ def changePassword(request):
         changePasswordForm = ChangePasswordForm(user=request.user)
     return render(request, "changePassword.html", dict(form=changePasswordForm))
 
-@login_required
 def addUser(request):
     if request.method == 'POST':
         uf = UserForm(request.POST, prefix='user')
