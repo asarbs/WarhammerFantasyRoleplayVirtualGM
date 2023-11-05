@@ -727,6 +727,11 @@ div#main div.character_sheet div.talents table tr th.block_name  {
 }
 div#main div.character_sheet div.talents table tr.block_header  {
     font-size: 20px;
+    border: 0px;
+}
+div#main div.character_sheet div.talents table tr.block_header td {
+    font-size: 20px;
+    border: 0px;
 }
 
 div#main div.character_sheet div.talents table tr td.edit {
