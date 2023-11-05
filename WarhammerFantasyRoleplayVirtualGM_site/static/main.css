@@ -709,7 +709,7 @@ div#main div.character_sheet div.talents {
     width: 700px;
 }
 div#main div.character_sheet div.talents table {
-    width: 450px;
+    /* width: 450px; */
     margin-left: 20px;
 }
 div#main div.character_sheet div.talents table tr {
@@ -717,6 +717,10 @@ div#main div.character_sheet div.talents table tr {
 }
 div#main div.character_sheet div.talents table tr th  {
 
+}
+div#main div.character_sheet div.talents table tr td  {
+    vertical-align: top;
+    border-bottom: 1px solid #000000;
 }
 div#main div.character_sheet div.talents table tr th.block_name  {
     font-size: 36px;
