@@ -1337,3 +1337,30 @@ def ajax_saveWealth(request):
     ret = {'status': 'ok', 'wealth': character.wealth}
     logger.debug(ret)
     return JsonResponse(ret)
+
+@login_required
+def ajax_fullSkillList(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    skills = []
+    for s in Skils.objects.all().order_by('name'):
+        skills.append({"id": s.id, "name":s.name})
+
+    ret = {'status': 'ok', 'skills': skills}
+    # logger.debug(ret)
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveSkill2Character(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    c2s, crated = Character2Skill.objects.get_or_create(characters_id = request.POST['character_id'], skills_id = request.POST['skill_id'])
+
+    skill = {'id': c2s.skills.id, 'name': c2s.skills.name, 'characteristics': c2s.skills.characteristics, 'description': c2s.skills.description, 'adv':c2s.adv, 'is_basic_skill':c2s.is_basic_skill , 'is_species_skill': c2s.is_species_skill, 'is_career_skill': c2s.is_career_skill}
+
+    ret = {'status': 'ok', 'skill': skill, 'crated':crated}
+    # logger.debug(ret)
+    return JsonResponse(ret)

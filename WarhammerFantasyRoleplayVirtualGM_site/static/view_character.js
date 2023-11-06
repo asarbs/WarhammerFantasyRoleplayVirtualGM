@@ -1875,9 +1875,9 @@ class CharacterParameters {
                                                     skill_params['is_basic_skill'],
                                                     skill_params['is_career_skill'],
                                                     skill_params['is_species_skill'],
-                                                    skill_params['adv'],
-                                                    skill_params['adv'],
-                                                    skill_params['adv']);
+                                                    parseInt(skill_params['adv']),
+                                                    parseInt(skill_params['adv']),
+                                                    parseInt(skill_params['adv']));
     }
     get skills() {
         return this.#skills;
@@ -2757,6 +2757,7 @@ function turon_on_edit() {
     $("select#add_weapon").addClass( "editable", 1000);
     $("select#add_spell").addClass( "editable", 1000);
     $("select#add_talents").addClass( "editable", 1000);
+    $("select#add_skills").addClass( "editable", 1000);
     $("select#add_trappings").addClass( "editable", 1000);
     $("input#fate_fate").addClass( "editable", 1000);
     $("input#fate_fortune").addClass( "editable", 1000);
@@ -2916,7 +2917,47 @@ function change_wealth() {
     var wealth = $("input#wealth").val()
     characterParameters.save_wealth(wealth)
 }
+function get_fullSkillList() {
+    console.log("get_characterData")
 
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_fullSkillList",
+        data: {
+            character_id: character_id,
+        },
+        success: function(data) {
+            console.log(data);
+            for(let k in data['skills']) {
+                $("select#add_skills").append($('<option>', {value: data['skills'][k]['id'], text: data['skills'][k]['name'] }));
+            };
+
+        }
+    });
+}
+
+function skill_add() {
+    var add_skills = $("select#add_skills").val()
+    console.log("add_skills: "+ add_skills);
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveSkill2Character",
+        data: {
+            character_id: characterParameters.id,
+            skill_id: add_skills,
+        },
+        success: function(data) {
+            console.log(data);
+            if(data['crated']) {
+                characterParameters.appendSkill(data['skill'])
+                characterParameters.updateSkillTable();
+            } else {
+                console.log('skill: \"'+data['skill']['name']+'\" already exists')
+            }
+
+        }
+    });
+}
 function main() {
 
     $.ajaxSetup({
@@ -2926,6 +2967,7 @@ function main() {
 
     character_id = $("input[name='character_id']").val()
     get_characterData();
+    get_fullSkillList();
 
     $("input").prop("readonly", true);
     $("select").prop("readonly", true);
@@ -2937,6 +2979,7 @@ function main() {
     $("button#spells_add_button").click(spell_add);
     $("button#talents_add_button").click(talent_add);
     $("button#trappings_add_button").click(trappings_add);
+    $("button#skills_add_button").click(skill_add);
     $("button#player_notes_add_button").click(note_add);
     $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
