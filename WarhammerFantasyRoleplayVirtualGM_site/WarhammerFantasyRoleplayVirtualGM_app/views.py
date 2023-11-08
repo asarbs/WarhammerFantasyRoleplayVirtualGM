@@ -1106,7 +1106,7 @@ def ajax_view_getCharacterData(request):
     character = Character.objects.get(id = character_id)
     ret['character'] = {
             "id"                           : character.id,
-            "name"                         : "{} ({})".format(character.name, character.player) ,
+            "name"                         : character.name,
             "species"                      : str(character.species),
             "ch_class"                     : str(character.ch_class),
             "career"                       : str(character.career),
@@ -1363,4 +1363,36 @@ def ajax_saveSkill2Character(request):
 
     ret = {'status': 'ok', 'skill': skill, 'crated':crated}
     # logger.debug(ret)
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveExperience_current(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['character_id']
+    character = Character.objects.get(id = character_id)
+
+    character.experience_current = request.POST['experience_current']
+    character.save()
+
+    ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveExperience_spent(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    character_id = request.POST['character_id']
+    character = Character.objects.get(id = character_id)
+
+    character.experience_spent = request.POST['experience_spent']
+    character.save()
+
+    ret = {'status': 'ok'  }
     return JsonResponse(ret)

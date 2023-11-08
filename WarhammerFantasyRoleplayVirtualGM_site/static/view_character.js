@@ -2728,6 +2728,116 @@ function updateResilience_motivation () {
         }
     });
 }
+function updateExperience_current() {
+    var val = parseInt($(this).val());
+    console.log("updateExperience_current: val="+val)
+    characterParameters.experience_current = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveExperience_current",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            experience_current : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function updateExperience_spent() {
+    var val = parseInt($(this).val());
+    console.log("updateExperience_spent: val="+val)
+    characterParameters.experience_spent = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveExperience_spent",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            experience_spent : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function updateCharacter_sheet_name() {
+    var val = $(this).val();
+    console.log("updateCharacter_sheet_name: val="+val)
+    characterParameters.name = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveName",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            name : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function updateAge() {
+    var val = parseInt($(this).val());
+    console.log("updateAge: val="+val)
+    characterParameters.age = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveAge",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            age : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+function updateHeight() {
+    var val = parseInt($(this).val());
+    console.log("updateHeight: val="+val)
+    characterParameters.height = val;
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveHeight",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            height : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -2765,6 +2875,11 @@ function turon_on_edit() {
     $("input#resilience_resolve").addClass( "editable", 1000);
     $("input#resilience_motivation").addClass( "editable", 1000);
     $("input#wealth").addClass( "editable", 1000);
+    $("input#experience_current").addClass( "editable", 1000);
+    $("input#experience_spent").addClass( "editable", 1000);
+    $("input#character_sheet_name").addClass( "editable", 1000);
+    $("input#age").addClass( "editable", 1000);
+    $("input#height").addClass( "editable", 1000);
 
 
 
@@ -2797,6 +2912,11 @@ function turon_on_edit() {
     $("input#resilience_resolve").prop("readonly", false);
     $("input#resilience_motivation").prop("readonly", false);
     $("input#wealth").prop("readonly", false);
+    $("input#experience_current").prop("readonly", false);
+    $("input#experience_spent").prop("readonly", false);
+    $("input#character_sheet_name").prop("readonly", false);
+    $("input#age").prop("readonly", false);
+    $("input#height").prop("readonly", false);
 
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristicsAdv);
@@ -2827,6 +2947,11 @@ function turon_on_edit() {
     $("input#resilience_resolve").change(updateResilience_resolve)
     $("input#resilience_motivation").change(updateResilience_motivation)
     $("input#wealth").on("change", change_wealth);
+    $("input#experience_current").change(updateExperience_current)
+    $("input#experience_spent").change(updateExperience_spent)
+    $("input#character_sheet_name").change(updateCharacter_sheet_name)
+    $("input#age").change(updateAge)
+    $("input#height").change(updateHeight)
 }
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()

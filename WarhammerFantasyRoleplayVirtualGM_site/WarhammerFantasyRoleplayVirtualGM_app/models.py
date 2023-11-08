@@ -516,7 +516,7 @@ class Character(models.Model):
     career_path = models.ForeignKey(CareerPath, verbose_name="CareerPath", on_delete=models.CASCADE, null=True)
     status = models.ForeignKey(Status, verbose_name="Status", on_delete=models.CASCADE, null=True)
     age = models.IntegerField(default="1", verbose_name="Age")
-    height = models.IntegerField(default="1", verbose_name="Age")
+    height = models.IntegerField(default="1", verbose_name="Height")
     hair = models.ForeignKey(Hair, verbose_name="Hair", on_delete=models.CASCADE, null=True)
     eyes = models.ForeignKey(Eyes, verbose_name="Eyes", on_delete=models.CASCADE, null=True)
     characteristics_ws_initial = models.IntegerField(default="0", verbose_name="ws_initial")
