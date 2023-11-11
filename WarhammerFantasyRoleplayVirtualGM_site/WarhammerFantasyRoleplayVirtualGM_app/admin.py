@@ -67,13 +67,13 @@ class HairAdmin(admin.ModelAdmin):
     list_display = ("species", "random_table_start", "random_table_end", "name")
     list_filter = ("species",)
     list_editable = ("name",)
-    ordering = ("species",'random_table_start')
+    ordering = ("species",'random_table_start','name')
 
 class EyesAdmin(admin.ModelAdmin):
     list_display = ("species", "random_table_start", "random_table_end", "name")
     list_filter = ("species",)
     list_editable = ("name",)
-    ordering = ("species",'random_table_start')
+    ordering = ("species",'random_table_start','name')
 
 class SkillsAdmin(admin.ModelAdmin):
     formfield_overrides = {

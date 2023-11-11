@@ -37,6 +37,10 @@ urlpatterns = [
     path('TalentsEditView/<int:pk>', views.TalentsEditView.as_view(), name="TalentsEditView"),
 
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
+    path("ajax_saveSpecies", views.ajax_saveSpecies, name="ajax_saveSpecies"),
+    path("ajax_saveClass", views.ajax_saveClass, name="ajax_saveClass"),
+    path("ajax_saveCareer", views.ajax_saveCareer, name="ajax_saveCareer"),
+    path("ajax_saveCareer_level", views.ajax_saveCareer_level, name="ajax_saveCareer_level"),
     path('ajax_randomSpecies', views.ajax_randomSpecies, name="ajax_randomSpecies"),
     path('ajax_randomClass', views.ajax_randomClass, name="ajax_randomClass"),
     path('ajax_saveName', views.ajax_saveName, name="ajax_saveName"),
@@ -74,6 +78,10 @@ urlpatterns = [
     path("ajax_saveSkill2Character", views.ajax_saveSkill2Character, name="ajax_saveSkill2Character"),
     path("ajax_saveExperience_current", views.ajax_saveExperience_current, name="ajax_saveExperience_current"),
     path("ajax_saveExperience_spent", views.ajax_saveExperience_spent, name="ajax_saveExperience_spent"),
+    path("ajax_getSpeciesList", views.ajax_getSpeciesList, name="ajax_getSpeciesList"),
+    path("ajax_getClassList", views.ajax_getClassList, name="ajax_getClassList"),
+    path("ajax_getHairList", views.ajax_getHairList, name="ajax_getHairList"),
+    path("ajax_getEyesList", views.ajax_getEyesList, name="ajax_getEyesList"),
 
     path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
     path('ajax_saveCampaignNotes', views.ajax_saveCampaignNotes, name="ajax_saveCampaignNotes"),

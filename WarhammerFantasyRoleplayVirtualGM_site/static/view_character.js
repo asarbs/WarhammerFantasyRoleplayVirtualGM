@@ -914,9 +914,8 @@ class CharacterParameters {
     #experience_spent                   = 0;
     #career_id                          = 0;
     #career_level                       = 0;
-    #career_name                        = "";
-    #career_path                        = "";
-    #ch_class_name                      = "";
+    #career_path_id                        = "";
+    #ch_class_id                        = 0;
     #character_creation_step            = 0;
     #characteristics_ag_advances        = 0;
     #characteristics_ag_initial         = 0;
@@ -981,6 +980,7 @@ class CharacterParameters {
     #ambitions_longterm                 = [];
     #notes                              = [];
     #advanceScheme;
+    classModel = {}
     movement = {
         0: {'walk': 0,"run": 0},
         3: {'walk': 6,"run": 12},
@@ -1031,17 +1031,17 @@ class CharacterParameters {
         return this.#name;
     }
     set hair(hair) {
-        if(typeof hair === "string") {
+        if(typeof hair === "number") {
             this.#hair = hair;
-            $("input#hair").val(this.#hair);
+            $("select#hair").val(this.#hair).change();
         }
         else
             throw "hair: " + hair + " is not a string";
     }
     set eyes(eyes) {
-        if(typeof eyes === "string") {
+        if(typeof eyes === "number") {
             this.#eyes = eyes;
-            $("input#eyes").val(this.#eyes);
+            $("select#eyes").val(this.#eyes).change();
         }
         else
             throw "eyes: " + eyes + " is not a string";
@@ -1614,12 +1614,12 @@ class CharacterParameters {
         return this.#needUpdate
     }
     set species(species) {
-        if(typeof species === "string") {
+        if(typeof species === "number") {
             this.#species = species;
-            $("input#species").val(this.#species);
+            $("select#species").val(this.#species).change();
         }
         else
-            throw "species[" + species + "] is not a string";
+            throw "species[" + species + "] is not a number";
     }
     get species() {
         return this.#species
@@ -1627,50 +1627,48 @@ class CharacterParameters {
     set career_id(career_id) {
         if(typeof career_id === "number") {
             this.#career_id = career_id;
+            $("select#career").val(this.#career_id).change();
+            $("input#career_path").val(this.classModel[this.#ch_class_id].carrer[this.career_id].name);
         }
-        else
-            throw "career_id[" + career_id + "] is not a number";
+        else {
+            throw "career_name[" + career_id + "] is not a number";
+        }
     }
     get career_id() {
         return this.#career_id
     }
-    set career_name(career_name) {
-        if(typeof career_name === "string") {
-            this.#career_name = career_name;
-            $("input#career").val(this.#career_name);
+    set ch_class_id(ch_class_id) {
+        if(typeof ch_class_id === "number") {
+            this.#ch_class_id = ch_class_id;
+            console.log("set ch_class_id:"+this.#ch_class_id);
+            $("select#class").val(this.#ch_class_id).change();
+            $("select#career").find('option').remove()
+
+            for(let k in this.classModel[this.#ch_class_id].carrer) {
+                 $("select#career").append($('<option>', {value: this.classModel[this.#ch_class_id].carrer[k].id, text: this.classModel[this.#ch_class_id].carrer[k].name }));
+            }
+
+            $("select#career").val(this.#career_id).change();
         }
         else
-            throw "career_name[" + career_name + "] is not a String";
+            throw "ch_class_name[" + ch_class_id + "] is not a number";
     }
-    get career_name() {
-        return this.#career_name
+    get ch_class_id() {
+        return this.#ch_class_id
     }
-    set ch_class_name(ch_class_name) {
-        if(typeof ch_class_name === "string") {
-            this.#ch_class_name = ch_class_name;
-            $("input#class").val(this.#ch_class_name);
+    set career_path_id(career_path_id) {
+        if(typeof career_path_id === "number") {
+            this.#career_path_id = career_path_id;
         }
         else
-            throw "ch_class_name[" + ch_class_name + "] is not a String";
+            throw "career_path[" + career_path_id + "] is not a number";
     }
-    get ch_class_name() {
-        return this.#ch_class_name
-    }
-    set career_path(career_path) {
-        if(typeof career_path === "string") {
-            this.#career_path = career_path;
-            $("input#career_path").val(this.#career_path);
-        }
-        else
-            throw "career_path[" + career_path + "] is not a String";
-    }
-    get career_path() {
-        return this.#career_path;
+    get career_path_id() {
+        return this.#career_path_id;
     }
     set status(status) {
         if(typeof status === "string") {
             this.#status = status;
-            $("input#status").val(this.#status);
         }
         else
             throw "status[" + status + "] is not a String";
@@ -1682,6 +1680,7 @@ class CharacterParameters {
         if(typeof career_level === "number") {
             this.#career_level = career_level;
             $("input#career_level").val(this.#career_level);
+            $("input#status").val(this.classModel[this.#ch_class_id].carrer[this.career_id].careersAdvanceScheme[[this.career_id]].advances_level[this.#career_level].status.tier + " "+ this.classModel[this.#ch_class_id].carrer[this.career_id].careersAdvanceScheme[[this.career_id]].advances_level[this.#career_level].status.level);
         }
         else
             throw "career_level[" + career_level + "] is not a number";
@@ -2467,6 +2466,12 @@ function get_characterData(){
 
     console.log("get_characterData")
 
+    get_fullHairList();
+    get_fullEyesList();
+    get_fullSkillList();
+    get_fullSpeciesList();
+    get_fullClassList();
+
     $.ajax({
         type: "POST",
         url: "/wfrpg_gm/ajax_view_getCharacterData",
@@ -2478,11 +2483,11 @@ function get_characterData(){
             characterParameters.id                           = data['character']["id"                           ]
             characterParameters.name                         = data['character']["name"                         ]
             characterParameters.species                      = data['character']["species"                      ]
-            characterParameters.ch_class_name                = data['character']["ch_class"                     ]
-            characterParameters.career_name                  = data['character']["career"                       ]
-            characterParameters.career_level                 = data['character']["career_level"                 ]
-            characterParameters.career_path                  = data['character']["career_path"                  ]
+            characterParameters.ch_class_id                  = data['character']["ch_class"                     ]
+            characterParameters.career_id                    = data['character']["career"                       ]
+            characterParameters.career_path_id               = data['character']["career_path"                  ]
             characterParameters.status                       = data['character']["status"                       ]
+            characterParameters.career_level                 = data['character']["career_level"                 ]
             characterParameters.age                          = data['character']["age"                          ]
             characterParameters.height                       = data['character']["height"                       ]
             characterParameters.hair                         = data['character']["hair"                         ]
@@ -2869,6 +2874,12 @@ function turon_on_edit() {
     $("select#add_talents").addClass( "editable", 1000);
     $("select#add_skills").addClass( "editable", 1000);
     $("select#add_trappings").addClass( "editable", 1000);
+    $("select#species").addClass( "editable", 1000);
+    $("select#class").addClass( "editable", 1000);
+    $("select#career").addClass( "editable", 1000);
+    $("select#hair").addClass( "editable", 1000);
+    $("select#eyes").addClass( "editable", 1000);
+    $("input#career_level").addClass( "editable", 1000);
     $("input#fate_fate").addClass( "editable", 1000);
     $("input#fate_fortune").addClass( "editable", 1000);
     $("input#resilience_resilience").addClass( "editable", 1000);
@@ -2917,6 +2928,8 @@ function turon_on_edit() {
     $("input#character_sheet_name").prop("readonly", false);
     $("input#age").prop("readonly", false);
     $("input#height").prop("readonly", false);
+    $("input#career_level").prop("readonly", false);
+
 
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristicsAdv);
@@ -2952,6 +2965,13 @@ function turon_on_edit() {
     $("input#character_sheet_name").change(updateCharacter_sheet_name)
     $("input#age").change(updateAge)
     $("input#height").change(updateHeight)
+
+    $("select#species").on("change", updateSpecies);
+    $("select#class").on("change", updateClass);
+    $("select#career").on("change", updateCareer);
+    $("input#career_level").change(updateCareer_level);
+    $("select#hair").on("change", updateHair);
+    $("select#eyes").on("change", updateEyes);
 }
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()
@@ -3060,13 +3080,115 @@ function get_fullSkillList() {
         }
     });
 }
+function get_fullSpeciesList() {
+    console.log("get_fullSpeciesList")
 
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_getSpeciesList",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: character_id,
+        },
+        success: function(data) {
+            console.log(data);
+            for(let k in data['species']) {
+                $("select#species").append($('<option>', {value: data['species'][k]['id'], text: data['species'][k]['name'] }));
+            };
+
+        }
+    });
+}
+function get_fullClassList() {
+    console.log("get_fullClassList")
+
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_getClassList",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: character_id,
+        },
+        success: function(data) {
+            console.log(data);
+            characterParameters.classModel = data['character_class']
+            console.log("get_fullClassList:")
+            console.log(data)
+            for(let k in data['character_class']) {
+                $("select#class").append($('<option>', {value: data['character_class'][k]['id'], text: data['character_class'][k]['name'] }));
+            };
+        }
+    });
+
+}
+function get_fullHairList() {
+    console.log("get_fullHairList")
+
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_getHairList",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: character_id,
+        },
+        success: function(data) {
+            console.log(data);
+            for(let k in data['hair']) {
+                $("select#hair").append($('<option>', {value: data['hair'][k]['id'], text: data['hair'][k]['name'] }));
+            };
+        }
+    });
+}
+function get_fullEyesList() {
+    console.log("get_fullEyesList")
+
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_getEyesList",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: character_id,
+        },
+        success: function(data) {
+            console.log(data);
+            for(let k in data['eyes']) {
+                $("select#eyes").append($('<option>', {value: data['eyes'][k]['id'], text: data['eyes'][k]['name'] }));
+            };
+        }
+    });
+}
 function skill_add() {
     var add_skills = $("select#add_skills").val()
     console.log("add_skills: "+ add_skills);
     $.ajax({
         type: "POST",
         url: "/wfrpg_gm/ajax_saveSkill2Character",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
         data: {
             character_id: characterParameters.id,
             skill_id: add_skills,
@@ -3083,16 +3205,155 @@ function skill_add() {
         }
     });
 }
+function updateSpecies(){
+    var val = $(this).val()
+    console.log("updateSpecies: "+ val);
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveSpecies",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: characterParameters.id,
+            species_id: val,
+        },
+        success: function(data) {
+            console.log(data);
+            characterParameters.species_id = data['species_id']
+        }
+    });
+}
+function updateClass(){
+    $("select#class").off("change", updateClass);
+    $("select#career").off("change", updateCareer);
+    var val = $(this).val()
+    console.log("updateClass: "+ val);
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveClass",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: characterParameters.id,
+            class_id: val,
+        },
+        success: function(data) {
+            console.log(data);
+            characterParameters.ch_class_id = data['class_id']
+            $("select#class").on("change", updateClass);
+            $("select#career").on("change", updateCareer);
+            alert("Update Career")
+        }
+    });
+}
+function updateCareer(){
+    $("select#class").off("change", updateClass);
+    $("select#career").off("change", updateCareer);
+    var val = $(this).val()
+    console.log("updateCareer: "+ val);
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveCareer",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: characterParameters.id,
+            career_id: val,
+        },
+        success: function(data) {
+            console.log(data);
+            characterParameters.career_id = data['career_id']
+            $("select#class").on("change", updateClass);
+            $("select#career").on("change", updateCareer);
+        }
+    });
+}
+function updateCareer_level() {
+    var val = $(this).val()
+    console.log("updateCareer_level: "+ val);
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveCareer_level",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: characterParameters.id,
+            career_level: val,
+        },
+        success: function(data) {
+            console.log(data);
+            characterParameters.career_level = parseInt(data['career_level'])
+        }
+    });
+}
+function updateHair() {
+    var val = $(this).val()
+    console.log("updateHair: "+ val);
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveHair",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: characterParameters.id,
+            hair: val,
+        },
+        success: function(data) {
+            console.log(data);
+        }
+    });
+}
+function updateEyes() {
+    var val = $(this).val()
+    console.log("updateEyes: "+ val);
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveEyes",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id: characterParameters.id,
+            eyes: val,
+        },
+        success: function(data) {
+            console.log(data);
+        }
+    });
+}
 function main() {
 
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     });
 
-
     character_id = $("input[name='character_id']").val()
+
+
     get_characterData();
-    get_fullSkillList();
 
     $("input").prop("readonly", true);
     $("select").prop("readonly", true);

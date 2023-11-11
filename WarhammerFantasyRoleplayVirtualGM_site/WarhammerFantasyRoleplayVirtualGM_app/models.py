@@ -185,6 +185,12 @@ class Class(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+    def to_dict(self):
+        data = {"id":self.id, "name":self.name, "carrer":{}}
+        for c in Career.objects.filter(ch_class=self):
+            data['carrer'][c.id] = c.to_dict()
+        return data
+
 class Career(models.Model):
     name = models.CharField(max_length= 50)
     ch_class = models.ForeignKey(Class, verbose_name="Class", default="1", on_delete=models.CASCADE)
@@ -205,6 +211,12 @@ class Career(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
+
+    def to_dict(self):
+        data = {"id": self.id, "name":self.name, "careersAdvanceScheme":{} }
+        for cas in CareersAdvanceScheme.objects.filter(career=self):
+            data['careersAdvanceScheme'][cas.id] = cas.serialize()
+        return data
 
 class Status(models.Model):
     class Tier(models.TextChoices):
@@ -319,6 +331,9 @@ class Hair(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
+    def to_dict(self):
+        return {'id':self.id, 'name':self.name}
+
 class Eyes(models.Model):
     name = models.CharField(max_length= 50)
     species = models.ForeignKey(Species, verbose_name="Species", on_delete=models.CASCADE, null=True)
@@ -330,6 +345,9 @@ class Eyes(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
+
+    def to_dict(self):
+        return {'id':self.id, 'name':self.name}
 
 class Availability(models.TextChoices):
     COMMON = "Common", _('Common')

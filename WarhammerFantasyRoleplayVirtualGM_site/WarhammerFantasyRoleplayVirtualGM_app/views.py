@@ -126,6 +126,50 @@ def ajax_save_character_species(request):
     return JsonResponse({'status': 'Invalid request'}, status=400)
 
 @login_required
+def ajax_saveSpecies(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    character = Character.objects.get(id= request.POST['character_id'])
+    character.species = Species.objects.get(id=request.POST['species_id'])
+    character.save()
+
+    return JsonResponse({'status': 'ok', "species_id": character.species.id})
+
+def ajax_saveClass(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    character = Character.objects.get(id= request.POST['character_id'])
+    character.ch_class = Class.objects.get(id=request.POST['class_id'])
+    character.save()
+
+    return JsonResponse({'status': 'ok', 'class_id':character.ch_class.id})
+
+def ajax_saveCareer(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+    logger.debug(request.POST)
+    character = Character.objects.get(id= request.POST['character_id'])
+    character.career = Career.objects.get(id=request.POST['career_id'])
+    character.save()
+
+    return JsonResponse({'status': 'ok', 'career_id':character.career.id})
+
+
+def ajax_saveCareer_level(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    character = Character.objects.get(id= request.POST['character_id'])
+    character.career_level = id=request.POST['career_level']
+    character.save()
+
+    return JsonResponse({'status': 'ok', 'career_level':character.career_level})
+
+@login_required
 def ajax_randomSpecies(request):
     if request.method == 'POST':
         species_list = Species.objects.all()
@@ -605,7 +649,7 @@ def ajax_saveEyes(request):
         character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
         if character is not None:
-            eye_color = Eyes.objects.get(name=request.POST['eyes'])
+            eye_color = Eyes.objects.get(id=request.POST['eyes'])
             character.eyes = eye_color
             character.save()
             ret = {'status': 'ok'  }
@@ -1107,16 +1151,16 @@ def ajax_view_getCharacterData(request):
     ret['character'] = {
             "id"                           : character.id,
             "name"                         : character.name,
-            "species"                      : str(character.species),
-            "ch_class"                     : str(character.ch_class),
-            "career"                       : str(character.career),
+            "species"                      : character.species.id,
+            "ch_class"                     : character.ch_class.id,
+            "career"                       : character.career.id,
             "career_level"                 : int(character.career_level),
             "age"                          : character.age,
             "height"                       : character.height,
-            "career_path"                  : str(character.career_path),
+            "career_path"                  : character.career_path.id,
             "status"                       : str(character.status),
-            "hair"                         : str(character.hair),
-            "eyes"                         : str(character.eyes),
+            "hair"                         : character.hair.id,
+            "eyes"                         : character.eyes.id,
             "characteristics_ws_initial"   : character.characteristics_ws_initial,
             "characteristics_bs_initial"   : character.characteristics_bs_initial,
             "characteristics_s_initial"    : character.characteristics_s_initial,
@@ -1395,4 +1439,56 @@ def ajax_saveExperience_spent(request):
     character.save()
 
     ret = {'status': 'ok'  }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_getSpeciesList(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    speciesList = []
+    for species in Species.objects.all().order_by("name"):
+        speciesList.append({'id':species.id, "name": species.name})
+
+    ret = {'status': 'ok', "species":speciesList}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_getClassList(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    cList = {}
+    for c in Class.objects.all().order_by("name"):
+        cList[c.id] = c.to_dict()
+
+    ret = {'status': 'ok', "character_class":cList}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_getHairList(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+
+    hairsList = {}
+    for c in Hair.objects.filter(species=c.species).order_by("name"):
+        hairsList[c.id] = c.to_dict()
+
+    ret = {'status': 'ok', "hair":hairsList}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_getEyesList(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+
+    eyesList = {}
+    for c in Eyes.objects.filter(species=c.species).order_by("name"):
+        eyesList[c.id] = c.to_dict()
+
+    ret = {'status': 'ok', "eyes":eyesList}
     return JsonResponse(ret)
