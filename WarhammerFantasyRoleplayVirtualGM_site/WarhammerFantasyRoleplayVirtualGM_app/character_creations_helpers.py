@@ -81,7 +81,7 @@ def get_character_talents(character: Character):
             'tests': t.tests,
             'description': t.description,
             'taken': (character_talents[t.my_talent_id] if t.my_talent_id in character_talents else 0),
-            'ref': str(st.talent.ref)
+            'ref': str(t.ref)
         }
         talents_list.append(dic_talent)
     return talents_list
