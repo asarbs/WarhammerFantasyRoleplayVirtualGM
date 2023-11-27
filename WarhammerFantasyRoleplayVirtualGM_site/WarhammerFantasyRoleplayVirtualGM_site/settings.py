@@ -227,8 +227,8 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {
     # 'google': {
     #     'APP': {
-    #         'client_id': '842250301308-q3hq8h0i3m6dpm0f43g7ahvmja6sbs9i.apps.googleusercontent.com',
-    #         'secret': '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',
+    #         'client_id': '',
+    #         'secret': '',
     #         'key': ''
     #     }
     # },
