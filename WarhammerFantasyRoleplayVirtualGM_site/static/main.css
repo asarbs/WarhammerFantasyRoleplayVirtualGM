@@ -760,50 +760,50 @@ div#main div.character_sheet div.talents table tr td.edit input  {
     position: relative;
 }
 
-div#main div.character_sheet div.ambitiosn {
+div#main div.character_sheet div.ambitions {
     border: 0px solid #128fd3;
     width: 700px;
     margin-bottom: 10px;
 }
-div#main div.character_sheet div.ambitiosn table {
+div#main div.character_sheet div.ambitions table {
     width: 700px;
 }
-div#main div.character_sheet div.ambitiosn table tr {
+div#main div.character_sheet div.ambitions table tr {
 }
-div#main div.character_sheet div.ambitiosn table tr td {
+div#main div.character_sheet div.ambitions table tr td {
     text-align: center;
 }
-div#main div.character_sheet div.ambitiosn table tr td.add {
+div#main div.character_sheet div.ambitions table tr td.add {
     height: 10px;
     display: none;
 }
-div#main div.character_sheet div.ambitiosn table tr td.title {
+div#main div.character_sheet div.ambitions table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.ambitiosn table tr td.head {
+div#main div.character_sheet div.ambitions table tr td.head {
     font-size: 150%;
     text-align: left;
     padding-left: 10px;
     width: 150px;
 }
-div#main div.character_sheet div.ambitiosn table tr td.list {
+div#main div.character_sheet div.ambitions table tr td.list {
     text-align: left;
 }
 
-div#main div.character_sheet div.ambitiosn table tr td img.ambitiosn_add {
+div#main div.character_sheet div.ambitions table tr td img.ambitions_add {
     cursor: pointer;
     width: 15px;
 }
 
-div#main div.character_sheet div.ambitiosn table tr td.list li.achieved {
+div#main div.character_sheet div.ambitions table tr td.list li.achieved {
     text-decoration: line-through;
 }
 
-div#main div.character_sheet div.ambitiosn table tr td.list li.to_achieved {
+div#main div.character_sheet div.ambitions table tr td.list li.to_achieved {
     text-decoration: none;
 }
 
-div#main div.character_sheet div.ambitiosn table tr td.list li.to_achieved img {
+div#main div.character_sheet div.ambitions table tr td.list li.to_achieved img {
     cursor: pointer;
     width: 15px;
 }

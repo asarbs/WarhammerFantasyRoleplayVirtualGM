@@ -3013,16 +3013,16 @@ function close_ambition() {
     characterParameters.save_currentXP()
 }
 function ambitions_add() {
-    $("div#main div.character_sheet div.ambitiosn table tr td.add").show(500)
-    $("div#main div.character_sheet div.ambitiosn table tr td.add input").prop("readonly", false)
-    $("div#main div.character_sheet div.ambitiosn table tr td.add input").off("click").click(function() {
-        let ambitions_description = $("div#main div.character_sheet div.ambitiosn table tr td.add textarea#ambitions").val();
+    $("div#main div.character_sheet div.ambitions table tr td.add").show(500)
+    $("div#main div.character_sheet div.ambitions table tr td.add input").prop("readonly", false)
+    $("div#main div.character_sheet div.ambitions table tr td.add input").off("click").click(function() {
+        let ambitions_description = $("div#main div.character_sheet div.ambitions table tr td.add textarea#ambitions").val();
         if(ambitions_description.length == 0) {
             alert("no ambition")
             return
         }
 
-        let target = $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target")
+        let target = $("div#main div.character_sheet div.ambitions table tr td.add input").attr("target")
         console.log(ambitions_description)
         let ambitions_to_append =  {
             'id': 0,
@@ -3037,16 +3037,16 @@ function ambitions_add() {
         }
         ambition.save()
         ambition.updateUI()
-        $("div#main div.character_sheet div.ambitiosn table tr td.add").hide(500)
+        $("div#main div.character_sheet div.ambitions table tr td.add").hide(500)
     });
 }
 function ambitions_shortterm_add() {
     ambitions_add()
-    $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target", "shortterm")
+    $("div#main div.character_sheet div.ambitions table tr td.add input").attr("target", "shortterm")
 }
 function ambitions_longterm_add() {
     ambitions_add()
-    $("div#main div.character_sheet div.ambitiosn table tr td.add input").attr("target", "longterm")
+    $("div#main div.character_sheet div.ambitions table tr td.add input").attr("target", "longterm")
 }
 function note_add() {
     let n = tinyMCE.get('player_notes_textarea').getContent();
