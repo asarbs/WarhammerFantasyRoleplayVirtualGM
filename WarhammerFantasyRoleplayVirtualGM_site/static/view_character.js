@@ -811,12 +811,14 @@ class Ambitions {
     #id          = 0;
     #description  = "";
     #achieved     = false;
-    #shortterm = false
+    #shortterm = false;
+    #deleted = false;
     constructor(id, description, achieved, shortterm) {
         this.#id            = id
         this.#description   = description
         this.#achieved      = achieved
         this.#shortterm     = shortterm
+        this.#deleted = false;
         console.log("Ambitions: id="+this.#id+"; description="+this.#description+"; achieved="+this.#achieved)
     }
 
@@ -851,12 +853,49 @@ class Ambitions {
     get id() {
         return this.#id;
     }
+    set deleted(deleted) {
+        if(typeof deleted === "boolean"){
+            this.#deleted = deleted;
+
+            let id = this.id
+
+            if(this.#deleted == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/wfrpg_gm/ajax_removeAmbitions",
+                    async: false,
+                    cache: false,
+                    timeout: 30000,
+                    fail: function(){
+                        return true;
+                    },
+                    data: {
+                        ambition_id   : this.#id
+                    },
+                    success: function(data) {
+                        $("li[ambitions_id="+id+"]").remove()
+                        console.log("remove: li [ambitions_id="+id+"]")
+                    }
+                });
+            }
+        }
+        else {
+            throw "Ambitions: deleted=" + deleted + " boolean";
+        }
+    }
+    get deleted() {
+        return this.#deleted;
+    }
 
     updateUI() {
         var cl = this.#shortterm == true ? "ambitions_shortterm" : "ambitions_longterm"
         var new_row = ""
         console.log("Ambitions.updateUI(): this.id="+this.id)
         if($("li[ambitions_id="+this.id+"]").length > 0) {
+
+            if(this.#deleted == true) {
+                return;
+            }
 
             if(this.#achieved == true) {
                 $("img[ambitions_id="+this.id+"]").remove()
@@ -871,9 +910,10 @@ class Ambitions {
                 new_row = "<li class=\"achieved\">"+this.#description+"</li>";
                 $("ol."+cl).append(new_row)
             } else {
-                new_row = "<li class=\"to_achieved\" ambitions_id='"+this.id+"'>"+this.#description+"   <img src=\"/static/img/tick.png\" width=\"15\" ambitions_id='"+this.id+"'></li>";
+                new_row = "<li class=\"to_achieved\" ambitions_id='"+this.id+"'>"+this.#description+"   <img src=\"/static/img/tick.png\" width=\"15\" close_ambitions_id='"+this.id+"'><img src=\"/static/img/trash.png\" width=\"15\" delete_ambitions_id='"+this.id+"'></li>";
                 $("ol."+cl).append(new_row)
-                $("li.to_achieved img[ambitions_id="+this.id+"]").click(close_ambition)
+                $("li.to_achieved img[close_ambitions_id="+this.id+"]").click(close_ambition)
+                $("li.to_achieved img[delete_ambitions_id="+this.id+"]").click(delete_ambition)
             }
             console.log("Ambitions.updateUI() cl="+cl+"; new_row="+new_row)
         }
@@ -2331,6 +2371,21 @@ class CharacterParameters {
             }
         }
     }
+    deleteAmbition(ambition_id) {
+        console.log("deleteAmbition: ambition_id="+ambition_id)
+        for(let a in this.#ambitions_shortterm) {
+            if(ambition_id == this.#ambitions_shortterm[a].id) {
+                this.#ambitions_shortterm[a].deleted = true;
+                return
+            }
+        }
+        for(let a in this.#ambitions_longterm) {
+            if(ambition_id == this.#ambitions_longterm[a].id) {
+                this.#ambitions_longterm[a].deleted = true;
+                return
+            }
+        }
+    }
     save_currentXP() {
         $.ajax({
             type: "POST",
@@ -2595,7 +2650,6 @@ function get_characterData(){
             characterParameters.updateEncumbrance();
             turon_on_edit();
             $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
-            $("li.to_achieved img").click(close_ambition)
         }
     });
 }
@@ -3007,10 +3061,15 @@ function put_on_armour() {
     characterParameters.put_on_armour($(this).attr('armour_id'), $(this).prop('checked'));
 }
 function close_ambition() {
-    var ambition_id = $(this).attr("ambitions_id")
+    var ambition_id = $(this).attr("close_ambitions_id")
     console.log("close_ambition:"+ ambition_id)
     characterParameters.updateAmbition(ambition_id, true)
     characterParameters.save_currentXP()
+}
+function delete_ambition() {
+    var ambition_id = $(this).attr("delete_ambitions_id")
+    console.log("delete_ambition:"+ ambition_id)
+    characterParameters.deleteAmbition(ambition_id);
 }
 function ambitions_add() {
     $("div#main div.character_sheet div.ambitions table tr td.add").show(500)

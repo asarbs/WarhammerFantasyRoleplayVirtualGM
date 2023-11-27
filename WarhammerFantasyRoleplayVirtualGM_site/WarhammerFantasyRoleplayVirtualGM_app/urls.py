@@ -82,6 +82,12 @@ urlpatterns = [
     path("ajax_getClassList", views.ajax_getClassList, name="ajax_getClassList"),
     path("ajax_getHairList", views.ajax_getHairList, name="ajax_getHairList"),
     path("ajax_getEyesList", views.ajax_getEyesList, name="ajax_getEyesList"),
+    path("ajax_removeAmbitions", views.ajax_removeAmbitions, name="ajax_removeAmbitions"),
+    path("ajax_removeWeapon", views.ajax_removeWeapon, name="ajax_removeWeapon"),
+    path("ajax_removeArmour", views.ajax_removeArmour, name="ajax_removeArmour"),
+    path("ajax_removeTrappings", views.ajax_removeTrappings, name="ajax_removeTrappings"),
+    path("ajax_removeSpells", views.ajax_removeSpells, name="ajax_removeSpells"),
+
 
     path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
     path('ajax_saveCampaignNotes', views.ajax_saveCampaignNotes, name="ajax_saveCampaignNotes"),

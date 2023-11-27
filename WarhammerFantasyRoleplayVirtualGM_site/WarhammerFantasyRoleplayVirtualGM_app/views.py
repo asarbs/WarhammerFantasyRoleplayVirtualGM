@@ -1492,3 +1492,50 @@ def ajax_getEyesList(request):
 
     ret = {'status': 'ok', "eyes":eyesList}
     return JsonResponse(ret)
+
+def ajax_removeAmbitions(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    res = Ambitions.objects.get(id=request.POST['ambition_id']).delete()
+
+    logger.debug("remove ambition id:{}; res={}".format(request.POST['ambition_id'], res))
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+def ajax_removeWeapon(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+def ajax_removeArmour(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+def ajax_removeTrappings(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+def ajax_removeSpells(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
