@@ -43,8 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_tables2",
     'ajax_select',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
     'WarhammerFantasyRoleplayVirtualGM_app',
     'WarhammerFantasyRoleplayVirtualGM_user',
+    'WarhammerFantasyRoleplayVirtualGM_map',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'WarhammerFantasyRoleplayVirtualGM_site.urls'
@@ -62,7 +69,7 @@ ROOT_URLCONF = 'WarhammerFantasyRoleplayVirtualGM_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR,'templates'), os.path.join(BASE_DIR, "WarhammerFantasyRoleplayVirtualGM_map", "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,7 +77,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.request'
             ],
         },
     },
@@ -138,7 +144,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), )
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, "WarhammerFantasyRoleplayVirtualGM_map", "static"))
 #STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
@@ -204,3 +210,59 @@ LOGGING = {
     },
 }
 
+AUTHENTICATION_CLASSES = (
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+# settings.py
+
+SITE_ID = 1
+
+# Ustawienia allauth
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_QUERY_EMAIL = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    # 'google': {
+    #     'APP': {
+    #         'client_id': '842250301308-q3hq8h0i3m6dpm0f43g7ahvmja6sbs9i.apps.googleusercontent.com',
+    #         'secret': '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',
+    #         'key': ''
+    #     }
+    # },
+    # 'facebook': {
+    #     'METHOD': 'oauth2',
+    #     'SCOPE': ['email', 'public_profile'],
+    #     'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+    #     'INIT_PARAMS': {'cookie': True},
+    #     'FIELDS': [
+    #         'id',
+    #         'email',
+    #         'name',
+    #         'first_name',
+    #         'last_name',
+    #         'verified',
+    #         'locale',
+    #         'timezone',
+    #         'link',
+    #         'gender',
+    #         'updated_time',
+    #     ],
+    #     'EXCHANGE_TOKEN': True,
+    #     'LOCALE_FUNC': 'path.to.callable',
+    #     'VERIFIED_EMAIL': False,
+    #     'VERSION': 'v2.12',
+    # }
+}
+
+AUTHENTICATION_BACKENDS = [
+
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+]

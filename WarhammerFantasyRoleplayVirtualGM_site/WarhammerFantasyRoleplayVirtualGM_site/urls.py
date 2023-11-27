@@ -19,8 +19,11 @@ from django.urls import path, include
 from ajax_select import urls as ajax_select_urls
 
 from django.contrib.auth import views as auth_views
+
 from WarhammerFantasyRoleplayVirtualGM_app import views as MainView
 from WarhammerFantasyRoleplayVirtualGM_app.views import *
+
+
 
 admin.autodiscover()
 
@@ -36,4 +39,5 @@ urlpatterns = [
     path('trappings-autocomplete/', AutocompleteTrappings.as_view(), name='trappings-autocomplete'),
     path('player-autocomplete/', AutocompletePlayer.as_view(), name='player-autocomplete'),
     path('ajax_select/', include(ajax_select_urls)),
+    path('accounts/', include('allauth.urls')),
 ]

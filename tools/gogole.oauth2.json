@@ -1,0 +1,13 @@
+{
+    "web": {
+        "client_id": "842250301308-q3hq8h0i3m6dpm0f43g7ahvmja6sbs9i.apps.googleusercontent.com",
+        "project_id": "bricklink-342810",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "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",
+        "redirect_uris": [
+            "http://wfrpg.skorupa.net//accounts/google/login/callback/"
+        ]
+    }
+}
