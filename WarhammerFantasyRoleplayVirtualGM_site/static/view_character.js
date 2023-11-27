@@ -219,7 +219,7 @@ class Armour{
     #locations
     #armour_points
     #qualities_and_flaws
-    #is_in_inventory
+    #is_in_inventory = false;
     #put_on
     constructor(id, name, armour_type, price, encumbrance, availability, penalty, locations, armour_points, qualities_and_flaws, is_in_inventory) {
         this.#id = id;
@@ -232,9 +232,9 @@ class Armour{
         this.#locations = locations;
         this.#armour_points = armour_points;
         this.#qualities_and_flaws = qualities_and_flaws;
-        this.#is_in_inventory = is_in_inventory
+        this.#is_in_inventory = is_in_inventory;
         this.#put_on = false;
-        console.log("Create Armour:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory);
+        console.log("Create Armour:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory+", is_in_inventory="+is_in_inventory);
     }
     set name(name) {
         if(typeof name === "string")
@@ -418,7 +418,7 @@ class Armour{
         console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         if(this.#is_in_inventory && !$('td#armour_name__'+this.#id).length) {
             var new_row = '<tr class="block_body">'
-            new_row += '<td id="armour_name__'+this.#id+'" class="left">'+this.#name+'</td>'
+            new_row += '<td id="armour_name__'+this.#id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_armour_id="'+this.#id+'">'+this.#name+'</td>'
             new_row += '<td id="armour_location__'+this.#id+'" class="center">'+this.#locations+'</td>'
             new_row += '<td id="armour_encumbrance__'+this.#id+'" class="center">'+this.#encumbrance+'</td>'
             new_row += '<td id="armour_armour_points__'+this.#id+'" class="center">'+this.#armour_points+'</td>'
@@ -1974,7 +1974,8 @@ class CharacterParameters {
         });
     }
     appendArmour(armour) {
-        console.log("appendArmour: +"+armour)
+        console.log("appendArmour:")
+        console.log(armour)
         var a = new Armour(armour.id,
             armour.name,
             armour.armour_type,
@@ -1984,6 +1985,7 @@ class CharacterParameters {
             armour.penalty,
             armour.locations,
             armour.armour_points,
+            armour.qualities_and_flaws,
             armour.is_in_inventory);
         this.#armour.push(a)
         a.updateUI();
