@@ -1518,6 +1518,10 @@ def ajax_removeArmour(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     c = Character.objects.get(id = request.POST['character_id'])
+    armour = Armour.objects.get(id = request.POST['armour_id']);
+    c.armour.remove(armour)
+
+    logger.debug("remove armour {} from {}".format(armour, c))
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)

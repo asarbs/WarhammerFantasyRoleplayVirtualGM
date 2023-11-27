@@ -220,7 +220,8 @@ class Armour{
     #armour_points
     #qualities_and_flaws
     #is_in_inventory = false;
-    #put_on
+    #put_on;
+    #deleted;
     constructor(id, name, armour_type, price, encumbrance, availability, penalty, locations, armour_points, qualities_and_flaws, is_in_inventory) {
         this.#id = id;
         this.#name = name;
@@ -354,6 +355,41 @@ class Armour{
         return this.#is_in_inventory
     }
 
+    set deleted(deleted) {
+        if(typeof deleted === "boolean"){
+            this.#deleted = deleted;
+
+            let id = this.id
+
+            if(this.#deleted == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/wfrpg_gm/ajax_removeArmour",
+                    async: false,
+                    cache: false,
+                    timeout: 30000,
+                    fail: function(){
+                        return true;
+                    },
+                    data: {
+                        character_id: characterParameters.id,
+                        armour_id   : this.#id
+                    },
+                    success: function(data) {
+                        $("tr[armour_id="+id+"]").remove()
+                        console.log("remove: tr [armour_id="+id+"]")
+                    }
+                });
+            }
+        }
+        else {
+            throw "Ambitions: deleted=" + deleted + " boolean";
+        }
+    }
+    get deleted() {
+        return this.#deleted;
+    }
+
     try_put_off(locations) {
         var arr_locations = locations.split(", ")
         var item_locations = this.locations.split(", ")
@@ -415,9 +451,13 @@ class Armour{
     }
 
     updateUI() {
-        console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
+        console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory+"; deleted"+this.#deleted);
+        if(this.#deleted) {
+            return;
+        }
+
         if(this.#is_in_inventory && !$('td#armour_name__'+this.#id).length) {
-            var new_row = '<tr class="block_body">'
+            var new_row = '<tr class="block_body" armour_id="'+this.#id+'">'
             new_row += '<td id="armour_name__'+this.#id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_armour_id="'+this.#id+'">'+this.#name+'</td>'
             new_row += '<td id="armour_location__'+this.#id+'" class="center">'+this.#locations+'</td>'
             new_row += '<td id="armour_encumbrance__'+this.#id+'" class="center">'+this.#encumbrance+'</td>'
@@ -427,6 +467,7 @@ class Armour{
             new_row += '</tr>'
             $("table#armour").append(new_row)
             $("input[type='checkbox']#armour_put_on_checkbox__"+this.#id).on("change", put_on_armour);
+            $("img[delete_armour_id="+this.#id+"]").click(delete_armour);
         } else {
             console.log("Armour NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         }
@@ -2430,6 +2471,13 @@ class CharacterParameters {
         a.put_on = checked;
         a.put_on_update_ui();
     }
+    deleteArmour(armour_id) {
+        $.each(this.#armour, function(i, item) {
+            if(item.id == armour_id) {
+                item.deleted = true;
+            }
+        });
+    }
 };
 class Note{
     #id              = 0;
@@ -3061,6 +3109,11 @@ function trappings_add() {
 function put_on_armour() {
     console.log("put_on_armour: id:"+$(this).attr('armour_id') + " checked="+$(this).prop('checked'))
     characterParameters.put_on_armour($(this).attr('armour_id'), $(this).prop('checked'));
+}
+function delete_armour(){
+    var armour_id = $(this).attr("delete_armour_id")
+    console.log("delete_armour: "+armour_id);
+    characterParameters.deleteArmour(armour_id);
 }
 function close_ambition() {
     var ambition_id = $(this).attr("close_ambitions_id")
