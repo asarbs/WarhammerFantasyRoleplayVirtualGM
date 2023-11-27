@@ -1509,6 +1509,10 @@ def ajax_removeWeapon(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     c = Character.objects.get(id = request.POST['character_id'])
+    weapon = Weapon.objects.get(id = request.POST['weapon_id']);
+    c.weapon.remove(weapon)
+
+    logger.debug("remove weapon {} from {}".format(weapon, c))
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)
@@ -1530,7 +1534,7 @@ def ajax_removeTrappings(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-    c = Character.objects.get(id = request.POST['character_id'])
+    Character2Trappingl.objects.get(characters_id= request.POST['character_id'], trapping_id=request.POST['trapping_id']).delete()
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)
@@ -1540,6 +1544,10 @@ def ajax_removeSpells(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     c = Character.objects.get(id = request.POST['character_id'])
+    spells = Spells.objects.get(id = request.POST['spells_id']);
+    c.spells.remove(spells)
+
+    logger.debug("remove spells {} from {}".format(spells, c))
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)

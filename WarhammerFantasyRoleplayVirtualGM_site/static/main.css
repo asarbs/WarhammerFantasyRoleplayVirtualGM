@@ -113,6 +113,11 @@ td.center  {
     text-align: center;
 }
 
+img.pointer {
+    cursor: pointer;
+    width: 15px;
+}
+
 select,
 input {
     border : #AAA solid 1px;
