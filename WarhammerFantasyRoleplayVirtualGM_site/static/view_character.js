@@ -541,9 +541,10 @@ class Weapon{
     #qualities_and_flaws
     #reach_range
     #is_in_inventory
+    #is_range
     #deleted = false
     #not_sb_group= ['BLACKPOWDER', "CROSSBOW", "ENGINEERING", "EXPLOSIVES", "SLING"]
-    constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory) {
+    constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory, is_range) {
         this.#id = id
         this.#name = name
         this.#weapon_group = weapon_group
@@ -553,6 +554,7 @@ class Weapon{
         this.#damage = damage
         this.#qualities_and_flaws = qualities_and_flaws
         this.#reach_range = reach_range
+        this.#is_range = is_range
         this.#is_in_inventory = is_in_inventory
         console.log("Weaponr:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory);
     }
@@ -693,7 +695,15 @@ class Weapon{
         console.log("updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         if(this.#is_in_inventory && this.#deleted == false && !$('td#weapon_name__'+this.#id).length) {
             var new_row = '<tr class="block_body" weapon_id="'+this.#id+'">'
-            new_row += '<td id="weapon_name__'+this.#id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_weapon_id="'+this.#id+'" class="pointer">'+this.name+'</td>'
+            new_row += '<td id="weapon_name__'+this.#id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_weapon_id="'+this.#id+'" class="pointer">'
+            if(this.#is_range == true) {
+                new_row += '<a href="/wfrpg_gm/EditRangedWeapon/'+this.id+'">'+this.name+'</a>'
+            } else {
+                new_row += '<a href="/wfrpg_gm/EditMeleWeapon/'+this.id+'">'+this.name+'</a>'
+            }
+
+
+            new_row += '</td>'
             new_row += '<td id="weapon_location__'+this.#id+'" class="center">'+this.weapon_group+'</td>'
             new_row += '<td id="weapon_encumbrance__'+this.#id+'" class="center">'+this.encumbrance+'</td>'
             new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.reach_range+'</td>'
@@ -2047,7 +2057,7 @@ class CharacterParameters {
             if(!$('#trappings_enc__'+item.id).length && item.is_in_inventory) {
                 console.log("updateTrappingsTable: "+item.id +"; "+item.name);
                 new_row = '<tr class="block_body" trapping_id="'+this.id+'">'
-                new_row += '<td id="trappings_name__'+item.id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_trapping_id="'+this.id+'" class="pointer">'+item.name+'</td>'
+                new_row += '<td id="trappings_name__'+item.id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_trapping_id="'+this.id+'" class="pointer"><a href="/wfrpg_gm/TrappingssEditView/'+item.id+'">'+item.name+'</a></td>'
                 new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname" value="'+item.enc+'"></td>'
                 new_row += '</tr>'
                 $("#trappings_table").append(new_row)
@@ -2168,7 +2178,9 @@ class CharacterParameters {
             weapon.damage,
             weapon.qualities_and_flaws,
             weapon.reach_range,
-            weapon.is_in_inventory);
+            weapon.is_in_inventory,
+            weapon.is_range
+            );
         this.#weapon.push(a)
         a.updateUI();
         $("select#add_weapon").append($('<option>', {value: weapon.id, text: weapon.name}));

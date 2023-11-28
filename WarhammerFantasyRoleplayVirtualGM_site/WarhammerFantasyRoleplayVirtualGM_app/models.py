@@ -470,6 +470,11 @@ class MeleeWeapons(Weapon):
     def get_absolute_url(self):
         return reverse("MeleWeaponListView")
 
+    def to_dict(self, is_in_inventory=False):
+        data = super().to_dict(is_in_inventory)
+        data['is_range'] = False
+        return data
+
 class RangedWeapon(Weapon):
     range = models.IntegerField(default=0, verbose_name="Range")
 
@@ -479,6 +484,11 @@ class RangedWeapon(Weapon):
 
     def get_absolute_url(self):
         return reverse("RangedWeaponListView")
+
+    def to_dict(self, is_in_inventory=False):
+        data = super().to_dict(is_in_inventory)
+        data['is_range'] = True
+        return data
 
 class Spells(models.Model):
     class SpellList(models.TextChoices):
