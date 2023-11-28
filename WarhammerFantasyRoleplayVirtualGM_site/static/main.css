@@ -56,6 +56,30 @@
     display: inline-block;
 }
 
+.tooltip {
+  /* position: relative; */
+  /* display: inline-block; */
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 600px;
+  background-color: black;
+  color: #fff;
+  font-size: 80%;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
 body {
     background-color : #FFFFFF;
     font-family: AntykwaTorunska-Regular;

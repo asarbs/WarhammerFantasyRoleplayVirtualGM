@@ -41,6 +41,9 @@ class Skill {
     get is_species_skill() {
         return this.#is_species_skill
     }
+    get description() {
+        return this.#description
+    }
     set adv_standard(adv) {
         if(typeof adv === "number") {
             this.#adv_standard = adv;
@@ -1981,7 +1984,7 @@ class CharacterParameters {
             var new_row = ""
             if(!$('#skills_adv__'+item.id).length && !$('#skills_characteristics__'+item.id).length) {
                 new_row = '<tr class="block_body">'
-                new_row += '<td id="skills_name__'+item.id+'" class="left">'+item.name+'</td>'
+                new_row += '<td id="skills_name__'+item.id+'" class="left tooltip">'+item.name+'<span class="tooltiptext">'+item.description+'</span></td>'
                 new_row += '<td class="characteristics">'+item.characteristics+'</td>'
                 new_row += '<td class="edit"><input type="number" id="skills_characteristics__'+item.id+'" name="fname"></td>'
                 new_row += '<td class="edit"><input type="number" id="skills_adv__'+item.id+'" class="skills_adv" skill_id="'+item.id+'" min="0" max="100" step="1" name="fname"></td>'
