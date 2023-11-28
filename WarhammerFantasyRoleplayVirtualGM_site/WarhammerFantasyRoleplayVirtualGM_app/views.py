@@ -62,6 +62,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.tables import RangedWeaponsTable
 from WarhammerFantasyRoleplayVirtualGM_app.tables import SpellsTable
 from WarhammerFantasyRoleplayVirtualGM_app.tables import TalentTable
 from WarhammerFantasyRoleplayVirtualGM_app.tables import TrappingTable
+from WarhammerFantasyRoleplayVirtualGM_app.models import createCharacterLog as ccl
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -133,7 +134,7 @@ def ajax_saveSpecies(request):
     character = Character.objects.get(id= request.POST['character_id'])
     character.species = Species.objects.get(id=request.POST['species_id'])
     character.save()
-
+    ccl(request.user, character, "set species  to {}".format(character.species))
     return JsonResponse({'status': 'ok', "species_id": character.species.id})
 
 def ajax_saveClass(request):
@@ -143,7 +144,7 @@ def ajax_saveClass(request):
     character = Character.objects.get(id= request.POST['character_id'])
     character.ch_class = Class.objects.get(id=request.POST['class_id'])
     character.save()
-
+    ccl(request.user, character, "set class  to {}".format(character.ch_class))
     return JsonResponse({'status': 'ok', 'class_id':character.ch_class.id})
 
 def ajax_saveCareer(request):
@@ -155,7 +156,7 @@ def ajax_saveCareer(request):
     character = Character.objects.get(id= request.POST['character_id'])
     character.career = Career.objects.get(id=request.POST['career_id'])
     character.save()
-
+    ccl(request.user, character, "set career  to {}".format(character.career))
     return JsonResponse({'status': 'ok', 'career_id':character.career.id})
 
 
@@ -166,7 +167,7 @@ def ajax_saveCareer_level(request):
     character = Character.objects.get(id= request.POST['character_id'])
     character.career_level = id=request.POST['career_level']
     character.save()
-
+    ccl(request.user, character, "set career level to {}".format(character.career_level))
     return JsonResponse({'status': 'ok', 'career_level':character.career_level})
 
 @login_required
@@ -225,7 +226,9 @@ def ajax_saveTalentToCharacter(request):
     talent_id = request.POST['talent_id']
     talent_taken = request.POST['talent_taken']
     try:
-        char2tal, created = Character2Talent.objects.get_or_create(characters_id=character_id, talent_id=talent_id, taken=talent_taken)
+        character = Character.objects.get(id=character_id)
+        char2tal, created = Character2Talent.objects.get_or_create(characters=character, talent_id=talent_id, taken=talent_taken)
+        ccl(request.user, character, "add talen \"{}\".".format(char2tal.talent.name))
         char2tal.save()
     except django.db.utils.IntegrityError as e:
         logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.taken.name, created))
@@ -238,7 +241,9 @@ def ajax_saveTrappingToCharacter(request):
     character_id = request.POST['character_id']
     trapping_id = request.POST['trapping_id']
     try:
-        char2tal, created = Character2Trappingl.objects.get_or_create(characters_id=character_id, trapping_id=trapping_id)
+        character = Character.objects.get(id=character_id)
+        char2tal, created = Character2Trappingl.objects.get_or_create(characters=character, trapping_id=trapping_id)
+        ccl(request.user, character, "add Traping \"{}\".".format(char2tal.trapping.name))
         char2tal.save()
     except django.db.utils.IntegrityError as e:
         logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.trapping.name, created))
@@ -355,6 +360,7 @@ def ajax_saveName(request):
             character.name = request.POST['name']
             logger.debug("character name: {}".format(character.name))
             character.save()
+            ccl(request.user, character, "change character name to {} ".format(character.name))
             return JsonResponse({'status': 'ok', 'name': character.name})
         else:
             logger.error("ajax_saveName character_id={}".format(character_id))
@@ -562,6 +568,7 @@ def ajax_saveFate(request):
                    'fate_fate':    int(character.fate_fate),
             }
             logger.debug(ret)
+            ccl(request.user, character, "change character fate to  {} ".format(character.fate_fate))
             return JsonResponse(ret)
         else:
             logger.error("ajax_save_fate not found: character_id={}".format(character_id))
@@ -582,6 +589,7 @@ def ajax_saveFortune(request):
                    'fate_fortune':     int(character.fate_fortune),
             }
             logger.debug(ret)
+            ccl(request.user, character, "change character fortune to  {} ".format(character.fate_fortune))
             return JsonResponse(ret)
         else:
             logger.error("ajax_save_fortune not found: character_id={}".format(character_id))
@@ -600,6 +608,7 @@ def ajax_saveAge(request):
             character.save()
             ret = {'status': 'ok'  }
             logger.debug(ret)
+            ccl(request.user, character, "set character age to {}".format(character.age))
             return JsonResponse(ret)
         else:
             logger.error("ajax_saveAge not found: character_id={}".format(character_id))
@@ -617,6 +626,7 @@ def ajax_saveHeight(request):
             character.save()
             ret = {'status': 'ok'  }
             logger.debug(ret)
+            ccl(request.user, character, "set character high to {}".format(character.height))
             return JsonResponse(ret)
         else:
             logger.error("ajax_saveHeight not found: character_id={}".format(character_id))
@@ -636,6 +646,7 @@ def ajax_saveHair(request):
             character.save()
             ret = {'status': 'ok'  }
             logger.debug(ret)
+            ccl(request.user, character, "set character hair to {}".format(character.hair))
             return JsonResponse(ret)
         else:
             logger.error("ajax_saveHair not found: character_id={}".format(character_id))
@@ -654,6 +665,7 @@ def ajax_saveEyes(request):
             character.save()
             ret = {'status': 'ok'  }
             logger.debug(ret)
+            ccl(request.user, character, "set character eyes to {}".format(character.eyes))
             return JsonResponse(ret)
         else:
             logger.error("ajax_saveEyes not found: character_id={}".format(character_id))
@@ -671,6 +683,7 @@ def ajax_saveSkillAdv(request):
             ch2skill = Character2Skill.objects.get(characters_id=character_id, skills_id=request.POST['skill_id'])
             if ch2skill is not None:
                 ch2skill.adv =request.POST['points']
+
                 ch2skill.save()
             else:
                 logger.error("ajax_saveSkillAdv not found: character_id={}".format(character_id))
@@ -700,7 +713,7 @@ def ajax_saveFreeHandSkillAdv(request):
     ch2skill = Character2Skill.objects.get(characters_id=request.POST['character_id'], skills_id=request.POST['skill_id'])
     ch2skill.adv = request.POST['skill_adv_val']
     ch2skill.save()
-
+    ccl(request.user, ch2skill.characters, "Update \"{}\" to {}.".format(ch2skill.skills, ch2skill.adv))
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
@@ -725,6 +738,8 @@ def ajax_saveFreeHandCharacteristicAdv(request):
 
     ch.save()
 
+    ccl(request.user, ch, "set characteristics: ws_advances  = {}; bs_advances  = {}; s_advances   = {}; t_advances   = {}; i_advances   = {}; ag_advances  = {}; dex_advances = {}; int_advances = {}; wp_advances  = {}; fel_advances = {};".format(request.POST['characteristics_ws_advances'], request.POST['characteristics_bs_advances'], request.POST['characteristics_s_advances'], request.POST['characteristics_t_advances'], request.POST['characteristics_i_advances'], request.POST['characteristics_ag_advances'], request.POST['characteristics_dex_advances'], request.POST['characteristics_int_advances'], request.POST['characteristics_wp_advances'], request.POST['characteristics_fel_advances']))
+
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
@@ -746,8 +761,10 @@ def ajax_saveFreeHandCharacteristicInit(request):
     ch.characteristics_int_initial = request.POST['characteristics_int_initial']
     ch.characteristics_wp_initial  = request.POST['characteristics_wp_initial']
     ch.characteristics_fel_initial = request.POST['characteristics_fel_initial']
-
     ch.save()
+    ccl(request.user, ch, "set characteristics: ws_initial  = {}; bs_initial  = {}; s_initial   = {}; t_initial   = {}; i_initial   = {}; ag_initial  = {}; dex_initial = {}; int_initial = {}; wp_initial  = {}; fel_initial = {};".format(request.POST['characteristics_ws_initial'], request.POST['characteristics_bs_initial'], request.POST['characteristics_s_initial'], request.POST['characteristics_t_initial'], request.POST['characteristics_i_initial'], request.POST['characteristics_ag_initial'], request.POST['characteristics_dex_initial'], request.POST['characteristics_int_initial'], request.POST['characteristics_wp_initial'], request.POST['characteristics_fel_initial']))
+
+
 
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
@@ -771,8 +788,10 @@ def ajax_addArmourToCharacter(request):
 
     character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
-    character.armour.add(Armour.objects.get(id=request.POST['armour_id']))
+    armour = Armour.objects.get(id=request.POST['armour_id'])
+    character.armour.add(armour)
     character.save()
+    ccl(request.user, character, "add armour \"{}\".".format(armour))
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
@@ -784,9 +803,11 @@ def ajax_addWeaponToCharacter(request):
     logger.debug(request.POST)
 
     character_id = request.POST['character_id']
+    weapon = Weapon.objects.get(id=request.POST['weapon_id'])
     character = Character.objects.get(id = character_id)
-    character.weapon.add(Weapon.objects.get(id=request.POST['weapon_id']))
+    character.weapon.add(weapon)
     character.save()
+    ccl(request.user, character, "add weapon \"{}\".".format(weapon))
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
@@ -799,8 +820,10 @@ def ajax_addSpellsToCharacter(request):
 
     character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
-    character.spells.add(Spells.objects.get(id=request.POST['spell_id']))
+    spell = Spells.objects.get(id=request.POST['spell_id'])
+    character.spells.add()
     character.save()
+    ccl(request.user, character, "add spell \"{}\".".format(spell))
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
@@ -867,6 +890,8 @@ def ajax_saveAmbitions(request):
             character.ambitions_longterm.add(ami)
         character.save()
 
+
+    ccl(request.user, character, "add ambition \"{}\"; achieved={}".format(request.POST['description'], ami.achieved) )
     ret = {'status': 'ok' , 'id':ami.id}
     logger.debug(ret)
     return JsonResponse(ret)
@@ -880,6 +905,8 @@ def ajax_saveCurrentEp(request):
 
     ch, created = Character.objects.get_or_create(id=request.POST['character_id'])
     ch.experience_current = request.POST['experience_current']
+
+    ccl(request.user, ch, "change character experience current to  {} ".format(character.experience_current))
     ch.save()
 
     ret = {'status': 'ok'}
@@ -1144,6 +1171,7 @@ def ajax_view_getCharacterData(request):
             },
             'talents_all': [],
             'careers_advance_scheme': {},
+            'characterChangeLog': [],
         }
 
     character_id = request.POST['character_id']
@@ -1206,7 +1234,7 @@ def ajax_view_getCharacterData(request):
         ret['character']["ambitions_longterm"].append(ambitions_longterm.to_dict())
 
     for ss in Character2Skill.objects.filter(characters=character).all():
-        logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
+        # logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
         ret['skills'][ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
 
     ch2STrappingl = list(Character2Trappingl.objects.filter(characters=character).values_list("trapping", flat=-True))
@@ -1241,6 +1269,9 @@ def ajax_view_getCharacterData(request):
 
     for n in character.notes.order_by('datetime_create'):
         ret['notes'].append(n.to_dict())
+
+    for l in CharacterChangeLog.objects.filter(character=character).order_by("id")[0:50]:
+        ret['characterChangeLog'].append(l.to_dict())
 
     ret['party']['name'] = character.campaign.party_name
     for a in character.campaign.ambitions_shortterm.all():
@@ -1339,6 +1370,7 @@ def ajax_saveMotivation(request):
 
     character.resilience_motivation = request.POST['resilience_motivation']
     character.save()
+    ccl(request.user, character, "change character motivation to  {} ".format(character.resilience_motivation))
     ret = {'status': 'ok'}
     return JsonResponse(ret)
 
@@ -1352,6 +1384,7 @@ def ajax_saveResolve(request):
 
     character.resilience_resolve = request.POST['resilience_resolve']
     character.save()
+    ccl(request.user, character, "change character resolve to  {} ".format(character.resilience_resolve))
     ret = {'status': 'ok'}
     return JsonResponse(ret)
 
@@ -1364,6 +1397,8 @@ def ajax_saveResilience(request):
     character = Character.objects.get(id = character_id)
 
     character.resilience_resilience = request.POST['resilience_resilience']
+
+    ccl(request.user, character, "change character resilience to  {} ".format(character.resilience_resilience))
     character.save()
     ret = {'status': 'ok'}
     return JsonResponse(ret)
@@ -1400,11 +1435,11 @@ def ajax_saveSkill2Character(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     logger.debug(request.POST)
-
+    character = Character.objects.get(id=request.POST['character_id'])
     c2s, crated = Character2Skill.objects.get_or_create(characters_id = request.POST['character_id'], skills_id = request.POST['skill_id'])
 
     skill = {'id': c2s.skills.id, 'name': c2s.skills.name, 'characteristics': c2s.skills.characteristics, 'description': c2s.skills.description, 'adv':c2s.adv, 'is_basic_skill':c2s.is_basic_skill , 'is_species_skill': c2s.is_species_skill, 'is_career_skill': c2s.is_career_skill}
-
+    ccl(request.user, character, "add skil to character {} with adv = {}".format(c2s.skills.name, c2s.adv))
     ret = {'status': 'ok', 'skill': skill, 'crated':crated}
     # logger.debug(ret)
     return JsonResponse(ret)
@@ -1421,7 +1456,7 @@ def ajax_saveExperience_current(request):
 
     character.experience_current = request.POST['experience_current']
     character.save()
-
+    ccl(request.user, character, "change character current experience to  {} ".format(character.experience_current))
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
@@ -1437,7 +1472,7 @@ def ajax_saveExperience_spent(request):
 
     character.experience_spent = request.POST['experience_spent']
     character.save()
-
+    ccl(request.user, character, "change character spend experience to  {} ".format(character.experience_spent))
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
 
@@ -1498,7 +1533,6 @@ def ajax_removeAmbitions(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     res = Ambitions.objects.get(id=request.POST['ambition_id']).delete()
-
     logger.debug("remove ambition id:{}; res={}".format(request.POST['ambition_id'], res))
 
     ret = {'status': 'ok', }
@@ -1509,9 +1543,9 @@ def ajax_removeWeapon(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     c = Character.objects.get(id = request.POST['character_id'])
-    weapon = Weapon.objects.get(id = request.POST['weapon_id']);
+    weapon = Weapon.objects.get(id = request.POST['weapon_id'])
     c.weapon.remove(weapon)
-
+    ccl(request.user, c, "remove weapon {}".format(weapon))
     logger.debug("remove weapon {} from {}".format(weapon, c))
 
     ret = {'status': 'ok', }
@@ -1524,7 +1558,7 @@ def ajax_removeArmour(request):
     c = Character.objects.get(id = request.POST['character_id'])
     armour = Armour.objects.get(id = request.POST['armour_id']);
     c.armour.remove(armour)
-
+    ccl(request.user, c, "remove armour \"{}\".".format(armour))
     logger.debug("remove armour {} from {}".format(armour, c))
 
     ret = {'status': 'ok', }
@@ -1534,8 +1568,10 @@ def ajax_removeTrappings(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-    Character2Trappingl.objects.get(characters_id= request.POST['character_id'], trapping_id=request.POST['trapping_id']).delete()
+    ch2t =Character2Trappingl.objects.get(characters_id= request.POST['character_id'], trapping_id=request.POST['trapping_id'])
+    ccl(request.user, ch2t.characters, "remove Trapping \"{}\".".format(ch2t.trapping))
 
+    ch2t.delete()
     ret = {'status': 'ok', }
     return JsonResponse(ret)
 
@@ -1546,7 +1582,7 @@ def ajax_removeSpells(request):
     c = Character.objects.get(id = request.POST['character_id'])
     spells = Spells.objects.get(id = request.POST['spells_id']);
     c.spells.remove(spells)
-
+    ccl(request.user, c, "remove spell \"{}\".".format(spells))
     logger.debug("remove spells {} from {}".format(spells, c))
 
     ret = {'status': 'ok', }

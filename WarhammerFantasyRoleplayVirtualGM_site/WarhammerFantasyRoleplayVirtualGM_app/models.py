@@ -703,3 +703,35 @@ class ImprovementXPCosts(models.Model):
         for f in opts.concrete_fields:
             data[f.name] = f.value_from_object(self)
         return data
+
+
+class CharacterChangeLog(models.Model):
+    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name="Create Time")
+    user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, verbose_name='Character', on_delete=models.CASCADE)
+    log = models.TextField(verbose_name="Log", default="", blank=False, null=False)
+
+    def __str__(self):
+        return u"{0} -> {1}; {2}; {3}".format(self.datetime_create, self.user, self.character, self.log)
+
+    def __unicode__(self):
+        return u"{0} -> {1}; {2}; {3}".format(self.datetime_create, self.user, self.character, self.log)
+
+    @property
+    def formated_datatime(self):
+        return self.datetime_create.strftime('%Y-%m-%d %H:%M')
+
+    @property
+    def timestamp(self):
+        return self.datetime_create.strftime('%Y%m%d%H%M%S')
+
+    @property
+    def user_name(self):
+        return u"{0} \"{1}\" {2}".format(self.user.first_name, self.user.username, self.user.last_name)
+
+    def to_dict(self):
+        return {"id": self.id, "datetime_create": self.formated_datatime, 'timestamp':self.timestamp , "user": self.user_name, "log":self.log}
+
+def createCharacterLog(u:User, c:Character, l:str):
+    ccl =CharacterChangeLog.objects.create(user=u, character=c,log=l)
+    ccl.save()

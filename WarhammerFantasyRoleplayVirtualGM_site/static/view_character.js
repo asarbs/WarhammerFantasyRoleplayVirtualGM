@@ -2523,6 +2523,21 @@ class CharacterParameters {
         this.#notes.push(new_note);
         new_note.updateUI();
     }
+    appendLog(log) {
+
+        console.log("Log.updateUI: "+ log.datetime_create);
+        if(!$('td#character_change_log__'+log.timestamp).length) {
+            var new_row = '<tr class="note_line">'
+            new_row += '<td id="character_change_log__'+log.timestamp+'" class="date">'+log.datetime_create+'</td>'
+            new_row += '<td>'+log.user+'</td>'
+            new_row += '<td>'+log.log+'</td>'
+            new_row += '</tr>'
+            $("table#character_change_log tr.block_header").after(new_row)
+        } else {
+            console.log("NOT log.updateUI: "+ this.datetime_create);
+        }
+
+    }
     saveNote(note) {
         let new_note = new Note(note['id'], note['datetime_create'], note['timestamp'], note['note_text']);
         this.#notes.push(new_note);
@@ -2713,6 +2728,7 @@ function get_characterData(){
     get_fullSpeciesList();
     get_fullClassList();
 
+
     $.ajax({
         type: "POST",
         url: "/wfrpg_gm/ajax_view_getCharacterData",
@@ -2829,6 +2845,10 @@ function get_characterData(){
 
             data['notes'].forEach(element => {
                 characterParameters.appendNote(element)
+            });
+
+            data['characterChangeLog'].forEach(element => {
+                characterParameters.appendLog(element)
             });
 
             $("input").prop("readonly", true);

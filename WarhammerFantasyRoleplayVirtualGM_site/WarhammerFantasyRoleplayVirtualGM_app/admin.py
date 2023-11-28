@@ -228,6 +228,11 @@ class NoteAdmin(admin.ModelAdmin):
     ordering = ("datetime_update", "datetime_create")
     save_as = True
 
+class CharacterChangeLogAdmin(admin.ModelAdmin):
+    list_display = ("datetime_create", "user", "character", 'log')
+    list_filter = ("character", "datetime_create","user")
+    ordering = ("character", "datetime_create")
+
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
@@ -261,3 +266,4 @@ admin.site.register(models.Ambitions, AmbitionsAdmin)
 admin.site.register(models.Character2Talent, Character2TalentAdmin)
 admin.site.register(models.Character2Trappingl, Character2TrappinglAdmin)
 admin.site.register(models.Note, NoteAdmin)
+admin.site.register(models.CharacterChangeLog, CharacterChangeLogAdmin)
