@@ -3528,6 +3528,9 @@ function updateSpecies(){
         success: function(data) {
             console.log(data);
             characterParameters.species_id = data['species_id']
+            characterParameters.movement_movement = data['movement_movement']
+            characterParameters.movement_walk = data['movement_walk']
+            characterParameters.movement_run = data['movement_run']
         }
     });
 }

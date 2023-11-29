@@ -132,10 +132,21 @@ def ajax_saveSpecies(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     character = Character.objects.get(id= request.POST['character_id'])
-    character.species = Species.objects.get(id=request.POST['species_id'])
+    species = Species.objects.get(id=request.POST['species_id'])
+    character.species = species
+    rat = RandomAttributesTable.objects.get(species=species)
+    character.movement_movement = rat.movement
+    character.movement_walk     = 2 * rat.movement
+    character.movement_run      = 4 * rat.movement
     character.save()
-    ccl(request.user, character, "set species  to {}".format(character.species))
-    return JsonResponse({'status': 'ok', "species_id": character.species.id})
+    ccl(request.user, character, "set species  to {}; movement={}; walk={}; run{}".format(character.species, character.movement_movement, character.movement_walk, character.movement_run))
+    res = {'status': 'ok',
+           "species_id": character.species.id,
+           'movement_movement': character.movement_movement,
+           'movement_walk': character.movement_walk,
+           'movement_run': character.movement_run,
+           }
+    return JsonResponse(res)
 
 def ajax_saveClass(request):
     if not request.method == 'POST':
@@ -431,6 +442,8 @@ def ajax_randomAttributes(request):
             character.resilience_resilience = rat.resilience
             character.resilience_resolve = rat.resilience
             character.movement_movement = rat.movement
+            character.movement_walk = 2 * rat.movement
+            character.movement_run = 4 * rat.movement
             SB = math.floor(character.characteristics_s_initial / 10.0)
             TB = math.floor(character.characteristics_t_initial / 10.0)
             WPB = math.floor(character.characteristics_wp_initial / 10.0)
