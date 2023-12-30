@@ -592,16 +592,6 @@ class Character(models.Model):
     def __unicode__(self):
         return u"{0}".format(self.name)
 
-class Character2Trappingl(models.Model):
-    characters = models.ForeignKey(Character, on_delete=models.CASCADE)
-    trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
-    is_basic_skill = models.BooleanField(default=False)
-    is_species_skill = models.BooleanField(default=False)
-    is_career_skill = models.BooleanField(default=False)
-
-    class Meta:
-        unique_together = ('characters', 'trapping',)
-
 class Character2Skill(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     skills = models.ForeignKey(Skils, on_delete=models.CASCADE)
@@ -745,3 +735,54 @@ class CharacterChangeLog(models.Model):
 def createCharacterLog(u:User, c:Character, l:str):
     ccl =CharacterChangeLog.objects.create(user=u, character=c,log=l)
     ccl.save()
+
+class Containers(models.Model):
+    name = models.CharField(max_length= 50)
+    encumbrance = models.IntegerField(default=0, verbose_name="Encumbrance")
+    carries = models.IntegerField(default=0, verbose_name="Carries")
+    price = models.IntegerField(default=0, verbose_name="Price")
+    availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
+    trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+
+    def get_absolute_url(self):
+        return reverse("ContainersListView")
+
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name, 'carries': self.carries, 'encumbrance': self.encumbrance}
+
+class Character2Container(models.Model):
+    character = models.ForeignKey(Character, verbose_name='Character', on_delete=models.CASCADE)
+    container = models.ForeignKey(Containers, verbose_name='Container', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"[{self.id}]{self.character} -> {self.container}"
+
+    def __unicode__(self):
+        return f"[{self.id}]{self.character} -> {self.container}"
+
+    def to_dict(self):
+        return {'Character2Container_id': self.id, 'container': self.container.to_dict()}
+
+class Character2Trapping(models.Model):
+    characters = models.ForeignKey(Character, on_delete=models.CASCADE)
+    trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
+    is_basic_skill = models.BooleanField(default=False)
+    is_species_skill = models.BooleanField(default=False)
+    is_career_skill = models.BooleanField(default=False)
+    container = models.ForeignKey(Character2Container, null=True, blank=True,  on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('characters', 'trapping',)
+
+    def __str__(self):
+        return f"{self.id}; {self.characters} -> {self.trapping}; {self.container}"
+
+    def __unicode__(self):
+        return f"{self.id}; {self.characters} -> {self.trapping}; {self.container}"

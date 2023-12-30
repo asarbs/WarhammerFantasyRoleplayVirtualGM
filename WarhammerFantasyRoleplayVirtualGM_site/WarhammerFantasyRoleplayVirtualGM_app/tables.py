@@ -1,11 +1,7 @@
 import django_tables2 as tables
 from django_tables2.utils import A
 
-from WarhammerFantasyRoleplayVirtualGM_app.models import MeleeWeapons
-from WarhammerFantasyRoleplayVirtualGM_app.models import RangedWeapon
-from WarhammerFantasyRoleplayVirtualGM_app.models import Spells
-from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
-from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
+from WarhammerFantasyRoleplayVirtualGM_app.models import *
 
 from .character_creations_helpers import format_currency
 
@@ -91,3 +87,18 @@ class TalentTable(tables.Table):
         order_by = ('name')
         data = Talent.objects.all()
         per_page = 500
+
+class ContainerTable(tables.Table):
+    id = tables.Column(visible=False)
+    name = tables.LinkColumn("ContainersEditView", args=[A('pk')])
+    reference = tables.Column(visible=False)
+    weapon_ptr = tables.Column(visible=False)
+
+    class Meta:
+        model = Containers
+        attrs = {"class": "paleblue"}
+        sequence = ('name', 'encumbrance',  'carries', 'price', 'availability')
+        order_by = ('name', 'encumbrance',)
+
+    def render_price(self, value):
+        return f"{format_currency(value)}"

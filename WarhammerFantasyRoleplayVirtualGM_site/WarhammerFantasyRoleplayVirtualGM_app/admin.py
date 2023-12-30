@@ -214,8 +214,8 @@ class Character2TalentAdmin(admin.ModelAdmin):
     save_as = True
 
 
-class Character2TrappinglAdmin(admin.ModelAdmin):
-    list_display = ("characters", "trapping", "is_basic_skill", "is_species_skill", "is_career_skill")
+class Character2TrappingAdmin(admin.ModelAdmin):
+    list_display = ("characters", "trapping", "is_basic_skill", "is_species_skill", "is_career_skill", "container")
     list_filter = ("characters",)
     ordering = ("characters", "trapping")
     save_as = True
@@ -232,6 +232,14 @@ class CharacterChangeLogAdmin(admin.ModelAdmin):
     list_display = ("datetime_create", "user", "character", 'log')
     list_filter = ("character", "datetime_create","user")
     ordering = ("character", "datetime_create")
+
+class ContainersAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "encumbrance", "carries", 'price', 'availability', 'trapping')
+    ordering = ("name",)
+    # list_editable
+
+class Character2ContainerAdmin(admin.ModelAdmin):
+    list_display = ("id", "character", "container")
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
@@ -264,6 +272,8 @@ admin.site.register(models.ImprovementXPCosts, ImprovementXPCostsAdmin)
 admin.site.register(models.Spells, SpellsAdmin)
 admin.site.register(models.Ambitions, AmbitionsAdmin)
 admin.site.register(models.Character2Talent, Character2TalentAdmin)
-admin.site.register(models.Character2Trappingl, Character2TrappinglAdmin)
+admin.site.register(models.Character2Trapping, Character2TrappingAdmin)
 admin.site.register(models.Note, NoteAdmin)
 admin.site.register(models.CharacterChangeLog, CharacterChangeLogAdmin)
+admin.site.register(models.Containers, ContainersAdmin)
+admin.site.register(models.Character2Container, Character2ContainerAdmin)

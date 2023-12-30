@@ -36,6 +36,11 @@ urlpatterns = [
     path('TalentsCreateFormView', views.TalentsCreateFormView.as_view(), name="TalentsCreateFormView"),
     path('TalentsEditView/<int:pk>', views.TalentsEditView.as_view(), name="TalentsEditView"),
 
+    path('ContainersListView',          views.ContainersListView.as_view(),       name="ContainersListView"),
+    path('ContainersCreateFormView',    views.ContainersCreateFormView.as_view(), name="ContainersCreateFormView"),
+    path('ContainersEditView/<int:pk>', views.ContainersEditView.as_view(),       name="ContainersEditView"),
+
+
     path("ajax_save_character_species", views.ajax_save_character_species, name="ajax_save_character_species"),
     path("ajax_saveSpecies", views.ajax_saveSpecies, name="ajax_saveSpecies"),
     path("ajax_saveClass", views.ajax_saveClass, name="ajax_saveClass"),
@@ -88,7 +93,7 @@ urlpatterns = [
     path("ajax_removeTrappings", views.ajax_removeTrappings, name="ajax_removeTrappings"),
     path("ajax_removeSpells", views.ajax_removeSpells, name="ajax_removeSpells"),
 
-
+    path("ajax_saveTraping2Container", views.ajax_saveTraping2Container, name="ajax_saveTraping2Container"),
     path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
     path('ajax_saveCampaignNotes', views.ajax_saveCampaignNotes, name="ajax_saveCampaignNotes"),
 

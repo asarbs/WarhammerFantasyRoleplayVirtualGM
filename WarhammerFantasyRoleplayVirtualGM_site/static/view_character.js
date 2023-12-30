@@ -85,17 +85,19 @@ class Skill {
 };
 class Trapping {
     #id              = 0
+    #container_id    = 0
     #name            = ""
     #enc             = 0
     #description     = ""
     #is_in_inventory = false
     #deleted = false;
-    constructor(id, name, enc, description, is_in_inventory) {
+    constructor(id, name, enc, description, is_in_inventory, container_id) {
         this.#id = id;
         this.#name = name;
         this.#enc = enc;
         this.#description = description;
         this.#is_in_inventory = is_in_inventory;
+        this.#container_id = container_id
     }
     get id() {
         return this.#id;
@@ -109,7 +111,7 @@ class Trapping {
             throw "" + name + " is not a string";
     }
     get name() {
-        return this.#name;
+        return this.#name
     }
     set enc(enc) {
         if(typeof enc === "string") {
@@ -134,6 +136,9 @@ class Trapping {
     }
     get is_in_inventory() {
         return this.#is_in_inventory;
+    }
+    get container_id() {
+        return this.#container_id
     }
     set is_in_inventory(is_in_inventory) {
         if(typeof is_in_inventory === "boolean"){
@@ -1111,6 +1116,35 @@ class Ambitions {
     }
 
 }
+
+class Containers {
+    #id                     = 0;
+    #Character2Container_id  = 0;
+    #carries                = 0;
+    #encumbrance            = 0;
+    #name                   = "";
+    constructor(id, carries, encumbrance, name, Character2Container_id) {
+        console.log("Containers "+ id +", name="+name +", carries="+ carries +", encumbrance="+ encumbrance)
+        this.#id = id;
+        this.#carries = carries;
+        this.#encumbrance = encumbrance;
+        this.#name = name;
+        this.#Character2Container_id = Character2Container_id
+    }
+    get id() {
+        return this.#id
+    }
+    get carries() {
+        return this.#carries
+    }
+    get name() {
+        return this.#name
+    }
+    get Character2Container_id() {
+        return this.#Character2Container_id
+    }
+}
+
 class CharacterParameters {
     #id                                 = 0;
     #age                                = 0;
@@ -1119,7 +1153,7 @@ class CharacterParameters {
     #experience_spent                   = 0;
     #career_id                          = 0;
     #career_level                       = 0;
-    #career_path_id                        = "";
+    #career_path_id                     = "";
     #ch_class_id                        = 0;
     #character_creation_step            = 0;
     #characteristics_ag_advances        = 0;
@@ -1184,6 +1218,7 @@ class CharacterParameters {
     #ambitions_shortterm                = [];
     #ambitions_longterm                 = [];
     #notes                              = [];
+    #containers                         = [];
     #advanceScheme;
     classModel = {}
     movement = {
@@ -1327,7 +1362,7 @@ class CharacterParameters {
             $("input#characteristics_s_initial"   ).val(characterParameters.characteristics_s_initial)
             $("input#characteristics_s_current"   ).val(characterParameters.characteristics_s_current)
             $("input#strength_bonus"              ).val(characterParameters.s_bonus)
-            $("input#encumbrance_max"          ).val(characterParameters.s_bonus + characterParameters.t_bonus)
+            $("input#encumbrance_max"          ).val(this.encumbrance_max)
             this.updateWounds();
         }
         else
@@ -1342,7 +1377,7 @@ class CharacterParameters {
             $("input#characteristics_t_initial"   ).val(characterParameters.characteristics_t_initial)
             $("input#characteristics_t_current"   ).val(characterParameters.characteristics_t_current )
             $("input#toughness_bonus"              ).val(this.t_bonus + " * 2")
-            $("input#encumbrance_max"          ).val(characterParameters.s_bonus + characterParameters.t_bonus)
+            $("input#encumbrance_max"          ).val(this.encumbrance_max)
             this.updateWounds();
         }
         else
@@ -2043,6 +2078,21 @@ class CharacterParameters {
             }
         });
     }
+
+    build_containers_options_list(container_id) {
+        let out = ""
+        out += "<option value='-1'>--</option>";
+        this.#containers.forEach(element => {
+            console.log("build_containers_options_list: container_id=" + container_id + "; element.id=" + element.id)
+            if(container_id == element.Character2Container_id) {
+                out += "<option value='"+element.Character2Container_id+"' selected>" + element.name + "</option>";
+            } else {
+                out += "<option value='"+element.Character2Container_id+"'>" + element.name + "</option>";
+            }
+        });
+        return out
+    }
+
     updateTrappingsTable() {
         if(!this.trappingsNeedUpdate) {
             console.log("updateTrappingsTable return");
@@ -2059,10 +2109,39 @@ class CharacterParameters {
                 new_row = '<tr class="block_body" trapping_id="'+this.id+'">'
                 new_row += '<td id="trappings_name__'+item.id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_trapping_id="'+this.id+'" class="pointer"><a href="/wfrpg_gm/TrappingssEditView/'+item.id+'">'+item.name+'</a></td>'
                 new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname" value="'+item.enc+'"></td>'
+                new_row += '<td class="edit">'
+                new_row += '<select name="containers" id="add_container_'+item.id+'">'
+                new_row += characterParameters.build_containers_options_list(item.container_id);
+                new_row += '</select>'
+                new_row += '</td>'
                 new_row += '</tr>'
                 $("#trappings_table").append(new_row)
                 $("img[delete_trapping_id="+this.id+"]").click(delete_trapping);
+                $('select#add_container_'+item.id).on("change", function(){
+                    let container_id = $(this).val()
+                    console.log("item id="+item.id + "; container_id="+container_id)
 
+                    $.ajax({
+                        type: "POST",
+                        url: "/wfrpg_gm/ajax_saveTraping2Container",
+                        async: false,
+                        cache: false,
+                        timeout: 30000,
+                        fail: function(){
+                            return true;
+                        },
+                        data: {
+                            character_id : characterParameters.id,
+                            trapping_id:item.id,
+                            character2container_id:container_id
+                        },
+                        success: function(data) {
+                            console.log(data)
+                        }
+                    });
+
+                });
+                $('select#add_container_'+item.id).addClass( "editable", 10);
             }
         });
     }
@@ -2098,7 +2177,7 @@ class CharacterParameters {
     appendTrappings(trapping) {
         // console.log("appendTrappings:"+ trapping['id']+"; "+trapping['name']+"; "+trapping['description']+"; "+trapping['enc']);
         // id, name, enc, description, is_in_inventory
-        let traping = new Trapping(trapping['id'], trapping['name'],trapping['enc'],trapping['description'],trapping['is_in_inventory']);
+        let traping = new Trapping(trapping['id'], trapping['name'],trapping['enc'],trapping['description'],trapping['is_in_inventory'], trapping['container_id']);
         this.#trappings[trapping['id']] = traping
         this.trappingsNeedUpdate = true;
         $("select#add_trappings").append($('<option>', {value: traping.id, text: traping.name}));
@@ -2230,6 +2309,15 @@ class CharacterParameters {
                 this.updateUI();
             }
         });
+    }
+    add_container(container) {
+        this.#containers.push(new Containers(
+        container.container.id,
+        container.container.carries,
+        container.container.encumbrance,
+        container.container.name,
+        container.Character2Container_id
+        ));
     }
     deleteSpell(spell_id) {
         console.log("characeter deleteSpell: "+ spell_id);
@@ -2487,6 +2575,19 @@ class CharacterParameters {
         return 0
     }
 
+    get container_encumbrance() {
+        let r = 0
+        this.#containers.forEach(element => {
+            r += element.carries
+        })
+        return r
+    }
+
+    get encumbrance_max() {
+        let r = this.s_bonus + this.t_bonus + this.container_encumbrance
+        return r
+    }
+
     updateWounds() {
         $("input#hardy"              ).val(this.hardy + " * " + this.t_bonus);
         $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.hardy * this.t_bonus + this.wp_bonus);
@@ -2518,6 +2619,7 @@ class CharacterParameters {
         $("input#encumbrance_armour").val(armour_enc_sum)
         $("input#encumbrance_weapons").val(weapons_enc_sum)
         $("input#encumbrance_total").val(trapping_enc_sum + armour_enc_sum + weapons_enc_sum)
+        $("input#encumbrance_container").val(this.container_encumbrance)
 
     }
     append_ambitions_shortterm(ambitions_to_append) {
@@ -2752,6 +2854,11 @@ function get_characterData(){
         },
         success: function(data) {
             console.log(data);
+
+            data["containers"].forEach(element => {
+                characterParameters.add_container(element);
+            });
+
             characterParameters.id                           = data['character']["id"                           ]
             characterParameters.name                         = data['character']["name"                         ]
             characterParameters.species                      = data['character']["species"                      ]
@@ -3662,8 +3769,8 @@ function main() {
 
     get_characterData();
 
-    $("input").prop("readonly", true);
-    $("select").prop("readonly", true);
+    // $("input").prop("readonly", true);
+    // $("select").prop("readonly", true);
 
     $("span.dot_not_editable").click(turon_on_edit);
 

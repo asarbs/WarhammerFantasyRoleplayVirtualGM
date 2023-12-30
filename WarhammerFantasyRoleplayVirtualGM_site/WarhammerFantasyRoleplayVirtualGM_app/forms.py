@@ -185,3 +185,33 @@ class TalentForm(ModelForm):
         self.fields['ref'].widget = (
             RelatedFieldWidgetWrapper(self.fields['ref'].widget, self.instance._meta.get_field('ref').remote_field, admin_site)
         )
+
+class ContainersForm(ModelForm):
+    price = PriceCharFiled( help_text="Price should ends with GC or */*")
+
+    def __init__(self, *args, **kwargs):
+        super(ContainersForm, self).__init__(*args, **kwargs)
+
+
+    class Meta:
+        model = models.Containers
+        fields = ["name", "encumbrance", "carries", "price", "availability", "trapping"]
+
+    def calc_price_to_brass(self):
+        logger.debug("price:{}".format(self.data['price']))
+        self.data['price'] = calc_price_to_brass(self.data['price'])
+        return True
+
+    def is_valid(self) -> bool:
+        logger
+        self.data._mutable = True
+        price_calc = self.calc_price_to_brass()
+        self.data._mutable = False
+        valid = super(ContainersForm,self).is_valid()
+        logger.debug("price:{};valid={}; price_calc={}".format(self.data['price'], valid, price_calc))
+        return valid
+
+    def save(self, commit=True):
+        mwf = super(ContainersForm, self).save(commit=False)
+        mwf.save()
+        return mwf

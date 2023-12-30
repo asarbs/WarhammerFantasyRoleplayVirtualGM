@@ -30,39 +30,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-from WarhammerFantasyRoleplayVirtualGM_app.forms import Campaign2PlayerForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import CreateCampaignForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import MeleWeaponForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import RangedWeaponForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import RemindPasswordForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import SpellsForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import TalentForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import TrappingForm
-from WarhammerFantasyRoleplayVirtualGM_app.forms import UserForm
+from WarhammerFantasyRoleplayVirtualGM_app.forms import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import *
-from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
-from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
-from WarhammerFantasyRoleplayVirtualGM_app.models import Career
-from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
-from WarhammerFantasyRoleplayVirtualGM_app.models import Character
-from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Skill
-from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Talent
-from WarhammerFantasyRoleplayVirtualGM_app.models import ClassTrappings
-from WarhammerFantasyRoleplayVirtualGM_app.models import ExampleName
-from WarhammerFantasyRoleplayVirtualGM_app.models import Eyes
-from WarhammerFantasyRoleplayVirtualGM_app.models import Hair
-from WarhammerFantasyRoleplayVirtualGM_app.models import Player
-from WarhammerFantasyRoleplayVirtualGM_app.models import RandomAttributesTable
-from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
-from WarhammerFantasyRoleplayVirtualGM_app.models import Species
-from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
-from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
-from WarhammerFantasyRoleplayVirtualGM_app.tables import MeleeWeaponsTable
-from WarhammerFantasyRoleplayVirtualGM_app.tables import RangedWeaponsTable
-from WarhammerFantasyRoleplayVirtualGM_app.tables import SpellsTable
-from WarhammerFantasyRoleplayVirtualGM_app.tables import TalentTable
-from WarhammerFantasyRoleplayVirtualGM_app.tables import TrappingTable
 from WarhammerFantasyRoleplayVirtualGM_app.models import createCharacterLog as ccl
+from WarhammerFantasyRoleplayVirtualGM_app.tables import *
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
@@ -253,9 +224,19 @@ def ajax_saveTrappingToCharacter(request):
     trapping_id = request.POST['trapping_id']
     try:
         character = Character.objects.get(id=character_id)
-        char2tal, created = Character2Trappingl.objects.get_or_create(characters=character, trapping_id=trapping_id)
+        char2tal, created = Character2Trapping.objects.get_or_create(characters=character, trapping_id=trapping_id)
         ccl(request.user, character, "add Traping \"{}\".".format(char2tal.trapping.name))
         char2tal.save()
+
+        containers = Containers.objects.filter(trapping_id=trapping_id)
+        if containers.exists():
+            for c in containers:
+                logger.debug(f"container: {c.name}")
+                char2Cont, created = Character2Container.objects.get_or_create(character = character, container = c)
+                ccl(request.user, character, "add Containers \"{}\".".format(char2Cont.container.name))
+                char2Cont.save()
+
+
     except django.db.utils.IntegrityError as e:
         logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.trapping.name, created))
     return JsonResponse({'status': 'ok'})
@@ -317,10 +298,10 @@ def ajax_randomClass(request):
 
 
 
-            Character2Trappingl.objects.filter(characters=character, is_career_skill = True).delete()
+            Character2Trapping.objects.filter(characters=character, is_career_skill = True).delete()
             for classTraping in ClassTrappings.objects.filter(ch_class=career.ch_class).all():
                 try:
-                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=classTraping.trapping, enc=classTraping.trapping.encumbrance)
+                    ch2STrappingl, created = Character2Trapping.objects.get_or_create(characters=character, trapping=classTraping.trapping, enc=classTraping.trapping.encumbrance)
                     logger.debug("ClassTrappings.trapping.id={} name={};".format(classTraping.trapping.id, classTraping.trapping.name))
                     ch2STrappingl.is_career_skill = True
                     ch2STrappingl.save()
@@ -329,14 +310,14 @@ def ajax_randomClass(request):
 
             for trapping in ad.trappings.all():
                 try:
-                    ch2STrappingl, created = Character2Trappingl.objects.get_or_create(characters=character, trapping=trapping, enc=trapping.encumbrance)
+                    ch2STrappingl, created = Character2Trapping.objects.get_or_create(characters=character, trapping=trapping, enc=trapping.encumbrance)
                     ch2STrappingl.is_career_skill = True
                     ch2STrappingl.save()
                 except django.db.utils.IntegrityError as e:
                     logger.debug("UNIQUE constraint failed: characters:{} Trappings:{} created:{}".format(character.id, trapping.name, created))
 
             trappings = {}
-            for ch2STrappingl in Character2Trappingl.objects.filter(characters=character).all():
+            for ch2STrappingl in Character2Trapping.objects.filter(characters=character).all():
                 logger.debug("'id': {}, 'name': {}, 'description': {}, 'enc': {}".format(ch2STrappingl.id, ch2STrappingl.trapping.name, ch2STrappingl.trapping.description, ch2STrappingl.enc))
                 trappings[ch2STrappingl.id] = {
                     'id': ch2STrappingl.id,
@@ -1158,6 +1139,21 @@ class TalentsEditView(LoginRequiredMixin, UpdateView):
     form_class = TalentForm
     model = Talent
 
+class ContainersListView(SingleTableView):
+    model = Containers
+    table_class = ContainerTable
+    template_name = 'list_Container.html'
+    paginator_class = LazyPaginator
+
+class ContainersCreateFormView(LoginRequiredMixin, CreateView):
+    template_name = "create_Container.html"
+    form_class = ContainersForm
+
+class ContainersEditView(LoginRequiredMixin, UpdateView):
+    template_name = "update_Container.html"
+    form_class = ContainersForm
+    model = Containers
+
 @login_required
 def viewCharacter(request, pk):
     character=Character.objects.get(pk=pk)
@@ -1170,6 +1166,7 @@ def ajax_view_getCharacterData(request):
     ret = {'status': 'ok',
            'skills': {},
            'trappings': {},
+           'containers': [],
            'armour':[],
            'spells':[],
            "weapon":[],
@@ -1250,7 +1247,8 @@ def ajax_view_getCharacterData(request):
         # logger.debug("ss.name:{}; is_basic_skill:{}; is_species_skill:{}; is_career_skill:{}".format(ss.skills.name, ss.is_basic_skill , ss.is_species_skill, ss.is_career_skill))
         ret['skills'][ss.skills.id]= {'id': ss.skills.id, 'name': ss.skills.name, 'characteristics': ss.skills.characteristics, 'description': ss.skills.description, 'adv':ss.adv, 'is_basic_skill':ss.is_basic_skill , 'is_species_skill': ss.is_species_skill, 'is_career_skill': ss.is_career_skill}
 
-    ch2STrappingl = list(Character2Trappingl.objects.filter(characters=character).values_list("trapping", flat=-True))
+    ch2STrappingQuerySet = Character2Trapping.objects.filter(characters=character)
+    ch2STrapping = list(ch2STrappingQuerySet.values_list("trapping", flat=-True))
 
     for trapping in Trapping.objects.all():
         # logger.debug("'id': {}, 'name': {}, 'description': {}, 'enc': {}".format(trapping.id, trapping.name, trapping.description, trapping.encumbrance))
@@ -1259,7 +1257,8 @@ def ajax_view_getCharacterData(request):
             'name': trapping.name,
             'description': trapping.description,
             'enc': trapping.encumbrance,
-            'is_in_inventory': True if trapping.id in ch2STrappingl else False
+            'is_in_inventory': True if trapping.id in ch2STrapping else False,
+            'container_id': get_cotainer_id(trapping, ch2STrappingQuerySet) if trapping.id in ch2STrapping else -1
         }
 
     for r in Armour.objects.all():
@@ -1295,6 +1294,9 @@ def ajax_view_getCharacterData(request):
     campaign2Player = Campaign2Player.objects.filter(campaign=character.campaign)
     for c2p in campaign2Player:
         ret['party']['members'].append(str(c2p.player))
+
+    for cc in Character2Container.objects.filter(character=character):
+        ret['containers'].append(cc.to_dict())
 
     return JsonResponse(ret)
 
@@ -1541,6 +1543,7 @@ def ajax_getEyesList(request):
     ret = {'status': 'ok', "eyes":eyesList}
     return JsonResponse(ret)
 
+@login_required
 def ajax_removeAmbitions(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -1551,6 +1554,7 @@ def ajax_removeAmbitions(request):
     ret = {'status': 'ok', }
     return JsonResponse(ret)
 
+@login_required
 def ajax_removeWeapon(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -1564,6 +1568,7 @@ def ajax_removeWeapon(request):
     ret = {'status': 'ok', }
     return JsonResponse(ret)
 
+@login_required
 def ajax_removeArmour(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -1577,17 +1582,19 @@ def ajax_removeArmour(request):
     ret = {'status': 'ok', }
     return JsonResponse(ret)
 
+@login_required
 def ajax_removeTrappings(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-    ch2t =Character2Trappingl.objects.get(characters_id= request.POST['character_id'], trapping_id=request.POST['trapping_id'])
+    ch2t =Character2Trapping.objects.get(characters_id= request.POST['character_id'], trapping_id=request.POST['trapping_id'])
     ccl(request.user, ch2t.characters, "remove Trapping \"{}\".".format(ch2t.trapping))
 
     ch2t.delete()
     ret = {'status': 'ok', }
     return JsonResponse(ret)
 
+@login_required
 def ajax_removeSpells(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
@@ -1597,6 +1604,26 @@ def ajax_removeSpells(request):
     c.spells.remove(spells)
     ccl(request.user, c, "remove spell \"{}\".".format(spells))
     logger.debug("remove spells {} from {}".format(spells, c))
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveTraping2Container(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    character2Trapping,created = Character2Trapping.objects.get_or_create(characters_id = request.POST['character_id'], trapping_id = request.POST['trapping_id'])
+
+    logger.debug(f"{request.POST['character2container_id']}, {created}, {character2Trapping}")
+
+    if int(request.POST['character2container_id']) is not -1:
+        character2Container = Character2Container.objects.get(id=request.POST['character2container_id'])
+        character2Trapping.container = character2Container
+    else:
+        character2Trapping.container = None
+    character2Trapping.save()
+
+    logger.debug(f"created={created}; character_id: {request.POST['character_id']}; trapping_id: {request.POST['trapping_id']}; character2container_id: {request.POST['character2container_id']}")
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)

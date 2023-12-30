@@ -992,7 +992,7 @@ div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_l
 
 div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table  td.header {
     font-weight: bold;
-    width: 15%;
+    /* width: 15%; */
 }
 
 div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right table tbody tr td input.encumbrance_values {

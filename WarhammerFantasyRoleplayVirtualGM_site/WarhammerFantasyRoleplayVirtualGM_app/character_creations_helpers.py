@@ -167,3 +167,16 @@ def calc_price_to_brass(price_str):
     split = [ int(p) for p in split]
     return split[0] * 240 + split[1] * 12 + split[2]
 
+def get_cotainer_id(trapping, ch2STrappingQuerySet):
+
+    #ch2STrappingQuerySet[trapping.id].container.id if trapping.id in ch2STrapping else -1
+
+    for c2t in ch2STrappingQuerySet.all():
+        if c2t.container is not None and trapping.id == c2t.trapping.id :
+            # print(f"{trapping.name}, {trapping.id} ----- {c2t.trapping.name} {c2t.trapping.id}, {c2t.container.id}")
+            return c2t.container.id
+        # else:
+        #     print(f"{trapping.name}, {trapping.id} ----- {c2t.trapping.name} {c2t.trapping.id}, None")
+        # # if c2t.trapping.id == trapping.id:
+        # #     return c2t.container.id
+    return -1
