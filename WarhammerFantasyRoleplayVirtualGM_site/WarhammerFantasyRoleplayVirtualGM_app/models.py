@@ -211,6 +211,8 @@ class Career(models.Model):
     random_table_high_elf_end = models.IntegerField(default="0", verbose_name="random_table_high_elf_end")
     random_table_wood_elf_start = models.IntegerField(default="0", verbose_name="random_table_wood_elf_start")
     random_table_wood_elf_end = models.IntegerField(default="0", verbose_name="random_table_wood_elf_end")
+    random_table_wood_ogre_start = models.IntegerField(default="0", verbose_name="random_table_wood_ogre_start")
+    random_table_wood_ogre_end = models.IntegerField(default="0", verbose_name="random_table_wood_ogre_end")
 
 
     def __str__(self):
