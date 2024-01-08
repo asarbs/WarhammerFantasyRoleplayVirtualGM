@@ -815,7 +815,7 @@ def ajax_addSpellsToCharacter(request):
     character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
     spell = Spells.objects.get(id=request.POST['spell_id'])
-    character.spells.add()
+    character.spells.add(spell)
     character.save()
     ccl(request.user, character, "add spell \"{}\".".format(spell))
     ret = {'status': 'ok'  }
