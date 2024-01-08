@@ -1115,6 +1115,9 @@ div#main div.character_sheet table.player_notes tr.block_header {
     font-size: 20px;
     text-align: center;
 }
+div#main div.character_sheet table.player_notes tr.block_header th.date {
+    width: 150px;
+}
 div#main div.character_sheet table.player_notes tr.block_editor button#player_notes_add_button {
     width: 100%;
 }
@@ -1124,9 +1127,7 @@ div#main div.character_sheet table.player_notes tr.note_line {
 div#main div.character_sheet table.player_notes tr td {
     padding: 10px;
 }
-div#main div.character_sheet table.player_notes tr td.date {
-    width: 150px;
-}
+
 
 div#main div.character_sheet table.character_change_log {
     width: 1420px;

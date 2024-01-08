@@ -2636,7 +2636,7 @@ class CharacterParameters {
         return ambition
     }
     appendNote(note) {
-        let new_note = new Note(note['id'], note['datetime_create'], note['timestamp'], note['note_text']);
+        let new_note = new Note(note['id'], note['datetime_create'], note['timestamp'], note['note_text'], note['author']);
         this.#notes.push(new_note);
         new_note.updateUI();
     }
@@ -2656,7 +2656,7 @@ class CharacterParameters {
 
     }
     saveNote(note) {
-        let new_note = new Note(note['id'], note['datetime_create'], note['timestamp'], note['note_text']);
+        let new_note = new Note(note['id'], note['datetime_create'], note['timestamp'], note['note_text'], note['author']);
         this.#notes.push(new_note);
         new_note.save();
     }
@@ -2752,11 +2752,13 @@ class Note{
     #datetime_create = "";
     #timestamp       = 0;
     #note_text       = "";
-    constructor(id, datetime_create, timestamp, note_text) {
+    #author          = "";
+    constructor(id, datetime_create, timestamp, note_text, author) {
         this.#id              = id;
         this.#datetime_create = datetime_create;
         this.#timestamp       = parseInt(timestamp);
         this.#note_text       = note_text;
+        this.#author = author
     }
     get id() {
         return this.#id;
@@ -2769,6 +2771,9 @@ class Note{
     }
     get note_text() {
         return this.#note_text
+    }
+    get author() {
+        return this.#author
     }
     set id(id) {
         if(typeof id === "number")
@@ -2794,11 +2799,18 @@ class Note{
         else
             throw "Note.note_text: \"" + note_text + "\" is not a string";
     }
+    set author(author) {
+    if(typeof author === "string")
+        this.#author = author;
+    else
+        throw "Note.author: \"" + author + "\" is not a string";
+    }
     updateUI() {
         console.log("Note.updateUI: "+ this.datetime_create);
         if(!$('td#player_notes_timestamp__'+this.#timestamp).length) {
             var new_row = '<tr class="note_line">'
             new_row += '<td id="player_notes_timestamp__'+this.#timestamp+'" class="date">'+this.#datetime_create+'</td>'
+            new_row += '<td>'+this.#author+'</td>'
             new_row += '<td>'+this.#note_text+'</td>'
             new_row += '</tr>'
             $("table#player_notes tr.block_header").after(new_row)
@@ -2826,6 +2838,7 @@ class Note{
                 note.id = data['id']
                 note.datetime_create = data['datetime_create']
                 note.timestamp = parseInt(data['timestamp'])
+                note.author = data['author']
                 console.log("Note.save: id="+note.id+"; datetime_create="+note.datetime_create+"; timestamp="+note.timestamp);
                 note.updateUI();
                 return true;

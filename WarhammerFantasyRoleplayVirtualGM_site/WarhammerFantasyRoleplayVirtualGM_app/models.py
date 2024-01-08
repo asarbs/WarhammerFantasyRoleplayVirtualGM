@@ -44,9 +44,10 @@ class Ambitions(models.Model):
         return data
 
 class Note(models.Model):
-    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name="Create TIme")
-    datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update TIme")
+    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name="Create Time")
+    datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update Time")
     note_text = models.TextField(verbose_name="Note Text", default="", blank=False, null=False)
+    author = models.ForeignKey(User, verbose_name='User', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"{0}".format(self.datetime_create)
@@ -62,8 +63,12 @@ class Note(models.Model):
     def formated_datatime(self):
         return self.datetime_create.strftime('%Y-%m-%d %H:%M')
 
+    @property
+    def user_name(self):
+        return u"{0} \"{1}\" {2}".format(self.author.first_name, self.author.username, self.author.last_name)
+
     def to_dict(self):
-        return {"id": self.id, "datetime_create": self.formated_datatime , "timestamp": self.timestamp, "note_text":self.note_text}
+        return {"id": self.id, "datetime_create": self.formated_datatime , "timestamp": self.timestamp, "note_text":self.note_text, "author":self.user_name}
 
 class Campaign(models.Model):
     name = models.CharField(max_length= 250)

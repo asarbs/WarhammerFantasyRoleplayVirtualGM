@@ -1315,6 +1315,7 @@ def ajax_savePlayerNote(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     note = Note.objects.create(note_text=request.POST['note_text'])
+    note.author = request.user
     note.save()
 
     logger.debug(request.POST)
@@ -1324,7 +1325,7 @@ def ajax_savePlayerNote(request):
     character.notes.add(note)
     character.save()
 
-    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp}
+    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp, 'author':note.user_name}
 
     return JsonResponse(ret)
 
