@@ -65,6 +65,8 @@ class Note(models.Model):
 
     @property
     def user_name(self):
+        if self.author == None:
+            return "--"
         return u"{0} \"{1}\" {2}".format(self.author.first_name, self.author.username, self.author.last_name)
 
     def to_dict(self):
