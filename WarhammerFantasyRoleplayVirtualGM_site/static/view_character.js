@@ -2574,6 +2574,15 @@ class CharacterParameters {
         }
         return 0
     }
+    get sturdy() {
+        console.log("sturdy: "+ this.#talents)
+        if( 500 in this.#talents) {
+            let talent = this.#talents[500]
+            console.log("sturdy: "+ talent)
+            return talent.taken * 2
+        }
+        return 0
+    }
 
     get container_encumbrance() {
         let r = 0
@@ -2584,7 +2593,7 @@ class CharacterParameters {
     }
 
     get encumbrance_max() {
-        let r = this.s_bonus + this.t_bonus + this.container_encumbrance
+        let r = this.s_bonus + this.t_bonus + this.container_encumbrance + this.sturdy
         return r
     }
 
@@ -2871,6 +2880,11 @@ function get_characterData(){
             data["containers"].forEach(element => {
                 characterParameters.add_container(element);
             });
+
+            for(let k in data['talents'] ) {
+                characterParameters.appendTalent(data['talents'][k])
+            };
+
             document.title = data['character']["name"                         ];
             characterParameters.id                           = data['character']["id"                           ]
             characterParameters.name                         = data['character']["name"                         ]
@@ -2963,9 +2977,6 @@ function get_characterData(){
             };
             characterParameters.updateTrappingsTable()
 
-            for(let k in data['talents'] ) {
-                characterParameters.appendTalent(data['talents'][k])
-            };
             characterParameters.updateTalentsTable()
             characterParameters.updateWounds();
             data['armour'].forEach(element => {
