@@ -2871,7 +2871,7 @@ function get_characterData(){
             data["containers"].forEach(element => {
                 characterParameters.add_container(element);
             });
-
+            document.title = data['character']["name"                         ];
             characterParameters.id                           = data['character']["id"                           ]
             characterParameters.name                         = data['character']["name"                         ]
             characterParameters.species                      = data['character']["species"                      ]
