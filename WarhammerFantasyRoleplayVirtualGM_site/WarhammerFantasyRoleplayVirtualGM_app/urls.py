@@ -27,6 +27,10 @@ urlpatterns = [
     path('SpellListView', views.SpellListView.as_view(), name="SpellListView"),
     path('SpellsCreateFormView', views.SpellsCreateFormView.as_view(), name="SpellsCreateFormView"),
     path('SpellsEditView/<int:pk>', views.SpellsEditView.as_view(), name="SpellsEditView"),
+    path('SkillsListView', views.SkillsListView.as_view(), name="SkillsListView"),
+    path('SkillsCreateFormView', views.SkillsCreateFormView.as_view(), name="SkillsCreateFormView"),
+    path('SkillsEditView/<int:pk>', views.SkillsEditView.as_view(), name="SkillsEditView"),
+
 
     path('TrappingsListView', views.TrappingsListView.as_view(), name="TrappingsListView"),
     path('TrappingssCreateFormView', views.TrappingssCreateFormView.as_view(), name="TrappingssCreateFormView"),

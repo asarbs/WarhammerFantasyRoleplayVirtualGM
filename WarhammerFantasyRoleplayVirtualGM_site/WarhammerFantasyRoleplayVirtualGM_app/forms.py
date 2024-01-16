@@ -170,6 +170,12 @@ class SpellsForm(ModelForm):
         model = models.Spells
         fields = ['spellLists', 'name',  'cn', 'range', 'target', 'duration', 'effect']
 
+
+class SkillsForm(ModelForm):
+    class Meta:
+        model = models.Skils
+        fields = ['name', 'characteristics', 'description', 'ref', 'skils_parent']
+
 class TrappingForm(ModelForm):
     class Meta:
         model = models.Trapping

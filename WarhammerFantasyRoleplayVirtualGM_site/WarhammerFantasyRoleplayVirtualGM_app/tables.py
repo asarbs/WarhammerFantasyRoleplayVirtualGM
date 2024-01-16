@@ -102,3 +102,18 @@ class ContainerTable(tables.Table):
 
     def render_price(self, value):
         return f"{format_currency(value)}"
+
+class SkillsTable(tables.Table):
+    id = tables.Column(visible=False)
+    name = tables.LinkColumn("SkillsEditView", args=[A('pk')])
+    characteristics = tables.Column(visible=False)
+    description = tables.Column(visible=False)
+    skils_parent = tables.Column(visible=False)
+
+    class Meta:
+        model = Skils
+        attrs = {"class": "paleblue"}
+        sequence = ('name', 'characteristics', 'description', 'ref')
+        order_by = ('name')
+        data = Skils.objects.all()
+        per_page = 1500

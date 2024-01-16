@@ -113,12 +113,13 @@ class MenuManager(object):
                         self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
 
         self.l.append(LogedInMenuElement(request=request, name="Careers Advance Schemes", url=reverse('listCareersAdvanceSchemes')))
+        self.l.append(LogedInMenuElement(request=request, name="Containers", url=reverse('ContainersListView')))
         self.l.append(LogedInMenuElement(request=request, name="Mele Weapons", url=reverse('MeleWeaponListView')))
         self.l.append(LogedInMenuElement(request=request, name="Ranged Weapons", url=reverse('RangedWeaponListView')))
+        self.l.append(LogedInMenuElement(request=request, name="Skills", url=reverse('SkillsListView')))
         self.l.append(LogedInMenuElement(request=request, name="Spells", url=reverse('SpellListView')))
-        self.l.append(LogedInMenuElement(request=request, name="Trappings", url=reverse('TrappingsListView')))
         self.l.append(LogedInMenuElement(request=request, name="Talents", url=reverse('TalentsListView')))
-        self.l.append(LogedInMenuElement(request=request, name="Containers", url=reverse('ContainersListView')))
+        self.l.append(LogedInMenuElement(request=request, name="Trappings", url=reverse('TrappingsListView')))
         # if not request.user.is_anonymous:
         #     cas = CareersAdvanceScheme.objects.all().order_by("career__name")
         #     for c in cas:

@@ -75,17 +75,15 @@
     </div>
     <div class="row">
         <h3>Characters:</h3>
-
-        {% if createNewCharacter == False %}
-        <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
-        {% endif %}
-
         <ol>
             {% for character in characters %}
             <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
             {% endfor %}
         </ol>
-
+        {% if createNewCharacter == False %}
+        <br><br><br><br>
+        <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
+        {% endif %}
     </div>
 
     <div class="row">

@@ -1120,6 +1120,21 @@ class SpellsEditView(LoginRequiredMixin, UpdateView):
     form_class = SpellsForm
     model = Spells
 
+class SkillsListView(LoginRequiredMixin, SingleTableView):
+    model = Skils
+    table_class = SkillsTable
+    template_name = 'list_Skills.html'
+    paginator_class = LazyPaginator
+
+class SkillsCreateFormView(LoginRequiredMixin, CreateView):
+    template_name = "create_Skills.html"
+    form_class = SkillsForm
+
+class SkillsEditView(LoginRequiredMixin, UpdateView):
+    template_name = "update_Skills.html"
+    form_class = SkillsForm
+    model = Skils
+
 class TrappingsListView(LoginRequiredMixin, SingleTableView):
     model = Trapping
     table_class = TrappingTable
