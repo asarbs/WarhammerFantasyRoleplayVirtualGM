@@ -15,6 +15,8 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
+from django.urls import reverse
+
 
 from pprint import pformat
 
@@ -66,7 +68,16 @@ def addCharacter(request, CampaignId):
     basic_skills_criterion2 = Q(id__lte = 26)
     basic_skills = Skils.objects.filter(basic_skills_criterion1 & basic_skills_criterion2).order_by("name").values()
     player = Player.objects.get(user=request.user)
-    character = Character(player=player, campaign_id = CampaignId)
+    character = Character(player=player,
+                          campaign_id = CampaignId,
+                          name="Example Name",
+                          species_id = 2,
+                          ch_class_id=8,
+                          career_id=58,
+                          career_path_id=487,
+                          hair_id = 9,
+                          eyes_id = 10,
+                          )
     character.save()
 
     for skill in basic_skills:
@@ -80,13 +91,13 @@ def addCharacter(request, CampaignId):
                 skill['adv'] = skill_val.adv
     species = Species.objects.all()
 
-
-    context = {
-        'characker_id': character.id,
-        'basic_skills': basic_skills,
-        'species': species
-        }
-    return render(request, 'addCharacter.html',context)
+    return redirect(reverse('viewCharacter', args=(character.id,)))
+    # context = {
+    #     'characker_id': character.id,
+    #     'basic_skills': basic_skills,
+    #     'species': species
+    #     }
+    # return render(request, 'addCharacter.html',context)
 
 @login_required
 def ajax_save_character_species(request):
