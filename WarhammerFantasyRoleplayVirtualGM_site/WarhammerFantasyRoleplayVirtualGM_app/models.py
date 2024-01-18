@@ -795,3 +795,27 @@ class Character2Trapping(models.Model):
 
     def __unicode__(self):
         return f"{self.id}; {self.characters} -> {self.trapping}; {self.container}"
+
+class Condition(models.Model):
+    name = models.CharField(max_length= 50)
+    description = models.TextField(verbose_name="Description", default="")
+
+    def __str__(self):
+        return f"{self.name}"
+
+    def __unicode__(self):
+        return f"{self.name}"
+
+class Condition2Character(models.Model):
+    characters = models.ForeignKey(Character, on_delete=models.CASCADE)
+    condition = models.ForeignKey(Condition, on_delete=models.CASCADE)
+    occurrence = models.IntegerField(default=0, verbose_name="Occurrence")
+
+    def __str__(self):
+        return f"{self.characters.name} -> {self.condition.name}"
+
+    def __unicode__(self):
+        return f"{self.characters.name} -> {self.condition.name}"
+
+    def to_dict(self):
+        return {'Condition2Character_id': self.id, 'condition': self.condition.id, 'occurrence': self.occurrence}

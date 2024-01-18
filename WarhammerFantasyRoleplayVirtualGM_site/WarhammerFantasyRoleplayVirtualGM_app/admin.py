@@ -241,6 +241,20 @@ class ContainersAdmin(admin.ModelAdmin):
 class Character2ContainerAdmin(admin.ModelAdmin):
     list_display = ("id", "character", "container")
 
+class ConditionAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+          models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
+    }
+    list_display = ("id", "name", "description")
+    ordering = ("name",)
+    save_as = True
+
+class Condition2CharacterAdmin(admin.ModelAdmin):
+    list_display = ("id", "characters", "condition", "occurrence")
+    list_filter = ("characters",)
+    list_editable = ("occurrence",)
+
+
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
 admin.site.register(models.Character, CharacterAdmin)
@@ -277,3 +291,5 @@ admin.site.register(models.Note, NoteAdmin)
 admin.site.register(models.CharacterChangeLog, CharacterChangeLogAdmin)
 admin.site.register(models.Containers, ContainersAdmin)
 admin.site.register(models.Character2Container, Character2ContainerAdmin)
+admin.site.register(models.Condition, ConditionAdmin)
+admin.site.register(models.Condition2Character, Condition2CharacterAdmin)

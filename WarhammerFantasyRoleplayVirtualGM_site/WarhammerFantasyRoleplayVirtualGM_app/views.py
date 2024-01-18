@@ -1208,6 +1208,7 @@ def ajax_view_getCharacterData(request):
             'talents_all': [],
             'careers_advance_scheme': {},
             'characterChangeLog': [],
+            'condition': [],
         }
 
     character_id = request.POST['character_id']
@@ -1323,6 +1324,9 @@ def ajax_view_getCharacterData(request):
 
     for cc in Character2Container.objects.filter(character=character):
         ret['containers'].append(cc.to_dict())
+
+    for con in Condition2Character.objects.filter(characters=character):
+        ret['condition'].append(con.to_dict())
 
     return JsonResponse(ret)
 
@@ -1577,7 +1581,7 @@ def ajax_removeAmbitions(request):
 
     res = Ambitions.objects.get(id=request.POST['ambition_id']).delete()
     logger.debug("remove ambition id:{}; res={}".format(request.POST['ambition_id'], res))
-
+    ccl(request.user, c, "remove ambitions {}".format(res))
     ret = {'status': 'ok', }
     return JsonResponse(ret)
 
@@ -1653,4 +1657,31 @@ def ajax_saveTraping2Container(request):
     logger.debug(f"created={created}; character_id: {request.POST['character_id']}; trapping_id: {request.POST['trapping_id']}; character2container_id: {request.POST['character2container_id']}")
 
     ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_get_fullConditionsList(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    ret = {'status': 'ok', 'conditions':[]}
+
+    for c in Condition.objects.all():
+        ret['conditions'].append({'id':c.id, 'name': c.name, 'description': c.description})
+
+    return JsonResponse(ret)
+
+@login_required
+def ajax_updateConditionOccurrence(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+    con = Condition.objects.get(id = request.POST['condition_id'])
+
+    c2c, created = Condition2Character.objects.get_or_create(characters=c, condition=con)
+    c2c.occurrence = request.POST['cccurrence']
+    c2c.save()
+
+    ccl(request.user, c, f"update condition {con} to {c2c.occurrence}")
+    ret = {'status': 'ok'}
     return JsonResponse(ret)

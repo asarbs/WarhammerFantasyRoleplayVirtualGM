@@ -101,6 +101,9 @@ urlpatterns = [
     path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
     path('ajax_saveCampaignNotes', views.ajax_saveCampaignNotes, name="ajax_saveCampaignNotes"),
 
+    path("ajax_get_fullConditionsList", views.ajax_get_fullConditionsList, name="ajax_get_fullConditionsList"),
+    path('ajax_updateConditionOccurrence', views.ajax_updateConditionOccurrence, name="ajax_updateConditionOccurrence"),
+
     path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),
     path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData"),
     path("AddPlayer2Campaign", views.addPlayer2Campaign, name="AddPlayer2Campaign")

@@ -1219,6 +1219,7 @@ class CharacterParameters {
     #ambitions_longterm                 = [];
     #notes                              = [];
     #containers                         = [];
+    #conditions                         = [];
     #advanceScheme;
     classModel = {}
     movement = {
@@ -2070,7 +2071,7 @@ class CharacterParameters {
             if(!$('#talents_adv__'+item.id).length && item.taken > 0) {
                 new_row = '<tr class="block_body">'
                 new_row += '<td id="talents_name__'+item.id+'" class="left"><a href="/wfrpg_gm/TalentsEditView/'+item.id+'">'+item.name+'</a></td>'
-                new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" talent_id="'+item.id+'" min="0" max="100" step="1" name="fname" talent_id="'+item.id+'"></td>'
+                new_row += '<td class="edit"><input type="text" id="talents_adv__'+item.id+'" class="talents_adv" min="0" max="100" step="1" name="fname" talent_id="'+item.id+'"></td>'
                 new_row += '<td class="description">'+item.description+'</br><b>Max:'+item.max+'</b></td>'
                 new_row += '</tr>'
                 $("#talents_table").append(new_row)
@@ -2649,8 +2650,45 @@ class CharacterParameters {
         this.#notes.push(new_note);
         new_note.updateUI();
     }
-    appendLog(log) {
+    appendCondition(condition){
+        let new_condition = new Conditions(condition['id'], condition['name'], condition['description'], 0)
+        this.#conditions.push(new_condition);
+        // new_condition.updateUI();
+    }
+    updateCondition(condition) {
+        this.#conditions.forEach(con => {
+            if(con.id == condition['condition']) {
+                con.occurrence = condition['occurrence']
+                con.updateUI();
+                return;
+            }
+        });
+    }
+    add_condition_occurrence(condition_id){
+        console.log("add_condition_occurrence: "+condition_id)
+        this.#conditions.forEach(con => {
+            if(con.id == condition_id) {
+                console.log("add_condition_occurrence: "+condition_id+" form " +con.occurrence+ " to "+(con.occurrence+1))
+                con.occurrence = con.occurrence + 1
+                con.updateUI();
+                con.save();
+                return;
+            }
+        });
+    }
+    set_condition_occurrence(condition_to_save, condition_vale) {
+        console.log("set_condition_occurrence: "+condition_to_save+"; condition_vale"+condition_vale)
+        this.#conditions.forEach(con => {
+            if(con.id == condition_to_save) {
+                con.occurrence = parseInt(condition_vale)
+                con.updateUI();
+                con.save();
+                return;
+            }
+        });
+    }
 
+    appendLog(log) {
         console.log("Log.updateUI: "+ log.datetime_create);
         if(!$('td#character_change_log__'+log.timestamp).length) {
             var new_row = '<tr class="note_line">'
@@ -2855,6 +2893,74 @@ class Note{
         });
     }
 }
+
+class Conditions {
+    #id             = 0;
+    #name           = "";
+    #description    = "";
+    #occurrence     = 0;
+
+    constructor(id, name, description, occurrence) {
+        this.#id            = id;
+        this.#name          = name;
+        this.#description   = description;
+        this.#occurrence    = occurrence;
+    }
+    get id() {
+        return this.#id;
+    }
+    get name() {
+        return this.#name;
+    }
+    get description() {
+        return this.#description;
+    }
+    get occurrence() {
+        return this.#occurrence;
+    }
+    set occurrence(occurrence) {
+        if(typeof occurrence === "number")
+            this.#occurrence = occurrence;
+        else
+            throw "Conditions.occurrence: \"" + occurrence + "\" is not a number";
+    }
+    updateUI() {
+        console.log("Conditions.updateUI: "+ this.#id);
+        if(!$('td#conditions__'+this.#id).length) {
+            var new_row = '<tr class="block_body">'
+            new_row += '<td id="conditions__'+this.#id+'" class="left">'+this.#name+'</td>'
+            new_row += '<td class="edit"><input type="text" id="conditions__'+this.#id+'" condition_id="'+this.#id+'" min="0" max="100" step="1" name="fname" value="'+this.#occurrence+'"></td>'
+            new_row += '<td>'+this.#description+'</td>'
+            new_row += '</tr>'
+            $("table#conditions_table").append(new_row)
+            $('input#conditions__'+this.#id).addClass( "editable", 1000);
+            $('input#conditions__'+this.#id).on("change", condition_update)
+            $('input#conditions__'+this.#id).prop("readonly", false);
+        } else {
+            $('input#conditions__'+this.#id).val(this.#occurrence)
+        }
+    }
+    save() {
+        var condition = this;
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_updateConditionOccurrence",
+            async: false,
+            cache: false,
+            timeout: 30000,
+            fail: function(){
+                return true;
+            },
+            data: {
+                character_id    : characterParameters.id,
+                condition_id    : condition.id,
+                cccurrence      : condition.occurrence,
+            },
+            success: function(data) {
+            }
+        });
+    }
+}
 const characterParameters = new CharacterParameters();
 var character_id = 0
 function get_characterData(){
@@ -2866,6 +2972,7 @@ function get_characterData(){
     get_fullSkillList();
     get_fullSpeciesList();
     get_fullClassList();
+    get_fullConditionsList();
 
 
     $.ajax({
@@ -2999,6 +3106,12 @@ function get_characterData(){
 
             $("input").prop("readonly", true);
             $("select").prop("readonly", true);
+
+            data['condition'].forEach(element => {
+                characterParameters.updateCondition(element)
+            });
+
+
             characterParameters.updateEncumbrance();
             turon_on_edit();
             $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
@@ -3297,6 +3410,7 @@ function turon_on_edit() {
     $("input#character_sheet_name").addClass( "editable", 1000);
     $("input#age").addClass( "editable", 1000);
     $("input#height").addClass( "editable", 1000);
+    $("select#add_conditions").addClass( "editable", 1000);
 
 
 
@@ -3335,6 +3449,7 @@ function turon_on_edit() {
     $("input#age").prop("readonly", false);
     $("input#height").prop("readonly", false);
     $("input#career_level").prop("readonly", false);
+
 
 
 
@@ -3378,6 +3493,7 @@ function turon_on_edit() {
     $("input#career_level").change(updateCareer_level);
     $("select#hair").on("change", updateHair);
     $("select#eyes").on("change", updateEyes);
+
 }
 function armour_add() {
     var armour_to_add = $("select#add_armour").val()
@@ -3402,6 +3518,18 @@ function talent_add() {
     console.log("add_talent: "+ talent_to_add);
     characterParameters.add_talent(talent_to_add);
     characterParameters.updateTalentsTable();
+}
+function condition_add() {
+    var condition_to_add = $("select#add_conditions").val()
+    console.log("condition_add: "+ condition_to_add);
+    characterParameters.add_condition_occurrence(condition_to_add);
+}
+function condition_update() {
+    let condition_id = $(this).attr('condition_id')
+    let condition_vale = $(this).val()
+    console.log("condition_update: id="+ condition_id +"; condition_vale="+condition_vale)
+    characterParameters.set_condition_occurrence(condition_id, condition_vale);
+
 }
 function trappings_add() {
     var trappings_to_add = $("select#add_trappings").val()
@@ -3558,13 +3686,37 @@ function get_fullClassList() {
             console.log(data);
             characterParameters.classModel = data['character_class']
             console.log("get_fullClassList:")
-            console.log(data)
             for(let k in data['character_class']) {
                 $("select#class").append($('<option>', {value: data['character_class'][k]['id'], text: data['character_class'][k]['name'] }));
             };
         }
     });
 
+}
+function get_fullConditionsList() {
+    console.log("get_fullConditionsList")
+
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_get_fullConditionsList",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+        },
+        success: function(data) {
+            console.log("ajax_get_fullConditionsList:")
+            console.log(data);
+
+            for(let k in data['conditions']) {
+                $("select#add_conditions").append($('<option>', {value: data['conditions'][k]['id'], text: data['conditions'][k]['name'] }));
+                characterParameters.appendCondition(data['conditions'][k]);
+            };
+        }
+    });
 }
 function get_fullHairList() {
     console.log("get_fullHairList")
@@ -3802,6 +3954,7 @@ function main() {
     $("button#weapon_add_button").click(weapon_add);
     $("button#spells_add_button").click(spell_add);
     $("button#talents_add_button").click(talent_add);
+    $("button#conditions_add_button").click(condition_add);
     $("button#trappings_add_button").click(trappings_add);
     $("button#skills_add_button").click(skill_add);
     $("button#player_notes_add_button").click(note_add);
