@@ -65,7 +65,7 @@ class TrappingTable(tables.Table):
         sequence = ('name',  'description', 'encumbrance')
         order_by = ('name')
         data = Trapping.objects.all()
-        per_page = 50
+        per_page = 500
 
     def render_price(self, value):
         return f"{format_currency(value)}"

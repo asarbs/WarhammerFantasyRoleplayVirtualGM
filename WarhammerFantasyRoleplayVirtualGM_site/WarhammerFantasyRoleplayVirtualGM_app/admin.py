@@ -123,9 +123,11 @@ class CareersAdvanceSchemeAdmin(admin.ModelAdmin):
     list_editable = ('characteristics_ws_initial', 'characteristics_bs_initial', 'characteristics_s_initial', 'characteristics_t_initial', 'characteristics_i_initial', 'characteristics_ag_initial', 'characteristics_dex_initial', 'characteristics_int_initial', 'characteristics_wp_initial', 'characteristics_fel_initial', 'advances_level_1', 'advances_level_2', 'advances_level_3', 'advances_level_4')
 
 class TrappingAdmin(admin.ModelAdmin):
+    list_display = ("name","encumbrance", "price", "availability", "to_view")
+    list_editable = ("availability", "to_view")
     ordering = ("name",)
     list_max_show_all = 1500
-    list_per_page = 1000
+    list_per_page = 20
 
 class RandomTalentsTableAdmin(admin.ModelAdmin):
     list_display = ("talent", "any","random_interal_start", "random_interal_end")
@@ -161,7 +163,7 @@ class ArmourLocationsAdmin(admin.ModelAdmin):
     list_per_page = 1000
 
 class ArmourAdmin(admin.ModelAdmin):
-    list_display = ("name", "armour_type", "price", "encumbrance", "availability", "penalty", "armour_locations", "armour_points", "qualities_and_flaws")
+    list_display = ("name", "armour_type", "price_formated", "encumbrance", "availability", "penalty", "armour_locations", "armour_points", "qualities_and_flaws")
     list_filter = ("armour_type", "availability")
     ordering = ("armour_type", "name")
     save_as = True

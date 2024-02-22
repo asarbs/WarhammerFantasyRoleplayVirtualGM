@@ -36,13 +36,13 @@ from WarhammerFantasyRoleplayVirtualGM_app.forms import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import createCharacterLog as ccl
 from WarhammerFantasyRoleplayVirtualGM_app.tables import *
+from WarhammerFantasyRoleplayVirtualGM_app.decorators import *
 
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
 
 
 # Create your views here.
 from django.http import HttpResponse
-
 
 def index(request):
     data = {}
@@ -1100,6 +1100,9 @@ class RangedWeaponFormView(LoginRequiredMixin, CreateView):
     template_name = "create_ranged_weapon.html"
     form_class = RangedWeaponForm
 
+    def get_success_url(self) -> str:
+        return reverse('RangedWeaponListView', kwargs={'pk': self.object.pk})
+
 class RangedWeaponEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_ranged_weapon.html"
     form_class = RangedWeaponForm
@@ -1114,6 +1117,9 @@ class SpellListView(LoginRequiredMixin, SingleTableView):
 class SpellsCreateFormView(LoginRequiredMixin, CreateView):
     template_name = "create_spells.html"
     form_class = SpellsForm
+
+    def get_success_url(self) -> str:
+        return reverse('SpellsEditView', kwargs={'pk': self.object.pk})
 
 class SpellsEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_spells.html"
@@ -1130,6 +1136,9 @@ class SkillsCreateFormView(LoginRequiredMixin, CreateView):
     template_name = "create_Skills.html"
     form_class = SkillsForm
 
+    def get_success_url(self) -> str:
+        return reverse('SkillsEditView', kwargs={'pk': self.object.pk})
+
 class SkillsEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_Skills.html"
     form_class = SkillsForm
@@ -1144,6 +1153,9 @@ class TrappingsListView(LoginRequiredMixin, SingleTableView):
 class TrappingssCreateFormView(LoginRequiredMixin, CreateView):
     template_name = "create_Trapping.html"
     form_class = TrappingForm
+
+    def get_success_url(self) -> str:
+        return reverse('TrappingssEditView', kwargs={'pk': self.object.pk})
 
 class TrappingssEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_Trapping.html"
@@ -1160,6 +1172,9 @@ class TalentsCreateFormView(LoginRequiredMixin, CreateView):
     template_name = "create_Talent.html"
     form_class = TalentForm
 
+    def get_success_url(self) -> str:
+        return reverse('TalentsEditView', kwargs={'pk': self.object.pk})
+
 class TalentsEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_Talent.html"
     form_class = TalentForm
@@ -1175,11 +1190,15 @@ class ContainersCreateFormView(LoginRequiredMixin, CreateView):
     template_name = "create_Container.html"
     form_class = ContainersForm
 
+    def get_success_url(self) -> str:
+        return reverse('ContainersEditView', kwargs={'pk': self.object.pk})
+
 class ContainersEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_Container.html"
     form_class = ContainersForm
     model = Containers
 
+@can_view_character
 @login_required
 def viewCharacter(request, pk):
     character=Character.objects.get(pk=pk)
@@ -1285,7 +1304,8 @@ def ajax_view_getCharacterData(request):
             'description': trapping.description,
             'enc': trapping.encumbrance,
             'is_in_inventory': True if trapping.id in ch2STrapping else False,
-            'container_id': get_cotainer_id(trapping, ch2STrappingQuerySet) if trapping.id in ch2STrapping else -1
+            'container_id': get_cotainer_id(trapping, ch2STrappingQuerySet) if trapping.id in ch2STrapping else -1,
+            'price': trapping.price
         }
 
     for r in Armour.objects.all():
@@ -1685,3 +1705,22 @@ def ajax_updateConditionOccurrence(request):
     ccl(request.user, c, f"update condition {con} to {c2c.occurrence}")
     ret = {'status': 'ok'}
     return JsonResponse(ret)
+
+def shopping(request, characterId):
+    character = Character.objects.get(id=characterId)
+    haggel = Character2Skill.objects.get(characters=character, skills__name="Haggle")
+
+    trappings = Trapping.objects.filter(to_view=True).order_by('name')
+    for trapping in trappings:
+        trapping.price_format = format_currency(trapping.price)    
+
+    return render(request, 'shopping.html', {'character': character, "haggel": haggel, "trappings": trappings})
+
+def shopping_buy(request, characterId, trappingId):
+    character = Character.objects.get(id=characterId)
+    trapping = Trapping.objects.get(id=trappingId)
+    character.wealth -= trapping.price
+    character.save()
+    character2trapping, created = Character2Trapping.objects.get_or_create(characters=character, trapping=trapping)
+    character2trapping.save()
+    return redirect(reverse('viewCharacter', args=(characterId,)))

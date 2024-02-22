@@ -177,9 +177,24 @@ class SkillsForm(ModelForm):
         fields = ['name', 'characteristics', 'description', 'ref', 'skils_parent']
 
 class TrappingForm(ModelForm):
+    price = PriceCharFiled(help_text="Price should ends with GC, /-, d")
+
     class Meta:
         model = models.Trapping
-        fields = ['name',  'description', 'encumbrance']
+        fields = ['name',  'description', 'encumbrance', 'price', "availability", "to_view"]
+
+    def calc_price_to_brass(self):
+        logger.debug("price:{}".format(self.data['price']))
+        self.data['price'] = calc_price_to_brass(self.data['price'])
+        return True
+
+    def is_valid(self) -> bool:
+        self.data._mutable = True
+        price_calc = self.calc_price_to_brass()
+        self.data._mutable = False
+        valid = super(TrappingForm,self).is_valid()
+        logger.debug("price:{};valid={}; price_calc={}".format(self.data['price'], valid, price_calc))
+        return valid
 
 class TalentForm(ModelForm):
     class Meta:

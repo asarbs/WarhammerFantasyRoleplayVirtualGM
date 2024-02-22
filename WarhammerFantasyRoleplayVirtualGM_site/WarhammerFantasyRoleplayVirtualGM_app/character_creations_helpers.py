@@ -141,19 +141,7 @@ def format_currency(p: int):
     SC = math.floor(GC_left / 12)
     SC_left = GC_left % 12
     BC = SC_left
-
-    out = ""
-    if GC > 0:
-        out += "{}GC ".format(GC)
-    if SC > 0:
-        out += "{}/".format(SC)
-    if GC == 0 and SC > 0 and BC == 0:
-        out += "0"
-    if BC > 0:
-        out += "{} ".format(BC)
-
-    logger.debug("{} -> {}".format(p, out))
-    return out
+    return f"{GC}GC {SC}/{BC}"
 
 def calc_price_to_brass(price_str):
     price_str = price_str.replace(' ', '')

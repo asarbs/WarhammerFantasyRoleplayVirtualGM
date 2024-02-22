@@ -106,5 +106,9 @@ urlpatterns = [
 
     path("viewCharacter/<int:pk>", views.viewCharacter, name="viewCharacter"),
     path("ajax_view_getCharacterData", views.ajax_view_getCharacterData, name="ajax_view_getCharacterData"),
-    path("AddPlayer2Campaign", views.addPlayer2Campaign, name="AddPlayer2Campaign")
+    path("AddPlayer2Campaign", views.addPlayer2Campaign, name="AddPlayer2Campaign"),
+
+    
+    path("shopping/<int:characterId>", views.shopping, name="shopping"),
+    path("shopping_buy/<int:characterId>/<int:trappingId>", views.shopping_buy, name="shopping_buy"),
 ]

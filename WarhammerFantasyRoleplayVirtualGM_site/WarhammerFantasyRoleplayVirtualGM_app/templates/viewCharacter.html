@@ -513,12 +513,12 @@
     <div class="sheer2_left">
         <table id="armour" class="armour" border="0">
             <tr class="block_name">
-                <th colspan="5" class="">
+                <th colspan="6" class="">
                     ARMOUR
                 </th>
             </tr>
             <tr class="block_header">
-                <td colspan="5">
+                <td colspan="6">
                     <select name="armour" id="add_armour" value="1">
                     </select><button type="button" id="armour_add_button" >Add!</button>
                 </td>
@@ -526,6 +526,9 @@
             <tr class="block_header">
                 <th>
                     Name
+                </th>
+                <th>
+                    Price
                 </th>
                 <th>
                     Location
@@ -549,7 +552,7 @@
                 <table id="trappings_table" class="block_name" border="0">
                     <tr class="block_name">
                         <th colspan="3">
-                            <h2>TRAPPINGS</h2>
+                            <h2>TRAPPINGS</h2><a href="{% url 'shopping' character.id %}" id="edit_character_sheet" class="edit">Shopping</a>
                         </th>
                     </tr>
                     <tr class="block_header">
@@ -736,6 +739,9 @@
         <tr class="block_header">
             <th>
                 Name
+            </th>
+            <th>
+                Price
             </th>
             <th>
                 Group

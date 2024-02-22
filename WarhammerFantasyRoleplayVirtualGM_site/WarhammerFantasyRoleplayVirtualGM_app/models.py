@@ -1,10 +1,28 @@
-from django.db import models
+import math
+
 from django.contrib.auth.models import User
-from WarhammerFantasyRoleplayVirtualGM_app.validators import validator_sex
-from django.utils.translation import gettext_lazy as _
+from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+from WarhammerFantasyRoleplayVirtualGM_app.validators import validator_sex
+
+
+def format_currency(p: int):
+    GC = math.floor(p / 240)
+    GC_left = p % 240
+    SC = math.floor(GC_left / 12)
+    SC_left = GC_left % 12
+    BC = SC_left
+    return f"{GC}GC {SC}/{BC}"
 
 # Create your models here.
+
+class Availability(models.TextChoices):
+    COMMON = "Common", _('Common')
+    SCARCE = "Scarce", _('Scarce')
+    RARE = "Rare", _('Rare')
+    EXOTIC = "Exotic", _('Exotic')
+
 
 class RefBook(models.Model):
     name = models.CharField(max_length= 250)
@@ -130,12 +148,15 @@ class Trapping(models.Model):
     name = models.CharField(max_length= 50, unique=True)
     description = models.TextField(verbose_name="Description", default="")
     encumbrance = models.IntegerField(default=1, verbose_name="Encumbrance")
+    price = models.IntegerField(default=0, verbose_name="Price")
+    availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
+    to_view = models.BooleanField(default=True, verbose_name="To View")
 
     def __str__(self):
-        return u"{0}".format(self.name)
+        return f"{self.name}"
 
     def __unicode__(self):
-        return u"{0}".format(self.name)
+        return f"{self.name}"
 
     def get_absolute_url(self):
         return reverse("TrappingsListView")
@@ -358,12 +379,6 @@ class Eyes(models.Model):
     def to_dict(self):
         return {'id':self.id, 'name':self.name}
 
-class Availability(models.TextChoices):
-    COMMON = "Common", _('Common')
-    SCARCE = "Scarce", _('Scarce')
-    RARE = "Rare", _('Rare')
-    EXOTIC = "Exotic", _('Exotic')
-
 class ArmourLocations(models.Model):
     name = models.CharField(max_length= 50, verbose_name="Name")
 
@@ -388,6 +403,7 @@ class Armour(models.Model):
     locations = models.ManyToManyField(ArmourLocations, verbose_name="Locations")
     armour_points = models.IntegerField(default=1, verbose_name="Armour Points")
     qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Qualities & Flaws")
+
     def __str__(self):
         return u"{0}".format(self.name)
 
@@ -413,6 +429,11 @@ class Armour(models.Model):
             loc.append(str(l))
         out = ", ".join(loc)
         return out
+    
+    
+    @property
+    def price_formated(self):
+        return format_currency(self.price)
 
 class Weapon(models.Model):
     class WeaponGroup(models.TextChoices):
