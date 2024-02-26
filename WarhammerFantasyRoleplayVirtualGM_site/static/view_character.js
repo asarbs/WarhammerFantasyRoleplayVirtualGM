@@ -1,4 +1,14 @@
 
+function fortmatPrice(price_b) {
+    var GC = Math.floor(price_b / 240)
+    var GC_left = price_b % 240
+    var SC = Math.floor(GC_left / 12)
+    var SC_left = GC_left % 12
+    var BC = SC_left
+
+    return +GC+"GC "+SC+"/"+BC
+}
+
 class Skill {
     #adv_standard        = 0;
     #adv_career          = 0;
@@ -90,14 +100,16 @@ class Trapping {
     #enc             = 0
     #description     = ""
     #is_in_inventory = false
+    #price           = 0
     #deleted = false;
-    constructor(id, name, enc, description, is_in_inventory, container_id) {
+    constructor(id, name, enc, description, is_in_inventory, container_id, price) {
         this.#id = id;
         this.#name = name;
         this.#enc = enc;
         this.#description = description;
         this.#is_in_inventory = is_in_inventory;
         this.#container_id = container_id
+        this.#price = price
     }
     get id() {
         return this.#id;
@@ -111,7 +123,7 @@ class Trapping {
             throw "" + name + " is not a string";
     }
     get name() {
-        return this.#name
+        return this.#name; 
     }
     set enc(enc) {
         if(typeof enc === "string") {
@@ -376,7 +388,7 @@ class Armour{
         return this.#armour_type;
     }
     get price() {
-        return this.#price;
+        return fortmatPrice(this.#price);
     }
     get encumbrance() {
         return this.#encumbrance;
@@ -428,7 +440,7 @@ class Armour{
             }
         }
         else {
-            throw "Ambitions: deleted=" + deleted + " boolean";
+            throw "Armour: deleted=" + deleted + " boolean";
         }
     }
     get deleted() {
@@ -504,6 +516,7 @@ class Armour{
         if(this.#is_in_inventory && !$('td#armour_name__'+this.#id).length) {
             var new_row = '<tr class="block_body" armour_id="'+this.#id+'">'
             new_row += '<td id="armour_name__'+this.#id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_armour_id="'+this.#id+'" class="pointer">'+this.#name+'</td>'
+            new_row += '<td id="armour_price__'+this.#id+'" class="center">'+this.price+'</td>'
             new_row += '<td id="armour_location__'+this.#id+'" class="center">'+this.#locations+'</td>'
             new_row += '<td id="armour_encumbrance__'+this.#id+'" class="center">'+this.#encumbrance+'</td>'
             new_row += '<td id="armour_armour_points__'+this.#id+'" class="center">'+this.#armour_points+'</td>'
@@ -619,6 +632,9 @@ class Weapon{
         else
             throw "" + price + " is not a number";
     }
+    get price() {
+        return fortmatPrice(this.#price);   
+    }
     set encumbrance(encumbrance) {
         if(typeof encumbrance === "number")
             this.#encumbrance = encumbrance;
@@ -706,9 +722,8 @@ class Weapon{
             } else {
                 new_row += '<a href="/wfrpg_gm/EditMeleWeapon/'+this.id+'">'+this.name+'</a>'
             }
-
-
             new_row += '</td>'
+            new_row += '<td id="weapon_location__'+this.#id+'" class="center">'+this.price+'</td>'
             new_row += '<td id="weapon_location__'+this.#id+'" class="center">'+this.weapon_group+'</td>'
             new_row += '<td id="weapon_encumbrance__'+this.#id+'" class="center">'+this.encumbrance+'</td>'
             new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.reach_range+'</td>'
@@ -1789,12 +1804,7 @@ class CharacterParameters {
             throw "wealth[" + wealth + "] is not a number";
     }
     get wealth() {
-        var GC = Math.floor(this.#wealth / 240)
-        var GC_left = this.#wealth % 240
-        var SC = Math.floor(GC_left / 12)
-        var SC_left = GC_left % 12
-        var BC = SC_left
-        return GC+"GC " + SC + "/" + BC
+        return fortmatPrice(this.#wealth);
     }
     set character_creation_step(character_creation_step) {
         if(typeof character_creation_step === "number")
@@ -2178,7 +2188,7 @@ class CharacterParameters {
     appendTrappings(trapping) {
         // console.log("appendTrappings:"+ trapping['id']+"; "+trapping['name']+"; "+trapping['description']+"; "+trapping['enc']);
         // id, name, enc, description, is_in_inventory
-        let traping = new Trapping(trapping['id'], trapping['name'],trapping['enc'],trapping['description'],trapping['is_in_inventory'], trapping['container_id']);
+        let traping = new Trapping(trapping['id'], trapping['name'],trapping['enc'],trapping['description'],trapping['is_in_inventory'], trapping['container_id'], trapping['price']);
         this.#trappings[trapping['id']] = traping
         this.trappingsNeedUpdate = true;
         $("select#add_trappings").append($('<option>', {value: traping.id, text: traping.name}));
@@ -2707,7 +2717,13 @@ class CharacterParameters {
         this.#notes.push(new_note);
         new_note.save();
     }
-
+    deleteNote(note_id) {
+        $.each(this.#notes, function(i, item) {
+            if(item.id == note_id) {
+                item.deleted = true;
+            }
+        });
+    }
     updateAmbition(ambition_id, achieved) {
         console.log("updateAmbition: ambition_id="+ambition_id+"; achieved="+achieved )
         for(let a in this.#ambitions_shortterm) {
@@ -2800,6 +2816,7 @@ class Note{
     #timestamp       = 0;
     #note_text       = "";
     #author          = "";
+    #deleted         = false;
     constructor(id, datetime_create, timestamp, note_text, author) {
         this.#id              = id;
         this.#datetime_create = datetime_create;
@@ -2847,20 +2864,53 @@ class Note{
             throw "Note.note_text: \"" + note_text + "\" is not a string";
     }
     set author(author) {
-    if(typeof author === "string")
-        this.#author = author;
-    else
-        throw "Note.author: \"" + author + "\" is not a string";
+        if(typeof author === "string")
+            this.#author = author;
+        else
+            throw "Note.author: \"" + author + "\" is not a string";
+    }
+    set deleted(deleted) {
+        if(typeof deleted === "boolean"){
+            this.#deleted = deleted;
+
+            let id = this.id
+
+            if(this.#deleted == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/wfrpg_gm/ajax_removePlayerNote",
+                    async: false,
+                    cache: false,
+                    timeout: 30000,
+                    fail: function(){
+                        return true;
+                    },
+                    data: {
+                        character_id: characterParameters.id,
+                        note_id   : this.#id
+                    },
+                    success: function(data) {
+                        $("tr[note_id="+id+"]").remove()
+                        console.log("remove: tr [note_id="+id+"]")
+                    }
+                });
+            }
+        }
+        else {
+            throw "Armour: deleted=" + deleted + " boolean";
+        }
     }
     updateUI() {
         console.log("Note.updateUI: "+ this.datetime_create);
         if(!$('td#player_notes_timestamp__'+this.#timestamp).length) {
-            var new_row = '<tr class="note_line">'
+            var new_row = '<tr class="note_line" note_id="'+this.#id+'">'
             new_row += '<td id="player_notes_timestamp__'+this.#timestamp+'" class="date">'+this.#datetime_create+'</td>'
             new_row += '<td>'+this.#author+'</td>'
             new_row += '<td>'+this.#note_text+'</td>'
+            new_row += '<td class="middle"><img src=\"/static/img/trash.png\" width=\"15\" delete_note_id="'+this.#id+'" class="pointer"></td>'
             new_row += '</tr>'
             $("table#player_notes tr.block_header").after(new_row)
+            $("img[delete_note_id="+this.#id+"]").click(delete_note);
         } else {
             console.log("NOT Note.updateUI: "+ this.datetime_create);
         }
@@ -3546,6 +3596,11 @@ function delete_armour(){
     console.log("delete_armour: "+armour_id);
     characterParameters.deleteArmour(armour_id);
     characterParameters.updateEncumbrance();
+}
+function delete_note() {
+    var note_id = $(this).attr("delete_note_id")
+    console.log("delete_note: "+note_id);
+    characterParameters.deleteNote(note_id);
 }
 function delete_trapping() {
     var trapping_id = $(this).attr("delete_trapping_id")

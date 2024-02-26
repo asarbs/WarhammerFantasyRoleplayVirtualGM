@@ -56,6 +56,10 @@
     display: inline-block;
 }
 
+.middle {
+    text-align: center;
+}
+
 .tooltip {
   /* position: relative; */
   /* display: inline-block; */
@@ -141,6 +145,7 @@ img.pointer {
     cursor: pointer;
     width: 15px;
 }
+
 
 select,
 input {

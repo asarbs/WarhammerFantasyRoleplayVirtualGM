@@ -1380,6 +1380,19 @@ def ajax_savePlayerNote(request):
     return JsonResponse(ret)
 
 @login_required
+def ajax_removePlayerNote(request):
+    if not request.method == 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    logger.debug(request.POST)
+
+    note = Note.objects.get(id=request.POST['note_id'])
+    note.delete()
+
+    ret = {'status': 'ok'}
+    return JsonResponse(ret)
+
+@login_required
 def ajax_saveCampaignAmbitions(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
