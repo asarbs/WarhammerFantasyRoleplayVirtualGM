@@ -435,6 +435,7 @@ div#main div.character_sheet select.editable {
     height: 32px;
     width: 300px;
 }
+
 div#main div.character_sheet div.head {
     /* background-color: #c4a314; */
     width: 1455px;
@@ -977,10 +978,21 @@ div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trapping
     font-size: 20px;
 }
 
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit {
+    text-align: center;
+}
+
+
 div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit input  {
     position: relative;
     width: 36px;
 }
+
+div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit select  {
+    position: relative;
+    width: 136px;
+}
+
 
 div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right {
     /* background-color: #666666; */

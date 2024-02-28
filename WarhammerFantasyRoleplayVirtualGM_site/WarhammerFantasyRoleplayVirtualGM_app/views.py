@@ -220,11 +220,14 @@ def ajax_saveTalentToCharacter(request):
     talent_taken = request.POST['talent_taken']
     try:
         character = Character.objects.get(id=character_id)
-        char2tal, created = Character2Talent.objects.get_or_create(characters=character, talent_id=talent_id, taken=talent_taken)
-        ccl(request.user, character, "add talen \"{}\".".format(char2tal.talent.name))
+        talent = Talent.objects.get(id=talent_id)
+        logger.debug(f"character={character}; talent={talent}; talent_taken={talent_taken}")
+        char2tal, created = Character2Talent.objects.get_or_create(characters=character, talent=talent)
+        char2tal.taken = talent_taken
         char2tal.save()
+        ccl(request.user, character, "add talen \"{}\" taken {}.".format(char2tal.talent.name, char2tal.taken))
     except django.db.utils.IntegrityError as e:
-        logger.debug("UNIQUE constraint failed: characters:{} skill:{} created:{}".format(character_id, char2tal.taken.name, created))
+        logger.error(e)
     return JsonResponse({'status': 'ok'})
 
 @login_required
@@ -1305,7 +1308,8 @@ def ajax_view_getCharacterData(request):
             'enc': trapping.encumbrance,
             'is_in_inventory': True if trapping.id in ch2STrapping else False,
             'container_id': get_cotainer_id(trapping, ch2STrappingQuerySet) if trapping.id in ch2STrapping else -1,
-            'price': trapping.price
+            'price': trapping.price,
+            'quantity': get_quantity(trapping, ch2STrappingQuerySet) if trapping.id in ch2STrapping else 0
         }
 
     for r in Armour.objects.all():
@@ -1329,7 +1333,7 @@ def ajax_view_getCharacterData(request):
     for n in character.notes.order_by('datetime_create'):
         ret['notes'].append(n.to_dict())
 
-    for l in CharacterChangeLog.objects.filter(character=character).order_by("id")[0:50]:
+    for l in CharacterChangeLog.objects.filter(character=character).order_by("-id")[:50:-1]:
         ret['characterChangeLog'].append(l.to_dict())
 
     ret['party']['name'] = character.campaign.party_name
@@ -1688,6 +1692,26 @@ def ajax_saveTraping2Container(request):
     character2Trapping.save()
 
     logger.debug(f"created={created}; character_id: {request.POST['character_id']}; trapping_id: {request.POST['trapping_id']}; character2container_id: {request.POST['character2container_id']}")
+    ccl(request.user, c, "remove spell \"{}\".".format(spells))
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveTrapingQuantity(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    character = Character.objects.get(id=request.POST['character_id'])
+    trapping = Trapping.objects.get(id=request.POST['trapping_id'])
+
+    character2Trapping = Character2Trapping.objects.get(characters = character, trapping = trapping)
+    character2Trapping.quantity = request.POST['quantity']
+    character2Trapping.save()
+
+    logger.debug("Set \"{}\" quantity to {} .".format(trapping.name, character2Trapping.quantity))
+
+    ccl(request.user, character, "Set \"{}\" quantity to {} .".format(trapping.name, character2Trapping.quantity))
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)
@@ -1736,4 +1760,5 @@ def shopping_buy(request, characterId, trappingId):
     character.save()
     character2trapping, created = Character2Trapping.objects.get_or_create(characters=character, trapping=trapping)
     character2trapping.save()
+    ccl(request.user, character, "buy \"{}\" for {} .".format(trapping.name, format_currency(trapping.price)))
     return redirect(reverse('viewCharacter', args=(characterId,)))

@@ -168,3 +168,9 @@ def get_cotainer_id(trapping, ch2STrappingQuerySet):
         # # if c2t.trapping.id == trapping.id:
         # #     return c2t.container.id
     return -1
+
+def get_quantity(trapping, ch2STrappingQuerySet):
+    for c2t in ch2STrappingQuerySet.all():
+        if trapping.id == c2t.trapping.id :
+            return c2t.quantity
+    return -1

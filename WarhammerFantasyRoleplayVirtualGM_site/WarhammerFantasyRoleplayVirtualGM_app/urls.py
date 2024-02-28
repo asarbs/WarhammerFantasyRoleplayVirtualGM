@@ -99,6 +99,8 @@ urlpatterns = [
     path("ajax_removeSpells", views.ajax_removeSpells, name="ajax_removeSpells"),
 
     path("ajax_saveTraping2Container", views.ajax_saveTraping2Container, name="ajax_saveTraping2Container"),
+    path("ajax_saveTrapingQuantity", views.ajax_saveTrapingQuantity, name="ajax_saveTrapingQuantity"),
+
     path('ajax_saveCampaignAmbitions', views.ajax_saveCampaignAmbitions, name="ajax_saveCampaignAmbitions"),
     path('ajax_saveCampaignNotes', views.ajax_saveCampaignNotes, name="ajax_saveCampaignNotes"),
 

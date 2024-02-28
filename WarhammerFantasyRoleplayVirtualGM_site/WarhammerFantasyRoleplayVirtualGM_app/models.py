@@ -637,9 +637,6 @@ class Character2Talent(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     talent = models.ForeignKey(Talent, on_delete=models.CASCADE)
     taken = models.IntegerField(default="0", verbose_name="Taken")
-    is_basic_skill = models.BooleanField(default=False)
-    is_species_skill = models.BooleanField(default=False)
-    is_career_skill = models.BooleanField(default=False)
     class Meta:
         unique_together = ('characters', 'talent',)
 
@@ -803,10 +800,9 @@ class Character2Container(models.Model):
 class Character2Trapping(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
     trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
-    is_basic_skill = models.BooleanField(default=False)
-    is_species_skill = models.BooleanField(default=False)
-    is_career_skill = models.BooleanField(default=False)
     container = models.ForeignKey(Character2Container, null=True, blank=True,  on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1, verbose_name="Quantity")
+
 
     class Meta:
         unique_together = ('characters', 'trapping',)

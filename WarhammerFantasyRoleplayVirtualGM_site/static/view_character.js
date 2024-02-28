@@ -101,8 +101,9 @@ class Trapping {
     #description     = ""
     #is_in_inventory = false
     #price           = 0
+    #quantity        = 0
     #deleted = false;
-    constructor(id, name, enc, description, is_in_inventory, container_id, price) {
+    constructor(id, name, enc, description, is_in_inventory, container_id, price, quantity) {
         this.#id = id;
         this.#name = name;
         this.#enc = enc;
@@ -110,6 +111,7 @@ class Trapping {
         this.#is_in_inventory = is_in_inventory;
         this.#container_id = container_id
         this.#price = price
+        this.#quantity = quantity
     }
     get id() {
         return this.#id;
@@ -151,6 +153,15 @@ class Trapping {
     }
     get container_id() {
         return this.#container_id
+    }
+    get quantity() {
+        return this.#quantity
+    }
+    set quantity(quantity) {
+        if(typeof quantity === "number")
+            this.#quantity = adv;
+        else
+            throw "" + quantity + " is not a number";
     }
     set is_in_inventory(is_in_inventory) {
         if(typeof is_in_inventory === "boolean"){
@@ -2119,7 +2130,8 @@ class CharacterParameters {
                 console.log("updateTrappingsTable: "+item.id +"; "+item.name);
                 new_row = '<tr class="block_body" trapping_id="'+this.id+'">'
                 new_row += '<td id="trappings_name__'+item.id+'" class="left"><img src=\"/static/img/trash.png\" width=\"15\" delete_trapping_id="'+this.id+'" class="pointer"><a href="/wfrpg_gm/TrappingssEditView/'+item.id+'">'+item.name+'</a></td>'
-                new_row += '<td class="edit"><input type="text" id="trappings_enc__'+item.id+'" name="fname" value="'+item.enc+'"></td>'
+                new_row += '<td class="edit" class="left"><input type="number" id="trappings_quantity__'+item.id+'" name="fname" value="'+item.quantity+'"></td>'
+                new_row += '<td class="edit">'+item.enc+'</td>'
                 new_row += '<td class="edit">'
                 new_row += '<select name="containers" id="add_container_'+item.id+'">'
                 new_row += characterParameters.build_containers_options_list(item.container_id);
@@ -2128,6 +2140,31 @@ class CharacterParameters {
                 new_row += '</tr>'
                 $("#trappings_table").append(new_row)
                 $("img[delete_trapping_id="+this.id+"]").click(delete_trapping);
+                $('input#trappings_quantity__'+item.id).addClass("editable", 10);
+                $('input#trappings_quantity__'+item.id).prop("readonly", false);
+                $('input#trappings_quantity__'+item.id).on("change",function(){
+                    let quantity = $(this).val()
+                    console.log("item id="+item.id + "; quantity="+quantity)
+                    $.ajax({
+                        type: "POST",
+                        url: "/wfrpg_gm/ajax_saveTrapingQuantity",
+                        async: false,
+                        cache: false,
+                        timeout: 30000,
+                        fail: function(){
+                            return true;
+                        },
+                        data: {
+                            character_id : characterParameters.id,
+                            trapping_id:item.id,
+                            quantity: quantity
+                        },
+                        success: function(data) {
+                            console.log(data)
+                        }
+                    });
+
+                });
                 $('select#add_container_'+item.id).on("change", function(){
                     let container_id = $(this).val()
                     console.log("item id="+item.id + "; container_id="+container_id)
@@ -2188,7 +2225,7 @@ class CharacterParameters {
     appendTrappings(trapping) {
         // console.log("appendTrappings:"+ trapping['id']+"; "+trapping['name']+"; "+trapping['description']+"; "+trapping['enc']);
         // id, name, enc, description, is_in_inventory
-        let traping = new Trapping(trapping['id'], trapping['name'],trapping['enc'],trapping['description'],trapping['is_in_inventory'], trapping['container_id'], trapping['price']);
+        let traping = new Trapping(trapping['id'], trapping['name'],trapping['enc'],trapping['description'],trapping['is_in_inventory'], trapping['container_id'], trapping['price'], trapping['quantity']);
         this.#trappings[trapping['id']] = traping
         this.trappingsNeedUpdate = true;
         $("select#add_trappings").append($('<option>', {value: traping.id, text: traping.name}));
@@ -2575,6 +2612,7 @@ class CharacterParameters {
     updateTalentVal(talent_id, newVal) {
         console.log("updateTalentVal: this.#talents.length="+this.#talents.length);
         this.#talents[talent_id].taken = newVal;
+        this.#talents[talent_id].save_to_character()
     }
     get hardy() {
         console.log("hardy: "+ this.#talents)
@@ -2979,7 +3017,7 @@ class Conditions {
         if(!$('td#conditions__'+this.#id).length) {
             var new_row = '<tr class="block_body">'
             new_row += '<td id="conditions__'+this.#id+'" class="left">'+this.#name+'</td>'
-            new_row += '<td class="edit"><input type="text" id="conditions__'+this.#id+'" condition_id="'+this.#id+'" min="0" max="100" step="1" name="fname" value="'+this.#occurrence+'"></td>'
+            new_row += '<td class="edit"><input type="number" id="conditions__'+this.#id+'" condition_id="'+this.#id+'" min="0" max="100" step="1" name="fname" value="'+this.#occurrence+'"></td>'
             new_row += '<td>'+this.#description+'</td>'
             new_row += '</tr>'
             $("table#conditions_table").append(new_row)
@@ -3132,7 +3170,6 @@ function get_characterData(){
             for(let k in data['trappings'] ) {
                 characterParameters.appendTrappings(data['trappings'][k])
             };
-            characterParameters.updateTrappingsTable()
 
             characterParameters.updateTalentsTable()
             characterParameters.updateWounds();
@@ -3163,6 +3200,7 @@ function get_characterData(){
 
 
             characterParameters.updateEncumbrance();
+            characterParameters.updateTrappingsTable()
             turon_on_edit();
             $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
         }
@@ -3189,7 +3227,7 @@ function updateSkill() {
 function updateTalents() {
     var id = $(this).attr('talent_id');
     var adv_val = parseInt($(this).val());
-    // console.log("updateSkill: " + skill_id +":"+ skill_adv_val)
+    // console.log("updateTalents: " + skill_id +":"+ skill_adv_val)
     characterParameters.updateTalentVal(id, adv_val)
 }
 function updateFate_fate() {
