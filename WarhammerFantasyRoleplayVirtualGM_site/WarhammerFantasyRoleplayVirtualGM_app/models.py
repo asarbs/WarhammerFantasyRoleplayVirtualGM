@@ -571,7 +571,7 @@ class Character(models.Model):
     ch_class = models.ForeignKey(Class, verbose_name="Class", on_delete=models.CASCADE, null=True)
     career = models.ForeignKey(Career, verbose_name="Career", on_delete=models.CASCADE, null=True)
     career_level = models.IntegerField(default="1", verbose_name="Career  Level")
-    career_path = models.ForeignKey(CareerPath, verbose_name="CareerPath", on_delete=models.CASCADE, null=True)
+    career_path = models.ManyToManyField(CareerPath, verbose_name="CareerPath", through="Character2CareerPath")
     status = models.ForeignKey(Status, verbose_name="Status", on_delete=models.CASCADE, null=True)
     age = models.IntegerField(default="1", verbose_name="Age")
     height = models.IntegerField(default="1", verbose_name="Height")
@@ -621,6 +621,19 @@ class Character(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
+    
+class Character2CareerPath(models.Model):
+    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+    career_path = models.ForeignKey(CareerPath, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return u"{0} -> {1}".format(self.character, self.career_path)
+
+    def __unicode__(self):
+        return u"{0} -> {1}".format(self.character, self.career_path)   
 
 class Character2Skill(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)

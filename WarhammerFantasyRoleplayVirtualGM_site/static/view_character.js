@@ -1179,7 +1179,7 @@ class CharacterParameters {
     #experience_spent                   = 0;
     #career_id                          = 0;
     #career_level                       = 0;
-    #career_path_id                     = "";
+    #career_path_id                     = [];
     #ch_class_id                        = 0;
     #character_creation_step            = 0;
     #characteristics_ag_advances        = 0;
@@ -1890,7 +1890,6 @@ class CharacterParameters {
         if(typeof career_id === "number") {
             this.#career_id = career_id;
             $("select#career").val(this.#career_id).change();
-            $("input#career_path").val(this.classModel[this.#ch_class_id].carrer[this.career_id].name);
         }
         else {
             throw "career_name[" + career_id + "] is not a number";
@@ -1919,11 +1918,22 @@ class CharacterParameters {
         return this.#ch_class_id
     }
     set career_path_id(career_path_id) {
-        if(typeof career_path_id === "number") {
-            this.#career_path_id = career_path_id;
+        if(typeof career_path_id === "object") {
+            characterParameters.#career_path_id = []
+            career_path_id.forEach(function(item, i, arr) {
+                if(typeof item === "string") { 
+                    characterParameters.#career_path_id.push(item);
+                    console.log("career_path_id["+i+"]:"+item + " = "+characterParameters.#career_path_id);
+                 } else {
+                    throw "career_path[" + item + "]{"+typeof item+"} is not a string";
+                 }
+            });
+
+            $("input#career_path").val(characterParameters.#career_path_id.join(" -> "));
+
         }
         else
-            throw "career_path[" + career_path_id + "] is not a number";
+            throw "career_path[" + career_path_id + "]{"+typeof career_path_id+"} is not a number";
     }
     get career_path_id() {
         return this.#career_path_id;
@@ -3960,6 +3970,8 @@ function updateCareer(){
             characterParameters.career_id = data['career_id']
             $("select#class").on("change", updateClass);
             $("select#career").on("change", updateCareer);
+            characterParameters.career_path_id = data['career_path']
+            characterParameters.career_level = data['career_level']
         }
     });
 }
@@ -3982,6 +3994,7 @@ function updateCareer_level() {
         success: function(data) {
             console.log(data);
             characterParameters.career_level = parseInt(data['career_level'])
+            characterParameters.career_path_id = data['career_path']
         }
     });
 }

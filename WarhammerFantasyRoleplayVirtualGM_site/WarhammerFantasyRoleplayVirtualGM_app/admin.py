@@ -257,6 +257,9 @@ class Condition2CharacterAdmin(admin.ModelAdmin):
     list_filter = ("characters",)
     list_editable = ("occurrence",)
 
+class Character2CareerPathAdmin(admin.ModelAdmin):
+    list_display = ("id", "character", "career_path")
+    list_filter = ("character",)
 
 from . import models
 admin.site.register(models.Player, PlayerAdmin)
@@ -296,3 +299,4 @@ admin.site.register(models.Containers, ContainersAdmin)
 admin.site.register(models.Character2Container, Character2ContainerAdmin)
 admin.site.register(models.Condition, ConditionAdmin)
 admin.site.register(models.Condition2Character, Condition2CharacterAdmin)
+admin.site.register(models.Character2CareerPath, Character2CareerPathAdmin)

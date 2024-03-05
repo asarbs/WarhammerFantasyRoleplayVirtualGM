@@ -144,13 +144,30 @@ def ajax_saveCareer(request):
     if not request.method == 'POST':
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-
-    logger.debug(request.POST)
     character = Character.objects.get(id= request.POST['character_id'])
-    character.career = Career.objects.get(id=request.POST['career_id'])
+    career = Career.objects.get(id=request.POST['career_id'])
+    character.career = career
+    character.career_level = 1
+
+    cas = CareersAdvanceScheme.objects.get(career=character.career)
+    career_path = None
+    if int(character.career_level) == 1:
+        career_path = cas.advances_level_1
+    elif int(character.career_level) == 2:
+        career_path = cas.advances_level_2
+    elif int(character.career_level) == 3:
+        career_path = cas.advances_level_3
+    elif int(character.career_level) == 4:
+        career_path = cas.advances_level_4
+    
+    if career_path is not None:
+        character.career_path.add(career_path)
+    else:
+        logger.error(f"ajax_saveCareer career_path not found: career_path={career_path} character.career_level={character.career_level}")
+
     character.save()
     ccl(request.user, character, "set career  to {}".format(character.career))
-    return JsonResponse({'status': 'ok', 'career_id':character.career.id})
+    return JsonResponse({'status': 'ok', 'career_id':character.career.id , "career_path": [cp.name for cp in character.career_path.all()], 'career_level':character.career_level})
 
 
 def ajax_saveCareer_level(request):
@@ -158,10 +175,27 @@ def ajax_saveCareer_level(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     character = Character.objects.get(id= request.POST['character_id'])
-    character.career_level = id=request.POST['career_level']
+    character.career_level = request.POST['career_level']
+
+    cas = CareersAdvanceScheme.objects.get(career=character.career)
+    career_path = None
+    if int(character.career_level) == 1:
+        career_path = cas.advances_level_1
+    elif int(character.career_level) == 2:
+        career_path = cas.advances_level_2
+    elif int(character.career_level) == 3:
+        career_path = cas.advances_level_3
+    elif int(character.career_level) == 4:
+        career_path = cas.advances_level_4
+    
+    if career_path is not None:
+        character.career_path.add(career_path)
+    else:
+        logger.error(f"ajax_saveCareer_level career_path not found: career_path={career_path} character.career_level={character.career_level} {type(character.career_level)}")
+
     character.save()
-    ccl(request.user, character, "set career level to {}".format(character.career_level))
-    return JsonResponse({'status': 'ok', 'career_level':character.career_level})
+    ccl(request.user, character, "set career level to {} and careep_path = {}".format(character.career_level, career_path))
+    return JsonResponse({'status': 'ok', 'career_level':character.career_level, "career_path": [cp.name for cp in character.career_path.all()]})
 
 @login_required
 def ajax_randomSpecies(request):
@@ -1235,6 +1269,8 @@ def ajax_view_getCharacterData(request):
 
     character_id = request.POST['character_id']
     character = Character.objects.get(id = character_id)
+
+
     ret['character'] = {
             "id"                           : character.id,
             "name"                         : character.name,
@@ -1244,7 +1280,7 @@ def ajax_view_getCharacterData(request):
             "career_level"                 : int(character.career_level),
             "age"                          : character.age,
             "height"                       : character.height,
-            "career_path"                  : character.career_path.id,
+            "career_path"                  : [cp.name for cp in character.career_path.all()],
             "status"                       : str(character.status),
             "hair"                         : character.hair.id,
             "eyes"                         : character.eyes.id,
@@ -1684,7 +1720,7 @@ def ajax_saveTraping2Container(request):
 
     logger.debug(f"{request.POST['character2container_id']}, {created}, {character2Trapping}")
 
-    if int(request.POST['character2container_id']) is not -1:
+    if int(request.POST['character2container_id']) != -1:
         character2Container = Character2Container.objects.get(id=request.POST['character2container_id'])
         character2Trapping.container = character2Container
     else:
@@ -1692,7 +1728,7 @@ def ajax_saveTraping2Container(request):
     character2Trapping.save()
 
     logger.debug(f"created={created}; character_id: {request.POST['character_id']}; trapping_id: {request.POST['trapping_id']}; character2container_id: {request.POST['character2container_id']}")
-    ccl(request.user, c, "remove spell \"{}\".".format(spells))
+    # ccl(request.user, c, "remove spell \"{}\".".format(spells))
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)
