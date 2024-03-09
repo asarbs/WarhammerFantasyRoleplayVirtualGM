@@ -22,7 +22,7 @@ from pprint import pformat
 
 import random
 import math
-import json
+import string
 
 from django.urls import reverse
 
@@ -74,9 +74,9 @@ def addCharacter(request, CampaignId):
                           species_id = 2,
                           ch_class_id=8,
                           career_id=58,
-                          career_path_id=487,
                           hair_id = 9,
                           eyes_id = 10,
+                          hash_id = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(29))
                           )
     character.save()
 
