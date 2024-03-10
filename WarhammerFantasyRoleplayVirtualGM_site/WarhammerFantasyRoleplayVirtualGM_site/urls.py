@@ -27,6 +27,7 @@ admin.autodiscover()
 urlpatterns = [
     path('', MainView.index),
     path('wfrpg_gm/', include("WarhammerFantasyRoleplayVirtualGM_app.urls")),
+    path('chat', include("WarhammerFantasyRoleplayVirtualGM_chat.urls")),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(next_page= '/login/'), name='logout'),
     path('admin/', admin.site.urls),

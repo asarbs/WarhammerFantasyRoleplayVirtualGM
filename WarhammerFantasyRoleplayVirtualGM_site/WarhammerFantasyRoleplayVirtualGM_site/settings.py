@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'dal',
     'dal_select2',
     'tinymce',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'ajax_select',
     'WarhammerFantasyRoleplayVirtualGM_app',
     'WarhammerFantasyRoleplayVirtualGM_user',
+    'WarhammerFantasyRoleplayVirtualGM_chat',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +64,7 @@ ROOT_URLCONF = 'WarhammerFantasyRoleplayVirtualGM_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR,'templates'), os.path.join(BASE_DIR,'WarhammerFantasyRoleplayVirtualGM_chat' ,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,8 +79,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'WarhammerFantasyRoleplayVirtualGM_site.wsgi.application'
-
-
+ASGI_APPLICATION = 'WarhammerFantasyRoleplayVirtualGM_site.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
