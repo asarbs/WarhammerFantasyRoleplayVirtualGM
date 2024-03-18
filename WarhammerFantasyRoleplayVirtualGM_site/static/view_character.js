@@ -2069,6 +2069,7 @@ class CharacterParameters {
                 new_row += '<td class=""><img id="skills__is_basic_skill__'+item.id+'" src="/static/NO.png"></td>'
                 new_row += '<td class=""><img id="skills__is_career_skill__'+item.id+'" src="/static/NO.png"></td>'
                 new_row += '<td class=""><img id="skills__is_species_skill__'+item.id+'" src="/static/NO.png"></td>'
+                new_row += '<td><img class="skill_test" skill_id="'+item.id+'" skill_name="'+item.name+'" src="/static/d10.png"></td>'
                 new_row += '</tr>'
                 $("#skills_table").append(new_row)
             }
@@ -3060,6 +3061,7 @@ class Conditions {
     }
 }
 const characterParameters = new CharacterParameters();
+var chatSocket = null;
 var character_id = 0
 function get_characterData(){
 
@@ -3213,6 +3215,7 @@ function get_characterData(){
             characterParameters.updateTrappingsTable()
             turon_on_edit();
             $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
+            $("img.skill_test").click(skill_test)
         }
     });
 }
@@ -4040,6 +4043,16 @@ function updateEyes() {
         }
     });
 }
+function skill_test() {
+    let skill_id = $(this).attr("skill_id");
+    let skill_val = $("input#skills__"+skill_id).val()
+    let skill_name = $(this).attr("skill_name");
+    let skill_test_val = Math.floor(Math.random() * 100) + 1;
+    message = characterParameters.name + " tested skill \""+skill_name+"\" ["+skill_val +"] with result "+skill_test_val
+    chatSocket.send(JSON.stringify({
+        'message': message
+    }));
+}
 function main() {
 
     $.ajaxSetup({
@@ -4067,4 +4080,9 @@ function main() {
     $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
     $("img#ambitions_longterm_add").click(ambitions_longterm_add);
+
+    const roomName = "game"
+    let protocol = window.location.protocol == "http:" ? "ws" : "wss"
+    var url = protocol + '://' + window.location.host + '/ws/chat/'+roomName + '/'
+    chatSocket = new WebSocket(url);
 }
