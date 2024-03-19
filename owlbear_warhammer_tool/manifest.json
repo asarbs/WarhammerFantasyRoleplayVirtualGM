@@ -1,0 +1,12 @@
+{
+    "name": "Owlbear Warhammer Tool plugin",
+    "version": "0.0.1",
+    "manifest_version": 1,
+    "action": {
+      "title": "Owlbear Warhammer Tool plugin",
+      "icon": "/icon.svg",
+      "popover": "/",
+      "height": 600,
+      "width": 600
+    }
+  }
