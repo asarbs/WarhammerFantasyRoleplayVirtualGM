@@ -9,7 +9,7 @@ document.querySelector('#app').innerHTML = `
 
 let roomName = "game"
 let protocol = "ws"
-var url = 'ws://127.0.0.1:8000/ws/chat/'+roomName + '/'
+var url = 'ws://wfrpg.skorupa.net/ws/chat/'+roomName + '/'
 console.log(url)
 const chatSocket = new WebSocket(url);
 
