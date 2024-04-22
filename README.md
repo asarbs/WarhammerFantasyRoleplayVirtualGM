@@ -42,7 +42,7 @@ Contributions are welcome! If you would like to contribute to this project, plea
 6. Create a new Pull Request.
 
 ## Licenseyour@email.com
-This project is licensed under the [GNU General Public License v3.0]([LICENSE](https://github.com/asarbs/WarhammerFantasyRoleplayVirtualGM/blob/main/LICENSE)).
+This project is licensed under the [GNU General Public License v3.0](https://github.com/asarbs/WarhammerFantasyRoleplayVirtualGM/blob/main/LICENSE).
 
 ## Acknowledgements
 - Warhammer RPG 4th Edition by Cubicle 7 Entertainment
