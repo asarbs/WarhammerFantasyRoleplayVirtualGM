@@ -4052,6 +4052,7 @@ function skill_test() {
     chatSocket.send(JSON.stringify({
         'message': message
     }));
+    alert(message);
 }
 function main() {
 
