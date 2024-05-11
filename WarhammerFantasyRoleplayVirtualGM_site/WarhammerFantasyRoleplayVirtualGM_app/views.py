@@ -473,10 +473,6 @@ def ajax_randomAttributes(request):
             character.movement_movement = rat.movement
             character.movement_walk = 2 * rat.movement
             character.movement_run = 4 * rat.movement
-            SB = math.floor(character.characteristics_s_initial / 10.0)
-            TB = math.floor(character.characteristics_t_initial / 10.0)
-            WPB = math.floor(character.characteristics_wp_initial / 10.0)
-            character.wounds = SB + (2 * TB) + WPB
             character.save()
             ret = {'status': 'ok',
                    'extra_points': rat.extra_points,
@@ -495,7 +491,7 @@ def ajax_randomAttributes(request):
                    'resilience_resilience': character.resilience_resilience,
                    'resilience_resolve': character.resilience_resilience,
                    'movement_movement': character.movement_movement,
-                   'wounds': character.wounds
+                   'current_wounds': character.current_wounds
             }
             return JsonResponse(ret)
         else:
@@ -536,10 +532,6 @@ def ajax_saveAttribute(request):
             character.experience_current            = int(request.POST['newVal[experience_current]'])
             character.experience_spent              = int(request.POST['newVal[experience_spent]'])
 
-            SB = math.floor(int(character.characteristics_s_initial) / 10.0)
-            TB = math.floor(int(character.characteristics_t_initial) / 10.0)
-            WPB = math.floor(int(character.characteristics_wp_initial) / 10.0)
-            character.wounds = SB + (2 * TB) + WPB
             character.save()
             ret = {'status': 'ok',
                    'characteristics_ws_initial':    int(character.characteristics_ws_initial),
@@ -567,7 +559,7 @@ def ajax_saveAttribute(request):
                    'resilience_resilience':         int(character.resilience_resilience),
                    'resilience_resolve':            int(character.resilience_resilience),
                    'movement_movement':             int(character.movement_movement),
-                   'wounds':                        int(character.wounds)
+                   'current_wounds':                int(character.current_wounds)
             }
             return JsonResponse(ret)
         else:
@@ -1304,7 +1296,7 @@ def ajax_view_getCharacterData(request):
             "characteristics_int_advances" : character.characteristics_int_advances,
             "characteristics_wp_advances"  : character.characteristics_wp_advances,
             "characteristics_fel_advances" : character.characteristics_fel_advances,
-            "wounds"                       : character.wounds,
+            "current_wounds"               : character.current_wounds,
             "fate_fate"                    : character.fate_fate,
             "fate_fortune"                 : character.fate_fortune,
             "resilience_resilience"        : character.resilience_resilience,
@@ -1704,13 +1696,28 @@ def ajax_removeSpells(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
     c = Character.objects.get(id = request.POST['character_id'])
-    spells = Spells.objects.get(id = request.POST['spells_id']);
+    spells = Spells.objects.get(id = request.POST['spells_id'])
     c.spells.remove(spells)
     ccl(request.user, c, "remove spell \"{}\".".format(spells))
     logger.debug("remove spells {} from {}".format(spells, c))
 
     ret = {'status': 'ok', }
     return JsonResponse(ret)
+
+
+@login_required
+def ajax_saveCurrentWounds(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    c = Character.objects.get(id = request.POST['character_id'])
+    current_wounds = request.POST['current_wounds']
+    c.current_wounds = current_wounds
+    c.save()
+    ccl(request.user, c, f"set Cuttent Wounds to \"{current_wounds}\".")
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)    
 
 @login_required
 def ajax_saveTraping2Container(request):

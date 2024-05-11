@@ -1237,7 +1237,7 @@ class CharacterParameters {
     #armour                             = [];
     #weapon                             = [];
     #spells                             = [];
-    #wounds                             = 0;
+    #current_wounds                     = 0;
     skills_species                      = {};
     #improvementXPCosts                 = [];
     #wealth                             = 0;
@@ -1795,16 +1795,19 @@ class CharacterParameters {
     get movement_movement() {
         return this.#movement_movement;
     }
-    set wounds(wounds) {
+    set current_wounds(wounds) {
         if(typeof wounds === "number") {
-            this.#wounds = wounds;
-            $("input#wounds"                      ).val(characterParameters.wounds)
+            this.#current_wounds = wounds;
+            $("input#current_wounds"                      ).val(characterParameters.current_wounds)
         }
         else
-            throw "wounds[" + wounds + "] is not a string";
+            throw "current_wounds[" + wounds + "] is not a number";
+    }
+    get current_wounds() {
+        return this.#current_wounds;
     }
     get wounds() {
-        return this.#wounds;
+        return this.s_bonus + 2 * this.t_bonus + this.hardy * this.t_bonus + this.wp_bonus;
     }
     set wealth(wealth) {
         if(typeof wealth === "number") {
@@ -2659,7 +2662,7 @@ class CharacterParameters {
 
     updateWounds() {
         $("input#hardy"              ).val(this.hardy + " * " + this.t_bonus);
-        $("input#wounds"              ).val(this.s_bonus + 2 * this.t_bonus + this.hardy * this.t_bonus + this.wp_bonus);
+        $("input#wounds"              ).val(this.wounds);
     }
     updateEncumbrance() {
         console.log("updateEncumbrance")
@@ -3135,7 +3138,7 @@ function get_characterData(){
             characterParameters.characteristics_int_advances = data['character']["characteristics_int_advances" ]
             characterParameters.characteristics_wp_advances  = data['character']["characteristics_wp_advances"  ]
             characterParameters.characteristics_fel_advances = data['character']["characteristics_fel_advances" ]
-            characterParameters.wounds                       = data['character']["wounds"                       ]
+            characterParameters.current_wounds               = data['character']["current_wounds"               ]
             characterParameters.fate_fate                    = data['character']["fate_fate"                    ]
             characterParameters.fate_fortune                 = data['character']["fate_fortune"                 ]
             characterParameters.resilience_resilience        = data['character']["resilience_resilience"        ]
@@ -3463,6 +3466,34 @@ function updateHeight() {
         }
     });
 }
+function updateCurrentWounds() {
+    var val = parseInt($(this).val());
+    console.log("updateCurrentWounds: val="+val)
+    characterParameters.current_wounds = val;
+    if(val > characterParameters.wounds) {
+        msg = "Can't update Current Wounds ["+val+"] above Character Wounds Value["+characterParameters.wounds+"]";
+        console.error(msg)
+        alert(msg)
+        return
+    }
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_gm/ajax_saveCurrentWounds",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            character_id : characterParameters.id,
+            current_wounds : val
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
 function turon_on_edit() {
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -3512,8 +3543,7 @@ function turon_on_edit() {
     $("input#age").addClass( "editable", 1000);
     $("input#height").addClass( "editable", 1000);
     $("select#add_conditions").addClass( "editable", 1000);
-
-
+    $("input#current_wounds").addClass( "editable", 1000);
 
     $("input#characteristics_ws_initial ").prop("readonly", false);
     $("input#characteristics_bs_initial ").prop("readonly", false);
@@ -3550,9 +3580,7 @@ function turon_on_edit() {
     $("input#age").prop("readonly", false);
     $("input#height").prop("readonly", false);
     $("input#career_level").prop("readonly", false);
-
-
-
+    $("input#current_wounds").prop("readonly", false);
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristicsAdv);
     $("input#characteristics_bs_advances ").on("change", updateCharacteristicsAdv);
@@ -3587,6 +3615,7 @@ function turon_on_edit() {
     $("input#character_sheet_name").change(updateCharacter_sheet_name)
     $("input#age").change(updateAge)
     $("input#height").change(updateHeight)
+    $("input#current_wounds").change(updateCurrentWounds)
 
     $("select#species").on("change", updateSpecies);
     $("select#class").on("change", updateClass);

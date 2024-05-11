@@ -97,6 +97,7 @@ urlpatterns = [
     path("ajax_removeArmour", views.ajax_removeArmour, name="ajax_removeArmour"),
     path("ajax_removeTrappings", views.ajax_removeTrappings, name="ajax_removeTrappings"),
     path("ajax_removeSpells", views.ajax_removeSpells, name="ajax_removeSpells"),
+    path("ajax_saveCurrentWounds", views.ajax_saveCurrentWounds, name="ajax_saveCurrentWounds"),
 
     path("ajax_saveTraping2Container", views.ajax_saveTraping2Container, name="ajax_saveTraping2Container"),
     path("ajax_saveTrapingQuantity", views.ajax_saveTrapingQuantity, name="ajax_saveTrapingQuantity"),

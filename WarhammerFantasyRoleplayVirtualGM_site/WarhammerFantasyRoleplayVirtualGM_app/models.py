@@ -597,7 +597,7 @@ class Character(models.Model):
     characteristics_int_advances = models.IntegerField(default="0", verbose_name="int_advances")
     characteristics_wp_advances = models.IntegerField(default="0", verbose_name="wp_advances")
     characteristics_fel_advances = models.IntegerField(default="0", verbose_name="fel_advances")
-    wounds = models.IntegerField(default="0", verbose_name="wounds")
+    current_wounds = models.IntegerField(default="0", verbose_name="Current Wounds")
     fate_fate = models.IntegerField(default="0", verbose_name="fate_fate")
     fate_fortune = models.IntegerField(default="0", verbose_name="fate_fortune")
     resilience_resilience = models.IntegerField(default="0", verbose_name="resilience_resilience")
