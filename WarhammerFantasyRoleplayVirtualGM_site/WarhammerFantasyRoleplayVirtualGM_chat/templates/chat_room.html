@@ -12,8 +12,8 @@
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-        let protocol = window.location.protocol == "http:" ? "ws" : "wss"
-        var url = protocol + '://' + window.location.host + '/ws/chat/'+roomName + '/'
+        let protocol = window.location.protocol == "http:" ? "wss" : "wss"
+        var url = protocol + '://wfrpg.skorupa.net/ws/chat/'+roomName + '/'
         console.log(url)
         const chatSocket = new WebSocket(url);
         

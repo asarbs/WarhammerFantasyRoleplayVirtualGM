@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'WarhammerFantasyRoleplayVirtualGM_app',
     'WarhammerFantasyRoleplayVirtualGM_user',
     'WarhammerFantasyRoleplayVirtualGM_chat',
+    'WarhammerFantasyRoleplayVirtualGM_NPC',
 ]
 
 MIDDLEWARE = [
