@@ -95,7 +95,7 @@ class Campaign(models.Model):
     party_name = models.CharField(max_length= 250, default="")
     ambitions_shortterm = models.ManyToManyField(Ambitions, verbose_name="Shortterm Ambitions", related_name="campaign_ambitions_shortterm")
     ambitions_longterm = models.ManyToManyField(Ambitions, verbose_name="Longterm Ambitions", related_name="campaign_ambitions_longterm")
-    notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True, null=True)
+    notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -612,9 +612,9 @@ class Character(models.Model):
     ambitions_longterm = models.ManyToManyField(Ambitions, verbose_name="Longterm Ambitions", related_name="character_ambitions_longterm")
     armour = models.ManyToManyField(Armour, verbose_name="Armour")
     weapon = models.ManyToManyField(Weapon, verbose_name="Weapon")
-    spells = models.ManyToManyField(Spells, verbose_name="Spells", blank=True, null=True)
+    spells = models.ManyToManyField(Spells, verbose_name="Spells", blank=True)
     wealth = models.IntegerField(default=0, verbose_name="Wealth")
-    notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True, null=True)
+    notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True)
     hash_id = models.CharField(max_length=29, verbose_name="Hash ID", default="")
 
     def __str__(self):
