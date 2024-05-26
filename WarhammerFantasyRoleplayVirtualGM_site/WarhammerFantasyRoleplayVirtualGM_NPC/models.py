@@ -40,12 +40,29 @@ class NPC2Skill(models.Model):
     skill = models.ForeignKey(Skils, on_delete=models.CASCADE)
     value = models.IntegerField(default="0", verbose_name="Value")
 
+    def __str__(self):
+        return f"Skill: {self.npc} -> {self.skill} [{self.value}]"
+
+    def __unicode__(self):
+        return f"Skill: {self.npc} -> {self.skill} [{self.value}]"
+
 class NPC2Talent(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     talent = models.ForeignKey(Talent, on_delete=models.CASCADE)
     value = models.IntegerField(default="0", verbose_name="Value")
+    def __str__(self):
+        return f"Tallent: {self.npc} -> {self.talent} [{self.value}]"
+
+    def __unicode__(self):
+        return f"Tallent: {self.npc} -> {self.talent} [{self.value}]"
 
 class NPC2Trapping(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
     amount = models.IntegerField(default="0", verbose_name="Amount")
+
+    def __str__(self):
+        return f"Trapping: {self.npc} -> {self.trapping} [{self.amount}]"
+
+    def __unicode__(self):
+        return f"Trapping: {self.npc} -> {self.trapping} [{self.amount}]"

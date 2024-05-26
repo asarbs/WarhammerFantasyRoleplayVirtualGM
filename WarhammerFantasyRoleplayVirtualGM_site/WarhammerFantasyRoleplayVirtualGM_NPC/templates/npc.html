@@ -1,4 +1,68 @@
 {% extends "index.html" %}
 {% block main %}
 
+<div id="npcs">
+
+{% for n in npc %}
+<div class="npc_inline">
+
+<table border="0">
+    <tr>
+      <td class="portrait" rowspan="4"><img src="/{{ n.npc.portrait }}" class="npc_portrait"></td>
+      <td class="name" colspan="10">{{ n.npc }}</td>
+    </tr>
+    <tr>
+      <td class="species" colspan="10">{{ n.npc.species }} </td>
+    </tr>
+    <tr>
+        <td class="head">WS</td>
+        <td class="head">BS</td>
+        <td class="head">S</td>
+        <td class="head">T</td>
+        <td class="head">I</td>
+        <td class="head">Ag</td>
+        <td class="head">Dex</td>
+        <td class="head">Int</td>
+        <td class="head">WP</td>
+        <td class="head">Fel</td>
+    </tr>
+    <tr>
+        <td>{{ n.npc.characteristics_ws }} </td>
+        <td>{{ n.npc.characteristics_bs }} </td>
+        <td>{{ n.npc.characteristics_s }} </td>
+        <td>{{ n.npc.characteristics_t }} </td>
+        <td>{{ n.npc.characteristics_i }} </td>
+        <td>{{ n.npc.characteristics_ag }} </td>
+        <td>{{ n.npc.characteristics_dex }} </td>
+        <td>{{ n.npc.characteristics_int }} </td>
+        <td>{{ n.npc.characteristics_wp }} </td>
+        <td>{{ n.npc.characteristics_fel }} </td>
+    </tr>
+  </table>
+
+
+<p><b>Skills:</b>{% for x in n.npc2skill %} 
+    * {{ x.skill }} [{{ x.value }}], 
+   {% endfor %}
+</p>
+<p><b>Talents:</b>{% for x in n.npc2talent %} 
+    * {{ x.talent }} [{{ x.value }}],
+    {% endfor %}
+</p>
+<p><b>Weapons:</b>{% for x in n.npc.weapons.all %} 
+    * {{ x }},
+    {% endfor %}
+</p>
+<p><b>Trappings:</b>{% for x in n.npc2trapping %} 
+    * {{ x.trapping }} [{{ x.amount }}]
+    {% endfor %}
+</p>
+</div>
+
+{% endfor %}
+
+<div class="npc_clean"></div>
+
+</div>
+
 {% endblock %}

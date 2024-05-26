@@ -146,6 +146,11 @@ img.pointer {
     width: 16px;
 }
 
+img.npc_portrait {
+    border-radius: 50%;
+    width: 64px;
+}
+
 
 select,
 input {
@@ -1266,3 +1271,45 @@ div#menu_button {
      white-space : nowrap;
  }
 
+div#npcs {
+
+}
+
+div.npc_inline {
+    /* background-color: #35fbd6; */
+    margin-bottom: 15px;
+    margin-right: 15px;
+    width: 512px;
+    min-height: 250px;
+    float: left;
+    background-image : url("img/npc_bg.png");
+    background-repeat: repeat;
+    background-position: top;
+    padding: 5px;
+}
+
+div.npc_inline table {
+    width: 100%;
+}
+div.npc_inline table tr td {
+    text-align: center;
+}
+div.npc_inline table tr td.portrait {
+    width: 92px;
+    text-align: center;
+}
+div.npc_inline table tr td.name {
+    font-size: 150%;
+    font-weight: bold;
+}
+div.npc_inline table tr td.species {
+    font-size: 120%;
+    font-weight: bold;
+}
+div.npc_inline table tr td.head {
+    width: 10%;
+    font-weight: bold;
+}
+div.npc_clean {
+    clear: both;
+}
