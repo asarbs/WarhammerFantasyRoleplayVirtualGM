@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+{% block main %}
+
+<form action="{% url 'NPC_UpdateView' pk=object.id %}" method="POST">
+    {% with submit_value="Register" %}
+    {% include "form.html" %}
+    {% endwith %}
+</form>
+
+{% endblock %}

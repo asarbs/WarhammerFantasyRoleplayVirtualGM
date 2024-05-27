@@ -1,7 +1,10 @@
 {% extends "index.html" %}
 {% block main %}
 
+<h2>NPC List</h2>
+{% comment %} <a href="{% url 'NPC_CreateView' %}">Add NPC</a> {% endcomment %}
 <div id="npcs">
+  
   <div id="detailsMsg_container">
     <div id="detailsMsg"></div>
     <div id="detailsMsg_ok">OK</div>
@@ -14,6 +17,7 @@
 <table border="0">
     <tr>
       <td class="portrait" rowspan="4"><img src="/{{ n.npc.portrait }}" class="npc_portrait"></td>
+      {% comment %} <td class="name" colspan="12"><a href="{% url 'NPC_UpdateView' pk=n.npc.id  %}">{{ n.npc }}</a></td> {% endcomment %}
       <td class="name" colspan="12">{{ n.npc }}</td>
     </tr>
     <tr>

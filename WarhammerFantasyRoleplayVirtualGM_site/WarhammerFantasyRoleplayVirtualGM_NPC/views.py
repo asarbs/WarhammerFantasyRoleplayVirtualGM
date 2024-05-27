@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView
+from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import login_required
 
 from .models import *
-
+from .forms import *
 import logging
 logger = logging.getLogger(__name__)
 
@@ -38,6 +41,16 @@ def index(request):
         data["npc"].append(one_npc_data)
     logger.info(data)
     return render(request, 'npc.html', data)
+
+class NPCCreateView(LoginRequiredMixin, CreateView):
+    template_name = "NPCCreateView.html"
+    form_class = NPCForm
+    model = NPC
+
+class NPCUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = "NPCUpdateView.html"
+    form_class = NPCForm
+    model = NPC
 
 @login_required
 def ajax_npc_get_skill_description(request):
