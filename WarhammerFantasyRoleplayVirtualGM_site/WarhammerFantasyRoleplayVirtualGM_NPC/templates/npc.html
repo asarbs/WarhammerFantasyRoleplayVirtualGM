@@ -2,6 +2,11 @@
 {% block main %}
 
 <div id="npcs">
+  <div id="detailsMsg_container">
+    <div id="detailsMsg"></div>
+    <div id="detailsMsg_ok">OK</div>
+  </div>
+
 
 {% for n in npc %}
 <div class="npc_inline">
@@ -9,12 +14,19 @@
 <table border="0">
     <tr>
       <td class="portrait" rowspan="4"><img src="/{{ n.npc.portrait }}" class="npc_portrait"></td>
-      <td class="name" colspan="10">{{ n.npc }}</td>
+      <td class="name" colspan="12">{{ n.npc }}</td>
     </tr>
     <tr>
-      <td class="species" colspan="10">{{ n.npc.species }} </td>
+      <td class="species" colspan="12">
+        {% if n.npc.species is None %}
+          -
+        {% else %}
+          {{ n.npc.species }} 
+        {% endif %}
+      </td>
     </tr>
     <tr>
+        <td class="head">M</td>
         <td class="head">WS</td>
         <td class="head">BS</td>
         <td class="head">S</td>
@@ -25,8 +37,10 @@
         <td class="head">Int</td>
         <td class="head">WP</td>
         <td class="head">Fel</td>
+        <td class="head">W</td>
     </tr>
     <tr>
+        <td>{{ n.npc.characteristics_m }} </td>
         <td>{{ n.npc.characteristics_ws }} </td>
         <td>{{ n.npc.characteristics_bs }} </td>
         <td>{{ n.npc.characteristics_s }} </td>
@@ -37,26 +51,45 @@
         <td>{{ n.npc.characteristics_int }} </td>
         <td>{{ n.npc.characteristics_wp }} </td>
         <td>{{ n.npc.characteristics_fel }} </td>
+        <td>{{ n.npc.characteristics_w }} </td>
     </tr>
   </table>
 
 
+{% if n.npc2skill %}  
 <p><b>Skills:</b>{% for x in n.npc2skill %} 
-    * {{ x.skill }} [{{ x.value }}], 
+    <span class="npc_skill" skill_id="{{ x.skill.id }}">{{ x.skill }}</span> [{{ x.value }}], 
    {% endfor %}
 </p>
+{% endif %}
+{% if n.npc2talent %}
 <p><b>Talents:</b>{% for x in n.npc2talent %} 
-    * {{ x.talent }} [{{ x.value }}],
+  <span class="npc_talent" talent_id="{{ x.talent.id }}">{{ x.talent }}</span> [{{ x.value }}],
     {% endfor %}
 </p>
+{% endif %}
+{% if n.npc.weapons.count %}
 <p><b>Weapons:</b>{% for x in n.npc.weapons.all %} 
-    * {{ x }},
+    {{ x }},
     {% endfor %}
 </p>
-<p><b>Trappings:</b>{% for x in n.npc2trapping %} 
-    * {{ x.trapping }} [{{ x.amount }}]
+{% endif %}
+{% if n.npc2trapping %}
+<p><b>Trappings:</b>
+  {% for x in n.npc2trapping %} 
+  <span class="npc_trapping" trapping_id="{{ x.trapping.id }}">{{ x.trapping }}</span> [{{ x.amount }}]
     {% endfor %}
 </p>
+{% endif %}
+{% if n.npc2creatureTraits %}
+<p><b>Traits:</b>
+  {% for x in n.npc2creatureTraits %} 
+  <span class="npc_creatureTraits" creatureTraits_id="{{ x.creatureTraits.id }}">{{ x.creatureTraits }}</span> [{{ x.amount }}]
+    {% endfor %}
+</p>
+{% endif %}
+
+
 </div>
 
 {% endfor %}

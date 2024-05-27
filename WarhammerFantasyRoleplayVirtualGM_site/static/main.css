@@ -1275,6 +1275,28 @@ div#npcs {
 
 }
 
+div#npcs div#detailsMsg_container {
+    width: 600px;
+    min-height: 400px;
+    background-color: #CCC;
+    color: #004363;
+    position: absolute;
+    border-radius: 15px;
+    margin-left: 512px;
+    display: none;
+    padding: 30px;
+}
+
+div#npcs div#detailsMsg_container div#detailsMsg_ok {
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+    border: #000000 1px solid;
+    background-color: #004363;
+    color: #97D7F4;
+    cursor: pointer;
+}
+
 div.npc_inline {
     /* background-color: #35fbd6; */
     margin-bottom: 15px;
@@ -1286,6 +1308,9 @@ div.npc_inline {
     background-repeat: repeat;
     background-position: top;
     padding: 5px;
+}
+div.npc_inline p span.npc_skill, span.npc_talent, span.npc_trapping, span.npc_creatureTraits {
+    cursor: help;
 }
 
 div.npc_inline table {
@@ -1307,7 +1332,7 @@ div.npc_inline table tr td.species {
     font-weight: bold;
 }
 div.npc_inline table tr td.head {
-    width: 10%;
+    width: 8%;
     font-weight: bold;
 }
 div.npc_clean {

@@ -115,6 +115,13 @@ class Skils(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
+    
+    def serialize(self):
+        return {"name": self.name, 
+                "characteristics": self.characteristics,
+                "description": self.description,
+                "ref": str(self.ref),
+                }
 
 class Talent(models.Model):
     name = models.CharField(max_length= 50)
@@ -143,6 +150,14 @@ class Talent(models.Model):
 
     def get_absolute_url(self):
         return reverse("TalentsListView")
+    
+    def serialize(self):
+        return {
+            "name": self.name,
+            "description": self.description,
+            "tests": self.tests,
+            "ref": str(self.ref),
+        }
 
 class Trapping(models.Model):
     name = models.CharField(max_length= 50, unique=True)
@@ -160,6 +175,12 @@ class Trapping(models.Model):
 
     def get_absolute_url(self):
         return reverse("TrappingsListView")
+    
+    def serialize(self):
+        return {
+            "name": self.name,
+            "description": self.description,
+        }
 
 class Player(models.Model):
     user = models.OneToOneField(User, verbose_name='Player', on_delete=models.CASCADE)

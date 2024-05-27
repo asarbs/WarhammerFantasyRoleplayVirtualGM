@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.http import HttpResponseBadRequest
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 
@@ -7,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 # Create your views here.
+@login_required
 def index(request):
     data = {}
     data["npc"] = [] 
@@ -16,6 +21,7 @@ def index(request):
         one_npc_data["npc2skill"] = []
         one_npc_data["npc2talent"] = []
         one_npc_data["npc2trapping"] = []
+        one_npc_data["npc2creatureTraits"] = []
         for s in n.skills.all():
             _NPC2Skill = NPC2Skill.objects.get(npc=n, skill=s)
             one_npc_data["npc2skill"].append(_NPC2Skill)
@@ -25,7 +31,39 @@ def index(request):
         for t in n.trappings.all():
             _NPC2Trapping = NPC2Trapping.objects.get(npc=n, trapping=t)
             one_npc_data["npc2trapping"].append(_NPC2Trapping)
+        for ct in n.creatureTraits.all():
+            _NPC2CreatureTraits = NPC2CreatureTraits.objects.get(npc=n, creatureTraits=ct)
+            one_npc_data["npc2creatureTraits"].append(_NPC2CreatureTraits)
 
         data["npc"].append(one_npc_data)
     logger.info(data)
     return render(request, 'npc.html', data)
+
+@login_required
+def ajax_npc_get_skill_description(request):
+    skill_id = request.POST['skill_id']
+    skill = Skils.objects.get(id=skill_id)
+    ret = {'status': 'ok', "skill": skill.serialize()}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_npc_get_talent_description(request):
+    talent_id = request.POST['talent_id']
+    talent = Talent.objects.get(id=talent_id)
+    ret = {'status': 'ok', "talent":talent.serialize()}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_npc_get_trapping_description(request):
+    trapping_id = request.POST['trapping_id']
+    trapping = Trapping.objects.get(id=trapping_id)
+    ret = {'status': 'ok', "trapping":trapping.serialize()}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_npc_get_creatureTraits_description(request):
+    trait_id = request.POST['creatureTraits_id']
+    trait = CreatureTraits.objects.get(id=trait_id)
+
+    ret = {'status': 'ok', "trait":trait.serialize()}
+    return JsonResponse(ret)

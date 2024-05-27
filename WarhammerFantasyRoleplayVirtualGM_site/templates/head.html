@@ -22,6 +22,14 @@
     });
 </script>
 {% endif %}
+{% if "wfrpg_npc" in request.path %}
+<script src="{% static "npc.js" %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        main();
+    });
+</script>
+{% endif %}
 {% if "viewCharacter" in  request.path %}
 <script src="{% static "view_character.js" %}"></script>
 <script type="text/javascript">
