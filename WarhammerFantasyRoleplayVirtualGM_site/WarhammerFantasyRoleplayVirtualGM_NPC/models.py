@@ -16,6 +16,9 @@ class CreatureTraits(models.Model):
     description = models.TextField(verbose_name="Description", default="")
     ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return f"{self.name}"
 
@@ -53,6 +56,9 @@ class NPC(models.Model):
     creatureTraits = models.ManyToManyField(CreatureTraits, through="NPC2CreatureTraits", blank=True)
     spells = models.ManyToManyField(Spells, through="NPC2Spells", blank=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return u"{0}".format(self.name)
 
@@ -64,6 +70,9 @@ class NPC2Skill(models.Model):
     skill = models.ForeignKey(Skils, on_delete=models.CASCADE)
     value = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
 
+    class Meta:
+        ordering = ['skill']
+
     def __str__(self):
         return f"Skill: {self.npc} -> {self.skill} [{self.value}]"
 
@@ -74,6 +83,10 @@ class NPC2Talent(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     talent = models.ForeignKey(Talent, on_delete=models.CASCADE)
     value = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
+
+    class Meta:
+        ordering = ['talent']
+
     def __str__(self):
         return f"Tallent: {self.npc} -> {self.talent} [{self.value}]"
 
@@ -84,6 +97,9 @@ class NPC2Trapping(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
     amount  = models.CharField(max_length=150, verbose_name="Amount", blank=True, null=True)
+
+    class Meta:
+        ordering = ['trapping']
 
     def __str__(self):
         return f"Trapping: {self.npc} -> {self.trapping} [{self.amount}]"
@@ -96,6 +112,9 @@ class NPC2CreatureTraits(models.Model):
     creatureTraits = models.ForeignKey(CreatureTraits, on_delete=models.CASCADE)
     amount = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
 
+    class Meta:
+        ordering = ['creatureTraits']
+
     def __str__(self):
         return f"Trapping: {self.npc} -> {self.creatureTraits} [{self.amount}]"
 
@@ -106,6 +125,9 @@ class NPC2Spells(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     spell = models.ForeignKey(Spells, on_delete=models.CASCADE)
     amount = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
+
+    class Meta:
+        ordering = ['spell']
 
     def __str__(self):
         return f"Trapping: {self.npc} -> {self.spell} [{self.amount}]"
