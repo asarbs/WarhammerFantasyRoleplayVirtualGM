@@ -60,7 +60,7 @@ class NPC(models.Model):
 class NPC2Skill(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     skill = models.ForeignKey(Skils, on_delete=models.CASCADE)
-    value = models.CharField(max_length=150, verbose_name="Value")
+    value = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
 
     def __str__(self):
         return f"Skill: {self.npc} -> {self.skill} [{self.value}]"
@@ -71,7 +71,7 @@ class NPC2Skill(models.Model):
 class NPC2Talent(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     talent = models.ForeignKey(Talent, on_delete=models.CASCADE)
-    value = models.CharField(max_length=150, verbose_name="Value")
+    value = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
     def __str__(self):
         return f"Tallent: {self.npc} -> {self.talent} [{self.value}]"
 
@@ -81,7 +81,7 @@ class NPC2Talent(models.Model):
 class NPC2Trapping(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     trapping = models.ForeignKey(Trapping, on_delete=models.CASCADE)
-    amount = models.IntegerField(default="0", verbose_name="Amount")
+    amount  = models.CharField(max_length=150, verbose_name="Amount", blank=True, null=True)
 
     def __str__(self):
         return f"Trapping: {self.npc} -> {self.trapping} [{self.amount}]"
@@ -92,7 +92,7 @@ class NPC2Trapping(models.Model):
 class NPC2CreatureTraits(models.Model):
     npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
     creatureTraits = models.ForeignKey(CreatureTraits, on_delete=models.CASCADE)
-    amount = models.CharField(max_length=150, verbose_name="Value")
+    amount = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
 
     def __str__(self):
         return f"Trapping: {self.npc} -> {self.creatureTraits} [{self.amount}]"
