@@ -25,6 +25,7 @@ def index(request):
         one_npc_data["npc2talent"] = []
         one_npc_data["npc2trapping"] = []
         one_npc_data["npc2creatureTraits"] = []
+        one_npc_data["npc2spells"] = []
         for s in n.skills.all():
             _NPC2Skill = NPC2Skill.objects.get(npc=n, skill=s)
             one_npc_data["npc2skill"].append(_NPC2Skill)
@@ -37,6 +38,9 @@ def index(request):
         for ct in n.creatureTraits.all():
             _NPC2CreatureTraits = NPC2CreatureTraits.objects.get(npc=n, creatureTraits=ct)
             one_npc_data["npc2creatureTraits"].append(_NPC2CreatureTraits)
+        for s in n.spells.all():
+            _NPC2Spells = NPC2Spells.objects.get(npc=n, spell=s)
+            one_npc_data["npc2spells"].append(_NPC2Spells)
 
         data["npc"].append(one_npc_data)
     logger.info(data)
@@ -79,4 +83,12 @@ def ajax_npc_get_creatureTraits_description(request):
     trait = CreatureTraits.objects.get(id=trait_id)
 
     ret = {'status': 'ok', "trait":trait.serialize()}
+    return JsonResponse(ret)
+
+@login_required
+def ajax_npc_get_spell_description(request):
+    spell_id = request.POST['spell_id']
+    spell = Spells.objects.get(id=spell_id)
+
+    ret = {'status': 'ok', "spell":spell.serialize()}
     return JsonResponse(ret)

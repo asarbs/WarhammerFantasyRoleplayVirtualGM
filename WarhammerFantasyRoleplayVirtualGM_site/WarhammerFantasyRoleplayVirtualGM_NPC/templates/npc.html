@@ -92,7 +92,13 @@
     {% endfor %}
 </p>
 {% endif %}
-
+{% if n.npc2spells %}
+<p><b>Spells:</b>
+  {% for x in n.npc2spells %} 
+  <span class="npc_spells" spell_id="{{ x.spell.id }}">{{ x.spell }}</span> [{{ x.amount }}]
+    {% endfor %}
+</p>
+{% endif %}
 
 </div>
 

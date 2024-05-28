@@ -1309,7 +1309,7 @@ div.npc_inline {
     background-position: top;
     padding: 5px;
 }
-div.npc_inline p span.npc_skill, span.npc_talent, span.npc_trapping, span.npc_creatureTraits {
+div.npc_inline p span.npc_skill, span.npc_talent, span.npc_trapping, span.npc_creatureTraits, span.npc_spells {
     cursor: help;
 }
 

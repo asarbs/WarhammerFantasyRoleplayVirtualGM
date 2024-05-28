@@ -14,4 +14,5 @@ urlpatterns = [
     path("ajax_npc_get_talent_description", views.ajax_npc_get_talent_description, name="ajax_npc_get_talent_description"),
     path("ajax_npc_get_trapping_description", views.ajax_npc_get_trapping_description, name="ajax_npc_get_trapping_description"),
     path("ajax_npc_get_creatureTraits_description", views.ajax_npc_get_creatureTraits_description, name="ajax_npc_get_creatureTraits_description"),
+    path("ajax_npc_get_spell_description", views.ajax_npc_get_spell_description, name="ajax_npc_get_spell_description"),
 ]

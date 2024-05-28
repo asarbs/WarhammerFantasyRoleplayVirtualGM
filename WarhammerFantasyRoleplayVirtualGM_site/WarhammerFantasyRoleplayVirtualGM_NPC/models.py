@@ -2,6 +2,7 @@ from django.db import models
 
 from WarhammerFantasyRoleplayVirtualGM_app.models import Species
 from WarhammerFantasyRoleplayVirtualGM_app.models import Skils
+from WarhammerFantasyRoleplayVirtualGM_app.models import Spells
 from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import Weapon
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
@@ -50,6 +51,7 @@ class NPC(models.Model):
     weapons = models.ManyToManyField(Weapon, verbose_name="Weapon", blank=True)
     trappings = models.ManyToManyField(Trapping, through="NPC2Trapping", blank=True)
     creatureTraits = models.ManyToManyField(CreatureTraits, through="NPC2CreatureTraits", blank=True)
+    spells = models.ManyToManyField(Spells, through="NPC2Spells", blank=True)
 
     def __str__(self):
         return u"{0}".format(self.name)
@@ -99,3 +101,14 @@ class NPC2CreatureTraits(models.Model):
 
     def __unicode__(self):
         return f"Trapping: {self.npc} -> {self.creatureTraits} [{self.amount}]"
+    
+class NPC2Spells(models.Model):
+    npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
+    spell = models.ForeignKey(Spells, on_delete=models.CASCADE)
+    amount = models.CharField(max_length=150, verbose_name="Value", blank=True, null=True)
+
+    def __str__(self):
+        return f"Trapping: {self.npc} -> {self.spell} [{self.amount}]"
+
+    def __unicode__(self):
+        return f"Trapping: {self.npc} -> {self.spell} [{self.amount}]"

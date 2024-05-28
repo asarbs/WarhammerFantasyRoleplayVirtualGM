@@ -101,6 +101,36 @@ function get_creatureTraits_description() {
         }
     });
 }
+function get_spells_description() {
+    var spell_id = $(this).attr("spell_id")
+
+    $.ajax({
+        type: "POST",
+        url: "/wfrpg_npc/ajax_npc_get_spell_description",
+        async: false,
+        cache: false,
+        timeout: 30000,
+        fail: function(){
+            return true;
+        },
+        data: {
+            spell_id: spell_id,
+        },
+        success: function(data) {
+            console.log(data);
+            desc = "<h2>"+data['spell']['name']+"</h2>"
+            desc += "<p><b>Spell List:</b><span>"+data['spell']['spellLists']+"</span></p>"
+            desc += "<p><b>CN:</b><span>"+data['spell']['cn']+"</span></p>"
+            desc += "<p><b>Range:</b><span>"+data['spell']['range']+"</span></p>"
+            desc += "<p><b>Target:</b><span>"+data['spell']['target']+"</span></p>"
+            desc += "<p><b>Duration:</b><span>"+data['spell']['duration']+"</span></p>"
+            desc += "<p><b>Effect:</b><span>"+data['spell']['effect']+"</span></p>"
+            document.getElementById('detailsMsg').innerHTML = desc
+            document.getElementById('detailsMsg_container').style.display = "block";
+
+        }
+    });
+}
 function close_detailsMsg() {
     document.getElementById('detailsMsg_container').style.display = "none";
 }
@@ -113,5 +143,6 @@ function main() {
     $("span.npc_talent").click(get_talent_description);
     $("span.npc_trapping").click(get_trapping_description);
     $("span.npc_creatureTraits").click(get_creatureTraits_description);
+    $("span.npc_spells").click(get_spells_description);
     $("div#detailsMsg_ok").click(close_detailsMsg);
 }

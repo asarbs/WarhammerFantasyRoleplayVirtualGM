@@ -583,6 +583,17 @@ class Spells(models.Model):
 
     def get_absolute_url(self):
         return reverse("SpellListView")
+    
+    def serialize(self):
+        return {
+            "name": self.name,
+            "spellLists": self.spellLists,
+            "cn": self.cn,
+            "range": self.range,
+            "target": self.target,
+            "duration": self.duration,
+            "effect": self.effect
+        }
 
 class Character(models.Model):
     player = models.ForeignKey(Player, verbose_name="Player", on_delete=models.CASCADE)
