@@ -32,7 +32,7 @@ class CreatureTraits(models.Model):
 class NPC(models.Model):
     name = models.CharField(max_length= 50, verbose_name="Name")
     species = models.ForeignKey(Species, verbose_name="Species", related_name="npc_species", on_delete=models.CASCADE, null=True, blank=True)
-    portrait = models.ImageField(upload_to='static/page_images/', null=True, default="static/page_images/default.png")
+    portrait = models.ImageField(upload_to='npc', null=True, default="static/page_images/default.png")
     characteristics_m = models.IntegerField(default="0", verbose_name="Move")
     characteristics_ws = models.IntegerField(default="0", verbose_name="Weapon Skill")
     characteristics_bs = models.IntegerField(default="0", verbose_name="Ballistic Skill")
