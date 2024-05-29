@@ -1280,11 +1280,12 @@ div#npcs div#detailsMsg_container {
     min-height: 400px;
     background-color: #CCC;
     color: #004363;
-    position: absolute;
+    position: fixed;
     border-radius: 15px;
-    margin-left: 512px;
+    margin-left: -300px;
     display: none;
     padding: 30px;
+    left: 50%;
 }
 
 div#npcs div#detailsMsg_container div#detailsMsg_ok {
