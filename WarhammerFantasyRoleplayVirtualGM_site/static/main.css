@@ -1303,7 +1303,7 @@ div.npc_inline {
     margin-bottom: 15px;
     margin-right: 15px;
     width: 512px;
-    min-height: 250px;
+    min-height: 300px;
     float: left;
     background-image : url("img/npc_bg.png");
     background-repeat: repeat;
