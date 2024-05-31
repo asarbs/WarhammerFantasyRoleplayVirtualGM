@@ -31,7 +31,6 @@ urlpatterns = [
     path('SkillsCreateFormView', views.SkillsCreateFormView.as_view(), name="SkillsCreateFormView"),
     path('SkillsEditView/<int:pk>', views.SkillsEditView.as_view(), name="SkillsEditView"),
 
-
     path('TrappingsListView', views.TrappingsListView.as_view(), name="TrappingsListView"),
     path('TrappingssCreateFormView', views.TrappingssCreateFormView.as_view(), name="TrappingssCreateFormView"),
     path('TrappingssEditView/<int:pk>', views.TrappingssEditView.as_view(), name="TrappingssEditView"),

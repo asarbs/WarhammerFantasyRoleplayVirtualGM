@@ -181,6 +181,10 @@ ul.errorlist {
     color : #FF0000;
 }
 
+h3 {
+    /* display: inline; */
+}
+
 div.table-container {
     /* background-color: #35fbd6; */
     width: 100%;

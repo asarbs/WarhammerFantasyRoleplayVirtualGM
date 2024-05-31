@@ -27,14 +27,13 @@ class NPC2SpellsAdmin(admin.TabularInline):
     extra = 0
 
 class NPCAdmin(admin.ModelAdmin):
-    inlines = (NPC2SkillAdmin, NPC2TalentAdmin, NPC2TrappingAdmin, NPC2CreatureTraitsAdmin, NPC2SpellsAdmin)
+    (NPC2SkillAdmin, NPC2TalentAdmin, NPC2TrappingAdmin, NPC2CreatureTraitsAdmin, NPC2SpellsAdmin)
 
 
 class CreatureTraitsAdmin(admin.ModelAdmin):
     formfield_overrides = {
         db_models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
     }
-
 
 admin.site.register(models.NPC, NPCAdmin)
 admin.site.register(models.CreatureTraits, CreatureTraitsAdmin)

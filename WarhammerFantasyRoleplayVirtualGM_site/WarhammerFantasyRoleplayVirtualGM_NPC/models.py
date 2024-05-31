@@ -7,6 +7,7 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import Talent
 from WarhammerFantasyRoleplayVirtualGM_app.models import Weapon
 from WarhammerFantasyRoleplayVirtualGM_app.models import Trapping
 from WarhammerFantasyRoleplayVirtualGM_app.models import Reference
+from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 
 
 # Create your models here.

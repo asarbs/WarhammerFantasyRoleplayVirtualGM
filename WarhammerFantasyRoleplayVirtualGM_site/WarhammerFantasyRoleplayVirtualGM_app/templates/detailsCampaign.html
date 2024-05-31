@@ -56,36 +56,48 @@
 
 
     <div class="row">
-        <h3>Players:</h3>
+        <div class="column">
+            <h3>Players:</h3>
 
-        <form action="/wfrpg_gm/AddPlayer2Campaign" method="POST">
-            {% csrf_token %}
-            <input type="hidden" id="campaign_id" name="campaign_id" value="{{ camaing.id }}">
-            {{ campaign_2_player_form.media }}
-            {{ campaign_2_player_form }}
-            <input type="submit" class="button" value="Add">
-        </form>
+            <form action="/wfrpg_gm/AddPlayer2Campaign" method="POST">
+                {% csrf_token %}
+                <input type="hidden" id="campaign_id" name="campaign_id" value="{{ camaing.id }}">
+                {{ campaign_2_player_form.media }}
+                {{ campaign_2_player_form }}
+                <input type="submit" class="button" value="Add">
+            </form>
 
-        <ol>
-            {% for players in players %}
-            <li> {{ players }}  </li>
-            {% endfor %}
-        </ol>
-
+            <ol>
+                {% for players in players %}
+                <li> {{ players }}  </li>
+                {% endfor %}
+            </ol>
+        </div>
     </div>
     <div class="row">
-        <h3>Characters:</h3>
-        <ol>
-            {% for character in characters %}
-            <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
-            {% endfor %}
-        </ol>
-        {% if createNewCharacter == False %}
-        <br><br><br><br>
-        <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
-        {% endif %}
+        <div class="column">
+            <h3>Characters:</h3>
+            <ol>
+                {% for character in characters %}
+                <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
+                {% endfor %}
+            </ol>
+            {% if createNewCharacter == False %}
+            <br><br><br><br>
+            <a href="{% url 'addCharacter' CampaignId=camaing.id %}">Chreate Character</a>
+            {% endif %}
+        </div>
     </div>
-
+    <div class="row">
+        <div class="column">
+            <h3>Adventure:</h3>
+            <ol>
+            {% for adventure in adventures %}
+                <li><a href="{% url "Details" adventure_id=adventure.id %}">{{ adventure }}</a></li>
+            {% endfor %}
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <table class="campaign_notes" id="campaign_notes" border='0'>
             <tr class="block_name">

@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from WarhammerFantasyRoleplayVirtualGM_app.validators import validator_sex
 
-
 def format_currency(p: int):
     GC = math.floor(p / 240)
     GC_left = p % 240

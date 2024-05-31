@@ -37,8 +37,8 @@ from WarhammerFantasyRoleplayVirtualGM_app.models import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import createCharacterLog as ccl
 from WarhammerFantasyRoleplayVirtualGM_app.tables import *
 from WarhammerFantasyRoleplayVirtualGM_app.decorators import *
-
 from WarhammerFantasyRoleplayVirtualGM_app.character_creations_helpers import *
+from WarhammerFantasyRoleplayVirtualGM_Adventure.models import Adventure
 
 
 # Create your views here.
@@ -959,7 +959,10 @@ def detailsCampaign(request, CampaignId):
         if logged_player == character.player:
             createNewCharacter = True
     campaign_2_player_form = Campaign2PlayerForm()
-    dic ={'camaing': c, "players":players, "characters": characters, "createNewCharacter": createNewCharacter, "campaign_2_player_form":campaign_2_player_form}
+
+    adventures = Adventure.objects.filter(campaign=c)
+    
+    dic ={'camaing': c, "players":players, "characters": characters, "createNewCharacter": createNewCharacter, "campaign_2_player_form":campaign_2_player_form, "adventures": adventures}
     logging.debug(dic)
     return render(request, 'detailsCampaign.html', dic)
 
@@ -1805,3 +1808,4 @@ def shopping_buy(request, characterId, trappingId):
     character2trapping.save()
     ccl(request.user, character, "buy \"{}\" for {} .".format(trapping.name, format_currency(trapping.price)))
     return redirect(reverse('viewCharacter', args=(characterId,)))
+
