@@ -18,7 +18,7 @@ function get_skill_description() {
             desc = "<h2>"+data['skill']['name']+"</h2>"
             desc += "<b>Characteristic:</b> <span>"+data['skill']['characteristics']+"</span>"
             desc += "<span>"+data['skill']['description']+"</span>"
-            desc += "<span>"+data['skill']['ref']+"</span>"
+            desc += "<span class=\"ref\">"+data['skill']['ref']+"</span>"
             document.getElementById('detailsMsg').innerHTML = desc
             document.getElementById('detailsMsg_container').style.display = "block";
 
@@ -44,7 +44,7 @@ function get_talent_description() {
             desc = "<h2>"+data['talent']['name']+"</h2>"
             desc += "<b>Test:</b><span>"+data['talent']['tests']+"</span>"
             desc += "<span>"+data['talent']['description']+"</span>"
-            desc += "<span>"+data['talent']['ref']+"</span>"
+            desc += "<span class=\"ref\">"+data['talent']['ref']+"</span>"
             document.getElementById('detailsMsg').innerHTML = desc
             document.getElementById('detailsMsg_container').style.display = "block";
 
@@ -94,7 +94,7 @@ function get_creatureTraits_description() {
             console.log(data);
             desc = "<h2>"+data['trait']['name']+"</h2>"
             desc += "<span>"+data['trait']['description']+"</span>"
-            desc += "<span>"+data['trait']['ref']+"</span>"
+            desc += "<span class=\"ref\">"+data['trait']['ref']+"</span>"
             document.getElementById('detailsMsg').innerHTML = desc
             document.getElementById('detailsMsg_container').style.display = "block";
 

@@ -1340,6 +1340,12 @@ div.npc_inline table tr td.head {
     width: 8%;
     font-weight: bold;
 }
+div#main div#npcs div#detailsMsg_container div#detailsMsg span.ref {
+    border: 0px solid #15f947;
+    display: block;
+    margin-top: 30px;
+    text-align: right;
+}
 div.npc_clean {
     clear: both;
 }
