@@ -2,7 +2,7 @@
 {% block main %}
 
 <h2>NPC List</h2>
-{% comment %} <a href="{% url 'NPC_CreateView' %}">Add NPC</a> {% endcomment %}
+<a href="{% url 'NPC_CreateView' %}">Add NPC</a>
 <div id="npcs">
   
   <div id="detailsMsg_container">
@@ -17,8 +17,7 @@
 <table border="0">
     <tr>
       <td class="portrait" rowspan="4"><img src="/static/page_images/{{ n.npc.portrait }}" class="npc_portrait"></td>
-      {% comment %} <td class="name" colspan="12"><a href="{% url 'NPC_UpdateView' pk=n.npc.id  %}">{{ n.npc }}</a></td> {% endcomment %}
-      <td class="name" colspan="12">{{ n.npc }}</td>
+      <td class="name" colspan="12"><a href="{% url 'NPC_UpdateView' pk=n.npc.id  %}">{{ n.npc }}</a></td>
     </tr>
     <tr>
       <td class="species" colspan="12">
