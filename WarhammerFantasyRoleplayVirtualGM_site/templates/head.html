@@ -22,7 +22,7 @@
     });
 </script>
 {% endif %}
-{% if "wfrpg_npc" in request.path %}
+{% if "wfrpg_npc" in request.path or "Adventure" in request.path %}
 <script src="{% static "npc.js" %}"></script>
 <script type="text/javascript">
     $(document).ready(function() {

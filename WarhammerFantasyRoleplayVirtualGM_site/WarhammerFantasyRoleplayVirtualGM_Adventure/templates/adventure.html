@@ -1,6 +1,11 @@
 {% extends "index.html" %}
 {% block main %}
 <h2>{{ adventure.name }}</h2>
+<div id="npcs">
+<div id="detailsMsg_container">
+  <div id="detailsMsg"></div>
+  <div id="detailsMsg_ok">OK</div>
+</div>
 
 {% for n in npc %}
 <div class="npc_inline">
@@ -96,6 +101,7 @@
 
 <div class="npc_clean"></div>
 
+</div>
 </div>
 
 {% endblock %}
