@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_tables2",
     'ajax_select',
+    'request',
     'WarhammerFantasyRoleplayVirtualGM_app',
     'WarhammerFantasyRoleplayVirtualGM_user',
     'WarhammerFantasyRoleplayVirtualGM_chat',
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'request.middleware.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'WarhammerFantasyRoleplayVirtualGM_site.urls'
@@ -214,3 +216,4 @@ LOGGING = {
     },
 }
 
+# REQUEST_BASE_URL = 'http://%s' % Site.objects.get_current().domain
