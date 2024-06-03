@@ -85,7 +85,7 @@
 }
 
 body {
-    background-color : #FFFFFF;
+    background-color : gainsboro;
     font-family: AntykwaTorunska-Regular;
     font-size : 12px;
     color : #000000;
@@ -214,7 +214,22 @@ div#cookieack div.accept {
     background : rgba(255, 255, 255, 0.1);
 }
 
-div#main_top_bar {
+div#main_body {
+    height: 100%;
+    /* position:relative;   */
+}
+
+div#main_body div#main{
+    /* background-color: #993333; */
+    padding: 0 0 0 0;
+    width: auto;
+    position: relative;
+    margin-left: 235px;
+    margin-bottom: 10px;
+    min-height: 100%;
+}
+
+div#main_body div#main_top_bar{
     height: 158px;
     margin-bottom: 15px;
     padding-left: 15px;
@@ -222,72 +237,68 @@ div#main_top_bar {
     /* border-top: 2px solid #35fbd6; */
 }
 
-div#main_top_bar img {
+div#main_body div#main_top_barimg {
     width: 342px;
     height: 158px;
     /* margin-top: 2px; */
     /* line-height: 40px; */
 }
 
-div#main_top_bar div.user {
+div#main_body div#main_top_bar div.user {
     float : right;
     margin-right: 15px;
     color: white;
     line-height: 35px;
 }
 
-div#main_bottom_bar {
-    height: 158px;
-    margin-bottom: 15px;
+div#main_body div#main_bottom_bar{
+    /* height: 158px; */
+    margin-top: 15px;
     padding-left: 15px;
     background-color: #452304;
     color: #C2C2C2;
     /* border-top: 2px solid #35fbd6; */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
-div#main_bottom_bar a {
+div#main_body div#main_bottom_bara {
     color: #E1EDF7;
 }
 
-div#main {
-    padding: 0 0 0 0;
-    width: auto;
-    position: relative;
-    margin-left: 230px;
-}
-
-div#main h3.main {
+div#main_body div#main h3.main {
     font-size : 20px;
     border-bottom : 0px solid #666666;
     margin-bottom : 10px;
 }
 
-div#main div#blog {
+div#main_body div#main div#blog {
     width : 80%;
 }
-div#main div#blog div.blog_content {
+div#main_body div#main div#blog div.blog_content {
     margin-bottom: 25px;
 }
-div#main div#blog div.blog_content .news-link {
+div#main_body div#main div#blog div.blog_content .news-link {
     color : #97D7F4;
 }
-div#main div#blog div.blog_content_info {
+div#main_body div#main div#blog div.blog_content_info {
     margin-bottom: 5px;
 }
-div#main div#blog div.blog_content_info p {
+div#main_body div#main div#blog div.blog_content_info p {
     display: inline;
 }
-div#main div#blog div.blog_content .news-text {
+div#main_body div#main div#blog div.blog_content .news-text {
     font-size: 13px;
 }
-div#main div.top {
+div#main_body div#main div.top {
     background-image: url("img/WFRP_-_Character_Sheet-1_head.png");
     background-color: #c4a314;
     border: 0px solid #35fbd6;
     width: 1693px;
     height: 259px;
 }
-div#main div.top div.control {
+div#main_body div#main div.top div.control {
     /* border: 1px solid #FF0000; */
     margin-top: 150px;
     margin-left: 250px;
@@ -296,7 +307,7 @@ div#main div.top div.control {
     height: 50px;
     font-size: 220%;
 }
-div#main div.bottom {
+div#main_body div#main div.bottom {
     background-image: url("img/WFRP_-_Character_Sheet-1_bottom.png");
     background-color: #c4a314;
     border: 0px solid #35fbd6;
@@ -304,7 +315,7 @@ div#main div.bottom {
     height: 118px;
     bottom: 0;
 }
-div#main div.create_character {
+div#main_body div#main div.create_character {
     background-image: url("img/create_character_background.jpeg");
     border-radius: 15px;
     border: 3px solid #9d5009;
@@ -317,93 +328,97 @@ div#main div.create_character {
     z-index: 1000;
 }
 
-div#main div#campaign {
+div#main_body div#main div#campaign {
 
 }
-div#main div#campaign div.row {
+div#main_body div#main div#campaign div.row {
     min-height: 100px; /* Should be removed. Only for demonstration */
     display: flex;
 }
-div#main div#campaign div.row div.column {
+div#main_body div#main div#campaign div.row div.column {
     float: left;
     width: 45%;
     padding: 10px;
+    background-color: #c9ccdb;
+    border-radius: 10px;
+    border: 2px solid #bcbcbc;
+    /* margin: 10px; */
 }
-div#main div#campaign div.row div.column textarea {
+div#main_body div#main div#campaign div.row div.column textarea {
     margin: 0px;
     width: 650px;
 }
 
-div#main div#campaign div.row div.column input.submit {
+div#main_body div#main div#campaign div.row div.column input.submit {
     margin: 0px;
     width: 650px;
 }
-div#main div#campaign div.row div.column ol li.cross_out {
+div#main_body div#main div#campaign div.row div.column ol li.cross_out {
     text-decoration: line-through;
 }
-div#main div#campaign div.row div.column ol li img {
+div#main_body div#main div#campaign div.row div.column ol li img {
     cursor: pointer;
     width: 15px;
 }
 
-div#main div#campaign div.row table.campaign_notes {
+div#main_body div#main div#campaign div.row table.campaign_notes {
     width: 1420px;
     margin-left: 135px;
     padding-top: 20px;
     border-collapse: collapse;
 }
-div#main div#campaign div.row table.campaign_notes tr.block_name {
+div#main_body div#main div#campaign div.row table.campaign_notes tr.block_name {
     font-size: 36px;
     text-align: center;
 }
-div#main div#campaign div.row table.campaign_notes tr.block_header {
+div#main_body div#main div#campaign div.row table.campaign_notes tr.block_header {
     font-size: 20px;
     text-align: center;
 }
-div#main div#campaign div.row table.campaign_notes tr.block_editor button#campaign_notes_add_button {
+div#main_body div#main div#campaign div.row table.campaign_notes tr.block_editor button#campaign_notes_add_button {
     width: 100%;
 }
-div#main div#campaign div.row table.campaign_notes tr.note_line {
+div#main_body div#main div#campaign div.row table.campaign_notes tr.note_line {
     border-bottom: 1px solid #000000;
 }
-div#main div#campaign div.row table.campaign_notes tr td {
+div#main_body div#main div#campaign div.row table.campaign_notes tr td {
     padding: 10px;
 }
-div#main div#campaign div.row table.campaign_notes tr td.date {
+div#main_body div#main div#campaign div.row table.campaign_notes tr td.date {
     width: 150px;
 }
 
 
-div#main div.create_character img.img_random {
+div#main_body div#main div.create_character img.img_random {
     /* background-color: #c4a314; */
     height: 15px;
 }
-div#main div.create_character img.img_random:hover {
+div#main_body div#main div.create_character img.img_random:hover {
     cursor: pointer;
 }
-div#main div.create_character img#img_character_creaton_next {
+div#main_body div#main div.create_character img#img_character_creaton_next {
     height: 32px;
     bottom: 0;
 }
-div#main div.create_character img#img_character_creaton_next:hover {
+div#main_body div#main div.create_character img#img_character_creaton_next:hover {
     cursor: pointer;
 }
-div#main div.create_character div.create_character_steps {
+div#main_body div#main div.create_character div.create_character_steps {
     display: none;
 }
 
-div#main div.create_character div.create_character_steps span#step_5_career_skills_error {
+div#main_body div#main div.create_character div.create_character_steps span#step_5_career_skills_error {
     color: #FF0000;
     display:none;
 }
 
-div#main div.create_character div.header h1 {
+div#main_body div#main div.create_character div.header h1 {
     text-align: center;
     border-bottom: 3px solid #9d5009;
     font-size: 110%;
 }
 
-div#main div.create_character div.bottom {
+div#main_body div#main div.create_character div.bottom {
     background: none;
     border: 0px solid #35fbd6;
     text-align: center;
@@ -412,391 +427,391 @@ div#main div.create_character div.bottom {
     bottom: 0;
 }
 
-div#main div.character_sheet {
+div#main_body div#main div.character_sheet {
     background-image: url("img/WFRP_-_Character_Sheet-1_middle.png");
     /* background-color: #c4a314; */
     /* border: 1px solid #FF0000; */
     width: 1693px;
 }
 
-div#main div.character_sheet input {
+div#main_body div#main div.character_sheet input {
     background-color: rgba(21, 121, 112, 0.1);
     border: 1px solid #22282e9f;
     height: 32px;
     /* position: absolute; */
 }
 
-div#main div.character_sheet input.editable {
+div#main_body div#main div.character_sheet input.editable {
     background-color: rgba(21, 121, 112, 0.1);
     border: 1px solid #15f947;
     height: 32px;
     /* position: absolute; */
 }
-div#main div.character_sheet select {
+div#main_body div#main div.character_sheet select {
     background-color: rgba(21, 121, 112, 0.1);
     border: 1px solid #ee0e0e9f;
     height: 32px;
     width: 300px;
 }
-div#main div.character_sheet select.editable {
+div#main_body div#main div.character_sheet select.editable {
     background-color: rgba(21, 121, 112, 0.1);
     border: 1px solid #15f947;
     height: 32px;
     width: 300px;
 }
 
-div#main div.character_sheet div.head {
+div#main_body div#main div.character_sheet div.head {
     /* background-color: #c4a314; */
     width: 1455px;
     height: 180px;
     margin-left: 117px;
 }
-div#main div.character_sheet div.head table {
+div#main_body div#main div.character_sheet div.head table {
     width: 1420px;
     height: 170px;
     margin-left: 12px;
 }
-div#main div.character_sheet div.head table tr {
+div#main_body div#main div.character_sheet div.head table tr {
 }
-div#main div.character_sheet div.head table tr td {
+div#main_body div#main div.character_sheet div.head table tr td {
     text-align: center;
 }
-div#main div.character_sheet div.head table tr td.title {
+div#main_body div#main div.character_sheet div.head table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.head table tr td.head {
+div#main_body div#main div.character_sheet div.head table tr td.head {
     font-size: 103%;
     text-align: right;
 }
-div#main div.character_sheet div.head table tr td input {
+div#main_body div#main div.character_sheet div.head table tr td input {
     height: 32px;
     position: relative;
 }
-div#main div.character_sheet div.head table tr td input#character_sheet_name {
+div#main_body div#main div.character_sheet div.head table tr td input#character_sheet_name {
     width: 625px;
 }
-div#main div.character_sheet div.head table tr td select#species {
+div#main_body div#main div.character_sheet div.head table tr td select#species {
     width: 270px;
 }
-div#main div.character_sheet div.head table tr td  input#class {
+div#main_body div#main div.character_sheet div.head table tr td  input#class {
     width: 270px;
 }
-div#main div.character_sheet div.head table tr td  input#career {
+div#main_body div#main div.character_sheet div.head table tr td  input#career {
     width: 620px;
 }
-div#main div.character_sheet div.head table tr td  input#career_level {
+div#main_body div#main div.character_sheet div.head table tr td  input#career_level {
     width: 620px;
 }
 
-div#main div.character_sheet div.head table tr td  input#career_path {
+div#main_body div#main div.character_sheet div.head table tr td  input#career_path {
     width: 1005px;
 }
 
-div#main div.character_sheet div.head table tr td  input#status {
+div#main_body div#main div.character_sheet div.head table tr td  input#status {
     width: 265px;
 }
 
-div#main div.character_sheet div.head table tr td  input#age {
+div#main_body div#main div.character_sheet div.head table tr td  input#age {
     width: 305px;
 }
 
-div#main div.character_sheet div.head table tr td  input#height {
+div#main_body div#main div.character_sheet div.head table tr td  input#height {
     width: 255px;
 }
 
-div#main div.character_sheet div.head table tr td  input#hair {
+div#main_body div#main div.character_sheet div.head table tr td  input#hair {
     height: 32px;
     width: 300px;
 }
 
-div#main div.character_sheet div.head table tr td  input#eyes {
+div#main_body div#main div.character_sheet div.head table tr td  input#eyes {
     height: 32px;
     width: 280px;
 }
 
-div#main div.character_sheet div.characteristics {
+div#main_body div#main div.character_sheet div.characteristics {
     /* background-color: #abc818; */
     width: 700px;
     min-height: 280px;
     margin-left: 117px;
     float: left;
 }
-div#main div.character_sheet div.characteristics table {
+div#main_body div#main div.character_sheet div.characteristics table {
     width: 635px;
     margin-left: 10px;
 }
-div#main div.character_sheet div.characteristics table tr {
+div#main_body div#main div.character_sheet div.characteristics table tr {
     min-height: 52px;
 }
-div#main div.character_sheet div.characteristics table tr td {
+div#main_body div#main div.character_sheet div.characteristics table tr td {
     min-height: 52px;
     min-width: 53px;
     text-align: center;
 }
-div#main div.character_sheet div.characteristics table tr td.title {
+div#main_body div#main div.character_sheet div.characteristics table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.characteristics table tr td.head {
+div#main_body div#main div.character_sheet div.characteristics table tr td.head {
     font-size: 150%;
     text-align: center;
 }
-div#main div.character_sheet div.characteristics input {
+div#main_body div#main div.character_sheet div.characteristics input {
     height: 32px;
     width: 32px;
     position: relative;
     text-align: center;
 }
-div#main div.character_sheet div.right {
+div#main_body div#main div.character_sheet div.right {
     /* background-color: #469933; */
     width: 700px;
     margin-left: 840px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp {
     /* background-color: #d9c721; */
     width: 700px;
     position:relative
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.fate {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.fate {
     /* background-color: #10d010; */
     width: 150px;
     float: left;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.fate table {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.fate table {
     width: 140px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr {
     min-height: 52px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td {
     min-height: 35px;
     min-width: 42px;
     text-align: center;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td.title {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td.head {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td.head {
     font-size: 150%;
     text-align: left;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td input {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.fate table tr td input {
     height: 53px;
     width: 43px;
     position: relative;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience {
     /* background-color: #9c23ba; */
     width: 320px;
     float: left;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table {
     width: 140px;
     margin-left: 10px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr {
     min-height: 52px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td {
     min-height: 35px;
     min-width: 42px;
     text-align: center;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td.title {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td.head {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td.head {
     font-size: 120%;
     text-align: center;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input {
     height: 53px;
     width: 43px;
     position: relative;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_resilience {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_resilience {
     height: 37px;
     width: 105px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_resolve {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_resolve {
     height: 37px;
     width: 82px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_motivation {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.resilience table tr td input#resilience_motivation {
     height: 37px;
     width: 110px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience {
     /* background-color: #993333; */
     width: 230px;
     float: left;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table {
     width: 140px;
     margin-left: 12px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr {
     min-height: 52px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td {
     min-height: 35px;
     min-width: 42px;
     text-align: center;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td.title {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td.head {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td.head {
     font-size: 120%;
     text-align: center;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input {
     height: 35px;
     width: 43px;
     position: relative;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_current {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_current {
     height: 37px;
     width: 80px;
     text-align: center;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_spent {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_spent {
     height: 37px;
     width: 70px;
 }
-div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_total {
+div#main_body div#main div.character_sheet div.right div.fate_resistance_exp div.experience table tr td input#experience_total {
     height: 37px;
     width: 60px;
 }
-div#main div.character_sheet div.right div.movement {
+div#main_body div#main div.character_sheet div.right div.movement {
     /* background-color: #1310b3; */
     width: 700px;
 }
-div#main div.character_sheet div.right div.movement table {
+div#main_body div#main div.character_sheet div.right div.movement table {
     width: 700px;
     margin-left: 12px;
 }
-div#main div.character_sheet div.right div.movement table tr {
+div#main_body div#main div.character_sheet div.right div.movement table tr {
     min-height: 52px;
 }
-div#main div.character_sheet div.right div.movement table tr td {
+div#main_body div#main div.character_sheet div.right div.movement table tr td {
     min-height: 35px;
     min-width: 42px;
     text-align: center;
 }
-div#main div.character_sheet div.right div.movement table tr td.title {
+div#main_body div#main div.character_sheet div.right div.movement table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.right div.movement table tr td.head {
+div#main_body div#main div.character_sheet div.right div.movement table tr td.head {
     font-size: 150%;
     text-align: left;
     padding-left: 10px;
 }
-div#main div.character_sheet div.right div.movement table tr td input {
+div#main_body div#main div.character_sheet div.right div.movement table tr td input {
     position: relative;
 }
-div#main div.character_sheet div.right div.movement table tr td input#movement_movement {
+div#main_body div#main div.character_sheet div.right div.movement table tr td input#movement_movement {
     height: 37px;
     width: 90px;
 
 }
-div#main div.character_sheet div.right div.movement table tr td input#movement_walk {
+div#main_body div#main div.character_sheet div.right div.movement table tr td input#movement_walk {
     height: 37px;
     width: 90px;
 }
-div#main div.character_sheet div.right div.movement table tr td input#movement_run {
+div#main_body div#main div.character_sheet div.right div.movement table tr td input#movement_run {
     height: 37px;
     width: 90px;
 }
-div#main div.character_sheet div.basic_skills {
+div#main_body div#main div.character_sheet div.basic_skills {
     /* background-color: #993333; */
     width: 700px;
     min-height: 103px;
     margin-left: 118px;
     float: left;
 }
-div#main div.character_sheet div.basic_skills table {
+div#main_body div#main div.character_sheet div.basic_skills table {
 
     width: 650px;
     margin-left: 20px;
 }
-div#main div.character_sheet div.basic_skills table tr {
+div#main_body div#main div.character_sheet div.basic_skills table tr {
 }
-div#main div.character_sheet div.basic_skills table tr th  {
+div#main_body div#main div.character_sheet div.basic_skills table tr th  {
 }
-div#main div.character_sheet div.basic_skills table tr th.block_name  {
+div#main_body div#main div.character_sheet div.basic_skills table tr th.block_name  {
     font-size: 36px;
 }
-div#main div.character_sheet div.basic_skills table tr.block_header  {
+div#main_body div#main div.character_sheet div.basic_skills table tr.block_header  {
     font-size: 20px;
 }
-div#main div.character_sheet div.basic_skills table tr td {
+div#main_body div#main div.character_sheet div.basic_skills table tr td {
     padding-left: 3px;
     padding-right: 3px;
     margin: 0px;
     font-size: 18px;
     text-align: center;
 }
-div#main div.character_sheet div.basic_skills table tr td.left  {
+div#main_body div#main div.character_sheet div.basic_skills table tr td.left  {
     text-align: left;
     padding-left: 10px;
 }
-div#main div.character_sheet div.basic_skills table tr td.characteristics  {
+div#main_body div#main div.character_sheet div.basic_skills table tr td.characteristics  {
     padding: 0px;
     margin: 0px;
     width: 50px;
     height: 32px;
 }
-div#main div.character_sheet div.basic_skills table tr td.edit {
+div#main_body div#main div.character_sheet div.basic_skills table tr td.edit {
     height: 33px;
     width: 33px;
     text-align: center;
 }
-div#main div.character_sheet div.basic_skills table tr td.edit input  {
+div#main_body div#main div.character_sheet div.basic_skills table tr td.edit input  {
     padding: 0px;
     margin: 0px;
     height: 32px;
     width: 32px;
     position: relative;
 }
-div#main div.character_sheet div.talents_ambitions_party {
+div#main_body div#main div.character_sheet div.talents_ambitions_party {
     margin-left: 840px;
 }
-div#main div.character_sheet div.talents {
+div#main_body div#main div.character_sheet div.talents {
     /* background-color: #993333; */
     width: 700px;
 }
-div#main div.character_sheet div.talents table {
+div#main_body div#main div.character_sheet div.talents table {
     /* width: 450px; */
     margin-left: 20px;
     width: 100%;
 }
-div#main div.character_sheet div.talents table tr {
+div#main_body div#main div.character_sheet div.talents table tr {
 
 }
-div#main div.character_sheet div.talents table tr th  {
+div#main_body div#main div.character_sheet div.talents table tr th  {
 
 }
-div#main div.character_sheet div.talents table tr td  {
+div#main_body div#main div.character_sheet div.talents table tr td  {
     vertical-align: top;
     border-bottom: 1px solid #000000;
 }
-div#main div.character_sheet div.talents table tr th.block_name  {
+div#main_body div#main div.character_sheet div.talents table tr th.block_name  {
     font-size: 36px;
 }
-div#main div.character_sheet div.talents table tr.block_header  {
+div#main_body div#main div.character_sheet div.talents table tr.block_header  {
     font-size: 20px;
     border: 0px;
 }
-div#main div.character_sheet div.talents table tr.block_header td {
+div#main_body div#main div.character_sheet div.talents table tr.block_header td {
     font-size: 20px;
     border: 0px;
 }
-div#main div.character_sheet div.talents table tr td.edit {
+div#main_body div#main div.character_sheet div.talents table tr td.edit {
     height: 32px;
     width: 32px;
     text-align: center;
 }
-div#main div.character_sheet div.talents table tr td.edit input  {
+div#main_body div#main div.character_sheet div.talents table tr td.edit input  {
     padding: 0px;
     margin: 0px;
     height: 32px;
@@ -804,42 +819,42 @@ div#main div.character_sheet div.talents table tr td.edit input  {
     position: relative;
 }
 
-div#main div.character_sheet div.conditions {
+div#main_body div#main div.character_sheet div.conditions {
     /* background-color: #993333; */
     width: 700px;
 }
-div#main div.character_sheet div.conditions table {
+div#main_body div#main div.character_sheet div.conditions table {
     /* width: 450px; */
     margin-left: 20px;
     width: 100%;
 }
-div#main div.character_sheet div.conditions table tr {
+div#main_body div#main div.character_sheet div.conditions table tr {
 
 }
-div#main div.character_sheet div.conditions table tr th  {
+div#main_body div#main div.character_sheet div.conditions table tr th  {
 
 }
-div#main div.character_sheet div.conditions table tr td  {
+div#main_body div#main div.character_sheet div.conditions table tr td  {
     vertical-align: top;
     border-bottom: 1px solid #000000;
 }
-div#main div.character_sheet div.conditions table tr th.block_name  {
+div#main_body div#main div.character_sheet div.conditions table tr th.block_name  {
     font-size: 36px;
 }
-div#main div.character_sheet div.conditions table tr.block_header  {
+div#main_body div#main div.character_sheet div.conditions table tr.block_header  {
     font-size: 20px;
     border: 0px;
 }
-div#main div.character_sheet div.conditions table tr.block_header td {
+div#main_body div#main div.character_sheet div.conditions table tr.block_header td {
     font-size: 20px;
     border: 0px;
 }
-div#main div.character_sheet div.conditions table tr td.edit {
+div#main_body div#main div.character_sheet div.conditions table tr td.edit {
     height: 32px;
     width: 32px;
     text-align: center;
 }
-div#main div.character_sheet div.conditions table tr td.edit input  {
+div#main_body div#main div.character_sheet div.conditions table tr td.edit input  {
     padding: 0px;
     margin: 0px;
     height: 32px;
@@ -848,75 +863,75 @@ div#main div.character_sheet div.conditions table tr td.edit input  {
 }
 
 
-div#main div.character_sheet div.ambitions {
+div#main_body div#main div.character_sheet div.ambitions {
     border: 0px solid #128fd3;
     width: 700px;
     margin-bottom: 10px;
 }
-div#main div.character_sheet div.ambitions table {
+div#main_body div#main div.character_sheet div.ambitions table {
     width: 700px;
 }
-div#main div.character_sheet div.ambitions table tr {
+div#main_body div#main div.character_sheet div.ambitions table tr {
 }
-div#main div.character_sheet div.ambitions table tr td {
+div#main_body div#main div.character_sheet div.ambitions table tr td {
     text-align: center;
 }
-div#main div.character_sheet div.ambitions table tr td.add {
+div#main_body div#main div.character_sheet div.ambitions table tr td.add {
     height: 10px;
     display: none;
 }
-div#main div.character_sheet div.ambitions table tr td.title {
+div#main_body div#main div.character_sheet div.ambitions table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.ambitions table tr td.head {
+div#main_body div#main div.character_sheet div.ambitions table tr td.head {
     font-size: 150%;
     text-align: left;
     padding-left: 10px;
     width: 150px;
 }
-div#main div.character_sheet div.ambitions table tr td.list {
+div#main_body div#main div.character_sheet div.ambitions table tr td.list {
     text-align: left;
 }
 
-div#main div.character_sheet div.ambitions table tr td img.ambitions_add {
+div#main_body div#main div.character_sheet div.ambitions table tr td img.ambitions_add {
     cursor: pointer;
     width: 15px;
 }
 
-div#main div.character_sheet div.ambitions table tr td.list li.achieved {
+div#main_body div#main div.character_sheet div.ambitions table tr td.list li.achieved {
     text-decoration: line-through;
 }
 
-div#main div.character_sheet div.ambitions table tr td.list li.to_achieved {
+div#main_body div#main div.character_sheet div.ambitions table tr td.list li.to_achieved {
     text-decoration: none;
 }
 
-div#main div.character_sheet div.ambitions table tr td.list li.to_achieved img {
+div#main_body div#main div.character_sheet div.ambitions table tr td.list li.to_achieved img {
     cursor: pointer;
     width: 15px;
 }
 
-div#main div.character_sheet div.party {
+div#main_body div#main div.character_sheet div.party {
     border: 0px solid #d312a9;
     width: 700px;
     margin-bottom: 10px;
 }
 
-div#main div.character_sheet div.party table {
+div#main_body div#main div.character_sheet div.party table {
     width: 700px;
 }
-div#main div.character_sheet div.party table tr {
+div#main_body div#main div.character_sheet div.party table tr {
     min-height: 52px;
 }
-div#main div.character_sheet div.party table tr td {
+div#main_body div#main div.character_sheet div.party table tr td {
     min-height: 35px;
     min-width: 42px;
     text-align: center;
 }
-div#main div.character_sheet div.party table tr td.title {
+div#main_body div#main div.character_sheet div.party table tr td.title {
     font-size: 200%;
 }
-div#main div.character_sheet div.party table tr td.head {
+div#main_body div#main div.character_sheet div.party table tr td.head {
     font-size: 150%;
     text-align: left;
     vertical-align: top;
@@ -924,18 +939,18 @@ div#main div.character_sheet div.party table tr td.head {
     width: 120px;
 }
 
-div#main div.character_sheet div.party table tr td.data {
+div#main_body div#main div.character_sheet div.party table tr td.data {
     text-align: left;
     padding-left: 10px;
 }
-div#main div.character_sheet div.party table tr td.data ul {
+div#main_body div#main div.character_sheet div.party table tr td.data ul {
     margin-left: 10px;
 }
-div#main div.character_sheet div.party table tr td.data ul li.cross_out {
+div#main_body div#main div.character_sheet div.party table tr td.data ul li.cross_out {
     text-decoration: line-through;
 }
 
-div#main div.character_sheet div.sheer2_left {
+div#main_body div#main div.character_sheet div.sheer2_left {
     /* background-color: #25c840; */
     width: 940px;
 
@@ -943,139 +958,139 @@ div#main div.character_sheet div.sheer2_left {
     margin-left: 135px;
 }
 
-div#main div.character_sheet div.sheer2_left table.armour {
+div#main_body div#main div.character_sheet div.sheer2_left table.armour {
     /* background-color: #ddd91f; */
     width: 940px;
 }
-div#main div.character_sheet div.sheer2_left table.armour tr.block_name {
+div#main_body div#main div.character_sheet div.sheer2_left table.armour tr.block_name {
     font-size: 36px;
     text-align: center;
 }
-div#main div.character_sheet div.sheer2_left table.armour tr.block_header {
+div#main_body div#main div.character_sheet div.sheer2_left table.armour tr.block_header {
     font-size: 20px;
     text-align: center;
 }
-div#main div.character_sheet div.sheer2_left table.armour tr.block_body td input.armour_put_on {
+div#main_body div#main div.character_sheet div.sheer2_left table.armour tr.block_body td input.armour_put_on {
     width: 18px;
     height: 18px;
     background: #22282e9f;
     color: #004363;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom {
     /* background-color: #128fd3; */
     width: 940px;
     height: 300px;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings {
     /* background-color: #dbb50b; */
     width: 50%;
     float: left;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table {
     /* background-color: #35fbd6; */
     width: 95%;
     margin-left: 10px;
     margin-top: 10px;
 }
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr th.block_name  {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr th.block_name  {
     font-size: 36px;
 }
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr.block_header  {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr.block_header  {
     font-size: 20px;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit {
     text-align: center;
 }
 
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit input  {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit input  {
     position: relative;
     width: 36px;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit select  {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.trappings table#trappings_table tr td.edit select  {
     position: relative;
     width: 136px;
 }
 
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right {
     /* background-color: #666666; */
     width: 50%;
     float: left;
 }
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.psychology {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.psychology {
     /* background-color: #660000; */
     min-height: 30%;
     margin-top: 10px;
     text-align: center;
 }
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.coruption_mutation {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.coruption_mutation {
     /* background-color: #129bb3; */
     min-height: 30%;
     margin-top: 10px;
     text-align: center;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom {
     /* background-color: #35fbd6; */
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left {
     /* background-color: #660000; */
     width: 45%;
     float: left;
 }
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table {
     width: 95%;
 
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table  td.title {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table  td.title {
     font-size: 150%;
     text-align: center;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table  td.header {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_left  table  td.header {
     font-weight: bold;
     width: 15%;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right {
     /* background-color: #452304; */
     width: 45%;
     float: left;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table {
     width: 100%;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table  td.title {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table  td.title {
     font-size: 150%;
     text-align: center;
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table  td.header {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right  table  td.header {
     font-weight: bold;
     /* width: 15%; */
 }
 
-div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right table tbody tr td input.encumbrance_values {
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.sheer2_left_bottom_right_bottom div.sheer2_left_bottom_right_bottom_right table tbody tr td input.encumbrance_values {
     width: 35px;
 }
 
-div#main div.character_sheet div.sheer2_right {
+div#main_body div#main div.character_sheet div.sheer2_right {
     /* background-color: #d02e2e; */
     width: 480px;
     float: left;
 }
 
-div#main div.character_sheet div.sheer2_right div.sheet2_ap {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap {
     background-color: #d02e2e;
     background-image: url("img/WFRP_-_Character_Sheet-2_ap.png");
     width: 472px;
@@ -1083,149 +1098,149 @@ div#main div.character_sheet div.sheer2_right div.sheet2_ap {
     float: left;
 }
 
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input {
 
     width: 50px;
     height: 50px;
 }
 
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_head {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_head {
     margin-left: 46px;
     margin-top: 120px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_left_arm {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_left_arm {
     margin-left: 355px;
     margin-top: 190px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_right_arm {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_right_arm {
     margin-left: 45px;
     margin-top: 280px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_body {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_body {
     margin-left: 358px;
     margin-top: 358px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_left_leg {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_left_leg {
     margin-left: 358px;
     margin-top: 552px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_right_leg {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_right_leg {
     margin-left: 45px;
     margin-top: 455px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_shield {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_shield {
     margin-left: 45px;
     margin-top: 590px;
     position: absolute;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_wounds {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_wounds {
 
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_wounds table {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_wounds table {
     width: 480px;
 }
 
-div#main div.character_sheet div.sheer2_right div.sheet2_wounds td.title {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_wounds td.title {
     font-size: 200%;
     text-align: center;
 }
-div#main div.character_sheet div.sheer2_right div.sheet2_wounds td.header {
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_wounds td.header {
     font-weight: bold;
     text-align: center;
     width: 80px;
 }
 
-div#main div.character_sheet table.weapons {
+div#main_body div#main div.character_sheet table.weapons {
     width: 1420px;
     margin-left: 135px;
     padding-top: 20px;
 }
 
-div#main div.character_sheet table.weapons tr.block_name {
+div#main_body div#main div.character_sheet table.weapons tr.block_name {
     font-size: 36px;
     text-align: center;
 }
-div#main div.character_sheet table.weapons tr.block_header {
+div#main_body div#main div.character_sheet table.weapons tr.block_header {
     font-size: 20px;
     text-align: center;
 }
 
-div#main div.character_sheet table.spells {
+div#main_body div#main div.character_sheet table.spells {
     width: 1420px;
     margin-left: 135px;
     padding-top: 20px;
 }
 
-div#main div.character_sheet table.spells tr.block_name {
+div#main_body div#main div.character_sheet table.spells tr.block_name {
     font-size: 36px;
     text-align: center;
 }
-div#main div.character_sheet table.spells tr.block_header {
+div#main_body div#main div.character_sheet table.spells tr.block_header {
     font-size: 20px;
     text-align: center;
 }
 
-div#main div.character_sheet table.player_notes {
-    width: 1420px;
-    margin-left: 135px;
-    padding-top: 20px;
-    border-collapse: collapse;
-}
-div#main div.character_sheet table.player_notes tr.block_name {
-    font-size: 36px;
-    text-align: center;
-}
-div#main div.character_sheet table.player_notes tr.block_header {
-    font-size: 20px;
-    text-align: center;
-}
-div#main div.character_sheet table.player_notes tr.block_header th.date {
-    width: 150px;
-}
-div#main div.character_sheet table.player_notes tr.block_editor button#player_notes_add_button {
-    width: 100%;
-}
-div#main div.character_sheet table.player_notes tr.note_line {
-    border-bottom: 1px solid #000000;
-}
-div#main div.character_sheet table.player_notes tr td {
-    padding: 10px;
-}
-
-
-div#main div.character_sheet table.character_change_log {
+div#main_body div#main div.character_sheet table.player_notes {
     width: 1420px;
     margin-left: 135px;
     padding-top: 20px;
     border-collapse: collapse;
 }
-div#main div.character_sheet table.character_change_log tr.block_name {
+div#main_body div#main div.character_sheet table.player_notes tr.block_name {
     font-size: 36px;
     text-align: center;
 }
-div#main div.character_sheet table.character_change_log tr.block_header {
+div#main_body div#main div.character_sheet table.player_notes tr.block_header {
     font-size: 20px;
     text-align: center;
 }
-div#main div.character_sheet table.character_change_log tr.block_editor button#character_change_log_add_button {
-    width: 100%;
-}
-div#main div.character_sheet table.character_change_log tr.note_line {
-    border-bottom: 1px solid #000000;
-}
-div#main div.character_sheet table.character_change_log tr td {
-    padding: 10px;
-}
-div#main div.character_sheet table.character_change_log tr th.date {
+div#main_body div#main div.character_sheet table.player_notes tr.block_header th.date {
     width: 150px;
 }
-div#main div.character_sheet table.character_change_log tr th.user {
+div#main_body div#main div.character_sheet table.player_notes tr.block_editor button#player_notes_add_button {
+    width: 100%;
+}
+div#main_body div#main div.character_sheet table.player_notes tr.note_line {
+    border-bottom: 1px solid #000000;
+}
+div#main_body div#main div.character_sheet table.player_notes tr td {
+    padding: 10px;
+}
+
+
+div#main_body div#main div.character_sheet table.character_change_log {
+    width: 1420px;
+    margin-left: 135px;
+    padding-top: 20px;
+    border-collapse: collapse;
+}
+div#main_body div#main div.character_sheet table.character_change_log tr.block_name {
+    font-size: 36px;
+    text-align: center;
+}
+div#main_body div#main div.character_sheet table.character_change_log tr.block_header {
+    font-size: 20px;
+    text-align: center;
+}
+div#main_body div#main div.character_sheet table.character_change_log tr.block_editor button#character_change_log_add_button {
+    width: 100%;
+}
+div#main_body div#main div.character_sheet table.character_change_log tr.note_line {
+    border-bottom: 1px solid #000000;
+}
+div#main_body div#main div.character_sheet table.character_change_log tr td {
+    padding: 10px;
+}
+div#main_body div#main div.character_sheet table.character_change_log tr th.date {
+    width: 150px;
+}
+div#main_body div#main div.character_sheet table.character_change_log tr th.user {
     width: 150px;
 }
 
@@ -1233,7 +1248,9 @@ div#menu_button {
      display : none;
  }
  div#menu {
-     background-color : #E6EEF4;
+     background-color : #fcfcfc;
+     border-radius: 20px;
+     border: 1px solid #c1bfbf;
      padding : 0;
      margin : 0 15px 0 15px;
      width : 200px;
@@ -1290,6 +1307,7 @@ div#npcs div#detailsMsg_container {
     display: none;
     padding: 30px;
     left: 50%;
+    font-size: 120%;
 }
 
 div#npcs div#detailsMsg_container div#detailsMsg_ok {
@@ -1303,13 +1321,15 @@ div#npcs div#detailsMsg_container div#detailsMsg_ok {
 }
 
 div.npc_inline {
-    /* background-color: #35fbd6; */
+    background-color: #c9ccdb;
+    border-radius: 10px;
+    border: 2px solid #bcbcbc;
     margin-bottom: 15px;
     margin-right: 15px;
     width: 512px;
     min-height: 300px;
     float: left;
-    background-image : url("img/npc_bg.png");
+    /* background-image : url("img/npc_bg.png"); */
     background-repeat: repeat;
     background-position: top;
     padding: 5px;
@@ -1340,7 +1360,7 @@ div.npc_inline table tr td.head {
     width: 8%;
     font-weight: bold;
 }
-div#main div#npcs div#detailsMsg_container div#detailsMsg span.ref {
+div#main_body div#main div#npcs div#detailsMsg_container div#detailsMsg span.ref {
     border: 0px solid #15f947;
     display: block;
     margin-top: 30px;
