@@ -1360,7 +1360,7 @@ div.npc_inline table tr td.head {
     width: 8%;
     font-weight: bold;
 }
-div#main_body div#main div#npcs div#detailsMsg_container div#detailsMsg span.ref {
+span.ref {
     border: 0px solid #15f947;
     display: block;
     margin-top: 30px;

@@ -56,6 +56,7 @@ class NPC(models.Model):
     trappings = models.ManyToManyField(Trapping, through="NPC2Trapping", blank=True)
     creatureTraits = models.ManyToManyField(CreatureTraits, through="NPC2CreatureTraits", blank=True)
     spells = models.ManyToManyField(Spells, through="NPC2Spells", blank=True)
+    ref = models.ForeignKey(Reference, default=None, blank=True, null=True, on_delete=models.SET(None))
 
     class Meta:
         ordering = ['name']
