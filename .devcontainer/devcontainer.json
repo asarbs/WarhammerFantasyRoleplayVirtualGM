@@ -24,7 +24,9 @@
 				"alexcvzz.vscode-sqlite",
 				"ZainChen.json",
 				"dbaeumer.vscode-eslint",
-				"jerrygoyal.shortcut-menu-bar"
+				"jerrygoyal.shortcut-menu-bar",
+				"donjayamanne.python-extension-pack",
+				"vscode-icons-team.vscode-icons"
 			]
 		}
 	}
