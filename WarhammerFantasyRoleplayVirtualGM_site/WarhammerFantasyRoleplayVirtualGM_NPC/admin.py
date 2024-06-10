@@ -27,7 +27,7 @@ class NPC2SpellsAdmin(admin.TabularInline):
     extra = 0
 
 class NPCAdmin(admin.ModelAdmin):
-    (NPC2SkillAdmin, NPC2TalentAdmin, NPC2TrappingAdmin, NPC2CreatureTraitsAdmin, NPC2SpellsAdmin)
+    inlines = (NPC2SkillAdmin, NPC2TalentAdmin, NPC2TrappingAdmin, NPC2CreatureTraitsAdmin, NPC2SpellsAdmin)
 
 
 class CreatureTraitsAdmin(admin.ModelAdmin):
