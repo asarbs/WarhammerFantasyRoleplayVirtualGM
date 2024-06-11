@@ -10,6 +10,21 @@
     <div id="detailsMsg_ok">OK</div>
   </div>
 
+<form action="{% url "NPC_MainView" %}" method="POST">
+{% csrf_token %}
+<label for="ref_book_id">Filter by source book</label>
+<select name="ref_book_id" id="ref_book_id"  onchange="this.form.submit()"">
+  <option value="None">--</option>
+  <option value="None">All</option>
+  {% for ref in refBook %}
+  <option value="{{ ref.id }}">{{ ref }}</option>
+  {% endfor %}
+  </select>
+</form>
+
+
+
+</br>
 
 {% for n in npc %}
 <div class="npc_inline">

@@ -9,16 +9,27 @@ from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import *
+from WarhammerFantasyRoleplayVirtualGM_app.models import RefBook
 import logging
 logger = logging.getLogger(__name__)
 
 
+def __getNPCs(ref_book_id):
+    if ref_book_id == "None":
+        return NPC.objects.all()
+    else:
+        references = Reference.objects.filter(refBook_id = ref_book_id)
+        npc = NPC.objects.filter(ref__id__in=references.all())
+        return npc
+
 # Create your views here.
 @login_required
 def index(request):
+    npcs_objects = __getNPCs(ref_book_id=request.POST['ref_book_id']) if request.method == "POST" else  NPC.objects.all()
+    
     data = {}
     data["npc"] = [] 
-    for n in NPC.objects.all():
+    for n in npcs_objects:
         one_npc_data = {}
         one_npc_data["npc"] = n
         one_npc_data["npc2skill"] = []
@@ -43,7 +54,9 @@ def index(request):
             one_npc_data["npc2spells"].append(_NPC2Spells)
 
         data["npc"].append(one_npc_data)
-    logger.info(data)
+    
+    data["refBook"] = RefBook.objects.all()
+        
     return render(request, 'npc.html', data)
 
 class NPCCreateView(LoginRequiredMixin, CreateView):
