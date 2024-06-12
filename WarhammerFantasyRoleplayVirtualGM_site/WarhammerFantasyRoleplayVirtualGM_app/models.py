@@ -456,7 +456,11 @@ class Armour(models.Model):
         return format_currency(self.price)
 
 class WeaponQualities(models.Model):
+    class WeaponQualitiesTypes(models.TextChoices):
+        QUALITIES = 'Qualities', _('QUALITIES')
+        FLAWS = 'Flaws', _('FLAWS')
     name = models.CharField(max_length= 50, verbose_name="Name")
+    type = models.CharField(max_length=14, choices=WeaponQualitiesTypes.choices, default=WeaponQualitiesTypes.QUALITIES, verbose_name="Type")
     description = models.TextField(verbose_name="Description", default="")
     ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
     
@@ -490,8 +494,8 @@ class Weapon(models.Model):
     encumbrance = models.IntegerField(default=1, verbose_name="Encumbrance")
     availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
     damage = models.IntegerField(default=0, verbose_name="Damage")
-    qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Qualities & Flaws")
-    qualities = models.ManyToManyField(WeaponQualities, verbose_name="Qualities & Flaws")
+    qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Notes")
+    qualities = models.ManyToManyField(WeaponQualities, verbose_name="Qualities & Flaws", blank=True,)
     reference = models.ForeignKey(Reference, default=None, blank=True, null=True, on_delete=models.SET(None))
 
     def __str__(self):

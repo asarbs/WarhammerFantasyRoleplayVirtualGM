@@ -174,14 +174,15 @@ class WeaponQualitiesAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
     }
-    list_display = ("name","ref")
-    ordering = ("name",)
+    list_display = ("name",'type',"ref")
+    list_editable = ("type",)
+    ordering = ('type', "name",)
     save_as = True
     list_max_show_all = 1500
     list_per_page = 1000
 
 class MeleeWeaponsAdmin(admin.ModelAdmin):
-    list_display = ("name", "weapon_group", "price", "encumbrance", "availability", "reach", "damage", "qualities_and_flaws")
+    list_display = ("name", "weapon_group", "price", "encumbrance", "availability", "reach", "damage", "qualities_and_flaws", )
     list_filter = ("weapon_group", "availability")
     ordering = ("weapon_group", "name")
     save_as = True
