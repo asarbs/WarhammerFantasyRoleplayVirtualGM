@@ -455,6 +455,17 @@ class Armour(models.Model):
     def price_formated(self):
         return format_currency(self.price)
 
+class WeaponQualities(models.Model):
+    name = models.CharField(max_length= 50, verbose_name="Name")
+    description = models.TextField(verbose_name="Description", default="")
+    ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
+    
+    def __str__(self):
+        return u"{0}".format(self.name)
+
+    def __unicode__(self):
+        return u"{0}".format(self.name)
+    
 class Weapon(models.Model):
     class WeaponGroup(models.TextChoices):
         BASIC = 'BASIC', _('BASIC')
@@ -480,6 +491,7 @@ class Weapon(models.Model):
     availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
     damage = models.IntegerField(default=0, verbose_name="Damage")
     qualities_and_flaws = models.CharField(max_length= 250, default="-", verbose_name="Qualities & Flaws")
+    qualities = models.ManyToManyField(WeaponQualities, verbose_name="Qualities & Flaws")
     reference = models.ForeignKey(Reference, default=None, blank=True, null=True, on_delete=models.SET(None))
 
     def __str__(self):

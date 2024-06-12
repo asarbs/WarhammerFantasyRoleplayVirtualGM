@@ -170,6 +170,16 @@ class ArmourAdmin(admin.ModelAdmin):
     list_max_show_all = 1500
     list_per_page = 1000
 
+class WeaponQualitiesAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
+    }
+    list_display = ("name","ref")
+    ordering = ("name",)
+    save_as = True
+    list_max_show_all = 1500
+    list_per_page = 1000
+
 class MeleeWeaponsAdmin(admin.ModelAdmin):
     list_display = ("name", "weapon_group", "price", "encumbrance", "availability", "reach", "damage", "qualities_and_flaws")
     list_filter = ("weapon_group", "availability")
@@ -300,3 +310,4 @@ admin.site.register(models.Spells, SpellsAdmin)
 admin.site.register(models.Status ,StatusAdmin)
 admin.site.register(models.Talent ,TalenAdmin)
 admin.site.register(models.Trapping, TrappingAdmin)
+admin.site.register(models.WeaponQualities, WeaponQualitiesAdmin)

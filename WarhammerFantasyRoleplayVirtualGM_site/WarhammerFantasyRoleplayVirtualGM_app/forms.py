@@ -109,11 +109,14 @@ class MeleWeaponForm(ModelForm):
         self.fields['reference'].widget = (
             RelatedFieldWidgetWrapper(self.fields['reference'].widget, self.instance._meta.get_field('reference').remote_field, admin_site)
         )
+        self.fields['qualities'].widget = (
+            RelatedFieldWidgetWrapper(self.fields['qualities'].widget, self.instance._meta.get_field('qualities').remote_field, admin_site)
+        )
 
 
     class Meta:
         model = models.MeleeWeapons
-        fields = ["name", "weapon_group", "price", "encumbrance", "availability", "damage", "qualities_and_flaws", "reach", "reference"]
+        fields = ["name", "weapon_group", "price", "encumbrance", "availability", "damage", "qualities_and_flaws", "qualities", "reach", "reference"]
 
     def calc_price_to_brass(self):
         logger.debug("price:{}".format(self.data['price']))
@@ -142,10 +145,13 @@ class RangedWeaponForm(ModelForm):
         self.fields['reference'].widget = (
             RelatedFieldWidgetWrapper(self.fields['reference'].widget, self.instance._meta.get_field('reference').remote_field, admin_site)
         )
+        self.fields['qualities'].widget = (
+            RelatedFieldWidgetWrapper(self.fields['qualities'].widget, self.instance._meta.get_field('qualities').remote_field, admin_site)
+        )
 
     class Meta:
         model = models.RangedWeapon
-        fields = ["name", "weapon_group", "price", "encumbrance", "availability", "damage", "qualities_and_flaws", "range", "reference"]
+        fields = ["name", "weapon_group", "price", "encumbrance", "availability", "damage", "qualities_and_flaws", "qualities", "range", "reference"]
 
     def calc_price_to_brass(self):
         logger.debug("price:{}".format(self.data['price']))
