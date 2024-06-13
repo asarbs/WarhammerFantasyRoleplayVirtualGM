@@ -63,11 +63,12 @@
 .tooltip {
   /* position: relative; */
   /* display: inline-block; */
+  cursor: help;
 }
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 600px;
+  max-width: 600px;
   background-color: black;
   color: #fff;
   font-size: 80%;

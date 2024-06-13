@@ -568,12 +568,13 @@ class Weapon{
     #availability
     #damage
     #qualities_and_flaws
+    #qualities
     #reach_range
     #is_in_inventory
     #is_range
     #deleted = false
     #not_sb_group= ['BLACKPOWDER', "CROSSBOW", "ENGINEERING", "EXPLOSIVES", "SLING"]
-    constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory, is_range) {
+    constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory, is_range, qualities) {
         this.#id = id
         this.#name = name
         this.#weapon_group = weapon_group
@@ -585,7 +586,8 @@ class Weapon{
         this.#reach_range = reach_range
         this.#is_range = is_range
         this.#is_in_inventory = is_in_inventory
-        console.log("Weaponr:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory);
+        this.#qualities = qualities
+        console.log("Weaponr:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory+"; qualities="+ qualities+";");
     }
 
     get id() {
@@ -739,7 +741,12 @@ class Weapon{
             new_row += '<td id="weapon_encumbrance__'+this.#id+'" class="center">'+this.encumbrance+'</td>'
             new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.reach_range+'</td>'
             new_row += '<td id="weapon_armour_points__'+this.#id+'" class="center">'+this.damage+'</td>'
-            new_row += '<td id="weapon_qualities__'+this.#id+'" class="center">'+this.qualities_and_flaws+'</td>'
+            new_row += '<td id="weapon_qualities__'+this.#id+'" class="center">'
+            this.#qualities.forEach(element => {
+                new_row += '<span class="tooltip">' + element['name'] + '<span class="tooltiptext">'+element['description']+'</span>' + '</span>, '
+            });
+            new_row += this.qualities_and_flaws
+            new_row += '</td>'
             new_row += '</tr>'
             $("table#weapons").append(new_row)
             $("img[delete_weapon_id="+this.#id+"]").click(delete_weapon);
@@ -2320,7 +2327,8 @@ class CharacterParameters {
             weapon.qualities_and_flaws,
             weapon.reach_range,
             weapon.is_in_inventory,
-            weapon.is_range
+            weapon.is_range,
+            weapon.qualities
             );
         this.#weapon.push(a)
         a.updateUI();
