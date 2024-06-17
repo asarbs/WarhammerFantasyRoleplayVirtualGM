@@ -963,7 +963,6 @@ def detailsCampaign(request, CampaignId):
     adventures = Adventure.objects.filter(campaign=c)
     
     dic ={'camaing': c, "players":players, "characters": characters, "createNewCharacter": createNewCharacter, "campaign_2_player_form":campaign_2_player_form, "adventures": adventures}
-    logging.debug(dic)
     return render(request, 'detailsCampaign.html', dic)
 
 

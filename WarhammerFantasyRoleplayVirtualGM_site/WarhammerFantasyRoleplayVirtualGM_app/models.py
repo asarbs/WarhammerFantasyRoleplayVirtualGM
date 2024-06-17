@@ -65,6 +65,8 @@ class Note(models.Model):
     datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update Time")
     note_text = models.TextField(verbose_name="Note Text", default="", blank=False, null=False)
     author = models.ForeignKey(User, verbose_name='User', blank=True, null=True, on_delete=models.CASCADE)
+    class Meta:
+        ordering = ['-datetime_update']
 
     def __str__(self):
         return u"{0}".format(self.datetime_create)
