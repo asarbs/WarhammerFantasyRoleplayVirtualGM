@@ -11,10 +11,12 @@
 <link rel="stylesheet" type="text/css" href="{% static "django_tables2/bootstrap.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "django_tables2/themes/paleblue/css/screen.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "tinymce/skins/ui/oxide/skin.min.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "chosen/chosen.css" %}">
 
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script src="{% static "tinymce/tinymce.min.js" %}"></script>
+<script src="{% static "chosen/chosen.jquery.js" %}"></script>
 
 {% if "addCharacter" in  request.path %}
 <script src="{% static "create_character.js" %}"></script>

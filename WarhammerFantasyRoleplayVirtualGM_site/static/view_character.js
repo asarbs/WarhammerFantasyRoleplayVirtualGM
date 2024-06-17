@@ -3193,6 +3193,7 @@ function get_characterData(){
             for(let k in data['trappings'] ) {
                 characterParameters.appendTrappings(data['trappings'][k])
             };
+            $("select#add_trappings").chosen({width: "85%", disable_search_threshold: "0"});
 
             characterParameters.updateTalentsTable()
             characterParameters.updateWounds();
@@ -3589,6 +3590,7 @@ function turon_on_edit() {
     $("input#height").prop("readonly", false);
     $("input#career_level").prop("readonly", false);
     $("input#current_wounds").prop("readonly", false);
+    $("input.chosen-search-input").prop("readonly", false);
 
     $("input#characteristics_ws_advances ").on("change",  updateCharacteristicsAdv);
     $("input#characteristics_bs_advances ").on("change", updateCharacteristicsAdv);
