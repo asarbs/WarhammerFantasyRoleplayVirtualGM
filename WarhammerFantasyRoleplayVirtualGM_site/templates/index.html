@@ -14,8 +14,12 @@
 </div> {% endcomment %}
 <div id="main_body">
     <div id="main_top_bar">
-        <img src="{% static "/img/logo.png" %}">
-        <div class="user">{% loggedUser user %} </div>
+        <img src="{% static "/img/logo.png" %}" class="main_logo">
+        <div class="user">
+            <span>
+                {% loggedUser user %} 
+            </span>
+        </div>
     </div>
     {% include "menu.html" %}
 

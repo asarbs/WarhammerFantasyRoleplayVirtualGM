@@ -86,7 +86,7 @@
 }
 
 body {
-    background-color : gainsboro;
+    background-color : #f6f9ff;
     font-family: AntykwaTorunska-Regular;
     font-size : 12px;
     color : #000000;
@@ -151,7 +151,6 @@ img.npc_portrait {
     border-radius: 50%;
     width: 64px;
 }
-
 
 select,
 input {
@@ -231,30 +230,39 @@ div#main_body div#main{
 }
 
 div#main_body div#main_top_bar{
-    height: 158px;
     margin-bottom: 15px;
     padding-left: 15px;
-    background-color: #452304;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #99a0ad;
     /* border-top: 2px solid #35fbd6; */
+    display: flex;
+    box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
 }
 
-div#main_body div#main_top_barimg {
-    width: 342px;
-    height: 158px;
-    /* margin-top: 2px; */
-    /* line-height: 40px; */
+div#main_body div#main_top_bar img.main_logo{
+    margin: 0px;
+    height: 35px;
 }
 
 div#main_body div#main_top_bar div.user {
-    float : right;
+    margin-left : auto !important;
     margin-right: 15px;
     color: white;
-    line-height: 35px;
+    border: #15f947 solid 0px;
+}
+
+div#main_body div#main_top_bar div.user span{
+    border: #993333 solid 0px;
+    display:inline-block;
+    top: 25%;
+    position: relative;
 }
 
 div#main_body div#main_bottom_bar{
     /* height: 158px; */
     margin-top: 15px;
+    margin-left: 200px;
     padding-left: 15px;
     background-color: #452304;
     color: #C2C2C2;
@@ -262,6 +270,7 @@ div#main_body div#main_bottom_bar{
     position: fixed;
     bottom: 0;
     width: 100%;
+
 }
 
 div#main_body div#main_bottom_bara {
@@ -1250,12 +1259,15 @@ div#menu_button {
  }
  div#menu {
      background-color : #fcfcfc;
-     border-radius: 20px;
+     border-top-right-radius: 5px;
      border: 1px solid #c1bfbf;
      padding : 0;
-     margin : 0 15px 0 15px;
+     /* margin : 0 15px 0 15px; */
      width : 200px;
      float : left;
+     position: fixed;
+     height: 100%;
+     z-index: 998;
  }
  div#menu ol {
      margin : 0 0 0 0;
