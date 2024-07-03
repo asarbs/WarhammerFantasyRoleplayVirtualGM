@@ -668,6 +668,7 @@ class Character(models.Model):
     wealth = models.IntegerField(default=0, verbose_name="Wealth")
     notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True)
     hash_id = models.CharField(max_length=29, verbose_name="Hash ID", default="")
+    deleted = models.BooleanField(default=False, verbose_name="Is delated")
 
     def __str__(self):
         return u"{0}".format(self.name)

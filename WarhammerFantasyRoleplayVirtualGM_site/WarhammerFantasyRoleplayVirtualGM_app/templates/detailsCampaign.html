@@ -79,7 +79,11 @@
             <h3>Characters:</h3>
             <ol>
                 {% for character in characters %}
-                <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
+                    {% if character.deleted %}
+                        <li style="text-decoration: line-through">  <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }}</a></li>
+                    {% else %}
+                        <li> <a href="{% url "viewCharacter" pk=character.id %} "> {{ character.player }} - {{ character }} </a> </li>
+                    {% endif %}
                 {% endfor %}
             </ol>
             {% if createNewCharacter == False %}

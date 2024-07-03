@@ -1309,7 +1309,8 @@ def ajax_view_getCharacterData(request):
             "movement_movement"            : character.movement_movement,
             "movement_walk"                : character.movement_walk,
             "movement_run"                 : character.movement_run,
-            "wealth"                       : character.wealth
+            "wealth"                       : character.wealth,
+            "deleted"                      : character.deleted
         }
 
     cas = CareersAdvanceScheme.objects.get(career = character.career)

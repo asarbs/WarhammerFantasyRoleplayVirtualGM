@@ -3158,6 +3158,7 @@ function get_characterData(){
             characterParameters.movement_walk                = data['character']["movement_walk"                ]
             characterParameters.movement_run                 = data['character']["movement_run"                 ]
             characterParameters.wealth                       = data['character']["wealth"                       ]
+            characterParameters.deleted                      = data['character']["deleted"                       ];
 
             $("td#party_name").text(data['party']['name'])
             for(m in data['party']['members']) {
@@ -3504,6 +3505,9 @@ function updateCurrentWounds() {
     });
 }
 function turon_on_edit() {
+    console.log(" characterParameters.deleted=" + characterParameters.deleted)
+    if(characterParameters.deleted) 
+        return;
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
     $("input#characteristics_ws_initial ").addClass( "editable", 1000);
