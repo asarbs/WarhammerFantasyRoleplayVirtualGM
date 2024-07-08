@@ -1438,6 +1438,12 @@ def ajax_saveCampaignAmbitions(request):
     achieved_was = ami.achieved
     ami.achieved = True if request.POST['achieved'] == 'true' else False
     ami.save()
+    
+    campaign = Campaign.objects.get(id=request.POST['camaing_id'])
+    if request.POST['is_shortterm'] == "true":
+        campaign.ambitions_shortterm.add(ami)
+    else:
+        campaign.ambitions_longterm.add(ami)
 
     logger.debug("achieved_was={} and ami.achieved={}".format(achieved_was, ami.achieved))
     if achieved_was == False and ami.achieved == True:
