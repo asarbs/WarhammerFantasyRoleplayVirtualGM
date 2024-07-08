@@ -1449,12 +1449,15 @@ def ajax_saveCampaignAmbitions(request):
     if achieved_was == False and ami.achieved == True:
         for c in Character.objects.filter(campaign__id = request.POST['camaing_id']):
             logger.debug("{}".format(str(c)))
-            if request.POST['is_shortterm'] == "true":
-                logger.debug("{} get 50 xp".format(str(c)))
-                c.experience_current += 50
-            else:
-                logger.debug("{} get 500 xp".format(str(c)))
-                c.experience_current += 500
+            if c.deleted is False:
+                if request.POST['is_shortterm'] == "true":
+                    logger.debug("{} get 50 xp".format(str(c)))
+                    c.experience_current += 50
+                    ccl(request.user, c, "Add 50XP for finishing ambition \"{}\".".format(ami))
+                else:
+                    logger.debug("{} get 500 xp".format(str(c)))
+                    c.experience_current += 500
+                    ccl(request.user, c, "Add 500XP for finishing ambition \"{}\".".format(ami))
             c.save()
 
 
