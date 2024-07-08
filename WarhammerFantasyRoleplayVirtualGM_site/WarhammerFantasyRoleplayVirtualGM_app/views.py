@@ -916,16 +916,17 @@ def ajax_saveAmbitions(request):
 
     logger.debug("created={}".format(created))
 
+    character = Character.objects.get(id=request.POST['character_id'])
     if created:
-        character = Character.objects.get(id=request.POST['character_id'])
         if request.POST['is_shortterm'] == "true":
             character.ambitions_shortterm.add(ami)
         else:
             character.ambitions_longterm.add(ami)
         character.save()
-
-
-    ccl(request.user, character, "add ambition \"{}\"; achieved={}".format(request.POST['description'], ami.achieved) )
+        ccl(request.user, character, "Ambition \"{}\" created".format(ami))
+    else:
+        ccl(request.user, character, "Ambition \"{}\" achved={}".format(ami, ami.achieved))
+    
     ret = {'status': 'ok' , 'id':ami.id}
     logger.debug(ret)
     return JsonResponse(ret)
@@ -940,7 +941,7 @@ def ajax_saveCurrentEp(request):
     ch, created = Character.objects.get_or_create(id=request.POST['character_id'])
     ch.experience_current = request.POST['experience_current']
 
-    ccl(request.user, ch, "change character experience current to  {} ".format(character.experience_current))
+    ccl(request.user, ch, "Change character experience current to {} ".format(ch.experience_current))
     ch.save()
 
     ret = {'status': 'ok'}
