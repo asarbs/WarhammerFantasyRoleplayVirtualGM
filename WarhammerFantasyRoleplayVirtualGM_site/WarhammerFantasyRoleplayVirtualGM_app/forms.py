@@ -242,3 +242,4 @@ class ContainersForm(ModelForm):
         mwf = super(ContainersForm, self).save(commit=False)
         mwf.save()
         return mwf
+    

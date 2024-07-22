@@ -6,5 +6,7 @@ from dal import autocomplete
 from . import views
 
 urlpatterns = [
-    path("Details/<int:adventure_id>", views.adventureDetails, name="Details"),
+    path("Details/<int:adventure_id>", views.adventureDetails, name="AdventureDetails"),
+    path("Create/<int:campaign_id>", views.createNewAdventure, name="AdventureCreate"),
+    path("Edit/<int:pk>", views.AdventureEditView.as_view(), name="AdventureEdit"),
 ]

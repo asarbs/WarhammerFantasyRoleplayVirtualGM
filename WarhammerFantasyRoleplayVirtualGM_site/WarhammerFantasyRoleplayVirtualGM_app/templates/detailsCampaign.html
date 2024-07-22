@@ -95,9 +95,10 @@
     <div class="row">
         <div class="column">
             <h3>Adventure:</h3>
+            <a href="{% url "AdventureCreate" campaign_id=camaing.id %}">Add</a>
             <ol>
             {% for adventure in adventures %}
-                <li><a href="{% url "Details" adventure_id=adventure.id %}">{{ adventure }}</a></li>
+                <li><a href="{% url "AdventureEdit" pk=adventure.id %}"><img src={% static "img/quill.png" %} class="ambitions_add"  id="ambitions_longterm_add"></a><a href="{% url "AdventureDetails" adventure_id=adventure.id %}">{{ adventure }}</a></li>
             {% endfor %}
             </ol>
         </div>

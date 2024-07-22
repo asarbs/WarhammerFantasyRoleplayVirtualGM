@@ -1,7 +1,21 @@
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView
+from django.views.generic.edit import FormView
+from django.views.generic.edit import UpdateView
+from django.urls import reverse
+from django.shortcuts import redirect
+
 
 from WarhammerFantasyRoleplayVirtualGM_Adventure.models import Adventure
 from WarhammerFantasyRoleplayVirtualGM_NPC.models import *
+
+import logging
+logger = logging.getLogger(__name__)
+
+
+from . import forms
+from . import models
 
 # Create your views here.
 def adventureDetails(request, adventure_id):
@@ -34,3 +48,15 @@ def adventureDetails(request, adventure_id):
         data["npc"].append(one_npc_data)
 
     return render(request, 'adventure.html', data)
+
+
+def createNewAdventure(request, campaign_id):
+    adventure = Adventure.objects.create(name = "Name", campaign_id = campaign_id)
+    adventure.save()
+    return redirect(reverse('AdventureEdit', args=(adventure.id,)))
+    
+
+class AdventureEditView(LoginRequiredMixin, UpdateView):
+    template_name = "update_Adventure.html"
+    form_class =  forms.AdventureForm
+    model = models.Adventure
