@@ -376,7 +376,7 @@ class Armour{
             if(this.#put_on != put_on){
                 this.#put_on = put_on;
                 console.log("Armour.put_on: name="+this.name+"; put_on="+this.#put_on)
-                this.put_on_update_ui();
+                // this.put_on_update_ui();
             } else {
                 console.log("Armour.put_on: name="+this.name+"; #put_on="+this.#put_on+"; put_on="+put_on)
             }
@@ -474,45 +474,56 @@ class Armour{
             return
         }
         console.log("Armour.put_on_update_ui: name="+this.name+"; put_on="+this.put_on + "; #locations="+this.#locations)
+
+        let new_val = parseInt(this.armour_points)
+        let old_val_head = isNaN(parseInt($("input#armour_put_on_head").val())) ? 0 : parseInt($("input#armour_put_on_head").val())
+        let old_val_left_arm = isNaN(parseInt($("input#armour_put_on_left_arm").val())) ? 0 : parseInt($("input#armour_put_on_left_arm").val())
+        let old_val_right_arm = isNaN(parseInt($("input#armour_put_on_right_arm").val())) ? 0 : parseInt($("input#armour_put_on_right_arm").val())
+        let old_val_left_leg = isNaN(parseInt($("input#armour_put_on_left_leg").val())) ? 0 : parseInt($("input#armour_put_on_left_leg").val())
+        let old_val_right_leg = isNaN(parseInt($("input#armour_put_on_right_leg").val())) ? 0 : parseInt($("input#armour_put_on_right_leg").val())
+        let old_val_body = isNaN(parseInt($("input#armour_put_on_body").val())) ? 0 : parseInt($("input#armour_put_on_body").val())
+        let old_val_shield = isNaN(parseInt($("input#armour_put_on_shield").val())) ? 0 : parseInt($("input#armour_put_on_shield").val())
+
         if(this.put_on == true) {
             $("input#armour_put_on_checkbox__"+this.#id).prop( "checked", true );
 
             if(this.#locations == "Head") {
-                $("input#armour_put_on_head").val(this.armour_points)
+                $("input#armour_put_on_head").val(old_val_head + new_val)
             } else if(this.#locations == "Arms") {
-                $("input#armour_put_on_left_arm").val(this.armour_points)
-                $("input#armour_put_on_right_arm").val(this.armour_points)
+                $("input#armour_put_on_left_arm").val(old_val_left_arm + new_val)
+                $("input#armour_put_on_right_arm").val(old_val_right_arm + new_val)
             } else if(this.#locations == "Arms, Body") {
-                $("input#armour_put_on_left_arm").val(this.armour_points)
-                $("input#armour_put_on_right_arm").val(this.armour_points)
-                $("input#armour_put_on_body").val(this.armour_points)
+                $("input#armour_put_on_left_arm").val(old_val_left_arm + new_val)
+                $("input#armour_put_on_right_arm").val(old_val_right_arm + new_val)
+                $("input#armour_put_on_body").val(old_val_body + new_val)
             } else if(this.#locations == "Body") {
-                $("input#armour_put_on_body").val(this.armour_points)
+                $("input#armour_put_on_body").val(old_val_body + new_val)
             } else if(this.#locations == "Legs") {
-                $("input#armour_put_on_left_leg").val(this.armour_points)
-                $("input#armour_put_on_right_leg").val(this.armour_points)
+                $("input#armour_put_on_left_leg").val(old_val_left_leg + new_val)
+                $("input#armour_put_on_right_leg").val(old_val_right_leg + new_val)
             } else if(this.#locations == "Shield") {
-                $("input#armour_put_on_shield").val(this.armour_points)
+                $("input#armour_put_on_shield").val(old_val_shield + new_val)
             }
         } else if(this.put_on == false) {
             $("input#armour_put_on_checkbox__"+this.#id).prop( "checked", false );
 
+
             if(this.#locations == "Head") {
-                $("input#armour_put_on_head").val (" ")
+                $("input#armour_put_on_head").val(old_val_head - new_val)
             } else if(this.#locations == "Arms") {
-                $("input#armour_put_on_left_arm").val (" ")
-                $("input#armour_put_on_right_arm").val (" ")
+                $("input#armour_put_on_left_arm").val(old_val_left_arm - new_val)
+                $("input#armour_put_on_right_arm").val(old_val_right_arm - new_val)
             } else if(this.#locations == "Arms, Body") {
-                $("input#armour_put_on_left_arm").val (" ")
-                $("input#armour_put_on_right_arm").val (" ")
-                $("input#armour_put_on_body").val (" ")
+                $("input#armour_put_on_left_arm").val(old_val_left_arm - new_val)
+                $("input#armour_put_on_right_arm").val(old_val_right_arm - new_val)
+                $("input#armour_put_on_body").val(old_val_body - new_val)
             } else if(this.#locations == "Body") {
-                $("input#armour_put_on_body").val (" ")
+                $("input#armour_put_on_body").val(old_val_body - new_val)
             } else if(this.#locations == "Legs") {
-                $("input#armour_put_on_left_leg").val (" ")
-                $("input#armour_put_on_right_leg").val (" ")
+                $("input#armour_put_on_left_leg").val(old_val_left_leg - new_val)
+                $("input#armour_put_on_right_leg").val(old_val_right_leg - new_val)
             } else if(this.#locations == "Shield") {
-                $("input#armour_put_on_shield").val (" ")
+                $("input#armour_put_on_shield").val(old_val_shield - new_val)
             }
         }
 
@@ -2851,9 +2862,9 @@ class CharacterParameters {
             }
         });
 
-        $.each(this.#armour, function(i, item) {
-            item.try_put_off(a.locations)
-        });
+        // $.each(this.#armour, function(i, item) {
+        //     item.try_put_off(a.locations)
+        // });
 
         a.put_on = checked;
         a.put_on_update_ui();
@@ -3223,7 +3234,6 @@ function get_characterData(){
             characterParameters.updateEncumbrance();
             characterParameters.updateTrappingsTable()
             turon_on_edit();
-            $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
             $("img.skill_test").click(skill_test)
         }
     });
@@ -4117,7 +4127,7 @@ function main() {
     $("button#trappings_add_button").click(trappings_add);
     $("button#skills_add_button").click(skill_add);
     $("button#player_notes_add_button").click(note_add);
-    $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
+    // $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
     $("img#ambitions_longterm_add").click(ambitions_longterm_add);
 
