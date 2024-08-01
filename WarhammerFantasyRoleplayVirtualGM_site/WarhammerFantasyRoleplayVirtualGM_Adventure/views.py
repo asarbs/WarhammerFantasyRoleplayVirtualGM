@@ -1,14 +1,16 @@
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
-from django.urls import reverse
-from django.shortcuts import redirect
 
 
 from WarhammerFantasyRoleplayVirtualGM_Adventure.models import Adventure
 from WarhammerFantasyRoleplayVirtualGM_NPC.models import *
+from WarhammerFantasyRoleplayVirtualGM_app.models import Note
 
 import logging
 logger = logging.getLogger(__name__)
@@ -60,3 +62,17 @@ class AdventureEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_Adventure.html"
     form_class =  forms.AdventureForm
     model = models.Adventure
+    
+def ajax_saveAdventureNotes(request):
+    adventure_id = request.POST['adventure_id']
+    adventure = Adventure.objects.get(id=adventure_id)
+    
+    note = Note.objects.create(note_text=request.POST['note_text'])
+    note.save()
+    
+    adventure.notes.add(note)
+    adventure.save()
+    
+    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp}
+    logger.debug(ret)
+    return JsonResponse(ret)

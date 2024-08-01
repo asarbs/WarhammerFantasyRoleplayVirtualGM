@@ -7,7 +7,6 @@ from . import views
 from .models import Eyes, Hair
 
 urlpatterns = [
-    path("", views.index, name="index"),
     path("addUser", views.addUser, name="addUser"),
     path('changePassword', views.changePassword, name="changePassword"),
     path('addUserConfirm/', views.addUserConfirm, name="addUserConfirm"),

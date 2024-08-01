@@ -19,7 +19,7 @@ from django.urls import path, include
 from ajax_select import urls as ajax_select_urls
 
 from django.contrib.auth import views as auth_views
-from WarhammerFantasyRoleplayVirtualGM_app import views as MainView
+from cms import views as MainView
 from WarhammerFantasyRoleplayVirtualGM_app.views import *
 from WarhammerFantasyRoleplayVirtualGM_NPC.views import *
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path('wfrpg_gm/', include("WarhammerFantasyRoleplayVirtualGM_app.urls")),
     path('wfrpg_npc/', include("WarhammerFantasyRoleplayVirtualGM_NPC.urls")),
     path('Adventure/', include("WarhammerFantasyRoleplayVirtualGM_Adventure.urls")),
+    path('cms/', include("cms.urls")),
     path('chat', include("WarhammerFantasyRoleplayVirtualGM_chat.urls")),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(next_page= '/login/'), name='logout'),

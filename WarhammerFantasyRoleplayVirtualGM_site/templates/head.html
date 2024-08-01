@@ -32,6 +32,17 @@
     $(document).ready(function() {
         main();
     });
+
+    tinyMCE.init({
+        plugins: 'link',
+        selector: 'textarea#adventure_notes_textarea',
+        mode: "textareas",
+        theme: "silver",
+        toolbar: 'bold italic underline | h1 h2 h3 h4 h5 h6 | link | alignleft aligncenter alignright alignjustify | outdent indent | forecolor backcolor | removeformat',
+        menubar:false,
+        statusbar: false,
+    });
+    </script>
 </script>
 {% endif %}
 {% if "viewCharacter" in  request.path %}
@@ -115,5 +126,5 @@
     );
 
     </script>
-
+    <meta name="google-site-verification" content="qCXpgDCDIxGDJ9iYIZE8SpHuY4EPe2MzKmun8Dq9PRY" />
 </head>

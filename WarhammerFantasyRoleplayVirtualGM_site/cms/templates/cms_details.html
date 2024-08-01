@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+{% block main %}
+
+<div id="cms_news_grid">
+
+{% for n in news %}
+<div class="cms_news_detail">
+<h1>
+    {% if n.contents|length > 0 %}
+    <a href="{% url "newsDetail" pk=n.id %}">{{ n.title }}</a>
+    {% else  %}
+        {{ n.title }}
+    {% endif %}
+</h1>
+<h4>{{ n.datetime_update|date:"Y-m-d H:m" }} Author: {{ n.autor_formmated }}</h4>
+<div>
+    {{ n.lead|safe }}
+</div>
+<div>
+    {{ n.contents|safe }}
+</div>
+
+</div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

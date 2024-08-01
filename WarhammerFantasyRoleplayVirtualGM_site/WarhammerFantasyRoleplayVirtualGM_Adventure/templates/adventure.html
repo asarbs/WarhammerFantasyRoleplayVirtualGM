@@ -1,11 +1,46 @@
 {% extends "index.html" %}
 {% block main %}
+
+
 <h2>{{ adventure.name }}</h2>
 <div id="npcs">
 <div id="detailsMsg_container">
   <div id="detailsMsg"></div>
   <div id="detailsMsg_ok">OK</div>
 </div>
+
+<table class="campaign_notes" id="campaign_notes" border='0'>
+  <tr class="block_name">
+      <th colspan="2">
+        Adventure Notes
+      </th>
+  </tr>
+  <tr class="block_editor">
+      <td colspan="2">
+          <textarea id="adventure_notes_textarea" cols="480" rows="40">
+          </textarea>
+      </td>
+  </tr>
+    <td colspan="2">
+      <button type="button" id="adventure_notes_add_button" >Save</button>
+    </td>
+  </tr>
+  <tr class="block_header">
+      <th>
+          Date
+      </th>
+      <th>
+          Note
+      </th>
+  </tr>
+  {% for n in adventure.notes.all %}
+      <tr class="note_line">
+          <td id="camaing_notes_timestamp__{{ n.timestamp }}" class="date">{{ n.formated_datatime }}</td>
+          <td>{{ n.note_text|safe }}</td>
+      </tr>
+  {% endfor %}
+</table>
+
 
 {% for n in npc %}
 <div class="npc_inline">
@@ -106,6 +141,6 @@
 <div class="npc_clean"></div>
 
 </div>
-</div>
+
 
 {% endblock %}

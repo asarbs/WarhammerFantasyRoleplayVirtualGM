@@ -176,6 +176,14 @@ textarea {
     width : 700px;
 }
 
+textarea#campaign_notes_textarea {
+    border : #AAA solid 1px;
+    background : #CCC;
+    font-size : 11px;
+    color : #004363;
+    width : 1200px;
+}
+
 ul.errorlist {
     padding : 0 0 0 15px;
     color : #FF0000;
@@ -371,30 +379,30 @@ div#main_body div#main div#campaign div.row div.column ol li img {
     width: 15px;
 }
 
-div#main_body div#main div#campaign div.row table.campaign_notes {
+table.campaign_notes {
     width: 1420px;
     margin-left: 135px;
     padding-top: 20px;
     border-collapse: collapse;
 }
-div#main_body div#main div#campaign div.row table.campaign_notes tr.block_name {
+table.campaign_notes tr.block_name {
     font-size: 36px;
     text-align: center;
 }
-div#main_body div#main div#campaign div.row table.campaign_notes tr.block_header {
+table.campaign_notes tr.block_header {
     font-size: 20px;
     text-align: center;
 }
-div#main_body div#main div#campaign div.row table.campaign_notes tr.block_editor button#campaign_notes_add_button {
+table.campaign_notes tr.block_editor button#campaign_notes_add_button {
     width: 100%;
 }
-div#main_body div#main div#campaign div.row table.campaign_notes tr.note_line {
+table.campaign_notes tr.note_line {
     border-bottom: 1px solid #000000;
 }
-div#main_body div#main div#campaign div.row table.campaign_notes tr td {
+table.campaign_notes tr td {
     padding: 10px;
 }
-div#main_body div#main div#campaign div.row table.campaign_notes tr td.date {
+table.campaign_notes tr td.date {
     width: 150px;
 }
 
@@ -1381,4 +1389,56 @@ span.ref {
 }
 div.npc_clean {
     clear: both;
+}
+
+div#main_body div#main div#cms_news_grid {
+
+}
+
+div#main_body div#main div#cms_news_grid div.cms_news {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: 2px solid #bcbcbc;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    width: 512px;
+    min-height: 300px;
+    float: left;
+    /* background-image : url("img/npc_bg.png"); */
+    background-repeat: repeat;
+    background-position: top;
+    padding: 5px;
+}
+div#main_body div#main div#cms_news_grid div.cms_news h1{
+    font-weight: normal;
+}
+
+div#main_body div#main div#cms_news_grid div.cms_news h4 {
+    
+}
+
+div#main_body div#main div#cms_news_grid div.cms_news_detail {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: 2px solid #bcbcbc;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    width: 512px;
+    min-height: 300px;
+    min-width: 900px;
+    float: left;
+    /* background-image : url("img/npc_bg.png"); */
+    background-repeat: repeat;
+    background-position: top;
+    padding: 5px;
+}
+div#main_body div#main div#cms_news_grid div.cms_news_detail div {
+    margin-bottom: 15px;
+}
+div#main_body div#main div#cms_news_grid div.cms_news_detail h1{
+    font-weight: normal;
+}
+
+div#main_body div#main div#cms_news_grid div.cms_news_detail h4 {
+    
 }

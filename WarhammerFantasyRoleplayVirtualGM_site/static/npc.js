@@ -134,6 +134,32 @@ function get_spells_description() {
 function close_detailsMsg() {
     document.getElementById('detailsMsg_container').style.display = "none";
 }
+
+function note_add() {
+    let n = tinyMCE.get('adventure_notes_textarea').getContent();
+    let adventure_id = window.location.pathname.split("/")[3]
+    $.ajax({
+        type: "POST",
+        url: "/Adventure/ajax_saveAdventureNotes",
+        data: {
+            adventure_id : adventure_id,
+            note_text : n,
+        },
+        success: function(data) {
+            console.log("note_add data="+data)
+            if(!$('td#camaing_notes_timestamp__'+data['timestamp']).length) {
+                var new_row = '<tr class="note_line">'
+                new_row += '<td id="camaing_notes_timestamp__'+data['timestamp']+'" class="date">'+data['datetime_create']+'</td>'
+                new_row += '<td>'+n+'</td>'
+                new_row += '</tr>'
+                $("table#campaign_notes tr.block_header").after(new_row)
+            } else {
+                console.log("NOT Note.updateUI: "+ this.datetime_create);
+            }
+        }
+    });
+}
+
 function main() {
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
@@ -145,4 +171,14 @@ function main() {
     $("span.npc_creatureTraits").click(get_creatureTraits_description);
     $("span.npc_spells").click(get_spells_description);
     $("div#detailsMsg_ok").click(close_detailsMsg);
+    $("button#adventure_notes_add_button").click(note_add);
+
+    console.log(' href => ' + window.location.href);
+console.log(' host => ' + window.location.host);
+console.log(' hostname => ' + window.location.hostname);
+console.log(' port => ' + window.location.port);
+console.log(' protocol => ' + window.location.protocol);
+console.log(' pathname => ' + window.location.pathname);
+console.log(' hashpathname => ' + window.location.hash);
+console.log(' search=> ' + window.location.search);
 }

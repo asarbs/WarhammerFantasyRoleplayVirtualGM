@@ -26,6 +26,7 @@ RUN pip3 install 'channels[daphne]' --break-system-packages
 RUN pip3 install channels_redis --break-system-packages
 RUN pip3 install pillow --break-system-packages
 RUN pip3 install django-request --break-system-packages
+RUN pip3 install google-api-python-client --break-system-packages
 #RUN npm install @owlbear-rodeo/sdk
 
 SHELL ["/bin/bash", "-c"]

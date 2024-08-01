@@ -44,9 +44,6 @@ from WarhammerFantasyRoleplayVirtualGM_Adventure.models import Adventure
 # Create your views here.
 from django.http import HttpResponse
 
-def index(request):
-    data = {}
-    return render(request, 'main/main.html', data)
 
 @login_required
 def createCampaign(request):
