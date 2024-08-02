@@ -1424,7 +1424,7 @@ div#main_body div#main div#cms_news_grid div.cms_news_detail {
     margin-bottom: 15px;
     margin-right: 15px;
     width: 512px;
-    min-height: 300px;
+    min-height: 350px;
     min-width: 900px;
     float: left;
     /* background-image : url("img/npc_bg.png"); */
@@ -1441,4 +1441,9 @@ div#main_body div#main div#cms_news_grid div.cms_news_detail h1{
 
 div#main_body div#main div#cms_news_grid div.cms_news_detail h4 {
     
+}
+
+div#main_body div#main div#cms_news_grid div#paginator {
+    margin-bottom: 50px;
+    text-align: center;
 }

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django_tables2",
     'ajax_select',
     'request',
+    'rest_framework',
     'WarhammerFantasyRoleplayVirtualGM_app',
     'WarhammerFantasyRoleplayVirtualGM_user',
     'WarhammerFantasyRoleplayVirtualGM_chat',
@@ -218,3 +219,11 @@ LOGGING = {
 }
 
 # REQUEST_BASE_URL = 'http://%s' % Site.objects.get_current().domain
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

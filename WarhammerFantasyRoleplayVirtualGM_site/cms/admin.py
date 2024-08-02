@@ -19,7 +19,7 @@ class NewsAdmin(admin.ModelAdmin):
           models.TextField: {'widget': TinyMCE(mce_attrs={'width': 800})}
     }
     inlines = [News2TagAdmin]
-    list_display = ("title", "datetime_create", "datetime_update", "id","is_deleted")
+    list_display = ("title", "author", "datetime_create", "datetime_update", "id","is_deleted", "yt_id")
     list_filter = ("author","tagss")
     list_editable = ("is_deleted",)
 
