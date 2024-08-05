@@ -14,14 +14,14 @@
 </h1>
 <h4>{{ n.datetime_update|date:"Y-m-d H:m" }} </h4>
 
-{% if not n.yt_id %}
+{% if not n.is_yt %}
     <div>
         {{ n.lead|safe }}
     </div>
 {% else %}
 
     <div>
-        <iframe width="490" height="285" src="https://www.youtube.com/embed/{{ n.yt_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="490" height="285" src="https://www.youtube.com/embed/{{ n.internal_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
 {% endif %}
 

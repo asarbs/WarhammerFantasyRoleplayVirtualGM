@@ -25,7 +25,8 @@ class News(models.Model):
     author = models.ForeignKey(User, verbose_name='User', blank=True, null=True, on_delete=models.CASCADE)
     is_deleted = models.BooleanField(default=False)
     tagss = models.ManyToManyField(Tag, through="News2Tag", blank=True)
-    yt_id = models.CharField(max_length= 50, blank=True, null=True)
+    is_yt = models.BooleanField(max_length= 50, blank=True, null=True)
+    internal_id = models.CharField(max_length= 50, blank=True, null=True)
     
     def autor_formmated(self):
         if self.author is None:

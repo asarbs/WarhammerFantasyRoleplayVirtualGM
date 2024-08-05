@@ -29,7 +29,8 @@ RUN pip3 install django-request --break-system-packages
 RUN pip3 install google-api-python-client --break-system-packages
 RUN pip3 install djangorestframework --break-system-packages
 RUN pip3 install markdown --break-system-packages
-RUN pip3 install django-filter   --break-system-packages
+RUN pip3 install django-filter --break-system-packages
+RUN pip3 install feedparser --break-system-packages
 
 #RUN npm install @owlbear-rodeo/sdk
 
