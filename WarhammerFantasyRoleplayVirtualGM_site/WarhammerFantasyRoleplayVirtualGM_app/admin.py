@@ -238,7 +238,7 @@ class NoteAdmin(admin.ModelAdmin):
     formfield_overrides = {
           models.TextField: {'widget': TinyMCE(mce_attrs={'width': 600})}
     }
-    list_display = ("datetime_create", "datetime_update", "note_text")
+    list_display = ("datetime_create", "datetime_update", "author", "note_text")
     ordering = ("datetime_update", "datetime_create")
     save_as = True
 

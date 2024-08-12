@@ -1470,14 +1470,14 @@ def ajax_saveCampaignNotes(request):
 
     logger.debug("camaing_id={}; note={};".format(request.POST['camaing_id'], request.POST['note_text']))
 
-    note = Note.objects.create(note_text=request.POST['note_text'])
+    note = Note.objects.create(note_text=request.POST['note_text'], author=request.user)
     note.save()
 
     campaign = Campaign.objects.get(id=request.POST['camaing_id'])
     campaign.notes.add(note)
     campaign.save()
 
-    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp}
+    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp, "author": str(note.author)}
     logger.debug(ret)
     return JsonResponse(ret)
 

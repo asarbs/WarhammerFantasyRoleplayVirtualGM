@@ -150,6 +150,7 @@ function note_add() {
             if(!$('td#camaing_notes_timestamp__'+data['timestamp']).length) {
                 var new_row = '<tr class="note_line">'
                 new_row += '<td id="camaing_notes_timestamp__'+data['timestamp']+'" class="date">'+data['datetime_create']+'</td>'
+                new_row += '<td>'+data['author']+'</td>'
                 new_row += '<td>'+n+'</td>'
                 new_row += '</tr>'
                 $("table#campaign_notes tr.block_header").after(new_row)

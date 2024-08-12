@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
+from django.contrib.auth.decorators import login_required
 
 
 from WarhammerFantasyRoleplayVirtualGM_Adventure.models import Adventure
@@ -20,6 +21,7 @@ from . import forms
 from . import models
 
 # Create your views here.
+@login_required
 def adventureDetails(request, adventure_id):
     adventure = Adventure.objects.get(id=adventure_id)
     data = {"adventure":adventure, "npc":[]}
@@ -51,7 +53,7 @@ def adventureDetails(request, adventure_id):
 
     return render(request, 'adventure.html', data)
 
-
+@login_required
 def createNewAdventure(request, campaign_id):
     adventure = Adventure.objects.create(name = "Name", campaign_id = campaign_id)
     adventure.save()
@@ -63,16 +65,17 @@ class AdventureEditView(LoginRequiredMixin, UpdateView):
     form_class =  forms.AdventureForm
     model = models.Adventure
     
+@login_required
 def ajax_saveAdventureNotes(request):
     adventure_id = request.POST['adventure_id']
     adventure = Adventure.objects.get(id=adventure_id)
     
-    note = Note.objects.create(note_text=request.POST['note_text'])
+    note = Note.objects.create(note_text=request.POST['note_text'], author=request.user)
     note.save()
     
     adventure.notes.add(note)
     adventure.save()
     
-    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp}
+    ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp, 'author': str(note.author)}
     logger.debug(ret)
     return JsonResponse(ret)
