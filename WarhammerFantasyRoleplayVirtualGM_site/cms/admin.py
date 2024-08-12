@@ -22,6 +22,11 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ("title", "author", "datetime_create", "datetime_update", "id","is_deleted", "is_yt", "internal_id")
     list_filter = ("author","tagss")
     list_editable = ("is_deleted",)
+    
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(NewsAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['author'].initial = request.user
+        return form
 
 
 admin.site.register(cmd_models.Tag, TagAdmin)

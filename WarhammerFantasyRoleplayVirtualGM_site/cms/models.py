@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import hashlib
+from datetime import datetime
+
 # Create your models here.
 
 import logging
@@ -19,13 +22,13 @@ class Tag(models.Model):
 class News(models.Model):
     title = models.CharField(max_length= 250)
     lead = models.TextField(verbose_name="lead", default="")
-    contents = models.TextField(verbose_name="lead", default="", blank=True, null=True)
-    datetime_create = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Create Time")
+    contents = models.TextField(verbose_name="content", default="", blank=True, null=True)
+    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=False, verbose_name="Create Time", default=datetime.now())
     datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update Time")
     author = models.ForeignKey(User, verbose_name='User', blank=True, null=True, on_delete=models.CASCADE)
     is_deleted = models.BooleanField(default=False)
     tagss = models.ManyToManyField(Tag, through="News2Tag", blank=True)
-    is_yt = models.BooleanField(max_length= 50, blank=True, null=True)
+    is_yt = models.BooleanField(max_length= 50, default=False, blank=True, null=True)
     internal_id = models.CharField(max_length= 50, blank=True, null=True)
     
     def autor_formmated(self):
@@ -41,9 +44,8 @@ class News(models.Model):
         return u"{0}".format(self.title)
     
     def save(self, *args, **kwargs):
-        logger.debug(self)
-        logger.debug(args)
-        self.author = User.objects.get(id=2)
+        txt = self.lead.encode('utf-8') + str(self.datetime_create).encode('utf-8')
+        self.internal_id = hashlib.md5(txt).hexdigest()
         super().save(*args, **kwargs)
 
         
