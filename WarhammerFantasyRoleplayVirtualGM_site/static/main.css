@@ -1313,6 +1313,27 @@ div#menu_button {
      white-space : nowrap;
  }
 
+div#menu button.logout {
+    background: none!important;
+    border: none;
+    color: #004363;
+    padding: 10px 0 10px 10px;
+    display : block;
+    margin : 0 0 0 0;
+    font-family: AntykwaTorunska-Regular;
+    src: url(/static/font/AntykwaTorunska-Regular.ttf);
+    cursor: pointer;
+}
+
+div#menu button.logout:hover {
+    background-image : url("img/link_hover.png");
+    background-repeat : no-repeat;
+    margin : 0 0 0 0;
+    padding : 10px 0 10px 10px;
+    text-decoration : none;
+    white-space : nowrap;
+}
+
 div#npcs {
 
 }

@@ -45,15 +45,16 @@ class AuthenticationStateMenuElement(MenuElement):
     def __init__(self, request, visible=None):
         MenuElement.__init__(self, request, request, visible)
         if request.user.is_authenticated:
-            self.name = "Logout"
+            self.visible = False
+            self.name = "AAAALogout"
             self.url = "/logout/"
         else:
             self.name = "Login"
             self.url = "/login"
-        if visible is not None:
-            self.visible = visible
-        else:
             self.visible = True
+            
+    def getLinkTag(self):
+        return '<a href="{}">{}</a>'.format(self.url, self.name)
 
     def __str__(self):
         return u"{} {} {} {}".format(self.name, self.url, self.visible, self.children)

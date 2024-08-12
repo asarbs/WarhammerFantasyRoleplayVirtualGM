@@ -218,6 +218,8 @@ LOGGING = {
     },
 }
 
+LOGOUT_REDIRECT_URL = "/"
+
 # REQUEST_BASE_URL = 'http://%s' % Site.objects.get_current().domain
 
 REST_FRAMEWORK = {

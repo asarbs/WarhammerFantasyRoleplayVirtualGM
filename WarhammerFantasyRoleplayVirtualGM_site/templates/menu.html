@@ -1,4 +1,15 @@
 {% load menuManager %}
 <div id="menu">
 {% makeMenu %}
+
+
+{% if user.is_authenticated %}
+
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="logout">Log Out</button>
+</form>
+
+{% endif %}
+
 </div>
