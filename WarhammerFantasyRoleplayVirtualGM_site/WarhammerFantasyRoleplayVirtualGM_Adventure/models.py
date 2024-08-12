@@ -1,9 +1,11 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign
 from WarhammerFantasyRoleplayVirtualGM_app.models import Note
 from WarhammerFantasyRoleplayVirtualGM_NPC.models import NPC
+
 
 
 class Adventure(models.Model):
@@ -17,3 +19,6 @@ class Adventure(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
+    
+    def get_absolute_url(self):
+        return reverse("AdventureDetails", args=(self.id,) )

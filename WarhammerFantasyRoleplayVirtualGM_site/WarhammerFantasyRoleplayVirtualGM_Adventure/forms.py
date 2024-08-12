@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django.forms import HiddenInput
 from django.contrib.admin import site as admin_site
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
@@ -15,7 +16,8 @@ class AdventureForm(ModelForm):
             RelatedFieldWidgetWrapper(self.fields['npcs'].widget, self.instance._meta.get_field('npcs').remote_field, admin_site)
             
         )
+        # self.fields['campaign'].widget =  HiddenInput()
     
     class Meta:
         model = models.Adventure
-        fields = ['name', 'campaign', 'npcs']
+        fields = ['name', 'npcs']
