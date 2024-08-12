@@ -54,7 +54,7 @@ def createCampaign(request):
             player = Player.objects.get(user=request.user)
             c2p = Campaign2Player(player=player, campaign=campaign)
             c2p.save()
-            return HttpResponseRedirect("/wfrpg_gm/")
+            return redirect(reverse('detailsCampaign', args=(campaign.id,)))
     else:
         campaign_form = CreateCampaignForm(prefix='user')
     return render(request, 'addCampaign.html', dict(form=campaign_form))
