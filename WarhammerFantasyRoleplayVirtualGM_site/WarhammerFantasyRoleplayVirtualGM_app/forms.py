@@ -90,6 +90,9 @@ class Campaign2PlayerFormLookupChannel(LookupChannel):
     def format_item_display(self, item):
         return "<span class='campaign_2_player'>{}</span>".format(str(item))
 
+    def check_auth(self, request):
+        pass
+
 
 class Campaign2PlayerForm(ModelForm):
     class Meta:
