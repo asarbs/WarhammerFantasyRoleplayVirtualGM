@@ -393,7 +393,10 @@ table.campaign_notes tr.block_header {
     font-size: 20px;
     text-align: center;
 }
-table.campaign_notes tr.block_editor button#campaign_notes_add_button {
+table.campaign_notes tr.block_editor button#campaign_notes_add_button  {
+    width: 100%;
+}
+table.campaign_notes tr.block_editor button#adventure_notes_add_button {
     width: 100%;
 }
 table.campaign_notes tr.note_line {
