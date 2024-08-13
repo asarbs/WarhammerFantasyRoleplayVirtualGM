@@ -15,6 +15,12 @@ RUN apt-get install -y pipx
 RUN apt-get install -y sqlite3
 RUN apt-get install -y nodejs 
 RUN apt-get install -y npm
+RUN apt-get install -y wget
+
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+
 RUN rm -f /usr/lib/python3.x/EXTERNALLY-MANAGED
 RUN pip3 install requests --break-system-packages
 RUN pip3 install django-static-jquery --break-system-packages
@@ -31,6 +37,9 @@ RUN pip3 install djangorestframework --break-system-packages
 RUN pip3 install markdown --break-system-packages
 RUN pip3 install django-filter --break-system-packages
 RUN pip3 install feedparser --break-system-packages
+RUN pip3 install selenium --break-system-packages
+RUN pip3 install webdriver-manager --break-system-packages
+
 
 #RUN npm install @owlbear-rodeo/sdk
 

@@ -44,8 +44,9 @@ class News(models.Model):
         return u"{0}".format(self.title)
     
     def save(self, *args, **kwargs):
-        txt = self.lead.encode('utf-8') + str(self.datetime_create).encode('utf-8')
-        self.internal_id = hashlib.md5(txt).hexdigest()
+        if not self.is_yt:
+            txt = self.lead.encode('utf-8') + str(self.datetime_create).encode('utf-8')
+            self.internal_id = hashlib.md5(txt).hexdigest()
         super().save(*args, **kwargs)
 
         

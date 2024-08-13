@@ -98,7 +98,6 @@ class MenuElementWithPrivileges(MenuElement):
 class MenuManager(object):
     def __init__(self, request):
         self.request = request
-        print(request)
         module = self.request.get_full_path().split("/")[1]
         self.l = [
             MenuElement("Main", "/"),
