@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+        "cwd": "/workspaces/WarhammerFantasyRoleplayVirtualGM/WarhammerFantasyRoleplayVirtualGM_site/",
+        "name": "Django Test",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/WarhammerFantasyRoleplayVirtualGM_site/manage.py",
+        "args": [
+            "test",
+            // "-t",
+            // "/workspaces/WarhammerFantasyRoleplayVirtualGM/WarhammerFantasyRoleplayVirtualGM_site/tests/",
+            "-k",
+            "RegressionTests.test_createNewCampaign"
+        ],
+        "django": true,
+        },
+    ]
+}
