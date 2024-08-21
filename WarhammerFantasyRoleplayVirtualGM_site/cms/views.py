@@ -17,7 +17,6 @@ def index(request, page=0):
     data['news'] = news[page:page+number_of_news_on_page]
     data['page_numbers'] = []
     for p in range(ceil(len(news) / number_of_news_on_page)):
-        print(p)
         data['page_numbers'].append({"page_number": int(p+1), "page_start" : int(p * number_of_news_on_page) })
     
     return render(request, 'cms_main.html', data)

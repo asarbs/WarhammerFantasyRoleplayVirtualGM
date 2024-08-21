@@ -1050,12 +1050,36 @@ div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_botto
     margin-top: 10px;
     text-align: center;
 }
+
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.psychology textarea#player_psychology {
+    /* background-color: #660000; */
+    min-height: 100px;
+    min-width: 100%;
+}
+
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.psychology button#player_psychology_button {
+    /* background-color: #660000; */
+    min-width: 100%
+}
+
 div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.coruption_mutation {
     /* background-color: #129bb3; */
     min-height: 30%;
     margin-top: 10px;
     text-align: center;
 }
+
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.coruption_mutation textarea#player_coruption_and_mutation {
+    /* background-color: #660000; */
+    min-height: 100px;
+    min-width: 100%;
+}
+
+div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right div.coruption_mutation button#player_coruption_and_mutation_button {
+    /* background-color: #660000; */
+    min-width: 100%
+}
+
 
 div#main_body div#main div.character_sheet div.sheer2_left div.sheer2_left_bottom div.sheer2_left_bottom_right_bottom {
     /* background-color: #35fbd6; */

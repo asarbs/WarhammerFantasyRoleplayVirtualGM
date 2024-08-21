@@ -669,6 +669,9 @@ class Character(models.Model):
     notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True)
     hash_id = models.CharField(max_length=29, verbose_name="Hash ID", default="")
     deleted = models.BooleanField(default=False, verbose_name="Is delated")
+    psychology = models.TextField(verbose_name="Psychology", default="", blank=False, null=False)
+    coruption_and_mutation = models.TextField(verbose_name="Coruption & Mutation", default="", blank=False, null=False)
+
 
     def __str__(self):
         return u"{0}".format(self.name)

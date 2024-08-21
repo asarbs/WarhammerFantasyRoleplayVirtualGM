@@ -10,6 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support import expected_conditions
 
 
 
@@ -255,5 +256,19 @@ class RegressionTests(StaticLiveServerTestCase):
         self.browser.find_element(by=By.ID, value="ambitions_longterm").send_keys(ambition_test)
         self.browser.find_element(by=By.ID, value="submit_ambitions_longterm").click()
         self.assertEqual(ambition_test, self.browser.find_element(by=By.XPATH, value='/html/body/div[1]/div[3]/div/div[2]/div[1]/ol/li[1]').text)
+
+        self.browser.find_element(by=By.LINK_TEXT, value="Chreate Character").click()
+
+        # try:
+        #     wait = WebDriverWait(self.browser, 10)
+        #     wait.until(expected_conditions.url_contains("addCharacter"))
+        # finally:
+        #     pass
         
-        self.browser.find_element(by=By.XPATH, value='/html/body/div[1]/div[3]/div/div[4]/div/a').click()
+        try:
+            wait = WebDriverWait(self.browser, 10)
+            wait.until(expected_conditions.url_contains("viewCharacter"))
+        finally:
+            pass
+        
+        print("test end")

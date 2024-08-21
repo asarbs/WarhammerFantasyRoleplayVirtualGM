@@ -1264,6 +1264,9 @@ class CharacterParameters {
     #notes                              = [];
     #containers                         = [];
     #conditions                         = [];
+    #psychology                         = [];
+    #coruption_and_mutation             = [];
+
     #advanceScheme;
     classModel = {}
     movement = {
@@ -1919,6 +1922,75 @@ class CharacterParameters {
     get career_id() {
         return this.#career_id
     }
+    set psychology(psychology) {
+        if(typeof psychology === "string") {
+            this.#psychology = psychology;
+            $("textarea#player_psychology").val(this.#psychology);
+        }
+        else {
+            throw "psychology[" + text + "] is not a string";
+        }
+    }
+    get psychology() {
+        return this.#psychology
+    }
+    savePsychology(text) {
+        this.psychology = text;
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_savePlayerPsychology",
+            async: false,
+            cache: false,
+            timeout: 30000,
+            fail: function(){
+                return true;
+            },
+            data: {
+                character_id   : this.id,
+                psychology     : this.psychology
+            },
+            success: function(data) {
+                console.log(data)
+                return true;
+            }
+        });
+
+    }
+    set coruption_and_mutation(coruption_and_mutation) {
+        if(typeof coruption_and_mutation === "string") {
+            this.#coruption_and_mutation = coruption_and_mutation;
+            $("textarea#player_coruption_and_mutation").val(this.#coruption_and_mutation);
+        }
+        else {
+            throw "coruption_and_mutation[" + text + "] is not a string";
+        }
+    }
+    get coruption_and_mutation() {
+        return this.#coruption_and_mutation
+    }
+    saveCoruptionAndMutation(text) {
+        this.coruption_and_mutation = text;
+        $.ajax({
+            type: "POST",
+            url: "/wfrpg_gm/ajax_savePlayerCoruptionAndMutation",
+            async: false,
+            cache: false,
+            timeout: 30000,
+            fail: function(){
+                return true;
+            },
+            data: {
+                character_id   : this.id,
+                coruption_and_mutation     : this.coruption_and_mutation
+            },
+            success: function(data) {
+                console.log(data)
+                return true;
+            }
+        });
+
+    }
+
     set ch_class_id(ch_class_id) {
         if(typeof ch_class_id === "number") {
             this.#ch_class_id = ch_class_id;
@@ -2041,6 +2113,7 @@ class CharacterParameters {
     get fel_bonus() {
         return Math.floor(this.characteristics_fel_current /  10)
     }
+    
     getCharacteristicsCurrent(name) {
         if(name === "WS")
             return this.characteristics_ws_current
@@ -3165,7 +3238,10 @@ function get_characterData(){
             characterParameters.movement_walk                = data['character']["movement_walk"                ]
             characterParameters.movement_run                 = data['character']["movement_run"                 ]
             characterParameters.wealth                       = data['character']["wealth"                       ]
-            characterParameters.deleted                      = data['character']["deleted"                       ];
+            characterParameters.deleted                      = data['character']["deleted"                      ]
+            characterParameters.psychology                   = data['character']["psychology"                   ]
+            characterParameters.coruption_and_mutation       = data['character']["coruption_and_mutation"       ]
+            
 
             $("td#party_name").text(data['party']['name'])
             for(m in data['party']['members']) {
@@ -3776,6 +3852,15 @@ function note_add() {
     }
     new_note = characterParameters.saveNote(note);
 }
+function psychology_add() {
+    let p = $("textarea#player_psychology").val();
+    characterParameters.savePsychology(p);
+}
+function coruption_and_mutation_add() {
+    let p = $("textarea#player_coruption_and_mutation").val();
+    characterParameters.saveCoruptionAndMutation(p);
+}
+
 function change_wealth() {
     var wealth = $("input#wealth").val()
     characterParameters.save_wealth(wealth)
@@ -4127,6 +4212,8 @@ function main() {
     $("button#trappings_add_button").click(trappings_add);
     $("button#skills_add_button").click(skill_add);
     $("button#player_notes_add_button").click(note_add);
+    $("button#player_psychology_button").click(psychology_add);
+    $("button#player_coruption_and_mutation_button").click(coruption_and_mutation_add);
     // $("input[type='checkbox'].armour_put_on").on("change", put_on_armour);
     $("img#ambitions_shortterm_add").click(ambitions_shortterm_add);
     $("img#ambitions_longterm_add").click(ambitions_longterm_add);

@@ -570,7 +570,6 @@ def ajax_saveFate_and_fortune(request):
     if request.method == 'POST':
         character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
-        print(request.POST)
         if character is not None:
             character.fate_fate    = int(request.POST['newVal[fate_fate]'])
             character.fate_fortune    = int(request.POST['newVal[fate_fortune]'])
@@ -612,7 +611,6 @@ def ajax_saveFortune(request):
     if request.method == 'POST':
         character_id = request.POST['character_id']
         character = Character.objects.get(id = character_id)
-        print(request.POST)
         if character is not None:
             character.fate_fortune    = int(request.POST['fate_fortune'])
             character.save()
@@ -1264,51 +1262,53 @@ def ajax_view_getCharacterData(request):
 
 
     ret['character'] = {
-            "id"                           : character.id,
-            "name"                         : character.name,
-            "species"                      : character.species.id,
-            "ch_class"                     : character.ch_class.id,
-            "career"                       : character.career.id,
-            "career_level"                 : int(character.career_level),
-            "age"                          : character.age,
-            "height"                       : character.height,
-            "career_path"                  : [cp.name for cp in character.career_path.all()],
-            "status"                       : str(character.status),
-            "hair"                         : character.hair.id,
-            "eyes"                         : character.eyes.id,
-            "characteristics_ws_initial"   : character.characteristics_ws_initial,
-            "characteristics_bs_initial"   : character.characteristics_bs_initial,
-            "characteristics_s_initial"    : character.characteristics_s_initial,
-            "characteristics_t_initial"    : character.characteristics_t_initial,
-            "characteristics_i_initial"    : character.characteristics_i_initial,
-            "characteristics_ag_initial"   : character.characteristics_ag_initial,
-            "characteristics_dex_initial"  : character.characteristics_dex_initial,
-            "characteristics_int_initial"  : character.characteristics_int_initial,
-            "characteristics_wp_initial"   : character.characteristics_wp_initial,
-            "characteristics_fel_initial"  : character.characteristics_fel_initial,
-            "characteristics_ws_advances"  : character.characteristics_ws_advances,
-            "characteristics_bs_advances"  : character.characteristics_bs_advances,
-            "characteristics_s_advances"   : character.characteristics_s_advances,
-            "characteristics_t_advances"   : character.characteristics_t_advances,
-            "characteristics_i_advances"   : character.characteristics_i_advances,
-            "characteristics_ag_advances"  : character.characteristics_ag_advances,
-            "characteristics_dex_advances" : character.characteristics_dex_advances,
-            "characteristics_int_advances" : character.characteristics_int_advances,
-            "characteristics_wp_advances"  : character.characteristics_wp_advances,
-            "characteristics_fel_advances" : character.characteristics_fel_advances,
-            "current_wounds"               : character.current_wounds,
-            "fate_fate"                    : character.fate_fate,
-            "fate_fortune"                 : character.fate_fortune,
-            "resilience_resilience"        : character.resilience_resilience,
-            "resilience_resolve"           : character.resilience_resolve,
-            "resilience_motivation"        : character.resilience_motivation,
-            "experience_current"           : character.experience_current,
-            "experience_spent"             : character.experience_spent,
-            "movement_movement"            : character.movement_movement,
-            "movement_walk"                : character.movement_walk,
-            "movement_run"                 : character.movement_run,
-            "wealth"                       : character.wealth,
-            "deleted"                      : character.deleted
+            "id"                            : character.id,
+            "name"                          : character.name,
+            "species"                       : character.species.id,
+            "ch_class"                      : character.ch_class.id,
+            "career"                        : character.career.id,
+            "career_level"                  : int(character.career_level),
+            "age"                           : character.age,
+            "height"                        : character.height,
+            "career_path"                   : [cp.name for cp in character.career_path.all()],
+            "status"                        : str(character.status),
+            "hair"                          : character.hair.id,
+            "eyes"                          : character.eyes.id,
+            "characteristics_ws_initial"    : character.characteristics_ws_initial,
+            "characteristics_bs_initial"    : character.characteristics_bs_initial,
+            "characteristics_s_initial"     : character.characteristics_s_initial,
+            "characteristics_t_initial"     : character.characteristics_t_initial,
+            "characteristics_i_initial"     : character.characteristics_i_initial,
+            "characteristics_ag_initial"    : character.characteristics_ag_initial,
+            "characteristics_dex_initial"   : character.characteristics_dex_initial,
+            "characteristics_int_initial"   : character.characteristics_int_initial,
+            "characteristics_wp_initial"    : character.characteristics_wp_initial,
+            "characteristics_fel_initial"   : character.characteristics_fel_initial,
+            "characteristics_ws_advances"   : character.characteristics_ws_advances,
+            "characteristics_bs_advances"   : character.characteristics_bs_advances,
+            "characteristics_s_advances"    : character.characteristics_s_advances,
+            "characteristics_t_advances"    : character.characteristics_t_advances,
+            "characteristics_i_advances"    : character.characteristics_i_advances,
+            "characteristics_ag_advances"   : character.characteristics_ag_advances,
+            "characteristics_dex_advances"  : character.characteristics_dex_advances,
+            "characteristics_int_advances"  : character.characteristics_int_advances,
+            "characteristics_wp_advances"   : character.characteristics_wp_advances,
+            "characteristics_fel_advances"  : character.characteristics_fel_advances,
+            "current_wounds"                : character.current_wounds,
+            "fate_fate"                     : character.fate_fate,
+            "fate_fortune"                  : character.fate_fortune,
+            "resilience_resilience"         : character.resilience_resilience,
+            "resilience_resolve"            : character.resilience_resolve,
+            "resilience_motivation"         : character.resilience_motivation,
+            "experience_current"            : character.experience_current,
+            "experience_spent"              : character.experience_spent,
+            "movement_movement"             : character.movement_movement,
+            "movement_walk"                 : character.movement_walk,
+            "movement_run"                  : character.movement_run,
+            "wealth"                        : character.wealth,
+            "deleted"                       : character.deleted,
+            "psychology"                    : character.psychology,
+            "coruption_and_mutation"        : character.coruption_and_mutation
         }
 
     cas = CareersAdvanceScheme.objects.get(career = character.career)
@@ -1727,7 +1727,33 @@ def ajax_saveCurrentWounds(request):
     ccl(request.user, c, f"set Cuttent Wounds to \"{current_wounds}\".")
 
     ret = {'status': 'ok', }
-    return JsonResponse(ret)    
+    return JsonResponse(ret)
+
+@login_required
+def ajax_savePlayerPsychology(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+    c = Character.objects.get(id = request.POST['character_id'])
+    c.psychology = request.POST['psychology']
+    c.save()
+    ccl(request.user, c, f"Update of Psychology.")
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_savePlayerCoruptionAndMutation(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+    c = Character.objects.get(id = request.POST['character_id'])
+    c.coruption_and_mutation = request.POST['coruption_and_mutation']
+    c.save()
+    ccl(request.user, c, f"Update of Coruption and Mutation.")
+
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
 
 @login_required
 def ajax_saveTraping2Container(request):

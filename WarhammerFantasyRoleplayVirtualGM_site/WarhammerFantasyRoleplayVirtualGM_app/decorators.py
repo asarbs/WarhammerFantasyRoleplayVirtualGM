@@ -11,7 +11,6 @@ ACCESS_DENIED = "Access denied"
 
 def can_view_character(func):
     def wrapper(request, *args, **kwargs):
-        logger.debug(request.GET)
         if (request.user.is_anonymous) :
             return redirect("login")
         groups_names = [group.name for group in request.user.groups.all() ]
