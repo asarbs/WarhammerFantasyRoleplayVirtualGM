@@ -12,12 +12,12 @@ class AdventureForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(AdventureForm, self).__init__(*args, **kwargs)
-        self.fields['npcs'].widget = (
-            RelatedFieldWidgetWrapper(self.fields['npcs'].widget, self.instance._meta.get_field('npcs').remote_field, admin_site)
+        # self.fields['npcs'].widget = (
+        #     RelatedFieldWidgetWrapper(self.fields['npcs'].widget, self.instance._meta.get_field('npcs').remote_field, admin_site)
             
-        )
+        # )
         # self.fields['campaign'].widget =  HiddenInput()
     
     class Meta:
         model = models.Adventure
-        fields = ['name', 'npcs']
+        fields = ['name']

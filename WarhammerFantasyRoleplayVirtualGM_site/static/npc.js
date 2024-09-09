@@ -161,6 +161,48 @@ function note_add() {
     });
 }
 
+function condition_save() {
+    var condition_id = $(this).attr("condition_id")
+    var adventure_id = $(this).attr("adventure_id")
+    var npc_id = $(this).attr("npc_id")
+    var adv2npc_id = $(this).attr("adv2npc_id")
+    var checked = $(this).is(":checked")
+    console.log("condition_id:"+condition_id+"; adventure_id="+adventure_id+"; npc_id="+npc_id+ "; adv2npc_id=" + adv2npc_id +"; checked="+checked)
+
+    $.ajax({
+        type: "POST",
+        url: "/Adventure/ajax_saveConditionState",
+        data: {
+            adventure_id : adventure_id,
+            condition_id: condition_id,
+            npc_id: npc_id,
+            adv2npc_id: adv2npc_id,
+            checked : checked,
+        },
+        success: function(data) {
+
+        }
+    });
+}
+
+function current_wounds_save() {
+    var adv2npc_id = $(this).attr("adv2npc_id")
+    var current_wounds = $(this).val()
+    console.log("adv2npc_id=" + adv2npc_id +"; current_wounds="+current_wounds)
+
+    $.ajax({
+        type: "POST",
+        url: "/Adventure/ajax_saveConditionState",
+        data: {
+            adv2npc_id: adv2npc_id,
+            current_wounds : current_wounds,
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    });
+}
+
 function main() {
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") }
@@ -173,13 +215,16 @@ function main() {
     $("span.npc_spells").click(get_spells_description);
     $("div#detailsMsg_ok").click(close_detailsMsg);
     $("button#adventure_notes_add_button").click(note_add);
+    $("input.conditions").click(condition_save);
+    $("input.npc_characteristics_w").on("change", current_wounds_save);
 
-    console.log(' href => ' + window.location.href);
-console.log(' host => ' + window.location.host);
-console.log(' hostname => ' + window.location.hostname);
-console.log(' port => ' + window.location.port);
-console.log(' protocol => ' + window.location.protocol);
-console.log(' pathname => ' + window.location.pathname);
-console.log(' hashpathname => ' + window.location.hash);
-console.log(' search=> ' + window.location.search);
+
+    // console.log(' href => ' + window.location.href);
+    // console.log(' host => ' + window.location.host);
+    // console.log(' hostname => ' + window.location.hostname);
+    // console.log(' port => ' + window.location.port);
+    // console.log(' protocol => ' + window.location.protocol);
+    // console.log(' pathname => ' + window.location.pathname);
+    // console.log(' hashpathname => ' + window.location.hash);
+    // console.log(' search=> ' + window.location.search);
 }

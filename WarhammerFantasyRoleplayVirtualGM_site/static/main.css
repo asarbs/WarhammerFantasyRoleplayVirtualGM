@@ -1377,6 +1377,7 @@ div#npcs div#detailsMsg_container {
     padding: 30px;
     left: 50%;
     font-size: 120%;
+    z-index: 100;
 }
 
 div#npcs div#detailsMsg_container div#detailsMsg_ok {
@@ -1389,7 +1390,12 @@ div#npcs div#detailsMsg_container div#detailsMsg_ok {
     cursor: pointer;
 }
 
-div.npc_inline {
+div.npc_container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+div.npc_container div.npc {
     background-color: #c9ccdb;
     border-radius: 10px;
     border: 2px solid #bcbcbc;
@@ -1397,46 +1403,48 @@ div.npc_inline {
     margin-right: 15px;
     width: 512px;
     min-height: 300px;
-    float: left;
+    /* float: left; */
     /* background-image : url("img/npc_bg.png"); */
     background-repeat: repeat;
     background-position: top;
     padding: 5px;
 }
-div.npc_inline p span.npc_skill, span.npc_talent, span.npc_trapping, span.npc_creatureTraits, span.npc_spells {
+div.npc_container div.npc p span.npc_skill, span.npc_talent, span.npc_trapping, span.npc_creatureTraits, span.npc_spells {
     cursor: help;
 }
-
-div.npc_inline table {
+div.npc_container div.npc table {
     width: 100%;
 }
-div.npc_inline table tr td {
+div.npc_container div.npc table tr td {
     text-align: center;
 }
-div.npc_inline table tr td.portrait {
+div.npc_container div.npc table tr td.portrait {
     width: 92px;
     text-align: center;
 }
-div.npc_inline table tr td.name {
+div.npc_container div.npc table tr td.name {
     font-size: 150%;
     font-weight: bold;
 }
-div.npc_inline table tr td.species {
+div.npc_container div.npc table tr td.species {
     font-size: 120%;
     font-weight: bold;
 }
-div.npc_inline table tr td.head {
-    width: 8%;
+div.npc_container div.npc table tr td.head {
     font-weight: bold;
 }
+div.npc_container div.npc table tr td input.npc_characteristics_w {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+}
+
+
 span.ref {
     border: 0px solid #15f947;
     display: block;
     margin-top: 30px;
     text-align: right;
-}
-div.npc_clean {
-    clear: both;
 }
 
 div#main_body div#main div#cms_news_grid {

@@ -47,103 +47,119 @@
 </table>
 </br></br></br></br>
 
-{% for n in npc %}
-<div class="npc_inline">
+<div class="npc_container">
+  {% for n in npc %}
+  <div class="npc">
 
-<table border="0">
-    <tr>
-      <td class="portrait" rowspan="4"><img src="/static/page_images/{{ n.npc.portrait }}" class="npc_portrait"></td>
-      <td class="name" colspan="12"><a href="{% url 'NPC_UpdateView' pk=n.npc.id  %}">{{ n.npc }}</a></td>
-    </tr>
-    <tr>
-      <td class="species" colspan="12">
-        {% if n.npc.species is None %}
-          -
-        {% else %}
-          {{ n.npc.species }} 
-        {% endif %}
-      </td>
-    </tr>
-    <tr>
-        <td class="head">M</td>
-        <td class="head">WS</td>
-        <td class="head">BS</td>
-        <td class="head">S</td>
-        <td class="head">T</td>
-        <td class="head">I</td>
-        <td class="head">Ag</td>
-        <td class="head">Dex</td>
-        <td class="head">Int</td>
-        <td class="head">WP</td>
-        <td class="head">Fel</td>
-        <td class="head">W</td>
-    </tr>
-    <tr>
-        <td>{{ n.npc.characteristics_m }} </td>
-        <td>{{ n.npc.characteristics_ws }} </td>
-        <td>{{ n.npc.characteristics_bs }} </td>
-        <td>{{ n.npc.characteristics_s }} </td>
-        <td>{{ n.npc.characteristics_t }} </td>
-        <td>{{ n.npc.characteristics_i }} </td>
-        <td>{{ n.npc.characteristics_ag }} </td>
-        <td>{{ n.npc.characteristics_dex }} </td>
-        <td>{{ n.npc.characteristics_int }} </td>
-        <td>{{ n.npc.characteristics_wp }} </td>
-        <td>{{ n.npc.characteristics_fel }} </td>
-        <td>{{ n.npc.characteristics_w }} </td>
-    </tr>
-  </table>
+  <table border="0">
+      <tr>
+        <td class="portrait" rowspan="4"><img src="/static/page_images/{{ n.npc.portrait }}" class="npc_portrait"></td>
+        <td class="name" colspan="12">{{ n.adv2npc.name }} (<a href="{% url 'NPC_UpdateView' pk=n.npc.id  %}">{{ n.npc }}</a>)</td>
+      </tr>
+      <tr>
+        <td class="species" colspan="12">
+          {% if n.npc.species is None %}
+            -
+          {% else %}
+            {{ n.npc.species }} 
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+          <td class="head">M</td>
+          <td class="head">WS</td>
+          <td class="head">BS</td>
+          <td class="head">S</td>
+          <td class="head">T</td>
+          <td class="head">I</td>
+          <td class="head">Ag</td>
+          <td class="head">Dex</td>
+          <td class="head">Int</td>
+          <td class="head">WP</td>
+          <td class="head">Fel</td>
+          <td class="head" style="width: 50px">W</td>
+      </tr>
+      <tr>
+          <td>{{ n.npc.characteristics_m }} </td>
+          <td>{{ n.npc.characteristics_ws }} </td>
+          <td>{{ n.npc.characteristics_bs }} </td>
+          <td>{{ n.npc.characteristics_s }} </td>
+          <td>{{ n.npc.characteristics_t }} </td>
+          <td>{{ n.npc.characteristics_i }} </td>
+          <td>{{ n.npc.characteristics_ag }} </td>
+          <td>{{ n.npc.characteristics_dex }} </td>
+          <td>{{ n.npc.characteristics_int }} </td>
+          <td>{{ n.npc.characteristics_wp }} </td>
+          <td>{{ n.npc.characteristics_fel }} </td>
+          <td> <input class="npc_characteristics_w" id="characteristics_w" value="{{ n.current_wounds }}" adv2npc_id="{{ n.adv2npc.id }}">/{{ n.npc.characteristics_w }} </td>
+      </tr>
+    </table>
 
 
-{% if n.npc2skill %}  
-<p><b>Skills:</b>{% for x in n.npc2skill %} 
-    <span class="npc_skill" skill_id="{{ x.skill.id }}">{{ x.skill }}</span> [{{ x.value }}], 
-   {% endfor %}
-</p>
-{% endif %}
-{% if n.npc2talent %}
-<p><b>Talents:</b>{% for x in n.npc2talent %} 
-  <span class="npc_talent" talent_id="{{ x.talent.id }}">{{ x.talent }}</span> [{{ x.value }}],
+  {% if n.npc2skill %}  
+  <p><b>Skills:</b>
+    {% for x in n.npc2skill %} 
+      <span class="npc_skill" skill_id="{{ x.skill.id }}">{{ x.skill }}</span> [{{ x.value }}], 
     {% endfor %}
-</p>
-{% endif %}
-{% if n.npc.weapons.count %}
-<p><b>Weapons:</b>{% for x in n.npc.weapons.all %} 
-    {{ x }},
+  </p>
+  {% endif %}
+  {% if n.npc2talent %}
+  <p><b>Talents:</b>
+    {% for x in n.npc2talent %} 
+      <span class="npc_talent" talent_id="{{ x.talent.id }}">{{ x.talent }}</span> [{{ x.value }}],
     {% endfor %}
-</p>
-{% endif %}
-{% if n.npc2trapping %}
-<p><b>Trappings:</b>
-  {% for x in n.npc2trapping %} 
-  <span class="npc_trapping" trapping_id="{{ x.trapping.id }}">{{ x.trapping }}</span> [{{ x.amount }}]
+  </p>
+  {% endif %}
+  {% if n.npc.weapons.count %}
+  <p><b>Weapons:</b>{% for x in n.npc.weapons.all %} 
+      {{ x }},
+      {% endfor %}
+  </p>
+  {% endif %}
+  {% if n.npc2trapping %}
+  <p><b>Trappings:</b>
+    {% for x in n.npc2trapping %} 
+      <span class="npc_trapping" trapping_id="{{ x.trapping.id }}">{{ x.trapping }}</span> [{{ x.amount }}]
     {% endfor %}
-</p>
-{% endif %}
-{% if n.npc2creatureTraits %}
-<p><b>Traits:</b>
-  {% for x in n.npc2creatureTraits %} 
-  <span class="npc_creatureTraits" creatureTraits_id="{{ x.creatureTraits.id }}">{{ x.creatureTraits }}</span> [{{ x.amount }}]
+  </p>
+  {% endif %}
+  {% if n.npc2creatureTraits %}
+  <p><b>Traits:</b>
+    {% for x in n.npc2creatureTraits %} 
+      <span class="npc_creatureTraits" creatureTraits_id="{{ x.creatureTraits.id }}">{{ x.creatureTraits }}</span> [{{ x.amount }}]
     {% endfor %}
-</p>
-{% endif %}
-{% if n.npc2spells %}
-<p><b>Spells:</b>
-  {% for x in n.npc2spells %} 
-  <span class="npc_spells" spell_id="{{ x.spell.id }}">{{ x.spell }}</span> [{{ x.amount }}]
+  </p>
+  {% endif %}
+  {% if n.npc2spells %}
+  <p><b>Spells:</b>
+    {% for x in n.npc2spells %} 
+      <span class="npc_spells" spell_id="{{ x.spell.id }}">{{ x.spell }}</span> [{{ x.amount }}]
     {% endfor %}
-</p>
-{% endif %}
+  </p>
+  {% endif %}
 
-{% if n.npc.ref %}
-<span class="ref">{{ n.npc.ref }}</span>
-{% endif %}
+  <p><b>Conditions:</b><br>
+    {% for adv2Npc2condition in n.npc2condition %} 
+    <input type="checkbox" class="conditions" id="npc2condition_{{ adv2Npc2condition.condition.id }}" name="name_npc2condition_{{ adv2Npc2condition.condition.id }}" value="npc2condition_{{ adv2Npc2condition.condition.id }}" {% if adv2Npc2condition.has %} checked {% endif %} 
+      adv2npc_id="{{ n.adv2npc.id }}"
+      condition_id="{{ adv2Npc2condition.condition.id }}" 
+      adventure_id="{{ adventure.id }}" 
+      npc_id="{{ n.npc.id }}" 
+    >
+    <label for="name_npc2condition_{{ adv2Npc2condition.condition.id }}">{{ adv2Npc2condition.condition }} </label>
+    <br>
+  {% endfor %}
+  </p> 
+
+  {% if n.npc.ref %}
+  <span class="ref">{{ n.npc.ref }}</span>
+  {% endif %}
+
+  </div>
+
+  {% endfor %}
 
 </div>
-
-{% endfor %}
-
-<div class="npc_clean"></div>
 
 </div>
 

@@ -107,7 +107,7 @@ class MenuManager(object):
             MenuElement("Main", "/"),
             LogedInMenuElement(request=request, name="Create Campaign",  url=reverse("createCampaign")),
         ]
-        logger.info (f"user={request.user}, user_id={request.user.id}")
+        # logger.info (f"user={request.user}, user_id={request.user.id}")
         if not request.user.is_anonymous:
             try:
                 logged_player = Player.objects.get(user=request.user)

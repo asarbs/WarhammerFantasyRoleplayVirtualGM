@@ -23,7 +23,7 @@ class News(models.Model):
     title = models.CharField(max_length= 250)
     lead = models.TextField(verbose_name="lead", default="")
     contents = models.TextField(verbose_name="content", default="", blank=True, null=True)
-    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=False, verbose_name="Create Time", default=datetime.now())
+    datetime_create = models.DateTimeField(auto_now=False, auto_now_add=False, verbose_name="Create Time")
     datetime_update = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name="Update Time")
     author = models.ForeignKey(User, verbose_name='User', blank=True, null=True, on_delete=models.CASCADE)
     is_deleted = models.BooleanField(default=False)

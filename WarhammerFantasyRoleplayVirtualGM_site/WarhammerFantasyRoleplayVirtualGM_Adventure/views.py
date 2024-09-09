@@ -9,9 +9,10 @@ from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import login_required
 
 
-from WarhammerFantasyRoleplayVirtualGM_Adventure.models import Adventure
+from WarhammerFantasyRoleplayVirtualGM_Adventure.models import *
 from WarhammerFantasyRoleplayVirtualGM_NPC.models import *
 from WarhammerFantasyRoleplayVirtualGM_app.models import Note
+from WarhammerFantasyRoleplayVirtualGM_app.models import Condition
 
 import logging
 logger = logging.getLogger(__name__)
@@ -25,29 +26,42 @@ from . import models
 def adventureDetails(request, adventure_id):
     adventure = Adventure.objects.get(id=adventure_id)
     data = {"adventure":adventure, "npc":[]}
-    for n in adventure.npcs.all():
+    
+    conditions = Condition.objects.all()
+    
+    for adv2npc in Adventure2NPC.objects.filter(adventure=adventure):
         one_npc_data = {}
-        one_npc_data["npc"] = n
+        logger.info(f"{adv2npc.id}: {adv2npc}")
+        one_npc_data["adv2npc"] = adv2npc
+        one_npc_data["npc"] = adv2npc.npc
+        one_npc_data["current_wounds"] = adv2npc.current_wounds
         one_npc_data["npc2skill"] = []
         one_npc_data["npc2talent"] = []
         one_npc_data["npc2trapping"] = []
         one_npc_data["npc2creatureTraits"] = []
         one_npc_data["npc2spells"] = []
-        for s in n.skills.all():
-            _NPC2Skill = NPC2Skill.objects.get(npc=n, skill=s)
+        one_npc_data["npc2condition"] = []
+        
+        for s in adv2npc.npc.skills.all():
+            _NPC2Skill = NPC2Skill.objects.get(npc=adv2npc.npc, skill=s)
             one_npc_data["npc2skill"].append(_NPC2Skill)
-        for t in n.talents.all():
-            _NPC2Talent = NPC2Talent.objects.get(npc=n, talent=t)
+        for t in adv2npc.npc.talents.all():
+            _NPC2Talent = NPC2Talent.objects.get(npc=adv2npc.npc, talent=t)
             one_npc_data["npc2talent"].append(_NPC2Talent)
-        for t in n.trappings.all():
-            _NPC2Trapping = NPC2Trapping.objects.get(npc=n, trapping=t)
+        for t in adv2npc.npc.trappings.all():
+            _NPC2Trapping = NPC2Trapping.objects.get(npc=adv2npc.npc, trapping=t)
             one_npc_data["npc2trapping"].append(_NPC2Trapping)
-        for ct in n.creatureTraits.all():
-            _NPC2CreatureTraits = NPC2CreatureTraits.objects.get(npc=n, creatureTraits=ct)
+        for ct in adv2npc.npc.creatureTraits.all():
+            _NPC2CreatureTraits = NPC2CreatureTraits.objects.get(npc=adv2npc.npc, creatureTraits=ct)
             one_npc_data["npc2creatureTraits"].append(_NPC2CreatureTraits)
-        for s in n.spells.all():
-            _NPC2Spells = NPC2Spells.objects.get(npc=n, spell=s)
+        for s in adv2npc.npc.spells.all():
+            _NPC2Spells = NPC2Spells.objects.get(npc=adv2npc.npc, spell=s)
             one_npc_data["npc2spells"].append(_NPC2Spells)
+        for con in conditions:
+            if con in adv2npc.condition.all():
+                one_npc_data["npc2condition"].append({"condition":con, "has":True})
+            else:
+                one_npc_data["npc2condition"].append({"condition":con, "has": False})
 
         data["npc"].append(one_npc_data)
 
@@ -77,5 +91,40 @@ def ajax_saveAdventureNotes(request):
     adventure.save()
     
     ret = {'status': 'ok', 'id': note.id, 'datetime_create': note.formated_datatime, 'timestamp': note.timestamp, 'author': str(note.author)}
+    logger.debug(ret)
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveConditionState(request):
+    adventure_id = request.POST['adventure_id']
+    condition_id = request.POST['condition_id']
+    npc_id = request.POST['npc_id']
+    adv2npc_id = request.POST['adv2npc_id']
+    checked = request.POST['checked']
+    logger.info(f"request.POST={request.POST}")
+    
+    adv2npc = Adventure2NPC.objects.get(id=adv2npc_id)
+    condition = Condition.objects.get(id=condition_id)
+
+    if checked:
+        adv2npc.condition.add(condition)
+    else:
+        adv2npc.condition.remove(condition) 
+
+    ret = {'status': 'ok'}
+    logger.debug(ret)
+    return JsonResponse(ret)
+
+@login_required
+def ajax_saveConditionState(request):
+    adv2npc_id = request.POST['adv2npc_id']
+    current_wounds = request.POST['current_wounds']
+    logger.info(f"request.POST={request.POST}")
+    
+    adv2npc = Adventure2NPC.objects.get(id=adv2npc_id)
+    adv2npc.current_wounds = current_wounds
+    adv2npc.save()
+
+    ret = {'status': 'ok'}
     logger.debug(ret)
     return JsonResponse(ret)
