@@ -3,9 +3,13 @@ from django.urls import reverse
 from django import template
 from django.utils.safestring import mark_safe
 
+import WarhammerFantasyRoleplayVirtualGM_app
 from WarhammerFantasyRoleplayVirtualGM_app.models import Player
 from WarhammerFantasyRoleplayVirtualGM_app.models import Campaign2Player
 from WarhammerFantasyRoleplayVirtualGM_app.models import CareersAdvanceScheme
+
+import logging
+logger = logging.getLogger(__name__)
 
 class MenuElement(object):
     def __init__(self, name, url="", visible=True):
@@ -103,14 +107,18 @@ class MenuManager(object):
             MenuElement("Main", "/"),
             LogedInMenuElement(request=request, name="Create Campaign",  url=reverse("createCampaign")),
         ]
-
+        logger.info (f"user={request.user}, user_id={request.user.id}")
         if not request.user.is_anonymous:
-            logger_player = Player.objects.get(user=request.user)
-            if logger_player:
-                player_campaign = Campaign2Player.objects.filter(player=logger_player)
-                if player_campaign:
-                    for campaign in player_campaign:
-                        self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
+            try:
+                logged_player = Player.objects.get(user=request.user)
+                if logged_player:
+                    player_campaign = Campaign2Player.objects.filter(player=logged_player)
+                    if player_campaign:
+                        for campaign in player_campaign:
+                            self.l[1].addChildraen(MenuElement(campaign.campaign.name, reverse("detailsCampaign", args=(campaign.campaign.id,) )))
+            except WarhammerFantasyRoleplayVirtualGM_app.models.Player.DoesNotExist as ext:
+                logger.error(f"User {request.user}[id={request.user.id}] don't havre any player attached. {ext}")
+                return
 
         self.l.append(LogedInMenuElement(request=request, name="Careers Advance Schemes", url=reverse('listCareersAdvanceSchemes')))
         self.l.append(LogedInMenuElement(request=request, name="Containers", url=reverse('ContainersListView')))

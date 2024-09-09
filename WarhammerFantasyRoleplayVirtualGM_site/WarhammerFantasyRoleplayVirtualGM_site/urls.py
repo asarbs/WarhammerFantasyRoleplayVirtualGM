@@ -42,4 +42,5 @@ urlpatterns = [
     path('player-autocomplete/', AutocompletePlayer.as_view(), name='player-autocomplete'),
     path('ajax_select/', include(ajax_select_urls)),
     path('api-auth/', include('rest_framework.urls')),
+    path('auth/', include('social_django.urls', namespace='social')),
 ]

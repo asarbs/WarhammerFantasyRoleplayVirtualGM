@@ -39,6 +39,7 @@ RUN pip3 install django-filter --break-system-packages
 RUN pip3 install feedparser --break-system-packages
 RUN pip3 install selenium --break-system-packages
 RUN pip3 install webdriver-manager --break-system-packages
+RUN pip3 install social-auth-app-django --break-system-packages
 
 
 #RUN npm install @owlbear-rodeo/sdk
