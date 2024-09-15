@@ -1439,6 +1439,10 @@ div.npc_container div.npc table tr td input.npc_characteristics_w {
     font-size: 12px;
 }
 
+div.npc_container div.npc label.conditions {
+    cursor: help;
+}
+
 
 span.ref {
     border: 0px solid #15f947;

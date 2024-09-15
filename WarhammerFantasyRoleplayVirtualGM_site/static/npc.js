@@ -192,7 +192,7 @@ function current_wounds_save() {
 
     $.ajax({
         type: "POST",
-        url: "/Adventure/ajax_saveConditionState",
+        url: "/Adventure/ajax_saveCurrentWounds",
         data: {
             adv2npc_id: adv2npc_id,
             current_wounds : current_wounds,
@@ -201,6 +201,37 @@ function current_wounds_save() {
             console.log(data)
         }
     });
+}
+
+const conditions = new Array();
+
+function getConditionsDetails() {
+    $.ajax({
+        type: "POST",
+        url: "/Adventure/ajax_getConditionsDetails",
+        data: {},
+        success: function(data) {
+            console.log(data['status'])
+            data['conditions'].forEach((element) => {
+                conditions.push(element);
+            });
+        }
+    });
+
+}
+
+function condition_help() {
+    var condition_id = $(this).attr("condition_id")
+
+    conditions.forEach( (element) => {
+        if(element.id == condition_id) {
+            desc = "<h2>"+element.name+"</h2>"
+            desc += "<p><span>"+element.description+"</p>"
+            document.getElementById('detailsMsg').innerHTML = desc
+            document.getElementById('detailsMsg_container').style.display = "block";
+        }
+    });
+
 }
 
 function main() {
@@ -216,7 +247,9 @@ function main() {
     $("div#detailsMsg_ok").click(close_detailsMsg);
     $("button#adventure_notes_add_button").click(note_add);
     $("input.conditions").click(condition_save);
+    $("label.conditions").click(condition_help);
     $("input.npc_characteristics_w").on("change", current_wounds_save);
+    getConditionsDetails();
 
 
     // console.log(' href => ' + window.location.href);

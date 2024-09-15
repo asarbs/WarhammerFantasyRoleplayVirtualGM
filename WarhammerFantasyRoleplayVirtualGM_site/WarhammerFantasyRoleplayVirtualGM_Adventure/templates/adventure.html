@@ -146,7 +146,7 @@
       adventure_id="{{ adventure.id }}" 
       npc_id="{{ n.npc.id }}" 
     >
-    <label for="name_npc2condition_{{ adv2Npc2condition.condition.id }}">{{ adv2Npc2condition.condition }} </label>
+    <label class="conditions" for="name_npc2condition_{{ adv2Npc2condition.condition.id }}" condition_id="{{ adv2Npc2condition.condition.id }}" >{{ adv2Npc2condition.condition }} </label>
     <br>
   {% endfor %}
   </p> 

@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -6,7 +8,7 @@ from django.urls import reverse
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
-from django.contrib.auth.decorators import login_required
+
 
 
 from WarhammerFantasyRoleplayVirtualGM_Adventure.models import *
@@ -25,7 +27,7 @@ from . import models
 @login_required
 def adventureDetails(request, adventure_id):
     adventure = Adventure.objects.get(id=adventure_id)
-    data = {"adventure":adventure, "npc":[]}
+    data = {"adventure":adventure, "npc":[], "conditions":[]}
     
     conditions = Condition.objects.all()
     
@@ -116,7 +118,7 @@ def ajax_saveConditionState(request):
     return JsonResponse(ret)
 
 @login_required
-def ajax_saveConditionState(request):
+def ajax_saveCurrentWounds(request):
     adv2npc_id = request.POST['adv2npc_id']
     current_wounds = request.POST['current_wounds']
     logger.info(f"request.POST={request.POST}")
@@ -127,4 +129,16 @@ def ajax_saveConditionState(request):
 
     ret = {'status': 'ok'}
     logger.debug(ret)
+    return JsonResponse(ret)
+
+@login_required
+def ajax_getConditionsDetails(request):
+    conditions = Condition.objects.all()
+    ret = {'status': 'ok', "conditions":[]}
+    for con in conditions:
+        ret['conditions'].append({"id":con.id, "name":con.name, "description":con.description})
+
+
+
+    logger.info(ret)
     return JsonResponse(ret)
