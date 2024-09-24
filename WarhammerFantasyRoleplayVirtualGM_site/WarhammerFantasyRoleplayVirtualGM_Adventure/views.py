@@ -138,7 +138,4 @@ def ajax_getConditionsDetails(request):
     for con in conditions:
         ret['conditions'].append({"id":con.id, "name":con.name, "description":con.description})
 
-
-
-    logger.info(ret)
     return JsonResponse(ret)

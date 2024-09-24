@@ -33,7 +33,7 @@ class Adventure2NPC(models.Model):
     current_wounds = models.IntegerField(default="0", verbose_name="Current Wounds")
     
     def save(self, *args, **kwargs):
-        if self.current_wounds == 0:
+        if self._state.adding == True and self.current_wounds == 0:
             self.current_wounds = self.npc.characteristics_w
         super(Adventure2NPC, self).save(*args, **kwargs)
     
