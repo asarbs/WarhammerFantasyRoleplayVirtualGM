@@ -55,7 +55,7 @@ def index(request):
 
         data["npc"].append(one_npc_data)
     
-    data["refBook"] = RefBook.objects.all()
+    data["refBook"] = RefBook.objects.all().order_by("name")
         
     return render(request, 'npc.html', data)
 

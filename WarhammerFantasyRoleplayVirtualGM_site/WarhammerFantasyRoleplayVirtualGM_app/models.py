@@ -25,6 +25,10 @@ class Availability(models.TextChoices):
 
 class RefBook(models.Model):
     name = models.CharField(max_length= 250)
+
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return u"{0}".format(self.name)
 
@@ -132,6 +136,9 @@ class Talent(models.Model):
     ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
     talent_parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return u"{0}".format(self.name)
 
@@ -167,6 +174,9 @@ class Trapping(models.Model):
     price = models.IntegerField(default=0, verbose_name="Price")
     availability = models.CharField(max_length=6, choices=Availability.choices, default=Availability.COMMON, verbose_name="Availability")
     to_view = models.BooleanField(default=True, verbose_name="To View")
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return f"{self.name}"
@@ -208,6 +218,9 @@ class Species(models.Model):
     random_interal_end = models.IntegerField(default=0, verbose_name="random_interal_end")
     skills = models.ManyToManyField(Skils)
     talents = models.ManyToManyField(Talent)
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return u"{0}".format(self.name)
