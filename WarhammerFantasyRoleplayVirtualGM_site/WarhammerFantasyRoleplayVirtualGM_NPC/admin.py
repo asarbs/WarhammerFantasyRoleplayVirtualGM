@@ -1,9 +1,30 @@
 from django.contrib import admin
 from django.db import models as db_models
+from django.contrib.admin import SimpleListFilter
 
 from tinymce.widgets import TinyMCE
 from . import models
+from WarhammerFantasyRoleplayVirtualGM_app.models import RefBook
 # Register your models here.
+
+class RedBookFilter(SimpleListFilter):
+    title = "Reference Book"
+    parameter_name = "refBook"
+    def lookups(self, request, model_admin):
+        refBook = RefBook.objects.all().order_by('name')
+        out = []
+        for rb in refBook:
+            out.append((rb.id, f"{rb.name}"))
+        return out
+
+    def queryset(self, request, queryset):
+        if not 'refBook' in  request.GET:
+            return queryset
+        refBookId = request.GET['refBook']
+        out = queryset.filter(ref__refBook__id=refBookId)
+        for o in out:
+            print(refBookId, f"{o.name}, {o.ref.refBook.id}, {o.ref.refBook.name}")
+        return out
 
 
 class NPC2SkillAdmin(admin.TabularInline):
@@ -28,6 +49,8 @@ class NPC2SpellsAdmin(admin.TabularInline):
 
 class NPCAdmin(admin.ModelAdmin):
     inlines = (NPC2SkillAdmin, NPC2TalentAdmin, NPC2TrappingAdmin, NPC2CreatureTraitsAdmin, NPC2SpellsAdmin)
+    list_display = ("name", "refBook")
+    list_filter =(RedBookFilter,)
 
 
 class CreatureTraitsAdmin(admin.ModelAdmin):

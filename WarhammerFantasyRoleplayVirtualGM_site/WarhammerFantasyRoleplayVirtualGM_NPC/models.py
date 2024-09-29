@@ -61,6 +61,10 @@ class NPC(models.Model):
     class Meta:
         ordering = ['name']
 
+    @property
+    def refBook(self):
+        return f"{self.ref.refBook}"
+
     def __str__(self):
         return u"{0}".format(self.name)
 
