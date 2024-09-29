@@ -63,6 +63,8 @@ class NPC(models.Model):
 
     @property
     def refBook(self):
+        if self.ref is None:
+            return "-"
         return f"{self.ref.refBook}"
 
     def __str__(self):
