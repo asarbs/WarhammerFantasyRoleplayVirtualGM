@@ -1452,7 +1452,8 @@ span.ref {
 }
 
 div#main_body div#main div#cms_news_grid {
-
+    display: grid;
+    grid-template-columns: auto auto auto;
 }
 
 div#main_body div#main div#cms_news_grid div.cms_news {
