@@ -129,6 +129,7 @@ class MenuManager(object):
         self.l.append(LogedInMenuElement(request=request, name="Talents", url=reverse('TalentsListView')))
         self.l.append(LogedInMenuElement(request=request, name="Trappings", url=reverse('TrappingsListView')))
         self.l.append(LogedInMenuElement(request=request, name="NPC", url=reverse('NPC_MainView')))
+        self.l.append(LogedInMenuElement(request=request, name="Map", url=reverse('map_index')))
         # if not request.user.is_anonymous:
         #     cas = CareersAdvanceScheme.objects.all().order_by("career__name")
         #     for c in cas:

@@ -30,6 +30,7 @@ urlpatterns = [
     path('wfrpg_gm/', include("WarhammerFantasyRoleplayVirtualGM_app.urls")),
     path('wfrpg_npc/', include("WarhammerFantasyRoleplayVirtualGM_NPC.urls")),
     path('Adventure/', include("WarhammerFantasyRoleplayVirtualGM_Adventure.urls")),
+    path('Map/', include("WarhammerFantasyRoleplayVirtualGM_map.urls")),
     path('cms/', include("cms.urls")),
     path('chat', include("WarhammerFantasyRoleplayVirtualGM_chat.urls")),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name="login"),
