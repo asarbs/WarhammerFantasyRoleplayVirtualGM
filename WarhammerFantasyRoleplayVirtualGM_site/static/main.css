@@ -182,6 +182,7 @@ textarea#campaign_notes_textarea {
     font-size : 11px;
     color : #004363;
     width : 1200px;
+    height: 800px;
 }
 
 ul.errorlist {
