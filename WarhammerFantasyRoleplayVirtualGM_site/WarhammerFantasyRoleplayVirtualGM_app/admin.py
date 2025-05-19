@@ -7,6 +7,7 @@ from django.db.models import Q
 from WarhammerFantasyRoleplayVirtualGM_app.forms import SpeciesForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import CareerPathForm
 from WarhammerFantasyRoleplayVirtualGM_app.forms import ClassTrappingsForm
+from WarhammerFantasyRoleplayVirtualGM_app.models import Character2Weapon
 
 
 # Register your models here.
@@ -23,8 +24,8 @@ class CampaignAdmin(admin.ModelAdmin):
     pass
 
 class CharacterAdmin(admin.ModelAdmin):
+#    inlines = [Character2WeaponInline]
     list_display = ("name", "player", "campaign", "hash_id", "deleted")
-
 
 class SpeciesAdmin(admin.ModelAdmin):
     form = SpeciesForm

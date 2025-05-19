@@ -92,6 +92,7 @@ urlpatterns = [
     path("ajax_getEyesList", views.ajax_getEyesList, name="ajax_getEyesList"),
     path("ajax_removeAmbitions", views.ajax_removeAmbitions, name="ajax_removeAmbitions"),
     path("ajax_removeWeapon", views.ajax_removeWeapon, name="ajax_removeWeapon"),
+    path("ajax_updateWeaponQuantity", views.ajax_updateWeaponQuantity, name="ajax_updateWeaponQuantity"),
     path("ajax_removeArmour", views.ajax_removeArmour, name="ajax_removeArmour"),
     path("ajax_removeTrappings", views.ajax_removeTrappings, name="ajax_removeTrappings"),
     path("ajax_removeSpells", views.ajax_removeSpells, name="ajax_removeSpells"),

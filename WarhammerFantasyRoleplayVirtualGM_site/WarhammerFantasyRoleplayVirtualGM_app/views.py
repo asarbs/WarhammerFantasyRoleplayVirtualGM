@@ -834,8 +834,8 @@ def ajax_addWeaponToCharacter(request):
     character_id = request.POST['character_id']
     weapon = Weapon.objects.get(id=request.POST['weapon_id'])
     character = Character.objects.get(id = character_id)
-    character.weapon.add(weapon)
-    character.save()
+    ch2w = Character2Weapon.objects.create(character=character, weapon=weapon)
+    ch2w.save()
     ccl(request.user, character, "add weapon \"{}\".".format(weapon))
     ret = {'status': 'ok'  }
     return JsonResponse(ret)
@@ -1346,12 +1346,18 @@ def ajax_view_getCharacterData(request):
         ret['armour'].append(r.to_dict(is_in_inventory))
 
     for hw in MeleeWeapons.objects.all():
-        is_in_inventory = character.weapon.filter(id=hw.id).exists()
-        ret['weapon'].append(hw.to_dict(is_in_inventory))
+        link = Character2Weapon.objects.filter(character=character, weapon=hw).first()
+        if link:
+            ret['weapon'].append(hw.to_dict(True))
+        else:
+            ret['weapon'].append(hw.to_dict(False))
 
     for rw in RangedWeapon.objects.all():
-        is_in_inventory = character.weapon.filter(id=rw.id).exists()
-        ret['weapon'].append(rw.to_dict(is_in_inventory))
+        link = Character2Weapon.objects.filter(character=character, weapon=rw).first()
+        if link:
+            ret['weapon'].append(rw.to_dict(True, link.quantity))
+        else:
+            ret['weapon'].append(rw.to_dict(False))
 
     for s in Spells.objects.all():
         is_in_inventory = character.spells.filter(id=s.id).exists()
@@ -1671,6 +1677,21 @@ def ajax_removeWeapon(request):
     ccl(request.user, c, "remove weapon {}".format(weapon))
     logger.debug("remove weapon {} from {}".format(weapon, c))
 
+    ret = {'status': 'ok', }
+    return JsonResponse(ret)
+
+@login_required
+def ajax_updateWeaponQuantity(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+    character = Character.objects.get(id = request.POST['character_id'])
+    weapon = Weapon.objects.get(id = request.POST['weapon_id'])
+    
+    ch2w = Character2Weapon.objects.get_or_create(character=character, weapon=weapon)[0]
+    ch2w.quantity = int(request.POST['quantity'])
+    ch2w.save()
+    ccl(request.user, character, "Update weapon `{}` quantity to {}".format(weapon, request.POST['quantity']))
     ret = {'status': 'ok', }
     return JsonResponse(ret)
 

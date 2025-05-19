@@ -580,12 +580,13 @@ class Weapon{
     #damage
     #qualities_and_flaws
     #qualities
+    #quantity
     #reach_range
     #is_in_inventory
     #is_range
     #deleted = false
     #not_sb_group= ['BLACKPOWDER', "CROSSBOW", "ENGINEERING", "EXPLOSIVES", "SLING"]
-    constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory, is_range, qualities) {
+    constructor(id, name, weapon_group, price, encumbrance, availability, damage, qualities_and_flaws, reach_range, is_in_inventory, is_range, qualities, quantity) {
         this.#id = id
         this.#name = name
         this.#weapon_group = weapon_group
@@ -598,6 +599,7 @@ class Weapon{
         this.#is_range = is_range
         this.#is_in_inventory = is_in_inventory
         this.#qualities = qualities
+        this.#quantity = quantity
         console.log("Weaponr:" + this.name + "; this.#is_in_inventory:"+this.#is_in_inventory+"; qualities="+ qualities+";");
     }
 
@@ -729,11 +731,40 @@ class Weapon{
             }
         }
         else {
-            throw "Ambitions: deleted=" + deleted + " boolean";
+            throw "Weapon: deleted=" + deleted + " boolean";
         }
     }
     get deleted() {
         return this.#deleted;
+    }
+
+    set quantity(quantity) {
+        if(typeof quantity === "string"){
+            this.#quantity = quantity;
+
+            let id = this.id
+
+            $.ajax({
+                type: "POST",
+                url: "/wfrpg_gm/ajax_updateWeaponQuantity",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                fail: function(){
+                    return true;
+                },
+                data: {
+                    character_id: characterParameters.id,
+                    weapon_id   : this.#id,
+                    quantity    : quantity
+                },
+                success: function(data) {
+                }
+            });
+        }
+        else {
+            throw "Weapon: quantity=" + quantity + " is not number";
+        }
     }
 
     updateUI() {
@@ -758,9 +789,17 @@ class Weapon{
             });
             new_row += this.qualities_and_flaws
             new_row += '</td>'
+            new_row += '<td>'
+            if(this.#quantity != "N/A") {
+                new_row += '<input type="number" id="weapon_quantity__'+this.#id+'" class="weapon_quantity editable" quantity_weapon_id="'+this.#id+'" min="0" max="100" name="fname" style="" value="'+this.#quantity+'">'
+            } else {
+                new_row += '-'
+            }
+            new_row +='</td>'
             new_row += '</tr>'
             $("table#weapons").append(new_row)
             $("img[delete_weapon_id="+this.#id+"]").click(delete_weapon);
+            $("input[quantity_weapon_id="+this.#id+"]").prop('readonly', false).on('change', update_weapon_quantity)
         } else {
             console.log("Weapon: NOT updateUI: "+ this.name +" is_in_inventory:"+this.#is_in_inventory);
         }
@@ -2412,12 +2451,14 @@ class CharacterParameters {
             weapon.reach_range,
             weapon.is_in_inventory,
             weapon.is_range,
-            weapon.qualities
+            weapon.qualities,
+            weapon.quantity
             );
         this.#weapon.push(a)
         a.updateUI();
         $("select#add_weapon").append($('<option>', {value: weapon.id, text: weapon.name}));
     }
+
     add_weapon(weapon_to_add) {
         console.log("characeter weapon_add: "+ weapon_to_add);
         $.each(this.#weapon, function(i, item) {
@@ -2435,6 +2476,15 @@ class CharacterParameters {
             if(item.id == weapon_to_add_id) {
                 console.log("characeter weapon_to_delete: "+ weapon_to_add_id);
                 item.deleted = true;
+            }
+        });
+    }
+    update_weapon_quantity(weapon_id, quantity) {
+        console.log("characeter update_weapon_quantity: weapon_id="+ weapon_id+"; quantity="+quantity);
+        $.each(this.#weapon, function(i, item) {
+            if(item.id == weapon_id) {
+                console.log("characeter updatge weapon quantity: weapon_id="+ weapon_id+"; quantity="+quantity);
+                item.quantity = quantity;
             }
         });
     }
@@ -3287,9 +3337,6 @@ function get_characterData(){
             data['spells'].forEach(element => {
                 characterParameters.appendSpells(element)
             });
-            data['weapon'].forEach(element => {
-                characterParameters.appendWeapon(element)
-            });
 
             data['notes'].forEach(element => {
                 characterParameters.appendNote(element)
@@ -3306,6 +3353,9 @@ function get_characterData(){
                 characterParameters.updateCondition(element)
             });
 
+            data['weapon'].forEach(element => {
+                characterParameters.appendWeapon(element)
+            });
 
             characterParameters.updateEncumbrance();
             characterParameters.updateTrappingsTable()
@@ -3789,6 +3839,12 @@ function delete_weapon() {
     console.log("delete_weapon:"+ weapon_id)
     characterParameters.deleteWeapon(weapon_id)
     characterParameters.updateEncumbrance();
+}
+function update_weapon_quantity() {
+    var weapon_id = $(this).attr("quantity_weapon_id")
+    var quantity = $(this).val()
+    console.log("update_weapon_quantity:"+ weapon_id+"; quantity="+quantity)
+    characterParameters.update_weapon_quantity(weapon_id, quantity)
 }
 function delete_spell() {
     var spell_id = $(this).attr("delete_spell_id")

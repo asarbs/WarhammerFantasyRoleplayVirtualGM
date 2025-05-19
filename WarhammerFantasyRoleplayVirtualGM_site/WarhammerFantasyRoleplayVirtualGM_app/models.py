@@ -554,9 +554,10 @@ class MeleeWeapons(Weapon):
     def get_absolute_url(self):
         return reverse("MeleWeaponListView")
 
-    def to_dict(self, is_in_inventory=False):
+    def to_dict(self, is_in_inventory=False, quantity=0):
         data = super().to_dict(is_in_inventory)
         data['is_range'] = False
+        data['quantity'] = "N/A"
         return data
 
 class RangedWeapon(Weapon):
@@ -569,9 +570,10 @@ class RangedWeapon(Weapon):
     def get_absolute_url(self):
         return reverse("RangedWeaponListView")
 
-    def to_dict(self, is_in_inventory=False):
+    def to_dict(self, is_in_inventory=False, quantity=0):
         data = super().to_dict(is_in_inventory)
         data['is_range'] = True
+        data['quantity'] = quantity
         return data
 
 class Spells(models.Model):
@@ -676,7 +678,7 @@ class Character(models.Model):
     ambitions_shortterm = models.ManyToManyField(Ambitions, verbose_name="Shortterm Ambitions", related_name="character_ambitions_shortterm")
     ambitions_longterm = models.ManyToManyField(Ambitions, verbose_name="Longterm Ambitions", related_name="character_ambitions_longterm")
     armour = models.ManyToManyField(Armour, verbose_name="Armour")
-    weapon = models.ManyToManyField(Weapon, verbose_name="Weapon")
+    weapons_with_quantity = models.ManyToManyField(Weapon, through="Character2Weapon", related_name="characters_with_quantity", verbose_name="Weapons (with quantity)")
     spells = models.ManyToManyField(Spells, verbose_name="Spells", blank=True)
     wealth = models.IntegerField(default=0, verbose_name="Wealth")
     notes =  models.ManyToManyField(Note, verbose_name="Notes", blank=True)
@@ -691,6 +693,14 @@ class Character(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
+
+class Character2Weapon(models.Model):
+    character = models.ForeignKey('Character', on_delete=models.CASCADE)
+    weapon = models.ForeignKey('Weapon', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.character.name} - {self.weapon.name} x{self.quantity}"
     
 class Character2CareerPath(models.Model):
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
