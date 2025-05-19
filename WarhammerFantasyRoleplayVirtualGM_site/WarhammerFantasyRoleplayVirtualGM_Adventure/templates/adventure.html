@@ -9,6 +9,20 @@
   <div id="detailsMsg_ok">OK</div>
 </div>
 
+<form method="post" action="{% url 'add_npc_to_adventure' adventure.id %}">
+  {% csrf_token %}
+  
+  <label for="new_npc">Add NPC:</label>
+
+  <select id="new_npc" name="new_npc">
+  {% for npc_lib in npc_lib%}
+    <option value="{{ npc_lib.id }}">{{ npc_lib.name }}</option>
+  {% endfor %}
+  </select>
+  <button type="submit">Add</button>
+</form>
+
+
 <table class="campaign_notes" id="campaign_notes" border='0'>
   <tr class="block_name">
       <th colspan="3">

@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.edit import CreateView
@@ -27,7 +28,7 @@ from . import models
 @login_required
 def adventureDetails(request, adventure_id):
     adventure = Adventure.objects.get(id=adventure_id)
-    data = {"adventure":adventure, "npc":[], "conditions":[]}
+    data = {"adventure":adventure, "npc":[], "conditions":[], "npc_lib":[]}
     
     conditions = Condition.objects.all()
     
@@ -67,6 +68,10 @@ def adventureDetails(request, adventure_id):
 
         data["npc"].append(one_npc_data)
 
+
+    for npc in NPC.objects.all():
+       data['npc_lib'].append({"id": npc.id, "name": npc.name})
+
     return render(request, 'adventure.html', data)
 
 @login_required
@@ -75,6 +80,23 @@ def createNewAdventure(request, campaign_id):
     adventure.save()
     return redirect(reverse('AdventureEdit', args=(adventure.id,)))
     
+    
+@login_required
+def addNpscToAdventure(request, adventure_id):
+    if request.method == 'POST':
+        npc_id = request.POST.get('new_npc')
+        adventure = get_object_or_404(Adventure, id=adventure_id)
+        npc = get_object_or_404(NPC, id=npc_id)
+
+        # Sprawdź, czy taki rekord już istnieje
+        existing = Adventure2NPC.objects.filter(adventure=adventure, npc=npc).first()
+        if not existing:
+            # Utwórz powiązanie przez model pośredni
+            Adventure2NPC.objects.create(adventure=adventure, npc=npc)
+
+        return redirect(adventure.get_absolute_url())
+
+    return redirect('main')  # lub inna strona, jeśli użytkownik wejdzie przez GET
 
 class AdventureEditView(LoginRequiredMixin, UpdateView):
     template_name = "update_Adventure.html"
