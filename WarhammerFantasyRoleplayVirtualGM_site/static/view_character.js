@@ -2501,7 +2501,8 @@ class CharacterParameters {
             spell.is_in_inventory);
         this.#spells.push(a)
         a.updateUI();
-        $("select#add_spell").append($('<option>', {value: spell.id, text: spell.name}));
+        var spell_name = spell.spellLists + " " + spell.name
+        $("select#add_spell").append($('<option>', {value: spell.id, text: spell_name}));
     }
     add_spell(spell_to_add) {
         console.log("characeter spell: "+ spell_to_add);

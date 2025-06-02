@@ -513,6 +513,9 @@ class Weapon(models.Model):
     qualities = models.ManyToManyField(WeaponQualities, verbose_name="Qualities & Flaws", blank=True,)
     reference = models.ForeignKey(Reference, default=None, blank=True, null=True, on_delete=models.SET(None))
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return u"{0}".format(self.name)
 
@@ -602,6 +605,9 @@ class Spells(models.Model):
     target  = models.CharField(max_length= 50, verbose_name="Target")
     duration  = models.CharField(max_length= 50, verbose_name="Duration")
     effect = models.TextField(verbose_name="Effect", default="")
+
+    class Meta:
+        ordering = ['spellLists', 'name']
 
     def __str__(self):
         return u"{0}".format(self.name)
