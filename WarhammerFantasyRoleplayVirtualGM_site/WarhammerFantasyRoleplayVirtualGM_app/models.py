@@ -120,9 +120,9 @@ class Skils(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.name)
-    
+
     def serialize(self):
-        return {"name": self.name, 
+        return {"name": self.name,
                 "characteristics": self.characteristics,
                 "description": self.description,
                 "ref": str(self.ref),
@@ -158,7 +158,7 @@ class Talent(models.Model):
 
     def get_absolute_url(self):
         return reverse("TalentsListView")
-    
+
     def serialize(self):
         return {
             "name": self.name,
@@ -186,7 +186,7 @@ class Trapping(models.Model):
 
     def get_absolute_url(self):
         return reverse("TrappingsListView")
-    
+
     def serialize(self):
         return {
             "name": self.name,
@@ -464,8 +464,8 @@ class Armour(models.Model):
             loc.append(str(l))
         out = ", ".join(loc)
         return out
-    
-    
+
+
     @property
     def price_formated(self):
         return format_currency(self.price)
@@ -478,13 +478,13 @@ class WeaponQualities(models.Model):
     type = models.CharField(max_length=14, choices=WeaponQualitiesTypes.choices, default=WeaponQualitiesTypes.QUALITIES, verbose_name="Type")
     description = models.TextField(verbose_name="Description", default="")
     ref = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
-    
+
     def __str__(self):
         return u"{0}".format(self.name)
 
     def __unicode__(self):
         return u"{0}".format(self.name)
-    
+
 class Weapon(models.Model):
     class WeaponGroup(models.TextChoices):
         BASIC = 'BASIC', _('BASIC')
@@ -581,23 +581,36 @@ class RangedWeapon(Weapon):
 
 class Spells(models.Model):
     class SpellList(models.TextChoices):
-        PETTY_SPELLS            = 'PETTY_SPELLS',               _('Petty Spells')
-        ARCANE_SPELLS           = 'ARCANE_SPELLS',              _('Arcane Spells')
-        THE_LORE_OF_BEASTS      = 'THE_LORE_OF_BEASTS',         _('The Lore of Beasts')
-        THE_LORE_OF_DEATH       = 'THE_LORE_OF_DEATH',          _('The Lore of Death')
-        THE_LORE_OF_FIRE        = 'THE_LORE_OF_FIRE',           _('The Lore of Fire')
-        THE_LORE_OF_HEAVENS     = 'THE_LORE_OF_HEAVENS',        _('The Lore of Heavens')
-        THE_LORE_OF_METAL       = 'THE_LORE_OF_METAL',          _('The Lore of Metal')
-        THE_LORE_OF_LIFE        = 'THE_LORE_OF_LIFE',           _('The Lore of Life')
-        THE_LORE_OF_LIGHT       = 'THE_LORE_OF_LIGHT',          _('The Lore of Light')
-        THE_LORE_OF_SHADOWS     = 'THE_LORE_OF_SHADOWS',        _('The Lore of Shadows')
-        THE_LORE_OF_HEDGECRAFT  = 'THE_LORE_OF_HEDGECRAFT',     _('The Lore of Hedgecraft')
-        THE_LORE_OF_WITCHCRAFT  = 'THE_LORE_OF_WITCHCRAFT',     _('The Lore of Witchcraft')
-        THE_LORE_OF_DAEMONOLOGY = 'THE_LORE_OF_DAEMONOLOGY',    _('The Lore of Daemonology')
-        THE_LORE_OF_NECROMANCY  = 'THE_LORE_OF_NECROMANCY',     _('Lore of Necromancy')
-        THE_LORE_OF_NURGLE      = 'THE_LORE_OF_NURGLE',         _('The Lore of Nurgle')
-        THE_LORE_OF_SLAANESH    = 'THE_LORE_OF_SLAANESH',       _('The Lore of Slaanesh')
-        THE_LORE_OF_TZEENTCH    = 'THE_LORE_OF_TZEENTCH',       _('The Lore of Tzeentch')
+        PETTY_SPELLS            = 'PETTY_SPELLS'               ,_('Petty Spells')
+        ARCANE_SPELLS           = 'ARCANE_SPELLS'              ,_('Arcane Spells')
+        THE_LORE_OF_BEASTS      = 'THE_LORE_OF_BEASTS'         ,_('The Lore of Beasts')
+        THE_LORE_OF_DEATH       = 'THE_LORE_OF_DEATH'          ,_('The Lore of Death')
+        THE_LORE_OF_FIRE        = 'THE_LORE_OF_FIRE'           ,_('The Lore of Fire')
+        THE_LORE_OF_HEAVENS     = 'THE_LORE_OF_HEAVENS'        ,_('The Lore of Heavens')
+        THE_LORE_OF_METAL       = 'THE_LORE_OF_METAL'          ,_('The Lore of Metal')
+        THE_LORE_OF_LIFE        = 'THE_LORE_OF_LIFE'           ,_('The Lore of Life')
+        THE_LORE_OF_LIGHT       = 'THE_LORE_OF_LIGHT'          ,_('The Lore of Light')
+        THE_LORE_OF_SHADOWS     = 'THE_LORE_OF_SHADOWS'        ,_('The Lore of Shadows')
+        THE_LORE_OF_HEDGECRAFT  = 'THE_LORE_OF_HEDGECRAFT'     ,_('The Lore of Hedgecraft')
+        THE_LORE_OF_WITCHCRAFT  = 'THE_LORE_OF_WITCHCRAFT'     ,_('The Lore of Witchcraft')
+        THE_LORE_OF_DAEMONOLOGY = 'THE_LORE_OF_DAEMONOLOGY'    ,_('The Lore of Daemonology')
+        THE_LORE_OF_NECROMANCY  = 'THE_LORE_OF_NECROMANCY'     ,_('Lore of Necromancy')
+        THE_LORE_OF_NURGLE      = 'THE_LORE_OF_NURGLE'         ,_('The Lore of Nurgle')
+        THE_LORE_OF_SLAANESH    = 'THE_LORE_OF_SLAANESH'       ,_('The Lore of Slaanesh')
+        THE_LORE_OF_TZEENTCH    = 'THE_LORE_OF_TZEENTCH'       ,_('The Lore of Tzeentch')
+        BLESSINGS               = 'BLESSINGS'                  ,_('Blessings')
+        MIRACLES_OF_MANANN      = 'MIRACLES_OF_MANANN'         ,_('Miracles of Manann')
+        MIRACLES_OF_MORR        = 'MIRACLES_OF_MORR'           ,_('Miracles of Morr')
+        MIRACLES_OF_MYRMIDIA    = 'MIRACLES_OF_MYRMIDIA'       ,_('Miracles of Myrmidia')
+        MIRACLES_OF_RANALD      = 'MIRACLES_OF_RANALD'         ,_('Miracles of Ranald')
+        MIRACLES_OF_RHYA        = 'MIRACLES_OF_RHYA'           ,_('Miracles of Rhya')
+        MIRACLES_OF_SHALLYA     = 'MIRACLES_OF_SHALLYA'        ,_('Miracles of Shallya')
+        MIRACLES_OF_SIGMAR      = 'MIRACLES_OF_SIGMAR'         ,_('Miracles of Sigmar')
+        MIRACLES_OF_TAAL        = 'MIRACLES_OF_TAAL'           ,_('Miracles of Taal')
+        MIRACLES_OF_ULRIC       = 'MIRACLES_OF_ULRIC'          ,_('Miracles of Ulric')
+        MIRACLES_OF_VERENA      = 'MIRACLES_OF_VERENA'         ,_('Miracles of Verena')
+        MIRACLES_OF_BYLORAK     = 'MIRACLES_OF_BYLORAK'        ,_('Miracles of Bylorak')
+
     name = models.CharField(max_length= 50, verbose_name="Name")
     spellLists = models.CharField(max_length=23, choices=SpellList.choices, default=SpellList.PETTY_SPELLS, verbose_name="Spell List")
     cn = models.IntegerField(default=0, verbose_name="cn")
@@ -624,7 +637,7 @@ class Spells(models.Model):
 
     def get_absolute_url(self):
         return reverse("SpellListView")
-    
+
     def serialize(self):
         return {
             "name": self.name,
@@ -707,7 +720,7 @@ class Character2Weapon(models.Model):
 
     def __str__(self):
         return f"{self.character.name} - {self.weapon.name} x{self.quantity}"
-    
+
 class Character2CareerPath(models.Model):
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
     career_path = models.ForeignKey(CareerPath, on_delete=models.CASCADE)
@@ -719,7 +732,7 @@ class Character2CareerPath(models.Model):
         return u"{0} -> {1}".format(self.character, self.career_path)
 
     def __unicode__(self):
-        return u"{0} -> {1}".format(self.character, self.career_path)   
+        return u"{0} -> {1}".format(self.character, self.career_path)
 
 class Character2Skill(models.Model):
     characters = models.ForeignKey(Character, on_delete=models.CASCADE)
