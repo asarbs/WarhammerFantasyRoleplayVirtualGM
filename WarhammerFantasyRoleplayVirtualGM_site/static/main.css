@@ -1185,6 +1185,21 @@ div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#
     margin-top: 590px;
     position: absolute;
 }
+
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap input#armour_put_on_aethyric_armour {
+    width: 15px;
+    height: 15px;
+    margin-left: 45px;
+    margin-top: 700px;
+    position: absolute;
+}
+
+div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_ap label[for="armour_put_on_aethyric_armour"] {
+    position: absolute;
+    margin-left: 75px;
+    margin-top: 700px;
+}
+
 div#main_body div#main div.character_sheet div.sheer2_right div.sheet2_wounds {
 
 }
@@ -1476,7 +1491,7 @@ div#main_body div#main div#cms_news_grid div.cms_news h1{
 }
 
 div#main_body div#main div#cms_news_grid div.cms_news h4 {
-    
+
 }
 
 div#main_body div#main div#cms_news_grid div.cms_news_detail {
@@ -1502,7 +1517,7 @@ div#main_body div#main div#cms_news_grid div.cms_news_detail h1{
 }
 
 div#main_body div#main div#cms_news_grid div.cms_news_detail h4 {
-    
+
 }
 
 div#main_body div#main div#cms_news_grid div#paginator {

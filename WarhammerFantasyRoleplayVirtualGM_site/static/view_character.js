@@ -125,7 +125,7 @@ class Trapping {
             throw "" + name + " is not a string";
     }
     get name() {
-        return this.#name; 
+        return this.#name;
     }
     set enc(enc) {
         if(typeof enc === "string") {
@@ -388,7 +388,6 @@ class Armour{
     get put_on() {
         return this.#put_on;
     }
-
     get id() {
         return this.#id;
     }
@@ -476,13 +475,13 @@ class Armour{
         console.log("Armour.put_on_update_ui: name="+this.name+"; put_on="+this.put_on + "; #locations="+this.#locations)
 
         let new_val = parseInt(this.armour_points)
-        let old_val_head = isNaN(parseInt($("input#armour_put_on_head").val())) ? 0 : parseInt($("input#armour_put_on_head").val())
-        let old_val_left_arm = isNaN(parseInt($("input#armour_put_on_left_arm").val())) ? 0 : parseInt($("input#armour_put_on_left_arm").val())
-        let old_val_right_arm = isNaN(parseInt($("input#armour_put_on_right_arm").val())) ? 0 : parseInt($("input#armour_put_on_right_arm").val())
-        let old_val_left_leg = isNaN(parseInt($("input#armour_put_on_left_leg").val())) ? 0 : parseInt($("input#armour_put_on_left_leg").val())
-        let old_val_right_leg = isNaN(parseInt($("input#armour_put_on_right_leg").val())) ? 0 : parseInt($("input#armour_put_on_right_leg").val())
-        let old_val_body = isNaN(parseInt($("input#armour_put_on_body").val())) ? 0 : parseInt($("input#armour_put_on_body").val())
-        let old_val_shield = isNaN(parseInt($("input#armour_put_on_shield").val())) ? 0 : parseInt($("input#armour_put_on_shield").val())
+        let old_val_head        = isNaN(parseInt($("input#armour_put_on_head").val())) ? 0 : parseInt($("input#armour_put_on_head").val())
+        let old_val_left_arm    = isNaN(parseInt($("input#armour_put_on_left_arm").val())) ? 0 : parseInt($("input#armour_put_on_left_arm").val())
+        let old_val_right_arm   = isNaN(parseInt($("input#armour_put_on_right_arm").val())) ? 0 : parseInt($("input#armour_put_on_right_arm").val())
+        let old_val_left_leg    = isNaN(parseInt($("input#armour_put_on_left_leg").val())) ? 0 : parseInt($("input#armour_put_on_left_leg").val())
+        let old_val_right_leg   = isNaN(parseInt($("input#armour_put_on_right_leg").val())) ? 0 : parseInt($("input#armour_put_on_right_leg").val())
+        let old_val_body        = isNaN(parseInt($("input#armour_put_on_body").val())) ? 0 : parseInt($("input#armour_put_on_body").val())
+        let old_val_shield      = isNaN(parseInt($("input#armour_put_on_shield").val())) ? 0 : parseInt($("input#armour_put_on_shield").val())
 
         if(this.put_on == true) {
             $("input#armour_put_on_checkbox__"+this.#id).prop( "checked", true );
@@ -506,7 +505,6 @@ class Armour{
             }
         } else if(this.put_on == false) {
             $("input#armour_put_on_checkbox__"+this.#id).prop( "checked", false );
-
 
             if(this.#locations == "Head") {
                 $("input#armour_put_on_head").val(old_val_head - new_val)
@@ -659,7 +657,7 @@ class Weapon{
             throw "" + price + " is not a number";
     }
     get price() {
-        return fortmatPrice(this.#price);   
+        return fortmatPrice(this.#price);
     }
     set encumbrance(encumbrance) {
         if(typeof encumbrance === "number")
@@ -1305,6 +1303,7 @@ class CharacterParameters {
     #conditions                         = [];
     #psychology                         = [];
     #coruption_and_mutation             = [];
+    #aethyric_armour                    = false;
 
     #advanceScheme;
     classModel = {}
@@ -2049,11 +2048,46 @@ class CharacterParameters {
     get ch_class_id() {
         return this.#ch_class_id
     }
+
+    set aethyric_armour(aethyric_armour){
+        if(typeof aethyric_armour === "boolean" ){
+            if(this.#aethyric_armour != aethyric_armour){
+                this.#aethyric_armour = aethyric_armour;
+                console.log("Character.aethyric_armour:"+this.#aethyric_armour)
+                // this.put_on_update_ui();
+            } else {
+                console.log("Character.aethyric_armour:"+this.#aethyric_armour)
+            }
+
+            let old_val_head        = isNaN(parseInt($("input#armour_put_on_head").val()))      ? 0 : parseInt($("input#armour_put_on_head").val())
+            let old_val_left_arm    = isNaN(parseInt($("input#armour_put_on_left_arm").val()))  ? 0 : parseInt($("input#armour_put_on_left_arm").val())
+            let old_val_right_arm   = isNaN(parseInt($("input#armour_put_on_right_arm").val())) ? 0 : parseInt($("input#armour_put_on_right_arm").val())
+            let old_val_left_leg    = isNaN(parseInt($("input#armour_put_on_left_leg").val()))  ? 0 : parseInt($("input#armour_put_on_left_leg").val())
+            let old_val_right_leg   = isNaN(parseInt($("input#armour_put_on_right_leg").val())) ? 0 : parseInt($("input#armour_put_on_right_leg").val())
+            let old_val_body        = isNaN(parseInt($("input#armour_put_on_body").val()))      ? 0 : parseInt($("input#armour_put_on_body").val())
+            const new_val = this.#aethyric_armour ? 1 : -1
+            $("input#armour_put_on_body").val(old_val_body + new_val)
+            $("input#armour_put_on_head").val(old_val_head + new_val)
+            $("input#armour_put_on_left_arm").val(old_val_left_arm + new_val)
+            $("input#armour_put_on_left_leg").val(old_val_left_leg + new_val)
+            $("input#armour_put_on_right_arm").val(old_val_right_arm + new_val)
+            $("input#armour_put_on_right_leg").val(old_val_right_leg + new_val)
+
+
+
+        }
+        else {
+            throw "Character ["+this.#name+"].aethyric_armour = " + aethyric_armour + " is not boolean";
+        }
+    }
+    get aethyric_armour() {
+        return this.#aethyric_armour
+    }
     set career_path_id(career_path_id) {
         if(typeof career_path_id === "object") {
             characterParameters.#career_path_id = []
             career_path_id.forEach(function(item, i, arr) {
-                if(typeof item === "string") { 
+                if(typeof item === "string") {
                     characterParameters.#career_path_id.push(item);
                     console.log("career_path_id["+i+"]:"+item + " = "+characterParameters.#career_path_id);
                  } else {
@@ -2152,7 +2186,7 @@ class CharacterParameters {
     get fel_bonus() {
         return Math.floor(this.characteristics_fel_current /  10)
     }
-    
+
     getCharacteristicsCurrent(name) {
         if(name === "WS")
             return this.characteristics_ws_current
@@ -3292,7 +3326,7 @@ function get_characterData(){
             characterParameters.deleted                      = data['character']["deleted"                      ]
             characterParameters.psychology                   = data['character']["psychology"                   ]
             characterParameters.coruption_and_mutation       = data['character']["coruption_and_mutation"       ]
-            
+
 
             $("td#party_name").text(data['party']['name'])
             for(m in data['party']['members']) {
@@ -3362,6 +3396,7 @@ function get_characterData(){
             characterParameters.updateTrappingsTable()
             turon_on_edit();
             $("img.skill_test").click(skill_test)
+            $("input#armour_put_on_aethyric_armour").click(aethyric_armour_add);
         }
     });
 }
@@ -3639,7 +3674,7 @@ function updateCurrentWounds() {
 }
 function turon_on_edit() {
     console.log(" characterParameters.deleted=" + characterParameters.deleted)
-    if(characterParameters.deleted) 
+    if(characterParameters.deleted)
         return;
     $("span.dot_not_editable").switchClass( "dot_not_editable", "dot_editable", 1000);
 
@@ -4245,6 +4280,14 @@ function skill_test() {
     }));
     alert(message);
 }
+function aethyric_armour_add() {
+    if ($("#armour_put_on_aethyric_armour").is(":checked")) {
+        characterParameters.aethyric_armour = true
+    } else {
+        characterParameters.aethyric_armour = false
+    }
+}
+
 function main() {
 
     $.ajaxSetup({
